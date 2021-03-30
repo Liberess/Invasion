@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcf7219bab7fe46a1ad266029b2fee19, type: 3}
+  m_Name: Readme
+  m_EditorClassIdentifier: 
+  icon: {fileID: 2800000, guid: 3a41e4f34f4aa8c4b8fd0ad6ee5f98d9, type: 3}
+  title: 골드메탈 볼트 기초 프로젝트 VE2
+  sections:
+  - heading: Jelly Farm Assets Pack
+    text: '골드메탈 볼트 기초 강좌 VE2 진행에 필요한 에셋 팩입니다.'
+    linkText: 
+    url: 
+  - heading:
+    text: '방치형 게임(Idle Game)장르형 젤리 키우기 게임은 젤리를 클릭하며 키워서 젤라틴을 얻고 그 젤라틴을 소모하여 총 12마리의 젤리를 해금하는 것을 목적으로 합니다.'
+    linkText: 
+    url: 
+  - heading:
+    text: '해당 VE2 예제의 강좌는 V07부터 시작합니다.'
+    linkText: #V07 - 장면 세팅하기
+    url: https://youtu.be/G6NronfnXfg
+  - heading:
+    text: '유니티의 비주얼 스크립트, 볼트가 처음이라면 V01 강좌부터 하시는 것을 추천드립니다.'
+    linkText: #V01 - 볼트 시작하기
+    url: https://www.youtube.com/playlist?list=PLO-mt5Iu5TeaMl--ItJ2so8BitO_BfTIz
+  - heading: 
+    text: '이 에셋 팩은 배경과 캐릭터 스프라이트, 애니메이션, 파티클, 사운드, 폰트를 포함하고 있습니다. DoHyeon-Regular는 오픈 폰트 라이센스(OFL)입니다.'
+    linkText: 
+    url: 
+  - heading: 
+    text: '개인 학습용, 과제용으로 사용이 가능하나, 수익창출을 위한 상용 출시에는 사용하실 수 없습니다. 또한 골드메탈 스튜디오 외 다른 사이트에 2차 재배포 또한 금지합니다.'
+    linkText: 골드메탈 스튜디오
+    url: https://www.goldmetal.co.kr
+  loadedLayout: 1
