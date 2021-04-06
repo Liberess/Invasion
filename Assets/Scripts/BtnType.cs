@@ -14,7 +14,9 @@ public enum BTNType
     Back,
     Main,
     Exit,
-    Restart
+    Restart,
+    BackDungeon,
+    KarmaDungeon
 }
 
 public class BtnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -66,6 +68,12 @@ public class BtnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 break;
             case BTNType.Restart:
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                break;
+            case BTNType.BackDungeon:
+                //SceneManager.LoadScene(0);
+                break;
+            case BTNType.KarmaDungeon:
+                //SceneManager.LoadScene("Karma");
                 break;
         }
     }

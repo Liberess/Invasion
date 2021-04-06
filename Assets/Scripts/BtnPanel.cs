@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class BtnPanel : MonoBehaviour
 {
-    public static BtnPanel _instance;
+    public static BtnPanel Instance;
 
     public GameObject MyPanel;
     public GameObject OptionPanel;
@@ -16,13 +16,13 @@ public class BtnPanel : MonoBehaviour
     public Sprite HideSprite;
 
     public bool isShow;
-    private bool isClick;
+    public bool isClick;
 
     private void Awake()
     {
         isClick = false;
         isShow = false;
-        _instance = this;
+        Instance = this;
     }
 
     private void Update()
@@ -61,8 +61,8 @@ public class BtnPanel : MonoBehaviour
         isShow = true;
         isClick = true;
 
-        GameManager._instance.isPlay = false;
-        GameManager._instance.isPanel = true;
+        GameManager.Instance.isPlay = false;
+        GameManager.Instance.isPanel = true;
 
         if (GameManager.Instance.isPanel)
         {
@@ -84,11 +84,16 @@ public class BtnPanel : MonoBehaviour
         isShow = false;
         isClick = false;
 
-        GameManager._instance.isPlay = true;
-        GameManager._instance.isPanel = false;
+        GameManager.Instance.isPlay = true;
+        GameManager.Instance.isPanel = false;
 
         GetComponent<Image>().sprite = HideSprite;
         MyPanel.GetComponent<Animator>().SetTrigger("doHide");
+    }
+
+    public void SpriteChange()
+    {
+        GetComponent<Image>().sprite = HideSprite;
     }
 
     public void BtnClick()
@@ -100,6 +105,10 @@ public class BtnPanel : MonoBehaviour
         }
         else
         {
+            if(gameObject.name == "HeroBtn")
+            {
+                FadePanel.Instance.Fade();
+            }
             PanelShow();
             SoundManager.Instance.PlaySFX("Button");
         }

@@ -75,7 +75,6 @@ public class Monster : MonoBehaviour
     private void Start()
     {
         dataManager = DataManager.Instance;
-
         StartCoroutine(SetSoulGem());
     }
 

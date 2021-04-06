@@ -6,6 +6,9 @@ public class MenuPanel : MonoBehaviour
 {
     public GameObject[] AnotPanel;
 
+    public GameObject MyBtn;
+    public GameObject MyPanel;
+
     private bool isClick;
 
     public void PanelShow()
@@ -31,6 +34,15 @@ public class MenuPanel : MonoBehaviour
         }
 
         this.GetComponent<Animator>().SetTrigger("doHide");
+    }
+
+    public void PanelQuit()
+    {
+        FadePanel.Instance.Fade();
+        SoundManager.Instance.PlaySFX("Button");
+        MyBtn.GetComponent<BtnPanel>().isClick = false;
+        MyBtn.GetComponent<BtnPanel>().SpriteChange();
+        MyPanel.GetComponent<Animator>().SetTrigger("doHide");
     }
 
     public void BtnClick()
