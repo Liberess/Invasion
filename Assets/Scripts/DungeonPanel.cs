@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//
 //카르마 : Karma, Karma Dungeon, 캐릭터 레벨업
 //각성석 : Awakening Stone, Awakening Dungeon, 캐릭터 각성 (각성 10회 -> 초월 1회 가능)
 //파편 : Piece, Piece Dungeon -> 각각의 카드 해금

@@ -141,8 +141,8 @@ public class Monster : MonoBehaviour
     IEnumerator SetSoulGem()
     {
         DataManager.Instance.gameData.soulGem += mID + 1 * mLevel;
-
-        yield return new WaitForSeconds(3f);
+        
+       yield return new WaitForSeconds(3f);
 
         StartCoroutine(SetSoulGem());
     }
