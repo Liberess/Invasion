@@ -48,6 +48,7 @@ public class MonsterPanel : MonoBehaviour
 
         monsterLockImg.sprite = gameManager.monsSpriteList[page];
         monsterUnlockImg.sprite = gameManager.monsSpriteList[page];
+
         monsterLockImg.SetNativeSize();
         monsterUnlockImg.SetNativeSize();
 
@@ -89,38 +90,6 @@ public class MonsterPanel : MonoBehaviour
         {
             SoundManager.Instance.PlaySFX("Fail");
             NoticeManager.instance.Notice("NotJelatin");
-        }
-    }
-
-    public void Buy()
-    {
-        if (dataManager.gameData.gold >= gameManager.monsGoldList[page])
-        {
-            if(dataManager.monsData.monsList.Count < (dataManager.gameData.numLevel * 2))
-            {
-                dataManager.gameData.gold -= gameManager.monsGoldList[page];
-
-                GameObject mons = Instantiate(Resources.Load<GameObject>("Prefabs/Monster"), new Vector3(0, 0, 0), Quaternion.identity);
-                mons.name = string.Concat("Jelly" + dataManager.monsData.monsIndex);
-                mons.GetComponent<Monster>().mID = page;
-                mons.GetComponent<SpriteRenderer>().sprite = gameManager.monsSpriteList[page];
-
-                dataManager.monsData.monsDic.Add(mons.name, new MonsterStatus(mons.name, page, 0, 1));
-                dataManager.monsData.monsList = new List<MonsterStatus>(dataManager.monsData.monsDic.Values);
-                dataManager.monsData.monsIndex++;
-
-                SoundManager.Instance.PlaySFX("Buy");
-            }
-            else
-            {
-                NoticeManager.instance.Notice("NotNum");
-                SoundManager.Instance.PlaySFX("Fail");
-            }
-        }
-        else
-        {
-            NoticeManager.instance.Notice("NotGold");
-            SoundManager.Instance.PlaySFX("Fail");
         }
     }
 

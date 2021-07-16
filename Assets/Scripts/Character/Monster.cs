@@ -151,7 +151,7 @@ public class Monster : MonoBehaviour
     {
         if (DataManager.Instance.gameData.soulGem < DataManager.Instance.gameData.maxSoul)
         {
-            DataManager.Instance.gameData.soulGem += mID + 1 * mLevel * DataManager.Instance.gameData.clickLevel;
+            //DataManager.Instance.gameData.soulGem += mID + 1 * mLevel * DataManager.Instance.gameData.clickLevel;
         }
     }
     #endregion

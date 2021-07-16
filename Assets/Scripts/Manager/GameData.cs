@@ -16,10 +16,13 @@ public class GameData
     public float[] facilSliderTime = new float[7];
 
     public int dia;
-    public BigInteger gold;
-    public BigInteger soulGem;
     public string strGold;
     public string strSoulGem;
+    public string strDrink;
+
+    public BigInteger gold;
+    public BigInteger soulGem;
+    public BigInteger drink;
     public BigInteger maxSoul = BigInteger.Pow(10, (int)Unit.Max * 3);
 
     public string[] strFacilGold = new string[(int)Size.max];
@@ -35,9 +38,6 @@ public class GameData
             "j", "k", "l", "m", "n", "o", "p", "q", "r",
             "s", "t", "u", "v", "w", "x", "y", "z",
         };
-
-    public int numLevel;
-    public int clickLevel;
 
     public float bgm;
     public float sfx;

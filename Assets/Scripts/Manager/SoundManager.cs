@@ -23,20 +23,20 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public static SoundManager _instance;
+    public static SoundManager m_Instance;
     public static SoundManager Instance
     {
         get
         {
-            if (!_instance)
+            if (!m_Instance)
             {
                 _container = new GameObject();
                 _container.name = "SoundManager";
-                _instance = _container.AddComponent(typeof(SoundManager)) as SoundManager;
+                m_Instance = _container.AddComponent(typeof(SoundManager)) as SoundManager;
                 DontDestroyOnLoad(_container);
             }
 
-            return _instance;
+            return m_Instance;
         }
     }
     #endregion
@@ -54,11 +54,11 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
-        if (_instance == null)
+        if (m_Instance == null)
         {
-            _instance = this;
+            m_Instance = this;
         }
-        else if (_instance != this)
+        else if (m_Instance != this)
         {
             Destroy(gameObject);
         }

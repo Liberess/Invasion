@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BackEnd;
 
-public class BackendMager : MonoBehaviour
+public class BackendManager : MonoBehaviour
 {
     private void Start()
     {

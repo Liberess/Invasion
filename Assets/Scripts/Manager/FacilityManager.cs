@@ -57,7 +57,7 @@ public class FacilityManager : MonoBehaviour
 
     private void Update()
     {
-        Change();
+        //Change();
     }
 
     public void Change()

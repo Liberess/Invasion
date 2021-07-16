@@ -91,12 +91,29 @@ public class DataManager : MonoBehaviour
 
         SaveGameData();
         SaveMonsterData();
+
+        _gameData = new GameData();
+        File.Create(Application.persistentDataPath + GameDataFileName);
+
+        gameData.dia = 0;
+        gameData.gold = 100;
+        gameData.soulGem = 0;
+        gameData.drink = 100;
+
+        gameData.sfx = 1f;
+        gameData.bgm = 1f;
+
+        gameData.saveTime = DateTime.Now;
+
+        gameData.isNew = true;
+        gameData.isClear = false;
     }
 
     private void Update()
     {
         gameData.strGold = gameData.gold.ToString();
         gameData.strSoulGem = gameData.soulGem.ToString();
+        gameData.strDrink = gameData.drink.ToString();
 
         for(int i = 0; i < gameData.facilGold.Length; i++)
         {
@@ -201,6 +218,7 @@ public class DataManager : MonoBehaviour
 
             gameData.gold = BigInteger.Parse(gameData.strGold);
             gameData.soulGem = BigInteger.Parse(gameData.strSoulGem);
+            gameData.drink = BigInteger.Parse(gameData.strDrink);
 
             for (int i = 0; i < gameData.facilGold.Length; i++)
             {
@@ -215,9 +233,7 @@ public class DataManager : MonoBehaviour
             gameData.dia = 0;
             gameData.gold = 100;
             gameData.soulGem = 100;
-
-            gameData.numLevel = 1;
-            gameData.clickLevel = 1;
+            gameData.drink = 100;
 
             gameData.sfx = 1f;
             gameData.bgm = 1f;
@@ -233,6 +249,7 @@ public class DataManager : MonoBehaviour
     {
         gameData.gold = BigInteger.Parse(gameData.strGold);
         gameData.soulGem = BigInteger.Parse(gameData.strSoulGem);
+        gameData.drink = BigInteger.Parse(gameData.strDrink);
 
         for(int i = 0; i < gameData.facilGold.Length; i++)
         {

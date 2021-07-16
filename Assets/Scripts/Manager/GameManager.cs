@@ -206,7 +206,10 @@ public class GameManager : MonoBehaviour
         string str = string.Format("{0:n0}", DataManager.Instance.gameData.soulGem);
         DataManager.Instance.gameData.soulUnit = str.Split(','); */
 
-        moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strSoulGem);
+        //moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strSoulGem);
+        //moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strDrink);
+
+        moneyTxt[0].text = string.Format("{0:n0}", DataManager.Instance.gameData.drink);
         moneyTxt[1].text = DataManager.Instance.GoldUnitChange(DataManager.Instance.gameData.strGold);
         moneyTxt[2].text = string.Format("{0:n0}", DataManager.Instance.gameData.dia);
     }
