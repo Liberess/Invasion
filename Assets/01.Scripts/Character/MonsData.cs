@@ -14,4 +14,6 @@ public class MonsData
     public List<MonsterStatus> monsList = new List<MonsterStatus>();
 
     public int monsIndex;
+
+    public List<Monster> partyList = new List<Monster>();
 }

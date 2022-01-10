@@ -78,6 +78,9 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        Screen.SetResolution(1920, 1080, true);
+
         DontDestroyOnLoad(gameObject);
     }
 

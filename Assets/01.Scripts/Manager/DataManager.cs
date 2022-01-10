@@ -91,22 +91,6 @@ public class DataManager : MonoBehaviour
 
         SaveGameData();
         SaveMonsterData();
-
-        _gameData = new GameData();
-        File.Create(Application.persistentDataPath + GameDataFileName);
-
-        gameData.dia = 0;
-        gameData.gold = 100;
-        gameData.soulGem = 0;
-        gameData.drink = 100;
-
-        gameData.sfx = 1f;
-        gameData.bgm = 1f;
-
-        gameData.saveTime = DateTime.Now;
-
-        gameData.isNew = true;
-        gameData.isClear = false;
     }
 
     private void Update()
@@ -121,28 +105,57 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    #region Moster Load & Save
-    public void ConstructMonsDic() 
+    private void InitGameData()
+    {
+        gameData.dia = 0;
+        gameData.gold = 100;
+        gameData.soulGem = 0;
+        gameData.drink = 100;
+
+        gameData.strGold = "";
+        gameData.strSoulGem = "";
+        gameData.strDrink = "";
+
+        for (int i = 0; i < gameData.facilGold.Length; i++)
+            gameData.facilGold[i] = 0;
+
+        gameData.sfx = 1f;
+        gameData.bgm = 1f;
+
+        gameData.isNew = true;
+        gameData.isClear = false;
+
+        gameData.saveTime = DateTime.Now;
+    }
+
+    private void InitMonsterData()
+    {
+        for (int i = 0; i < 12; i++)
+            monsData.monsUnlockList[i] = false;
+
+        monsData.monsIndex = 0;
+        monsData.monsDic.Clear();
+        monsData.monsList.Clear();
+    }
+
+    public void ConstructMonsDic()
     {
         monsData.monsDic = new Dictionary<string, MonsterStatus>();
 
         //Json에 저장된 monsList안의 내용들을 monsDic에 저장
-        for(int i = 0; i < monsData.monsList.Count; i++)
-        {
+        for (int i = 0; i < monsData.monsList.Count; i++)
             monsData.monsDic.Add(monsData.monsList[i].name, monsData.monsList[i]);
-        }
     }
 
     public void ResettingMonsList()
     {
         monsData.monsList.Clear();
 
-        for(int i = 0; i < monsData.monsDic.Count; i++)
-        {
+        for (int i = 0; i < monsData.monsDic.Count; i++)
             monsData.monsList = new List<MonsterStatus>(monsData.monsDic.Values);
-        }
     }
 
+    #region Moster Load & Save
     public void LoadMonsterData()
     {
         string filePath = Application.persistentDataPath + MonsterDataFileName;
@@ -173,9 +186,7 @@ public class DataManager : MonoBehaviour
                 bool found = monsData.monsDic.ContainsKey(monsData.monsList[i].name);
 
                 if(found == false)
-                {
                     monsData.monsDic.Add(monsData.monsList[i].name, monsData.monsList[i]);
-                }
             }
         }
         else
@@ -183,14 +194,7 @@ public class DataManager : MonoBehaviour
             _monsData = new MonsData();
             File.Create(Application.persistentDataPath + MonsterDataFileName);
 
-            for (int i = 0; i < 12; i++)
-            {
-                monsData.monsUnlockList[i] = false;
-            }
-
-            monsData.monsIndex = 0;
-            monsData.monsDic.Clear();
-            monsData.monsList.Clear();
+            InitMonsterData();
         }
     }
 
@@ -221,27 +225,14 @@ public class DataManager : MonoBehaviour
             gameData.drink = BigInteger.Parse(gameData.strDrink);
 
             for (int i = 0; i < gameData.facilGold.Length; i++)
-            {
                 gameData.facilGold[i] = BigInteger.Parse(gameData.strFacilGold[i]);
-            }
         }
         else
         {
             _gameData = new GameData();
             File.Create(Application.persistentDataPath + GameDataFileName);
 
-            gameData.dia = 0;
-            gameData.gold = 100;
-            gameData.soulGem = 100;
-            gameData.drink = 100;
-
-            gameData.sfx = 1f;
-            gameData.bgm = 1f;
-
-            gameData.saveTime = DateTime.Now;
-
-            gameData.isNew = true;
-            gameData.isClear = false;
+            InitGameData();
         }
     }
 
@@ -252,9 +243,7 @@ public class DataManager : MonoBehaviour
         gameData.drink = BigInteger.Parse(gameData.strDrink);
 
         for(int i = 0; i < gameData.facilGold.Length; i++)
-        {
             gameData.facilGold[i] = BigInteger.Parse(gameData.strFacilGold[i]);
-        }
 
         string filePath = Application.persistentDataPath + GameDataFileName;
 
