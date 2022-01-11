@@ -24,7 +24,6 @@ public class MonsterStatus
 public class Monster : MonoBehaviour
 {
     #region 변수 선언
-    public static Monster _instance;
     DataManager dataManager;
 
     public GameObject shadow;
@@ -40,10 +39,7 @@ public class Monster : MonoBehaviour
     private float maxPickTime = 0.5f;
 
     public bool isMove;
-    private bool isSell;
     private bool isBorder;
-    private bool doMerge;
-    private bool canMerge;
 
     public float speedX;
     public float speedY;
@@ -55,19 +51,13 @@ public class Monster : MonoBehaviour
 
     private void Awake()
     {
-        #region 기본 초기화
         isMove = true;
         isPick = false;
-        isSell = false;
         isBorder = false;
-        canMerge = false;
-
-        _instance = this;
 
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
-        #endregion
 
         Think();
     }
@@ -86,9 +76,9 @@ public class Monster : MonoBehaviour
 
     private void LateUpdate()
     {
-        DataManager.Instance.monsData.monsDic[name].ID = mID;
-        DataManager.Instance.monsData.monsDic[name].Exp = mExp;
-        DataManager.Instance.monsData.monsDic[name].Level = mLevel;
+        dataManager.monsData.monsDic[name].ID = mID;
+        dataManager.monsData.monsDic[name].Exp = mExp;
+        dataManager.monsData.monsDic[name].Level = mLevel;
     }
 
     private void FixedUpdate()
@@ -149,10 +139,7 @@ public class Monster : MonoBehaviour
 
     public void GetSoulGem()
     {
-        if (DataManager.Instance.gameData.soulGem < DataManager.Instance.gameData.maxSoul)
-        {
-            //DataManager.Instance.gameData.soulGem += mID + 1 * mLevel * DataManager.Instance.gameData.clickLevel;
-        }
+        //DataManager.Instance.gameData.soulGem += mID + 1 * mLevel * DataManager.Instance.gameData.clickLevel;
     }
     #endregion
 
@@ -206,38 +193,9 @@ public class Monster : MonoBehaviour
     }
     #endregion
 
-    private void Merge(GameObject _monsObj)
-    {
-        if (doMerge)
-        {
-            GameObject mons = Instantiate(Resources.Load<GameObject>("Prefabs/Monster"), new Vector3(0, 0, 0), Quaternion.identity);
-            mons.name = string.Concat("Jelly" + dataManager.monsData.monsIndex);
-            mons.GetComponent<Monster>().mID = mID + 1;
-            mons.GetComponent<SpriteRenderer>().sprite = GameManager.Instance.monsSpriteList[mID + 1];
-
-            dataManager.monsData.monsDic.Add(mons.name, new MonsterStatus(mons.name, mID + 1, 0, 1));
-            dataManager.monsData.monsList = new List<MonsterStatus>(dataManager.monsData.monsDic.Values);
-            dataManager.monsData.monsIndex++;
-
-            //DataManager.Instance.monsData.monsDic.Remove(collision.gameObject.name);
-            DataManager.Instance.monsData.monsDic.Remove(_monsObj.name);
-            DataManager.Instance.monsData.monsDic.Remove(name);
-            dataManager.ResettingMonsList();
-
-            //Destroy(collision.gameObject);
-            Destroy(_monsObj);
-            Destroy(this.gameObject);
-        }
-    }
-
     #region 물리 충돌
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("SellBtn"))
-        {
-            isSell = true;
-        }
-
         if (collision.CompareTag("BorderLine"))
         {
             isBorder = true;
@@ -249,34 +207,11 @@ public class Monster : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Monster"))
-        {
-            if (collision.GetComponent<Monster>().mID == mID)
-            {
-                canMerge = true;
-
-                Merge(collision.gameObject);
-            }
-        }
-    }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("SellBtn"))
-        {
-            isSell = false;
-        }
-
         if (collision.CompareTag("BorderLine"))
         {
             isBorder = false;
-        }
-
-        if (collision.CompareTag("Monster"))
-        {
-            canMerge = false;
         }
     }
     #endregion
@@ -323,31 +258,6 @@ public class Monster : MonoBehaviour
             if(isBorder)
             {
                 transform.position = new Vector3(0, 0, 0);
-            }
-
-            if (isSell)
-            {
-                int gold = DataManager.Instance.gameData.goldUnit[(int)Unit.Max - 1];
-
-                if(gold < 999)
-                {
-                    DataManager.Instance.gameData.gold += GameManager._instance.monsGoldList[mID] * mLevel;
-
-                    SoundManager.Instance.PlaySFX("Sell");
-                    DataManager.Instance.monsData.monsDic.Remove(name);
-                    dataManager.ResettingMonsList();
-
-                    Destroy(this.gameObject);
-                }
-                else
-                {
-                    SoundManager.Instance.PlaySFX("Fail");
-                }
-            }
-
-            if(canMerge)
-            {
-                doMerge = true;
             }
         }
     }

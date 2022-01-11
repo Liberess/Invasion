@@ -213,7 +213,7 @@ public class GameManager : MonoBehaviour
         //moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strDrink);
 
         moneyTxt[0].text = string.Format("{0:n0}", DataManager.Instance.gameData.drink);
-        moneyTxt[1].text = DataManager.Instance.GoldUnitChange(DataManager.Instance.gameData.strGold);
+        moneyTxt[1].text = string.Format("{0:n0}", DataManager.Instance.gameData.gold);
         moneyTxt[2].text = string.Format("{0:n0}", DataManager.Instance.gameData.dia);
     }
 

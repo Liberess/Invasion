@@ -173,18 +173,19 @@ public class FacilityTimer : MonoBehaviour
         /* FacilityManager.Instance.facilSliders[ID].transform.Find("MaxTxt").GetComponent<Text>().text
             = (FacilityManager.Instance.facilGoldList[ID] * (DataManager.Instance.gameData.facilLevelList[ID] + 1)).ToString(); */
 
-        string maxGold = (FacilityManager.Instance.facilGoldList[ID] * (DataManager.Instance.gameData.facilLevelList[ID] + 1)).ToString();
-        DataManager.Instance.gameData.facilGold[ID] = BigInteger.Parse(maxGold);
+        string maxGold = (FacilityManager.Instance.facilGoldList[ID] *
+            (DataManager.Instance.gameData.facilLevelList[ID] + 1)).ToString();
+        DataManager.Instance.gameData.facilGold[ID] = int.Parse(maxGold);
         FacilityManager.Instance.facilSliders[ID].transform.Find("MaxTxt").GetComponent<Text>().text
-            = GoldUnitChange(maxGold);
+            = maxGold;
 
         string upGold = (FacilityManager.Instance.facilGoldList[ID] * (DataManager.Instance.gameData.facilLevelList[ID] + 1)).ToString();
         upBtn.transform.Find("PlusGoldTxt").GetComponent<Text>().text
-            = "+" + GoldUnitChange(upGold);
+            = "+" + upGold;
 
         string needGold = (FacilityManager.Instance.facilGoldList[ID] * (DataManager.Instance.gameData.facilLevelList[ID] + 1)).ToString();
         upBtn.transform.Find("NeedGoldTxt").GetComponent<Text>().text
-            = GoldUnitChange(needGold);
+            = needGold;
     }
 
     public void GetReward()
@@ -196,43 +197,8 @@ public class FacilityTimer : MonoBehaviour
         rewardBtn.image.enabled = false;
         rewardBtn.transform.Find("Text").gameObject.SetActive(false);
 
-        BigInteger gold = FacilityManager.Instance.facilGoldList[ID] * (DataManager.Instance.gameData.facilLevelList[ID] + 1);
-        DataManager.Instance.gameData.gold += gold;
-    }
-
-    public string GoldUnitChange(string haveGold)
-    {
-        int index = 0;
-
-        while (true)
-        {
-            string last4 = "";
-
-            if (haveGold.Length >= 4)
-            {
-                last4 = haveGold.Substring(haveGold.Length - 4);
-                int intLast4 = int.Parse(last4);
-
-                DataManager.Instance.gameData.facilGoldUnit[ID, index] = intLast4 % 1000;
-
-                haveGold = haveGold.Remove(haveGold.Length - 3);
-            }
-            else
-            {
-                DataManager.Instance.gameData.facilGoldUnit[ID, index] = int.Parse(haveGold);
-                break;
-            }
-
-            index++;
-        }
-
-        if (index > 0)
-        {
-            int r = DataManager.Instance.gameData.facilGoldUnit[ID, index] * 1000 + DataManager.Instance.gameData.facilGoldUnit[ID, index - 1];
-            return string.Format("{0:#,#}{1}", r / 1000f, DataManager.Instance.gameData.strMoneyUnit[index - 1]);
-        }
-
-        return haveGold;
+        DataManager.Instance.gameData.gold += FacilityManager.Instance.facilGoldList[ID] *
+            (DataManager.Instance.gameData.facilLevelList[ID] + 1);
     }
 
     private void OnApplicationPause(bool pause)

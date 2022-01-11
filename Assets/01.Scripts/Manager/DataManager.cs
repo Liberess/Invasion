@@ -93,28 +93,12 @@ public class DataManager : MonoBehaviour
         SaveMonsterData();
     }
 
-    private void Update()
-    {
-        gameData.strGold = gameData.gold.ToString();
-        gameData.strSoulGem = gameData.soulGem.ToString();
-        gameData.strDrink = gameData.drink.ToString();
-
-        for(int i = 0; i < gameData.facilGold.Length; i++)
-        {
-            gameData.strFacilGold[i] = gameData.facilGold[i].ToString();
-        }
-    }
-
     private void InitGameData()
     {
         gameData.dia = 0;
-        gameData.gold = 100;
+        gameData.gold = 0;
         gameData.soulGem = 0;
-        gameData.drink = 100;
-
-        gameData.strGold = "";
-        gameData.strSoulGem = "";
-        gameData.strDrink = "";
+        gameData.drink = 0;
 
         for (int i = 0; i < gameData.facilGold.Length; i++)
             gameData.facilGold[i] = 0;
@@ -219,13 +203,6 @@ public class DataManager : MonoBehaviour
             byte[] bytes = System.Convert.FromBase64String(code);
             string FromJsonData = System.Text.Encoding.UTF8.GetString(bytes);
             _gameData = JsonUtility.FromJson<GameData>(FromJsonData);
-
-            gameData.gold = BigInteger.Parse(gameData.strGold);
-            gameData.soulGem = BigInteger.Parse(gameData.strSoulGem);
-            gameData.drink = BigInteger.Parse(gameData.strDrink);
-
-            for (int i = 0; i < gameData.facilGold.Length; i++)
-                gameData.facilGold[i] = BigInteger.Parse(gameData.strFacilGold[i]);
         }
         else
         {
@@ -238,13 +215,6 @@ public class DataManager : MonoBehaviour
 
     public void SaveGameData()
     {
-        gameData.gold = BigInteger.Parse(gameData.strGold);
-        gameData.soulGem = BigInteger.Parse(gameData.strSoulGem);
-        gameData.drink = BigInteger.Parse(gameData.strDrink);
-
-        for(int i = 0; i < gameData.facilGold.Length; i++)
-            gameData.facilGold[i] = BigInteger.Parse(gameData.strFacilGold[i]);
-
         string filePath = Application.persistentDataPath + GameDataFileName;
 
         string ToJsonData = JsonUtility.ToJson(gameData);
@@ -257,78 +227,6 @@ public class DataManager : MonoBehaviour
     {
         gameData.saveTime = DateTime.Now;
         gameData.saveTimeStr = gameData.saveTime.ToString();
-    }
-    #endregion
-
-    #region 재화 단위 변경
-    public string SoulGemUnitChange(string haveSoul)
-    {
-        int index = 0;
-
-        while (true)
-        {
-            string last4 = "";
-
-            if (haveSoul.Length >= 4)
-            {
-                last4 = haveSoul.Substring(haveSoul.Length - 4);
-                int intLast4 = int.Parse(last4);
-
-                gameData.soulUnit[index] = intLast4 % 1000;
-
-                haveSoul = haveSoul.Remove(haveSoul.Length - 3);
-            }
-            else
-            {
-                gameData.soulUnit[index] = int.Parse(haveSoul);
-                break;
-            }
-
-            index++;
-        }
-
-        if(index > 0)
-        {
-            int r = gameData.soulUnit[index] * 1000 + gameData.soulUnit[index - 1];
-            return string.Format("{0:#,#}{1}", r / 1000f, gameData.strMoneyUnit[index - 1]);
-        }
-
-        return haveSoul;
-    }
-
-    public string GoldUnitChange(string haveGold)
-    {
-        int index = 0;
-
-        while (true)
-        {
-            string last4 = "";
-
-            if (haveGold.Length >= 4)
-            {
-                last4 = haveGold.Substring(haveGold.Length - 4);
-                int intLast4 = int.Parse(last4);
-
-                gameData.goldUnit[index] = intLast4 % 1000;
-
-                haveGold = haveGold.Remove(haveGold.Length - 3);
-            }
-            else
-            {
-                gameData.goldUnit[index] = int.Parse(haveGold);
-                break;
-            }
-
-            index++;
-        }
-
-        if (index > 0)
-        {
-            int r = gameData.goldUnit[index] * 1000 + gameData.goldUnit[index - 1];
-            return string.Format("{0:#,#}{1}", r / 1000f, gameData.strMoneyUnit[index - 1]);
-        }
-
-        return haveGold;
     }
     #endregion
 
