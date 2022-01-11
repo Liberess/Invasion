@@ -4,10 +4,9 @@ using UnityEngine;
 
 public enum DircTypes
 {
-    Up = 0,
-    Left,
-    Down,
-    Right
+    ToLobby = 0,
+    ToFacility,
+    ToDoctor,
 }
 
 public class DircType : MonoBehaviour
