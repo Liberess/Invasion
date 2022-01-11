@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class FacilityTimer : MonoBehaviour
 {
+    private DataManager dataMgr;
+
     public Button upBtn;
     public Button rewardBtn;
     public Text lvTxt;
@@ -18,7 +20,9 @@ public class FacilityTimer : MonoBehaviour
 
     private void Awake()
     {
-        if (DataManager.Instance.gameData.facilLimitTime == null)
+        dataMgr = DataManager.Instance;
+
+        if (dataMgr.gameData.facilLimitTime == null)
         {
             switch (ID)
             {
@@ -74,8 +78,8 @@ public class FacilityTimer : MonoBehaviour
                     break;
             }
 
-            limitTime = DataManager.Instance.gameData.facilLimitTime[ID];
-            sliderTime = DataManager.Instance.gameData.facilSliderTime[ID];
+            limitTime = dataMgr.gameData.facilLimitTime[ID];
+            sliderTime = dataMgr.gameData.facilSliderTime[ID];
         }
 
         ChangeTimerTxt();
@@ -108,14 +112,14 @@ public class FacilityTimer : MonoBehaviour
 
     public void SaveLimitTime()
     {
-        DataManager.Instance.gameData.facilLimitTime[ID] = limitTime;
-        DataManager.Instance.gameData.facilSliderTime[ID] = sliderTime;
+        dataMgr.gameData.facilLimitTime[ID] = limitTime;
+        dataMgr.gameData.facilSliderTime[ID] = sliderTime;
     }
 
     #region 타이머
     private void Timer()
     {
-        if(DataManager.Instance.gameData.facilUnlockList[ID])
+        if(dataMgr.gameData.facilUnlockList[ID])
         {
             if (limitTime >= 0)
             {
@@ -148,42 +152,42 @@ public class FacilityTimer : MonoBehaviour
 
     public void FacilLvUp()
     {
-        DataManager.Instance.gameData.facilLevelList[ID]++;
+        dataMgr.gameData.facilLevelList[ID]++;
 
         SetLvTxt();
         SetGoldTxt();
 
-        DataManager.Instance.gameData.gold -= (FacilityManager.Instance.facilGoldList[ID] * (DataManager.Instance.gameData.facilLevelList[ID] + 1));
+        dataMgr.gameData.gold -= (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.gameData.facilLevelList[ID] + 1));
     }
 
     public void SetLvTxt()
     {
         if (ID != 2)
         {
-            lvTxt.text = FacilityManager.Instance.facilNameList[ID] + " Lv." + DataManager.Instance.gameData.facilLevelList[ID].ToString();
+            lvTxt.text = FacilityManager.Instance.facilNameList[ID] + " Lv." + dataMgr.gameData.facilLevelList[ID].ToString();
         }
         else
         {
-            lvTxt.text = "Lv." + DataManager.Instance.gameData.facilLevelList[ID].ToString();
+            lvTxt.text = "Lv." + dataMgr.gameData.facilLevelList[ID].ToString();
         }
     }
 
     public void SetGoldTxt()
     {
         /* FacilityManager.Instance.facilSliders[ID].transform.Find("MaxTxt").GetComponent<Text>().text
-            = (FacilityManager.Instance.facilGoldList[ID] * (DataManager.Instance.gameData.facilLevelList[ID] + 1)).ToString(); */
+            = (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.gameData.facilLevelList[ID] + 1)).ToString(); */
 
         string maxGold = (FacilityManager.Instance.facilGoldList[ID] *
-            (DataManager.Instance.gameData.facilLevelList[ID] + 1)).ToString();
-        DataManager.Instance.gameData.facilGold[ID] = int.Parse(maxGold);
+            (dataMgr.gameData.facilLevelList[ID] + 1)).ToString();
+        dataMgr.gameData.facilGold[ID] = int.Parse(maxGold);
         FacilityManager.Instance.facilSliders[ID].transform.Find("MaxTxt").GetComponent<Text>().text
             = maxGold;
 
-        string upGold = (FacilityManager.Instance.facilGoldList[ID] * (DataManager.Instance.gameData.facilLevelList[ID] + 1)).ToString();
+        string upGold = (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.gameData.facilLevelList[ID] + 1)).ToString();
         upBtn.transform.Find("PlusGoldTxt").GetComponent<Text>().text
             = "+" + upGold;
 
-        string needGold = (FacilityManager.Instance.facilGoldList[ID] * (DataManager.Instance.gameData.facilLevelList[ID] + 1)).ToString();
+        string needGold = (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.gameData.facilLevelList[ID] + 1)).ToString();
         upBtn.transform.Find("NeedGoldTxt").GetComponent<Text>().text
             = needGold;
     }
@@ -197,8 +201,8 @@ public class FacilityTimer : MonoBehaviour
         rewardBtn.image.enabled = false;
         rewardBtn.transform.Find("Text").gameObject.SetActive(false);
 
-        DataManager.Instance.gameData.gold += FacilityManager.Instance.facilGoldList[ID] *
-            (DataManager.Instance.gameData.facilLevelList[ID] + 1);
+        dataMgr.gameData.gold += FacilityManager.Instance.facilGoldList[ID] *
+            (dataMgr.gameData.facilLevelList[ID] + 1);
     }
 
     private void OnApplicationPause(bool pause)
