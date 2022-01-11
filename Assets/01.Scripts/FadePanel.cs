@@ -5,19 +5,18 @@ using UnityEngine.UI;
 
 public class FadePanel : MonoBehaviour
 {
-    public static FadePanel Instance;
+    private static FadePanel mInstance;
+    public static FadePanel Instance { get => mInstance; }
 
-    public Image Panel;
+    [SerializeField] private Image Panel;
 
     private float time = 0f;
     private float fadeTime = 0.2f;
 
     private void Awake()
     {
-        if(Instance == null)
-        {
-            Instance = this;
-        }
+        if(mInstance == null)
+            mInstance = this;
     }
 
     public void Fade()
