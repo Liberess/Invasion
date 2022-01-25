@@ -239,7 +239,7 @@ public class GameManager : MonoBehaviour
 
             if (isPanel)
             {
-                BtnPanel.Instance.PanelHide();
+                UIManager.Instance.hidePanelAction();
             }
         }
         else
