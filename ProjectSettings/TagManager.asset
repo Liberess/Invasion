@@ -5,9 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - BorderLine
-  - Monster
-  - SellBtn
   - Clue
+  - Enemy
+  - Hero
   layers:
   - Default
   - TransparentFX
@@ -18,8 +18,8 @@ TagManager:
   - 
   - 
   - BorderLine
-  - Monster
-  - 
+  - Hero
+  - Enemy
   - 
   - 
   - 

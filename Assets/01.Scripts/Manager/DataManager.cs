@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,89 +7,83 @@ using UnityEngine.UI;
 
 public class DataManager : MonoBehaviour
 {
-    private string GameDataFileName = "/GameData.json";
-    private string MonsterDataFileName = "/MonsterData.json";
+    private const string GameDataFileName = "/GameData.json";
+    private const string HeroDataFileName = "/HeroData.json";
+
+    [SerializeField] private GameObject heroPrefab;
 
     #region 인스턴스화
-    static GameObject _container;
-    static GameObject Container
-    {
-        get
-        {
-            return _container;
-        }
-    }
+    private static GameObject mContainer;
 
-    public static DataManager _instance;
+    private static DataManager mInstance;
     public static DataManager Instance
     {
         get
         {
-            if (!_instance)
+            if (!mInstance)
             {
-                _container = new GameObject();
-                _container.name = "DataManager";
-                _instance = _container.AddComponent(typeof(DataManager)) as DataManager;
-                DontDestroyOnLoad(_container);
+                mContainer = new GameObject();
+                mContainer.name = "DataManager";
+                mInstance = mContainer.AddComponent(typeof(DataManager)) as DataManager;
+                DontDestroyOnLoad(mContainer);
             }
 
-            return _instance;
+            return mInstance;
         }
     }
 
-    public MonsData _monsData;
-    public MonsData monsData
+    private HeroData mHeroData;
+    public HeroData heroData
     {
         get
         {
-            if (_monsData == null)
+            if (mHeroData == null)
             {
-                LoadMonsterData();
-                SaveMonsterData();
+                LoadHeroData();
+                SaveHeroData();
             }
 
-            return _monsData;
+            return mHeroData;
         }
     }
 
-    public GameData _gameData;
+    private GameData mGameData;
     public GameData gameData
     {
         get
         {
-            if(_gameData == null)
+            if(mGameData == null)
             {
                 LoadGameData();
                 SaveGameData();
             }
 
-            return _gameData;
+            return mGameData;
         }
     }
     #endregion
 
     private void Awake()
     {
-       if(_instance == null)
+       if(mInstance == null)
         {
-            _instance = this;
+            mInstance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        else if(_instance != this)
+        else if(mInstance != this)
         {
             Destroy(gameObject);
         }
-
-        DontDestroyOnLoad(gameObject);
 
         LoadGameData();
     }
 
     private void Start()
     {
-        LoadMonsterData();
+        LoadHeroData();
 
         SaveGameData();
-        SaveMonsterData();
+        SaveHeroData();
     }
 
     private void InitGameData()
@@ -112,82 +105,84 @@ public class DataManager : MonoBehaviour
         gameData.saveTime = DateTime.Now;
     }
 
-    private void InitMonsterData()
+    private void InitHeroData()
     {
         for (int i = 0; i < 12; i++)
-            monsData.monsUnlockList[i] = false;
+            heroData.heroUnlockList[i] = false;
 
-        monsData.monsIndex = 0;
-        monsData.monsDic.Clear();
-        monsData.monsList.Clear();
+        heroData.heroIndex = 0;
+        heroData.heroDic.Clear();
+        heroData.heroList.Clear();
     }
 
-    public void ConstructMonsDic()
+    public void ConstructHeroDic()
     {
-        monsData.monsDic = new Dictionary<string, MonsterStatus>();
+        heroData.heroDic = new Dictionary<string, UnitStatus>();
 
-        //Json에 저장된 monsList안의 내용들을 monsDic에 저장
-        for (int i = 0; i < monsData.monsList.Count; i++)
-            monsData.monsDic.Add(monsData.monsList[i].name, monsData.monsList[i]);
+        //Json에 저장된 heroList안의 내용들을 heroDic에 저장
+        for (int i = 0; i < heroData.heroList.Count; i++)
+            heroData.heroDic.Add(heroData.heroList[i].name, heroData.heroList[i]);
     }
 
-    public void ResettingMonsList()
+    public void ResettingHeroList()
     {
-        monsData.monsList.Clear();
+        heroData.heroList.Clear();
 
-        for (int i = 0; i < monsData.monsDic.Count; i++)
-            monsData.monsList = new List<MonsterStatus>(monsData.monsDic.Values);
+        for (int i = 0; i < heroData.heroDic.Count; i++)
+            heroData.heroList = new List<UnitStatus>(heroData.heroDic.Values);
     }
 
     #region Moster Load & Save
-    public void LoadMonsterData()
+    public void LoadHeroData()
     {
-        string filePath = Application.persistentDataPath + MonsterDataFileName;
+        string filePath = Application.persistentDataPath + HeroDataFileName;
 
         if (File.Exists(filePath))
         {
             string code = File.ReadAllText(filePath);
             byte[] bytes = Convert.FromBase64String(code);
             string FromJsonData = System.Text.Encoding.UTF8.GetString(bytes);
-            _monsData = JsonUtility.FromJson<MonsData>(FromJsonData);
+            mHeroData = JsonUtility.FromJson<HeroData>(FromJsonData);
 
-            ConstructMonsDic();
+            ConstructHeroDic();
 
-            for (int i = 0; i < monsData.monsList.Count; i++)
+            for (int i = 0; i < heroData.heroList.Count; i++)
             {
-                GameObject mons = Instantiate(Resources.Load<GameObject>("Prefabs/Monster"), new UnityEngine.Vector3(0, 0, 0), UnityEngine.Quaternion.identity);
-                mons.name = monsData.monsList[i].name;
-                mons.GetComponent<Monster>().mID = monsData.monsList[i].ID;
-                mons.GetComponent<Monster>().mExp = monsData.monsList[i].Exp;
-                mons.GetComponent<Monster>().mLevel = monsData.monsList[i].Level;
-                mons.GetComponent<SpriteRenderer>().sprite = GameManager.Instance.monsSpriteList[monsData.monsList[i].ID];
-                mons.GetComponent<Monster>().ChangeAc();
+                var hero = Instantiate(heroPrefab, Vector3.zero, Quaternion.identity).GetComponent<Hero>();
+
+                var heroStat = new UnitStatus(heroData.heroList[i].name,
+                    heroData.heroList[i].ID, heroData.heroList[i].exp, heroData.heroList[i].level);
+
+                hero.UnitSetup(heroStat);
+                hero.name = heroData.heroList[i].name;
+                hero.GetComponent<SpriteRenderer>().sprite =
+                    heroData.heroSpriteList[heroData.heroList[i].ID];
             }
 
-            for (int i = 0; i < monsData.monsList.Count; i++)
+            for (int i = 0; i < heroData.heroList.Count; i++)
             {
-                //만약 monsDic에 해당 monsList의 "Jelly0"가 있다면
-                bool found = monsData.monsDic.ContainsKey(monsData.monsList[i].name);
+                //만약 heroDic에 해당 heroList의 "Jelly0"가 있다면
+                bool found = heroData.heroDic.ContainsKey(heroData.heroList[i].name);
 
                 if(found == false)
-                    monsData.monsDic.Add(monsData.monsList[i].name, monsData.monsList[i]);
+                    heroData.heroDic.Add(heroData.heroList[i].name, heroData.heroList[i]);
             }
         }
         else
         {
-            _monsData = new MonsData();
-            File.Create(Application.persistentDataPath + MonsterDataFileName);
+            mHeroData = new HeroData();
+            File.Create(Application.persistentDataPath + HeroDataFileName);
 
-            InitMonsterData();
+            InitHeroData();
         }
     }
 
-    public void SaveMonsterData()
+    public void SaveHeroData()
     {
-        string filePath = Application.persistentDataPath + MonsterDataFileName;
-        string ToJsonData = JsonUtility.ToJson(monsData);
+        string filePath = Application.persistentDataPath + HeroDataFileName;
+        string ToJsonData = JsonUtility.ToJson(heroData);
         byte[] bytes = System.Text.Encoding.UTF8.GetBytes(ToJsonData);
-        string code = System.Convert.ToBase64String(bytes);
+        string code = Convert.ToBase64String(bytes);
         File.WriteAllText(filePath, code);
     }
     #endregion
@@ -200,13 +195,13 @@ public class DataManager : MonoBehaviour
         if(File.Exists(filePath))
         {
             string code = File.ReadAllText(filePath);
-            byte[] bytes = System.Convert.FromBase64String(code);
+            byte[] bytes = Convert.FromBase64String(code);
             string FromJsonData = System.Text.Encoding.UTF8.GetString(bytes);
-            _gameData = JsonUtility.FromJson<GameData>(FromJsonData);
+            mGameData = JsonUtility.FromJson<GameData>(FromJsonData);
         }
         else
         {
-            _gameData = new GameData();
+            mGameData = new GameData();
             File.Create(Application.persistentDataPath + GameDataFileName);
 
             InitGameData();
@@ -219,7 +214,7 @@ public class DataManager : MonoBehaviour
 
         string ToJsonData = JsonUtility.ToJson(gameData);
         byte[] bytes = System.Text.Encoding.UTF8.GetBytes(ToJsonData);
-        string code = System.Convert.ToBase64String(bytes);
+        string code = Convert.ToBase64String(bytes);
         File.WriteAllText(filePath, code);
     }
 
@@ -234,6 +229,6 @@ public class DataManager : MonoBehaviour
     {
         SaveTime();
         SaveGameData();
-        SaveMonsterData();
+        SaveHeroData();
     }
 }

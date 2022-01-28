@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Text;
-using System.IO;
-using System.Numerics;
+//using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    DataManager dataManager;
+    private DataManager dataManager;
     
     public GameObject OptionPanel;
     public GameObject clearImg;
@@ -30,9 +30,6 @@ public class GameManager : MonoBehaviour
 
     private int reward;
     private int rewardLimit = 60;
-
-    //private BigInteger _soulGem;  //Txt Anim 효과를 위한 것
-    //private BigInteger _gold;     //이하동문
 
     public bool isPlay; //몬스터 이동 제어 등
     public bool isPanel; //Panel이 켜져 있는가
@@ -153,10 +150,10 @@ public class GameManager : MonoBehaviour
     {
         if(_minute >= 10)
         {
-            for (int i = 0; i < dataManager.monsData.monsList.Count; i++)
+            for (int i = 0; i < dataManager.heroData.heroList.Count; i++)
             {
-                reward = (((dataManager.monsData.monsList[i].ID + 1)
-                    * dataManager.monsData.monsList[i].Level * stopWatch)) / rewardLimit;
+                reward = (((dataManager.heroData.heroList[i].ID + 1)
+                    * dataManager.heroData.heroList[i].level * stopWatch)) / rewardLimit;
             }
 
             offNotice.transform.Find("OffTxt").gameObject.GetComponent<Text>().text =
@@ -179,6 +176,11 @@ public class GameManager : MonoBehaviour
         offNotice.gameObject.GetComponent<Animator>().SetTrigger("doHide");
     }
     #endregion
+
+    public void OnClickGameStartBtn()
+    {
+        SceneManager.LoadScene("Battle");
+    }
 
     public void GameClear()
     {
