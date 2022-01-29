@@ -126,6 +126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dust: {fileID: 7707199987726475255}
   shadow: {fileID: 0}
+  mJob: 1
 --- !u!95 &652529064102891199
 Animator:
   serializedVersion: 3

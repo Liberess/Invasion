@@ -32,7 +32,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    private HeroData mHeroData;
+    [SerializeField] private HeroData mHeroData;
     public HeroData heroData
     {
         get
@@ -47,7 +47,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    private GameData mGameData;
+    [SerializeField] private GameData mGameData;
     public GameData gameData
     {
         get
@@ -107,7 +107,7 @@ public class DataManager : MonoBehaviour
 
     private void InitHeroData()
     {
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < HeroData.HeroMaxSize; i++)
             heroData.heroUnlockList[i] = false;
 
         heroData.heroIndex = 0;
@@ -139,6 +139,8 @@ public class DataManager : MonoBehaviour
 
         if (File.Exists(filePath))
         {
+            Debug.Log("LoadHeroData : Exists");
+
             string code = File.ReadAllText(filePath);
             byte[] bytes = Convert.FromBase64String(code);
             string FromJsonData = System.Text.Encoding.UTF8.GetString(bytes);
@@ -167,9 +169,14 @@ public class DataManager : MonoBehaviour
                 if(found == false)
                     heroData.heroDic.Add(heroData.heroList[i].name, heroData.heroList[i]);
             }
+
+            var newHero = new UnitStatus("나나", 0, 0f, 1);
+            heroData.partyList.Add(newHero);
         }
         else
         {
+            Debug.Log("LoadHeroData : New");
+
             mHeroData = new HeroData();
             File.Create(Application.persistentDataPath + HeroDataFileName);
 

@@ -5,10 +5,8 @@ using UnityEngine.Events;
 
 public enum UnitType
 {
-    Sword = 0,
-    Range,
-    Guard,
-    Wizard,
+    ShortRange= 0,
+    LongRange,
     Bullet
 }
 
@@ -23,10 +21,9 @@ public abstract class Unit : MonoBehaviour
 
     private GameObject enemy;
 
-    public UnitType job { get; private set; }
+    [SerializeField] private UnitType mJob;
+    public UnitType job { get => mJob; }
 
-    protected int hp;
-    protected int atk;
     protected int direction;
 
     protected float distance;
@@ -38,7 +35,7 @@ public abstract class Unit : MonoBehaviour
 
     protected float attackTime = 0;
 
-    private bool IsAlive => hp > 0;
+    private bool IsAlive => myStat.hp > 0;
 
     protected Animator anim;
     protected Rigidbody2D rigid;
@@ -47,7 +44,7 @@ public abstract class Unit : MonoBehaviour
     public void UnitSetup(UnitStatus status)
     {
         myStat = status;
-        ChangeAc();
+        //ChangeAc();
     }
 
     public virtual void ChangeAc()
@@ -63,12 +60,10 @@ public abstract class Unit : MonoBehaviour
         allyValue = (direction == 1) ? "Hero" : "Enemy"; //Layer Mask - Check Ally
         enemyValue = (direction == 1) ? "Enemy" : "Hero"; //Layer Mask - Check Enemy
 
-        switch (job) //Set Distance
+        switch (mJob) //Set Distance
         {
-            case UnitType.Sword: distance = 0.7f; atk = 2; hp = 10; break;
-            case UnitType.Range: distance = 2.5f; atk = 1; hp = 5; break;
-            case UnitType.Guard: distance = 0.7f; atk = 1; hp = 30; break;
-            case UnitType.Wizard: distance = 3.5f; atk = 1; hp = 1; break;
+            case UnitType.ShortRange: distance = 0.7f; myStat.ap = 2; myStat.hp = 10; break;
+            case UnitType.LongRange: distance = 2.5f; myStat.ap = 1; myStat.hp = 5; break;
             case UnitType.Bullet: distance = 0.4f; break;
         }
     }
@@ -113,13 +108,12 @@ public abstract class Unit : MonoBehaviour
 
             switch (job)
             {
-                case UnitType.Sword: enemy.GetComponent<Unit>().Hit(atk); break;
-                case UnitType.Guard: enemy.GetComponent<Unit>().Hit(atk); break;
-                case UnitType.Range: Shot(); break;
-                case UnitType.Wizard: Spell(enemy.transform.position); break;
+                case UnitType.ShortRange: enemy.GetComponent<Unit>().Hit(myStat.ap); break;
+                case UnitType.LongRange: Shot(); break;
+                //case UnitType.Wizard: Spell(enemy.transform.position); break;
             }
 
-            enemy.GetComponent<Unit>().Hit(atk);
+            enemy.GetComponent<Unit>().Hit(myStat.ap);
         }
         else
         {
@@ -175,7 +169,7 @@ public abstract class Unit : MonoBehaviour
     {
         if(IsAlive)
         {
-            hp -= _atk;
+            myStat.hp -= _atk;
             //anim.SetTrigger("doHit");
         }
         else

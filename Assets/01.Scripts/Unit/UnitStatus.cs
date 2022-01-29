@@ -7,7 +7,7 @@ public class UnitStatus
     public int level;
     public int cost;
     public int hp;            // 체력. Health Point
-    public float ap;         // 공격력. Attack Power
+    public int ap;            // 공격력. Attack Power
     public float dp;         // 방어력. Defensive Power
     public float critical;  // 치명타율. Critical Chance
     public float dodge;   // 회피율. Dodge Chance
@@ -27,7 +27,7 @@ public class UnitStatus
     /// HeroPanel에서 표시될 Hero Unit들의 Status를 설정한다.
     /// </summary>
     public UnitStatus(string _name, int _id, float _exp, int _level,
-        int _hp, float _ap, float _dp, float _critical, float _dodge)
+        int _hp, int _ap, float _dp, float _critical, float _dodge)
     {
         this.name = _name;
         this.ID = _id;
@@ -44,7 +44,7 @@ public class UnitStatus
     /// Battle을 진행할 때, 생성되는 Unit들의 Status를 설정한다.
     /// </summary>
     public UnitStatus(string _name, int _id, float _exp, int _level, int _cost,
-        int _hp, float _ap, float _dp, float _critical, float _dodge)
+        int _hp, int _ap, float _dp, float _critical, float _dodge)
     {
         this.name = _name;
         this.ID = _id;

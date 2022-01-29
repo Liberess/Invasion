@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,13 +15,17 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Slider costSlider;
     [SerializeField] private Image leaderImg;
 
-    [SerializeField] private GameObject[] heroCards = new GameObject[4];
+    [SerializeField] private GameObject heroCardGrid;
+    [SerializeField] private GameObject heroCardPrefab;
+    [SerializeField] private List<GameObject> heroCardList = new List<GameObject>();
 
     private float playTime = 0f;
     [SerializeField] private int cost = 0;
     [SerializeField] private int maxCost = 10;
     private float leaderGauge = 0f;
     [SerializeField] private float maxLeaderGauge = 10f;
+
+    private Action UpdateCardAction;
 
     public bool isPlay { get; private set; }
 
@@ -106,20 +111,29 @@ public class BattleManager : MonoBehaviour
 
     private void SetHeroCard()
     {
-        for (int i = 0; i < heroCards.Length; i++)
-        {
-            if (dataMgr.heroData.partyList.Count <= 0 || dataMgr.heroData.partyList[i] == null)
-                continue;
+        heroCardList.Clear();
 
-            var heroID = dataMgr.heroData.partyList[i].myStat.ID;
+        for (int i = 0; i < dataMgr.heroData.partyList.Count; i++)
+        {
+            var heroCard = Instantiate(heroCardPrefab, Vector3.zero, Quaternion.identity);
+            heroCard.transform.SetParent(heroCardGrid.transform);
+            heroCard.transform.localScale = Vector3.one;
+
+            var heroID = dataMgr.heroData.partyList[i].ID;
 
             // Set Hero Card Sprite
-            heroCards[i].GetComponentInChildren<Image>().sprite =
+            heroCard.transform.GetChild(0).GetComponent<Image>().sprite =
                 dataMgr.heroData.heroSlotSpriteList[heroID];
 
             // Set Hero Cost Text
-            heroCards[i].GetComponentInChildren<Text>().text =
+            heroCard.transform.GetChild(1).GetComponent<Text>().text =
                 dataMgr.heroData.heroCostList[heroID].ToString();
+
+            // Set Hero Card OnClick Event
+            heroCard.GetComponent<Button>().onClick.AddListener(() => OnClickHeroCard(heroID));
+            UpdateCardAction += () => UpdateCardEvent(heroCard, heroID);
+
+            heroCardList.Add(heroCard);
         }
     }
 
@@ -134,6 +148,7 @@ public class BattleManager : MonoBehaviour
 
     private void SetCostSlider()
     {
+        UpdateCardAction();
         costSlider.value = cost;
         costTxt.text = cost + "/" + 10;
     }
@@ -144,5 +159,36 @@ public class BattleManager : MonoBehaviour
     public void OnClickPauseBtn()
     {
         isPlay = false;
+    }
+
+    private void UpdateCardEvent(GameObject target, int id)
+    {
+        var targetCost = dataMgr.heroData.heroCostList[id];
+
+        var button = target.GetComponent<Button>();
+        var lockImg = target.transform.GetChild(2).gameObject;
+
+        if(cost >= targetCost)
+        {
+            button.interactable = true;
+            lockImg.SetActive(false);
+        }
+        else
+        {
+            button.interactable = false;
+            lockImg.SetActive(true);
+        }
+    }
+
+    private void OnClickHeroCard(int id)
+    {
+        Debug.Log("OnClickHeroCard : " + id);
+        var targetCost = dataMgr.heroData.heroCostList[id];
+
+        if(cost >= targetCost)
+        {
+            cost -= targetCost;
+            SetCostSlider();
+        }
     }
 }
