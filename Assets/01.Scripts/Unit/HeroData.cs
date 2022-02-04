@@ -17,7 +17,7 @@ public class HeroData
 
     public int[] heroCostList = new int[HeroMaxSize];
     public List<Sprite> heroSpriteList = new List<Sprite>();
-    public List<Sprite> heroSlotSpriteList = new List<Sprite>();
+    public List<Sprite> heroCardSpriteList = new List<Sprite>();
     public List<RuntimeAnimatorController> heroAnimCtrlList = new List<RuntimeAnimatorController>();
 
     public int heroIndex;

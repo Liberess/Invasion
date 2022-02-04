@@ -26,9 +26,11 @@ public class Enemy : Unit
 
     private void FixedUpdate() => Scan();
 
-/*    protected override void UnitSetup(UnitStatus status)
+    protected override void CustomUnitSetup(UnitStatus status)
     {
         myStat = status;
-        ChangeAc();
-    }*/
+        sprite.sprite = DataManager.Instance.heroData.heroSpriteList[status.ID];
+        anim.runtimeAnimatorController =
+            DataManager.Instance.heroData.heroAnimCtrlList[status.ID];
+    }
 }

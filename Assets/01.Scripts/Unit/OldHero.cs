@@ -202,7 +202,7 @@ public class OldHero : MonoBehaviour
     #region 마우스 클릭 이벤트
     private void OnMouseDown()
     {
-        if (GameManager._instance.isPlay)
+        if (GameManager.Instance.isPlay)
         {
             sprite.sortingOrder += 1;
 
@@ -223,7 +223,7 @@ public class OldHero : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (GameManager._instance.isPlay)
+        if (GameManager.Instance.isPlay)
         {
             isPick = true;
         }
@@ -231,7 +231,7 @@ public class OldHero : MonoBehaviour
 
     private void OnMouseUp()
     {
-        if (GameManager._instance.isPlay)
+        if (GameManager.Instance.isPlay)
         {
             sprite.sortingOrder -= 1;
 

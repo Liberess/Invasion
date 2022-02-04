@@ -145,6 +145,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dust: {fileID: 4011201378189581654}
   shadow: {fileID: 0}
+  mJob: 0
 --- !u!1001 &6075884018620961998
 PrefabInstance:
   m_ObjectHideFlags: 0

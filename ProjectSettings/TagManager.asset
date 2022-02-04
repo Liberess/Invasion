@@ -5,9 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - BorderLine
-  - Clue
   - Enemy
   - Hero
+  - Monster
   layers:
   - Default
   - TransparentFX
@@ -45,6 +45,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Highlight
+  - name: Object
     uniqueID: 1662081191
+    locked: 0
+  - name: UI
+    uniqueID: 650544619
     locked: 0

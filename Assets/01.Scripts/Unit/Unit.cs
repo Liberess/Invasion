@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public enum UnitType
+public enum UnitJob
 {
-    ShortRange= 0,
+    ShortRange = 0,
     LongRange,
     Bullet
 }
@@ -21,8 +21,8 @@ public abstract class Unit : MonoBehaviour
 
     private GameObject enemy;
 
-    [SerializeField] private UnitType mJob;
-    public UnitType job { get => mJob; }
+    [SerializeField] private UnitJob mJob;
+    public UnitJob job { get => mJob; }
 
     protected int direction;
 
@@ -41,9 +41,11 @@ public abstract class Unit : MonoBehaviour
     protected Rigidbody2D rigid;
     protected SpriteRenderer sprite;
 
+    protected abstract void CustomUnitSetup(UnitStatus status);
+
     public void UnitSetup(UnitStatus status)
     {
-        myStat = status;
+        CustomUnitSetup(status);
         //ChangeAc();
     }
 
@@ -62,9 +64,9 @@ public abstract class Unit : MonoBehaviour
 
         switch (mJob) //Set Distance
         {
-            case UnitType.ShortRange: distance = 0.7f; myStat.ap = 2; myStat.hp = 10; break;
-            case UnitType.LongRange: distance = 2.5f; myStat.ap = 1; myStat.hp = 5; break;
-            case UnitType.Bullet: distance = 0.4f; break;
+            case UnitJob.ShortRange: distance = 0.7f; myStat.ap = 2; myStat.hp = 10; break;
+            case UnitJob.LongRange: distance = 2.5f; myStat.ap = 1; myStat.hp = 5; break;
+            case UnitJob.Bullet: distance = 0.4f; break;
         }
     }
 
@@ -108,9 +110,9 @@ public abstract class Unit : MonoBehaviour
 
             switch (job)
             {
-                case UnitType.ShortRange: enemy.GetComponent<Unit>().Hit(myStat.ap); break;
-                case UnitType.LongRange: Shot(); break;
-                //case UnitType.Wizard: Spell(enemy.transform.position); break;
+                case UnitJob.ShortRange: enemy.GetComponent<Unit>().Hit(myStat.ap); break;
+                case UnitJob.LongRange: Shot(); break;
+                //case UnitJob.Wizard: Spell(enemy.transform.position); break;
             }
 
             enemy.GetComponent<Unit>().Hit(myStat.ap);

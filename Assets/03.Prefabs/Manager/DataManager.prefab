@@ -45,17 +45,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heroPrefab: {fileID: 6963045056596892759, guid: 13cfbc33c912e564ba815ce946abbb1a,
     type: 3}
+  lobbyHeroPrefab: {fileID: 6963045056596892759, guid: cfd3ca33311f6d04c88aee436f89a0ae,
+    type: 3}
   mHeroData:
     heroUnlockList: 000000000000000000000000
     heroList: []
     heroCostList: 010000000200000003000000040000000500000006000000070000000800000009000000080000000700000006000000
-    heroSpriteList: []
-    heroSlotSpriteList:
+    heroSpriteList:
+    - {fileID: 4723107735738678597, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: -7385789195546760866, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 3234629978573100161, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
     - {fileID: 6373048116405451881, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 7264182050183361747, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: -2834552850196481573, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 3278449094680734212, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 3384493420599841878, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: -2331352242086191015, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: -3914248031228685145, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 7132915409514813599, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: -2055793278435719954, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
     - {fileID: -1133706752296058015, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
-    - {fileID: -4958919299980513654, guid: 4193617bbf1a66443b980082fa646df2, type: 3}
-    - {fileID: -6007857137893288414, guid: b4c081927d711de4e81f2c2ffea9aaac, type: 3}
-    heroAnimCtrlList: []
+    - {fileID: -7873313509577613512, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 719741960001666856, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: -2017107389029466533, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: -7851968663669621680, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: -216799431487514718, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 3610992343889596186, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 6538181465538999060, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 6239617922696411994, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 3604202040009161566, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 7714808819881066536, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 4839914909742284145, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 5540120679197756244, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 3244912566212535839, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 6059227464253780763, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 7058787313458793172, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 3195378521950649799, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: -4270365825416692982, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: -7216628340827019732, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 1885325910487202945, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 750087330491524381, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: -7683432258075436140, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 1317710789496429972, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    - {fileID: 774006559481001889, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
+    heroCardSpriteList:
+    - {fileID: 21300000, guid: 7ff859aa4cc12a542957b994714105c4, type: 3}
+    heroAnimCtrlList:
+    - {fileID: 9100000, guid: 55fcc50f522793a479736bf982f35ecb, type: 2}
+    - {fileID: 9100000, guid: 44315a883bd971443b35e10ee37bea29, type: 2}
+    - {fileID: 9100000, guid: ca65ed5850760434e828b0a22e4cfd7a, type: 2}
+    - {fileID: 9100000, guid: dc76f3dbb80571045a39cd0ec0ebbb00, type: 2}
     heroIndex: 0
     partyList: []
   mGameData:

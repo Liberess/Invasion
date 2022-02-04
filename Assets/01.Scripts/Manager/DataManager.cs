@@ -10,7 +10,9 @@ public class DataManager : MonoBehaviour
     private const string GameDataFileName = "/GameData.json";
     private const string HeroDataFileName = "/HeroData.json";
 
+    [Header("== Hero Object Prefab ==")]
     [SerializeField] private GameObject heroPrefab;
+    [SerializeField] private GameObject lobbyHeroPrefab;
 
     #region 인스턴스화
     private static GameObject mContainer;
@@ -32,6 +34,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    [Header("== Hero Data Information =="), Space(10)]
     [SerializeField] private HeroData mHeroData;
     public HeroData heroData
     {
@@ -47,6 +50,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    [Header("== Game Data Information =="), Space(10)]
     [SerializeField] private GameData mGameData;
     public GameData gameData
     {
@@ -86,6 +90,133 @@ public class DataManager : MonoBehaviour
         SaveHeroData();
     }
 
+    #region Update Resources
+    [ContextMenu("Update Hero Sprite")]
+    private void UpdateHeroSprite()
+    {
+        heroData.heroSpriteList.Clear();
+
+        object[] temp = Resources.LoadAll("HeroSprite");
+
+        foreach (var obj in temp)
+            heroData.heroSpriteList.Add(obj as Sprite);
+
+        heroData.heroSpriteList.RemoveAt(0);
+    }
+
+    [ContextMenu("Update Hero Card Sprite")]
+    private void UpdateHeroCardSprite()
+    {
+        heroData.heroCardSpriteList.Clear();
+
+        object[] temp = Resources.LoadAll("HeroCardSprite");
+
+        foreach (var obj in temp)
+            heroData.heroCardSpriteList.Add(obj as Sprite);
+
+        heroData.heroCardSpriteList.RemoveAt(0);
+    }
+
+    [ContextMenu("Update Hero Anim Controller")]
+    private void UpdateHeroAnimCtrl()
+    {
+        heroData.heroAnimCtrlList.Clear();
+
+        object[] temp = Resources.LoadAll("HeroAnimCtrl");
+
+        foreach (var obj in temp)
+            heroData.heroAnimCtrlList.Add(obj as RuntimeAnimatorController);
+
+        //heroData.heroAnimCtrlList.RemoveAt(0);
+    }
+    #endregion
+
+    public void ConstructHeroDic()
+    {
+        heroData.heroDic = new Dictionary<string, UnitStatus>();
+
+        //Json에 저장된 heroList안의 내용들을 heroDic에 저장
+        for (int i = 0; i < heroData.heroList.Count; i++)
+            heroData.heroDic.Add(heroData.heroList[i].myName, heroData.heroList[i]);
+    }
+
+    public void ResettingHeroList()
+    {
+        heroData.heroList.Clear();
+
+        for (int i = 0; i < heroData.heroDic.Count; i++)
+            heroData.heroList = new List<UnitStatus>(heroData.heroDic.Values);
+    }
+
+    #region Moster Load & Save
+    private void InitHeroData()
+    {
+        for (int i = 0; i < HeroData.HeroMaxSize; i++)
+            heroData.heroUnlockList[i] = false;
+
+        heroData.heroIndex = 0;
+        heroData.heroDic.Clear();
+        heroData.heroList.Clear();
+    }
+
+    private void LoadHeroData()
+    {
+        string filePath = Application.persistentDataPath + HeroDataFileName;
+
+        if (File.Exists(filePath))
+        {
+            string code = File.ReadAllText(filePath);
+            byte[] bytes = Convert.FromBase64String(code);
+            string FromJsonData = System.Text.Encoding.UTF8.GetString(bytes);
+            mHeroData = JsonUtility.FromJson<HeroData>(FromJsonData);
+
+            ConstructHeroDic();
+
+            for (int i = 0; i < heroData.heroList.Count; i++)
+            {
+                var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
+                    Quaternion.identity).GetComponent<LobbyHero>();
+
+                var heroStat = heroData.heroList[i];
+                //heroStat.mySprite = heroData.heroSpriteList[heroStat.ID];
+                //heroStat.animCtrl = heroData.heroAnimCtrlList[heroStat.ID];
+
+                hero.UnitSetup(heroStat);
+            }
+
+            for (int i = 0; i < heroData.heroList.Count; i++)
+            {
+                //만약 heroDic에 해당 heroList의 "Jelly0"가 있다면
+                var targetName = heroData.heroList[i].myName;
+
+                if(!heroData.heroDic.ContainsKey(targetName))
+                    heroData.heroDic.Add(targetName, heroData.heroList[i]);
+            }
+
+            //var newStat = new UnitStatus("나나", 0, 0, 1);
+            //heroData.partyList.Add(newStat);
+            //heroData.heroList.Add(newStat);
+        }
+        else
+        {
+            mHeroData = new HeroData();
+            File.Create(Application.persistentDataPath + HeroDataFileName);
+
+            InitHeroData();
+        }
+    }
+
+    private void SaveHeroData()
+    {
+        string filePath = Application.persistentDataPath + HeroDataFileName;
+        string ToJsonData = JsonUtility.ToJson(heroData);
+        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(ToJsonData);
+        string code = Convert.ToBase64String(bytes);
+        File.WriteAllText(filePath, code);
+    }
+    #endregion
+
+    #region Game Load & Save
     private void InitGameData()
     {
         gameData.dia = 0;
@@ -105,97 +236,7 @@ public class DataManager : MonoBehaviour
         gameData.saveTime = DateTime.Now;
     }
 
-    private void InitHeroData()
-    {
-        for (int i = 0; i < HeroData.HeroMaxSize; i++)
-            heroData.heroUnlockList[i] = false;
-
-        heroData.heroIndex = 0;
-        heroData.heroDic.Clear();
-        heroData.heroList.Clear();
-    }
-
-    public void ConstructHeroDic()
-    {
-        heroData.heroDic = new Dictionary<string, UnitStatus>();
-
-        //Json에 저장된 heroList안의 내용들을 heroDic에 저장
-        for (int i = 0; i < heroData.heroList.Count; i++)
-            heroData.heroDic.Add(heroData.heroList[i].name, heroData.heroList[i]);
-    }
-
-    public void ResettingHeroList()
-    {
-        heroData.heroList.Clear();
-
-        for (int i = 0; i < heroData.heroDic.Count; i++)
-            heroData.heroList = new List<UnitStatus>(heroData.heroDic.Values);
-    }
-
-    #region Moster Load & Save
-    public void LoadHeroData()
-    {
-        string filePath = Application.persistentDataPath + HeroDataFileName;
-
-        if (File.Exists(filePath))
-        {
-            Debug.Log("LoadHeroData : Exists");
-
-            string code = File.ReadAllText(filePath);
-            byte[] bytes = Convert.FromBase64String(code);
-            string FromJsonData = System.Text.Encoding.UTF8.GetString(bytes);
-            mHeroData = JsonUtility.FromJson<HeroData>(FromJsonData);
-
-            ConstructHeroDic();
-
-            for (int i = 0; i < heroData.heroList.Count; i++)
-            {
-                var hero = Instantiate(heroPrefab, Vector3.zero, Quaternion.identity).GetComponent<Hero>();
-
-                var heroStat = new UnitStatus(heroData.heroList[i].name,
-                    heroData.heroList[i].ID, heroData.heroList[i].exp, heroData.heroList[i].level);
-
-                hero.UnitSetup(heroStat);
-                hero.name = heroData.heroList[i].name;
-                hero.GetComponent<SpriteRenderer>().sprite =
-                    heroData.heroSpriteList[heroData.heroList[i].ID];
-            }
-
-            for (int i = 0; i < heroData.heroList.Count; i++)
-            {
-                //만약 heroDic에 해당 heroList의 "Jelly0"가 있다면
-                bool found = heroData.heroDic.ContainsKey(heroData.heroList[i].name);
-
-                if(found == false)
-                    heroData.heroDic.Add(heroData.heroList[i].name, heroData.heroList[i]);
-            }
-
-            var newHero = new UnitStatus("나나", 0, 0f, 1);
-            heroData.partyList.Add(newHero);
-        }
-        else
-        {
-            Debug.Log("LoadHeroData : New");
-
-            mHeroData = new HeroData();
-            File.Create(Application.persistentDataPath + HeroDataFileName);
-
-            InitHeroData();
-        }
-    }
-
-    public void SaveHeroData()
-    {
-        string filePath = Application.persistentDataPath + HeroDataFileName;
-        string ToJsonData = JsonUtility.ToJson(heroData);
-        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(ToJsonData);
-        string code = Convert.ToBase64String(bytes);
-        File.WriteAllText(filePath, code);
-    }
-    #endregion
-
-    #region Game Load & Save
-    public void LoadGameData()
+    private void LoadGameData()
     {
         string filePath = Application.persistentDataPath + GameDataFileName;
 
@@ -215,7 +256,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void SaveGameData()
+    private void SaveGameData()
     {
         string filePath = Application.persistentDataPath + GameDataFileName;
 
@@ -225,7 +266,7 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(filePath, code);
     }
 
-    public void SaveTime()
+    private void SaveTime()
     {
         gameData.saveTime = DateTime.Now;
         gameData.saveTimeStr = gameData.saveTime.ToString();

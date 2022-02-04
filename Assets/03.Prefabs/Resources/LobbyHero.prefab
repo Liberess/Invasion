@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 6963045056596892753}
   - component: {fileID: 6963045056596892752}
   - component: {fileID: 6963045056596892748}
-  - component: {fileID: 6963045056596892755}
   - component: {fileID: 6963045056596892749}
   - component: {fileID: 4987364541804944851}
+  - component: {fileID: -9084171132362409695}
   m_Layer: 9
-  m_Name: Hero
+  m_Name: LobbyHero
   m_TagString: Hero
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108,21 +108,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &6963045056596892755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6963045056596892759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2c07a896a7f7e64caeb5fadc0b79a5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dust: {fileID: 7204429219805006232, guid: 1951194dd6c93b7458a4425b33e87084, type: 3}
-  shadow: {fileID: 6963045057081066269}
-  mJob: 0
 --- !u!58 &6963045056596892749
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -158,6 +143,23 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-9084171132362409695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6963045056596892759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2152d57adde48694381d00cb0b4c081b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dust: {fileID: 0}
+  shadow: {fileID: 6963045057081066269}
+  mJob: 0
+  speedX: 5
+  speedY: 5
 --- !u!1 &6963045057081066269
 GameObject:
   m_ObjectHideFlags: 0
