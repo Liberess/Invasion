@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Text;
-using System.IO;
-using System.Numerics;
+//using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    DataManager dataManager;
+    private DataManager dataMgr;
     
     public GameObject OptionPanel;
     public GameObject clearImg;
@@ -28,39 +28,33 @@ public class GameManager : MonoBehaviour
 
     private int stopWatch;
 
+    private int _dia;
+    private int _gold;
+    private int _drink;
+
     private int reward;
     private int rewardLimit = 60;
-
-    //private BigInteger _soulGem;  //Txt Anim 효과를 위한 것
-    //private BigInteger _gold;     //이하동문
 
     public bool isPlay; //몬스터 이동 제어 등
     public bool isPanel; //Panel이 켜져 있는가
 
     #region 인스턴스화
-    static GameObject _container;
-    static GameObject Container
-    {
-        get
-        {
-            return _container;
-        }
-    }
+    private static GameObject Container;
 
-    public static GameManager _instance;
+    private static GameManager mInstance;
     public static GameManager Instance 
     {
         get
         {
-            if (!_instance)
+            if (!mInstance)
             {
-                _container = new GameObject();
-                _container.name = "GameManager";
-                _instance = _container.AddComponent(typeof(GameManager)) as GameManager;
-                DontDestroyOnLoad(_container);
+                Container = new GameObject();
+                Container.name = "GameManager";
+                mInstance = Container.AddComponent(typeof(GameManager)) as GameManager;
+                DontDestroyOnLoad(Container);
             }
 
-            return _instance;
+            return mInstance;
         }
     }
     #endregion
@@ -69,38 +63,37 @@ public class GameManager : MonoBehaviour
     {
         isPlay = true;
 
-        if (_instance == null)
+        if (mInstance == null)
         {
-            _instance = this;
+            mInstance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        else if (_instance != this)
+        else if (mInstance != this)
         {
             Destroy(gameObject);
         }
 
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.SetResolution(1920, 1080, true);
-
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
-        dataManager = DataManager.Instance;
+        dataMgr = DataManager.Instance;
 
         //_soulGem = (int)DataManager.Instance.gameData.soulGem;
         //_gold = DataManager.Instance.gameData.gold;
 
         GameClear();
 
-        if(dataManager.gameData.isNew == false)
+        if(dataMgr.gameData.isNew == false)
         {
             StartCoroutine(WebChk());
             offNotice.gameObject.GetComponent<Animator>().SetTrigger("doShow");
         }
         else
         {
-            dataManager.gameData.isNew = false;
+            dataMgr.gameData.isNew = false;
         }
     }
 
@@ -153,10 +146,10 @@ public class GameManager : MonoBehaviour
     {
         if(_minute >= 10)
         {
-            for (int i = 0; i < dataManager.monsData.monsList.Count; i++)
+            for (int i = 0; i < dataMgr.heroData.heroList.Count; i++)
             {
-                reward = (((dataManager.monsData.monsList[i].ID + 1)
-                    * dataManager.monsData.monsList[i].Level * stopWatch)) / rewardLimit;
+                reward = (((dataMgr.heroData.heroList[i].ID + 1)
+                    * dataMgr.heroData.heroList[i].level * stopWatch)) / rewardLimit;
             }
 
             offNotice.transform.Find("OffTxt").gameObject.GetComponent<Text>().text =
@@ -173,12 +166,17 @@ public class GameManager : MonoBehaviour
 
     public void GetOffReward()
     {
-        dataManager.gameData.soulGem += reward;
+        dataMgr.gameData.soulGem += reward;
 
         SoundManager.Instance.PlaySFX("Button");
         offNotice.gameObject.GetComponent<Animator>().SetTrigger("doHide");
     }
     #endregion
+
+    public void OnClickGameStartBtn()
+    {
+        SceneManager.LoadScene("Battle");
+    }
 
     public void GameClear()
     {
@@ -196,25 +194,24 @@ public class GameManager : MonoBehaviour
     public void ShowMoneyTxt()
     {
         //재화 텍스트 애니메이션 효과
-        /* float soulGem = Mathf.SmoothStep(_soulGem, DataManager.Instance.gameData.soulGem, 0.5f);
+        float dia = Mathf.SmoothStep(_dia, DataManager.Instance.gameData.dia, 0.5f);
         float gold = Mathf.SmoothStep(_gold, DataManager.Instance.gameData.gold, 0.5f);
+        float drink = Mathf.SmoothStep(_drink, DataManager.Instance.gameData.drink, 0.5f);
+        //float soulGem = Mathf.SmoothStep(_soulGem, DataManager.Instance.gameData.soulGem, 0.5f);
 
-         _soulGem = (int)soulGem;
-         _gold = (int)gold;
+        _dia = (int)dia;
+        _gold = (int)gold;
+        _drink = (int)drink;
 
         //천 단위로 콤마(,) 삽입
-        moneyTxt[0].text = string.Format("{0:n0}", DataManager.Instance.gameData.soulGem);
-        moneyTxt[1].text = string.Format("{0:n0}", DataManager.Instance.gameData.gold);
-
-        string str = string.Format("{0:n0}", DataManager.Instance.gameData.soulGem);
-        DataManager.Instance.gameData.soulUnit = str.Split(','); */
-
-        //moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strSoulGem);
-        //moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strDrink);
-
         moneyTxt[0].text = string.Format("{0:n0}", DataManager.Instance.gameData.drink);
-        moneyTxt[1].text = DataManager.Instance.GoldUnitChange(DataManager.Instance.gameData.strGold);
+        moneyTxt[1].text = string.Format("{0:n0}", DataManager.Instance.gameData.gold);
         moneyTxt[2].text = string.Format("{0:n0}", DataManager.Instance.gameData.dia);
+
+        /*        string str = string.Format("{0:n0}", DataManager.Instance.gameData.soulGem);
+                DataManager.Instance.gameData.soulUnit = str.Split(',');
+                moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strSoulGem);
+                moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strDrink);*/
     }
 
     private void CancelBtn() //인 게임 Cancel 동작
@@ -239,7 +236,7 @@ public class GameManager : MonoBehaviour
 
             if (isPanel)
             {
-                BtnPanel.Instance.PanelHide();
+                UIManager.Instance.hidePanelAction();
             }
         }
         else

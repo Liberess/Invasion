@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class CameraSwap : MonoBehaviour
 {
+    private bool canSwap = true;
     [SerializeField, Range(0f, 5f)] private float speed = 0.1f;
     [SerializeField] private Transform[] canvasPosArray;
 
     public void SetMove(DircType type)
     {
+        if (!canSwap)
+            return;
+
         if (canvasPosArray[(int)type.Type] == null)
             return;
 
-        StartCoroutine(MoveCo(canvasPosArray[(int)type.Type].position));
+        var pos = canvasPosArray[(int)type.Type].position;
+        pos.z = -10f;
+
+        canSwap = false;
+
+        StartCoroutine(MoveCo(pos));
     }
 
     private IEnumerator MoveCo(Vector3 target)
@@ -22,12 +31,14 @@ public class CameraSwap : MonoBehaviour
         while(distance > 0f)
         {
             distance = Vector3.Distance(transform.position, target);
-            transform.position = Vector3.Lerp(transform.position, target, 0.1f);
+            transform.position = Vector3.Lerp(transform.position, target, speed);
 
-/*            Vector3 velocity = Vector3.zero;
-            transform.position = Vector3.MoveTowards(transform.position, target, speed);*/
+            if (distance <= 0.001f)
+                break;
 
             yield return new WaitForSeconds(0.01f);
         }
+
+        canSwap = true;
     }
 }
