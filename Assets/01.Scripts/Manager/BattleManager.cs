@@ -32,10 +32,12 @@ public class BattleManager : MonoBehaviour
     [SerializeField, Range(0f, 3f)] private float getCostDelay = 1f;
     [SerializeField, Range(0, 10)] private int maxCost = 10;
     [SerializeField, Range(0f, 10f)] private float maxLeaderGauge = 10f;
+    [SerializeField, Range(0f, 10f)] private float enemySpawnDelay = 2f;
     private float playTime = 0f;
     private int cost = 0;
     private float leaderGauge = 0f;
-    public bool isPlay { get; private set; }
+    //public bool isPlay { get; private set; }
+    public bool isPlay;
 
     [Header("== Setting Object Pooling =="), Space(10)]
     [SerializeField] private int defaultHeroCount = 20;
@@ -48,8 +50,8 @@ public class BattleManager : MonoBehaviour
     //private Queue<Enemy> enemyQueue = new Queue<Enemy>();
 
     [Header("== Setting Base =="), Space(10)]
-    [SerializeField] private GameObject redBase;
-    [SerializeField] private GameObject blueBase;
+    [SerializeField] private Base redBase;
+    [SerializeField] private Base blueBase;
 
     private Action UpdateCardAction;
     #endregion
@@ -69,6 +71,11 @@ public class BattleManager : MonoBehaviour
         costSlider.maxValue = maxCost;
 
         dataMgr = DataManager.Instance;
+
+        stageTxt.text = GameManager.Instance.stage;
+
+        redBase.UnitSetup(new UnitStatus("RedBase", 100, 0f, 0f));
+        blueBase.UnitSetup(new UnitStatus("BlueBase", 100, 0f, 0f));
 
         quePrefabDic.Add(QueueType.Hero, Resources.Load("Unit/Hero") as GameObject);
         quePrefabDic.Add(QueueType.Enemy, Resources.Load("Unit/Enemy") as GameObject);
@@ -100,10 +107,10 @@ public class BattleManager : MonoBehaviour
         queDic.Add(type, new Queue<GameObject>());
 
         for (int i = 0; i < initCount; i++)
-            queDic[type].Enqueue(CreateNewObj(type));
+            queDic[type].Enqueue(CreateNewObj(type, i));
     }
 
-    private GameObject CreateNewObj(QueueType type)
+    private GameObject CreateNewObj(QueueType type, int index = 0)
     {
         if (!quePrefabDic.ContainsKey(type))
         {
@@ -118,6 +125,7 @@ public class BattleManager : MonoBehaviour
         }
 
         var newObj = Instantiate(quePrefabDic[type].gameObject, transform.position, Quaternion.identity);
+        newObj.name = type.ToString() + index;
         newObj.gameObject.SetActive(false);
         newObj.transform.SetParent(transform);
         return newObj;
@@ -141,14 +149,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public static void ReturnObj(QueueType type, GameObject obj)
-    {
-        obj.gameObject.SetActive(false);
-        obj.transform.SetParent(Instance.transform);
-        Instance.queDic[type].Enqueue(obj);
-    }
-
-    private void InstantiateObj(QueueType type, int id = -1)
+    private void InstantiateObj(QueueType type, int id = 0)
     {
         var obj = GetObj(type);
 
@@ -156,16 +157,26 @@ public class BattleManager : MonoBehaviour
         {
             case QueueType.Hero:
                 obj.transform.position = blueBase.transform.position;
-                var hero = obj.GetComponent<Hero>();
+                Hero hero = obj.GetComponent<Hero>();
                 hero.UnitSetup(dataMgr.heroData.partyList[id]);
+                hero.DeathAction += () => ReturnObj(QueueType.Hero, hero.gameObject);
                 break;
             case QueueType.Enemy:
                 obj.transform.position = redBase.transform.position;
-                var enemy = obj.GetComponent<Enemy>();
+                Enemy enemy = obj.GetComponent<Enemy>();
+                enemy.UnitSetup(dataMgr.enemyDataList[id].myStat);
+                enemy.DeathAction += () => ReturnObj(type, enemy.gameObject);
                 break;
             default:
                 break;
         }
+    }
+
+    public static void ReturnObj(QueueType type, GameObject obj)
+    {
+        obj.gameObject.SetActive(false);
+        obj.transform.SetParent(Instance.transform);
+        Instance.queDic[type].Enqueue(obj);
     }
     #endregion
 
@@ -185,7 +196,29 @@ public class BattleManager : MonoBehaviour
 
         isPlay = true;
         StartCoroutine(GetCostCoru());
+        StartCoroutine(EnemySpawnCoru());
         StartCoroutine(GetLeaderGaugeCoru());
+    }
+
+    private IEnumerator EnemySpawnCoru()
+    {
+        while(isPlay)
+        {
+            int rand = UnityEngine.Random.Range
+                (
+                    GameManager.Instance.stageInfo.minEnemyID,
+                    GameManager.Instance.stageInfo.maxEnemyID
+                );
+            InstantiateObj(QueueType.Enemy, rand);
+
+/*            var obj = GetObj(QueueType.Enemy);
+            var enemy = obj.GetComponent<Enemy>();
+            enemy.transform.position = redBase.transform.position;
+            enemy.UnitSetup(dataMgr.enemyDataList[0].myStat);
+            enemy.DeathAction += () => ReturnObj(QueueType.Enemy, enemy.gameObject);*/
+
+            yield return new WaitForSeconds(enemySpawnDelay);
+        }
     }
 
     #region Get Cost & LeaderGauge
@@ -286,6 +319,7 @@ public class BattleManager : MonoBehaviour
     }
     #endregion
 
+    #region OnClick Events
     public void OnClickPauseBtn()
     {
         isPlay = false;
@@ -300,6 +334,12 @@ public class BattleManager : MonoBehaviour
             cost -= targetCost;
             SetCostSlider();
             InstantiateObj(QueueType.Hero, id);
+/*            var obj = GetObj(QueueType.Hero);
+            var hero = obj.GetComponent<Hero>();
+            hero.transform.position = blueBase.transform.position;
+            hero.UnitSetup(dataMgr.heroData.partyList[id]);
+            hero.DeathAction += () => ReturnObj(QueueType.Hero, hero.gameObject);*/
         }
     }
+    #endregion
 }

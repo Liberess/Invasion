@@ -3,7 +3,7 @@
 [System.Serializable]
 public class UnitStatus
 {
-    public string myName; // 고유 닉네임
+    public string name; // 고유 닉네임
     public int ID;                 // 고유 판별 ID
     public float exp;           // 경험치. Experience
     public int level;            // 유닛 레벨
@@ -22,10 +22,21 @@ public class UnitStatus
     /// </summary>
     public UnitStatus(string _name, int _id, float _exp, int _level)
     {
-        this.myName = _name;
+        this.name = _name;
         this.ID = _id;
         this.exp = _exp;
         this.level = _level;
+    }
+
+    /// <summary>
+    /// Base의 Status를 설정한다.
+    /// </summary>
+    public UnitStatus(string _name, int _hp, float _dp, float _dodge)
+    {
+        this.name = _name;
+        this.hp = _hp;
+        this.dp = _dp;
+        this.dodge = _dodge;
     }
 
     /// <summary>
@@ -34,7 +45,7 @@ public class UnitStatus
     public UnitStatus(string _name, int _id, float _exp, int _level,
         int _hp, int _ap, float _dp, float _critical, float _dodge)
     {
-        this.myName = _name;
+        this.name = _name;
         this.ID = _id;
         this.exp = _exp;
         this.level = _level;
@@ -51,7 +62,7 @@ public class UnitStatus
     public UnitStatus(string _name, int _id, float _exp, int _level, int _cost,
         int _hp, int _ap, float _dp, float _critical, float _dodge)
     {
-        this.myName = _name;
+        this.name = _name;
         this.ID = _id;
         this.exp = _exp;
         this.level = _level;

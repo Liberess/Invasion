@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,15 +15,21 @@ public abstract class Unit : MonoBehaviour
 {
     protected BattleManager battleMgr;
 
-    public UnitStatus myStat { get; protected set; }
+    public event Action DeathAction;
+
+    //public UnitStatus myStat { get; protected set; }
+    [SerializeField] protected UnitStatus mMyStat;
+    public UnitStatus myStat { get => mMyStat; }
 
     [SerializeField] private GameObject dust;
     [SerializeField] private GameObject shadow;
 
-    private GameObject enemy;
+    [SerializeField] private GameObject enemy;
 
     [SerializeField] private UnitJob mJob;
     public UnitJob job { get => mJob; }
+
+    protected QueueType myObjType;
 
     protected int direction;
 
@@ -31,7 +38,7 @@ public abstract class Unit : MonoBehaviour
     protected string enemyValue;
 
     protected bool isDust;
-    protected bool isMove;
+    [SerializeField] protected bool isMove;
 
     protected float attackTime = 0;
 
@@ -45,6 +52,7 @@ public abstract class Unit : MonoBehaviour
 
     public void UnitSetup(UnitStatus status)
     {
+        Debug.Log(name + " UnitSetup");
         CustomUnitSetup(status);
         //ChangeAc();
     }
@@ -101,7 +109,7 @@ public abstract class Unit : MonoBehaviour
 
     protected void Attack()
     {
-        float delay = Random.Range(0.8f, 1.2f);
+        float delay = UnityEngine.Random.Range(0.8f, 1.2f);
 
         if (attackTime >= delay)
         {
@@ -143,8 +151,12 @@ public abstract class Unit : MonoBehaviour
         if (battleMgr != null && !battleMgr.isPlay)
             return;
 
-        RaycastHit2D rayHitAlly = Physics2D.Raycast(transform.position,
+        RaycastHit2D rayHitAlly = Physics2D.Raycast(new Vector2(transform.position.x + 0.4f * direction, transform.position.y),
             Vector2.right * direction, 0.2f, LayerMask.GetMask(allyValue));
+
+#if UNITY_EDITOR
+        Debug.DrawRay(new Vector2(transform.position.x + 0.4f * direction, transform.position.y), Vector2.right * direction);
+#endif
 
         RaycastHit2D rayHitEnemy = Physics2D.Raycast(transform.position,
             Vector2.right * direction, distance, LayerMask.GetMask(enemyValue));
@@ -160,14 +172,15 @@ public abstract class Unit : MonoBehaviour
         {
             enemy = null;
 
-            if (rayHitAlly.collider != null)
+            if (rayHitAlly.collider != null && rayHitAlly.collider.gameObject != gameObject
+                && rayHitAlly.collider.CompareTag(allyValue))
                 Stop();
             else
                 isMove = true;
         }
     }
 
-    public void Hit(int _atk)
+    public virtual void Hit(int _atk)
     {
         if(IsAlive)
         {
@@ -180,8 +193,9 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
-    protected void Die()
+    protected virtual void Die()
     {
-        Destroy(gameObject);
+        if (DeathAction != null)
+            DeathAction();
     }
 }

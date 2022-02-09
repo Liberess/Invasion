@@ -52,10 +52,12 @@ MonoBehaviour:
   heroCardPrefab: {fileID: 1914066237963822779, guid: 491401595416d0741b0f48d17f33f9db,
     type: 3}
   heroCardList: []
-  getCostDelay: 1.5
+  getCostDelay: 3
   maxCost: 10
   maxLeaderGauge: 10
+  enemySpawnDelay: 6
+  isPlay: 0
   defaultHeroCount: 20
   defaultEnemyCount: 20
-  blueBase: {fileID: 0}
   redBase: {fileID: 0}
+  blueBase: {fileID: 0}

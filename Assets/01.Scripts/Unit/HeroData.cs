@@ -8,11 +8,13 @@ public class HeroData
     public const int HeroMaxSize = 12;
 
     public bool[] heroUnlockList = new bool[HeroMaxSize];
+    public int[] heroGoldList = new int[HeroMaxSize];
+    public int[] heroSoulGemList = new int[HeroMaxSize];
 
-    //임시 몬스터 데이터 저장
+    //임시 히어로 데이터 저장
     public Dictionary<string, UnitStatus> heroDic = new Dictionary<string, UnitStatus>();
 
-    //Json 몬스터 데이터 저장
+    //Json 히어로 데이터 저장
     public List<UnitStatus> heroList = new List<UnitStatus>();
 
     public int[] heroCostList = new int[HeroMaxSize];

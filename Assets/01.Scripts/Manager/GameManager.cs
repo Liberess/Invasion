@@ -11,18 +11,16 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private DataManager dataMgr;
-    
+
+    [SerializeField] private StageInfo mStageInfo;
+    public StageInfo stageInfo { get => mStageInfo; }
+
     public GameObject OptionPanel;
     public GameObject clearImg;
     public GameObject offNotice;
     public Text[] moneyTxt;
 
-    public Sprite[] monsSpriteList;
     public string[] monsNameList;
-    public int[] monsGoldList;
-    public int[] monsSoulGemList;
-    public int[] numGoldList;
-    public int[] clickGoldList;
 
     private string url = "www.naver.com";
 
@@ -37,6 +35,8 @@ public class GameManager : MonoBehaviour
 
     public bool isPlay; //몬스터 이동 제어 등
     public bool isPanel; //Panel이 켜져 있는가
+
+    public string stage { get; private set; }
 
     #region 인스턴스화
     private static GameObject Container;
@@ -173,8 +173,10 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    public void OnClickGameStartBtn()
+    public void OnClickGameStartBtn(string _stage)
     {
+        stage = _stage;
+        SetStageInfo(new StageInfo(_stage, StageLevel.Easy, 0, 3));
         SceneManager.LoadScene("Battle");
     }
 
@@ -213,6 +215,8 @@ public class GameManager : MonoBehaviour
                 moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strSoulGem);
                 moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strDrink);*/
     }
+
+    private void SetStageInfo(StageInfo info) => mStageInfo = info;
 
     private void CancelBtn() //인 게임 Cancel 동작
     {

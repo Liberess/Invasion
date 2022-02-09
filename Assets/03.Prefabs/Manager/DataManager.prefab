@@ -47,8 +47,39 @@ MonoBehaviour:
     type: 3}
   lobbyHeroPrefab: {fileID: 6963045056596892759, guid: cfd3ca33311f6d04c88aee436f89a0ae,
     type: 3}
+  mGameData:
+    saveTimeStr: 
+    facilGold: 00000000000000000000000000000000000000000000000000000000
+    facilLevelList: 00000000000000000000000000000000000000000000000000000000
+    facilUnlockList: 00000000000000
+    facilLimitTime:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    facilSliderTime:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    dia: 0
+    gold: 0
+    soulGem: 0
+    drink: 0
+    bgm: 0
+    sfx: 0
+    isNew: 0
+    isClear: 0
   mHeroData:
     heroUnlockList: 000000000000000000000000
+    heroGoldList: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    heroSoulGemList: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
     heroList: []
     heroCostList: 010000000200000003000000040000000500000006000000070000000800000009000000080000000700000006000000
     heroSpriteList:
@@ -97,32 +128,5 @@ MonoBehaviour:
     - {fileID: 9100000, guid: dc76f3dbb80571045a39cd0ec0ebbb00, type: 2}
     heroIndex: 0
     partyList: []
-  mGameData:
-    saveTimeStr: 
-    facilGold: 00000000000000000000000000000000000000000000000000000000
-    facilLevelList: 00000000000000000000000000000000000000000000000000000000
-    facilUnlockList: 00000000000000
-    facilLimitTime:
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    facilSliderTime:
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    - 0
-    dia: 0
-    gold: 0
-    soulGem: 0
-    drink: 0
-    bgm: 0
-    sfx: 0
-    isNew: 0
-    isClear: 0
+  mEnemyDataList:
+  - {fileID: 11400000, guid: 7a7a6438a325ca54793c345090a15658, type: 2}

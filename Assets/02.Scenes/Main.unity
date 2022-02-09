@@ -37049,13 +37049,13 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1971758841}
         m_MethodName: OnClickGameStartBtn
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: 1-1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1825507981
@@ -38979,19 +38979,6 @@ MonoBehaviour:
   - {fileID: 796481818}
   - {fileID: 100204834}
   - {fileID: 932611533}
-  monsSpriteList:
-  - {fileID: 21300000, guid: f4ba7a5e8b25ae241a6c94d4d6df858d, type: 3}
-  - {fileID: 21300000, guid: 932ce8ce7b8fd8e4d9fb9bce6a7e0b7d, type: 3}
-  - {fileID: 21300000, guid: 590b73e132435194da7d40dc8a3816f0, type: 3}
-  - {fileID: 21300000, guid: ce60f325abe16e1408f2d226e825c21a, type: 3}
-  - {fileID: 21300000, guid: 230db3240b492574094d76e3dbd404a1, type: 3}
-  - {fileID: 21300000, guid: b8fd21ad16123364aaee0da8f1b3746b, type: 3}
-  - {fileID: 21300000, guid: 2d5d6782fc427ad498ff00ded71060f4, type: 3}
-  - {fileID: 21300000, guid: 6de610ccbbc0a094b804153e2dea43a6, type: 3}
-  - {fileID: 21300000, guid: 96481b76a6fa9c6428e4e4b1522e9378, type: 3}
-  - {fileID: 21300000, guid: d78e009f5bb799b42bbf3c801af824ac, type: 3}
-  - {fileID: 21300000, guid: 7fd151f4d9de8de47a1d5abe6e506e83, type: 3}
-  - {fileID: 21300000, guid: 764f930ba03e6324d805335eb66b8c98, type: 3}
   monsNameList:
   - "\uC2AC\uB77C\uC784"
   - "\uBD84\uD64D"
@@ -39005,10 +38992,6 @@ MonoBehaviour:
   - "\uCD08\uBC25"
   - "\uC6B0\uC720"
   - "\uC9C0\uAD6C"
-  monsGoldList: 64000000c8000000f4010000e8030000dc050000b80b00008813000010270000983a0000204e000050c30000a0860100
-  monsSoulGemList: 640000002c010000f4010000e8030000d00700008813000010270000a861000050c30000a0860100f049020020a10700
-  numGoldList: 00000000e8030000d00700008813000010270000
-  clickGoldList: 00000000c40900008813000010270000204e0000
   isPlay: 0
   isPanel: 0
 --- !u!1 &1977785305

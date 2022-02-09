@@ -8,9 +8,6 @@ public class Hero : Unit
 {
     private void Awake()
     {
-        isDust = true;
-        isMove = true;
-
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
@@ -22,13 +19,25 @@ public class Hero : Unit
         TeamValueSet();
     }
 
+    private void OnEnable()
+    {
+        isDust = true;
+        isMove = true;
+    }
+
+    private void OnDisable()
+    {
+        isDust = false;
+        isMove = false;
+    }
+
     private void Update() => Move();
 
     private void FixedUpdate() => Scan();
 
     protected override void CustomUnitSetup(UnitStatus status)
     {
-        myStat = status;
+        mMyStat = status;
         sprite.sprite = DataManager.Instance.heroData.heroSpriteList[status.ID];
         anim.runtimeAnimatorController =
             DataManager.Instance.heroData.heroAnimCtrlList[status.ID];

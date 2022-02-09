@@ -4,11 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DataManager : MonoBehaviour
 {
     private const string GameDataFileName = "/GameData.json";
     private const string HeroDataFileName = "/HeroData.json";
+    private const string EnemyDataFileName = "/EnemyData.json";
 
     [Header("== Hero Object Prefab ==")]
     [SerializeField] private GameObject heroPrefab;
@@ -34,6 +36,22 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    [Header("== Game Data Information =="), Space(10)]
+    [SerializeField] private GameData mGameData;
+    public GameData gameData
+    {
+        get
+        {
+            if (mGameData == null)
+            {
+                LoadGameData();
+                //SaveGameData();
+            }
+
+            return mGameData;
+        }
+    }
+
     [Header("== Hero Data Information =="), Space(10)]
     [SerializeField] private HeroData mHeroData;
     public HeroData heroData
@@ -43,28 +61,16 @@ public class DataManager : MonoBehaviour
             if (mHeroData == null)
             {
                 LoadHeroData();
-                SaveHeroData();
+                //SaveHeroData();
             }
 
             return mHeroData;
         }
     }
 
-    [Header("== Game Data Information =="), Space(10)]
-    [SerializeField] private GameData mGameData;
-    public GameData gameData
-    {
-        get
-        {
-            if(mGameData == null)
-            {
-                LoadGameData();
-                SaveGameData();
-            }
-
-            return mGameData;
-        }
-    }
+    [Header("== Enemy Data Information =="), Space(10)]
+    [SerializeField] private List<EnemyData> mEnemyDataList = new List<EnemyData>();
+    public List<EnemyData> enemyDataList { get => mEnemyDataList; }
     #endregion
 
     private void Awake()
@@ -101,7 +107,8 @@ public class DataManager : MonoBehaviour
         foreach (var obj in temp)
             heroData.heroSpriteList.Add(obj as Sprite);
 
-        heroData.heroSpriteList.RemoveAt(0);
+        if(heroData.heroSpriteList[0] == null)
+            heroData.heroSpriteList.RemoveAt(0);
     }
 
     [ContextMenu("Update Hero Card Sprite")]
@@ -114,7 +121,8 @@ public class DataManager : MonoBehaviour
         foreach (var obj in temp)
             heroData.heroCardSpriteList.Add(obj as Sprite);
 
-        heroData.heroCardSpriteList.RemoveAt(0);
+        if(heroData.heroCardSpriteList[0] == null)
+            heroData.heroCardSpriteList.RemoveAt(0);
     }
 
     [ContextMenu("Update Hero Anim Controller")]
@@ -127,7 +135,24 @@ public class DataManager : MonoBehaviour
         foreach (var obj in temp)
             heroData.heroAnimCtrlList.Add(obj as RuntimeAnimatorController);
 
-        //heroData.heroAnimCtrlList.RemoveAt(0);
+        if(heroData.heroAnimCtrlList[0] == null)
+            heroData.heroAnimCtrlList.RemoveAt(0);
+    }
+
+    [ContextMenu("Update Enemy Data")]
+    private void UpdateEnemyData()
+    {
+        mEnemyDataList.Clear();
+
+        EnemyData[] temp = Resources.LoadAll<EnemyData>("Scriptable");
+
+        foreach (var obj in temp)
+        {
+            mEnemyDataList.Add(obj);
+        }
+
+        if (mEnemyDataList[0] == null)
+            mEnemyDataList.RemoveAt(0);
     }
     #endregion
 
@@ -137,7 +162,7 @@ public class DataManager : MonoBehaviour
 
         //Json에 저장된 heroList안의 내용들을 heroDic에 저장
         for (int i = 0; i < heroData.heroList.Count; i++)
-            heroData.heroDic.Add(heroData.heroList[i].myName, heroData.heroList[i]);
+            heroData.heroDic.Add(heroData.heroList[i].name, heroData.heroList[i]);
     }
 
     public void ResettingHeroList()
@@ -148,7 +173,7 @@ public class DataManager : MonoBehaviour
             heroData.heroList = new List<UnitStatus>(heroData.heroDic.Values);
     }
 
-    #region Moster Load & Save
+    #region Hero Load & Save
     private void InitHeroData()
     {
         for (int i = 0; i < HeroData.HeroMaxSize; i++)
@@ -174,23 +199,26 @@ public class DataManager : MonoBehaviour
 
             for (int i = 0; i < heroData.heroList.Count; i++)
             {
-                var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
-                    Quaternion.identity).GetComponent<LobbyHero>();
-
-                var heroStat = heroData.heroList[i];
-                //heroStat.mySprite = heroData.heroSpriteList[heroStat.ID];
-                //heroStat.animCtrl = heroData.heroAnimCtrlList[heroStat.ID];
-
-                hero.UnitSetup(heroStat);
-            }
-
-            for (int i = 0; i < heroData.heroList.Count; i++)
-            {
                 //만약 heroDic에 해당 heroList의 "Jelly0"가 있다면
-                var targetName = heroData.heroList[i].myName;
+                var targetName = heroData.heroList[i].name;
 
                 if(!heroData.heroDic.ContainsKey(targetName))
                     heroData.heroDic.Add(targetName, heroData.heroList[i]);
+            }
+
+            if (SceneManager.GetActiveScene().name == "Lobby")
+            {
+                for (int i = 0; i < heroData.heroList.Count; i++)
+                {
+                    var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
+                        Quaternion.identity).GetComponent<LobbyHero>();
+
+                    var heroStat = heroData.heroList[i];
+                    //heroStat.mySprite = heroData.heroSpriteList[heroStat.ID];
+                    //heroStat.animCtrl = heroData.heroAnimCtrlList[heroStat.ID];
+
+                    hero.UnitSetup(heroStat);
+                }
             }
 
             //var newStat = new UnitStatus("나나", 0, 0, 1);

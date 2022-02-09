@@ -6,11 +6,10 @@ using UnityEngine;
 
 public class Enemy : Unit
 {
+    [SerializeField] private UnityEngine.UI.Text hpTxt;
+
     private void Awake()
     {
-        isDust = true;
-        isMove = true;
-
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
@@ -19,18 +18,36 @@ public class Enemy : Unit
     private void Start()
     {
         battleMgr = BattleManager.Instance;
+
         TeamValueSet();
     }
 
-    private void Update() => Move();
+    private void OnEnable()
+    {
+        isDust = true;
+        isMove = true;
+    }
+
+    private void OnDisable()
+    {
+        isDust = false;
+        isMove = false;
+    }
+
+    //private void Update() => Move();
+    
+    private void Update()
+    {
+        Move();
+        hpTxt.text = myStat.hp.ToString();
+    }
 
     private void FixedUpdate() => Scan();
 
     protected override void CustomUnitSetup(UnitStatus status)
     {
-        myStat = status;
-        sprite.sprite = DataManager.Instance.heroData.heroSpriteList[status.ID];
-        anim.runtimeAnimatorController =
-            DataManager.Instance.heroData.heroAnimCtrlList[status.ID];
+        mMyStat = status;
+        sprite.sprite = mMyStat.mySprite;
+        anim.runtimeAnimatorController = mMyStat.animCtrl;
     }
 }

@@ -46,23 +46,23 @@ public class MonsterPanel : MonoBehaviour
             lockGroup.SetActive(false);
         }
 
-        monsterLockImg.sprite = gameManager.monsSpriteList[page];
-        monsterUnlockImg.sprite = gameManager.monsSpriteList[page];
+        //monsterLockImg.sprite = dataManager.enemyData.enemySpriteList[page];
+        //monsterUnlockImg.sprite = dataManager.enemyData.enemySpriteList[page];
 
         monsterLockImg.SetNativeSize();
         monsterUnlockImg.SetNativeSize();
 
         monsterNameTxt.text = gameManager.monsNameList[page];
-        monsterGoldTxt.text = string.Format("{0:n0}", gameManager.monsGoldList[page]);
-        monsterKarmaTxt.text = string.Format("{0:n0}", gameManager.monsSoulGemList[page]);
+        //monsterGoldTxt.text = string.Format("{0:n0}", gameManager.monsGoldList[page]);
+        //monsterKarmaTxt.text = string.Format("{0:n0}", gameManager.heroSoulGemList[page]);
         pageTxt.text = string.Format("#{0:00}", page + 1);
     }
 
     public void Unlock()
     {
-        if (dataManager.gameData.soulGem >= gameManager.monsSoulGemList[page])
+        if (dataManager.gameData.soulGem >= dataManager.heroData.heroSoulGemList[page])
         {
-            dataManager.gameData.soulGem -= gameManager.monsSoulGemList[page];
+            dataManager.gameData.soulGem -= dataManager.heroData.heroSoulGemList[page];
             dataManager.heroData.heroUnlockList[page] = true;
 
             Change();

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fd8d5bdadee9a4786aa3d05a0cf342, type: 3}
+  m_Name: EnemyData00_Man
+  m_EditorClassIdentifier: 
+  myStat:
+    name: Man
+    ID: 0
+    exp: 0
+    level: 0
+    cost: 1
+    hp: 10
+    ap: 2
+    dp: 1
+    critical: 0
+    dodge: 0
+    distance: 0.2
+    mySprite: {fileID: 7058787313458793172, guid: 1618eae39a61bd345ab4d414bdeec9ea,
+      type: 3}
+    animCtrl: {fileID: 9100000, guid: f48df9e80424ec7428e16ed342b5996d, type: 2}

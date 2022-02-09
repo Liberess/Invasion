@@ -31,7 +31,7 @@ public class LobbyHero : Unit
 
     protected override void CustomUnitSetup(UnitStatus status)
     {
-        myStat = status;
+        mMyStat = status;
         myStat.mySprite = DataManager.Instance.heroData.heroSpriteList[status.ID];
         sprite.sprite = myStat.mySprite;
         myStat.animCtrl = DataManager.Instance.heroData.heroAnimCtrlList[status.ID];
