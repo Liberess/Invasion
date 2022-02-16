@@ -26,27 +26,13 @@ public class FacilityTimer : MonoBehaviour
         {
             switch (ID)
             {
-                case 0:
-                    limitTime = 10f;    //10초
-                    break;
-                case 1:
-                    limitTime = 60f;    //1분
-                    break;
-                case 2:
-                    limitTime = 600f;   //10분
-                    break;
-                case 3:
-                    limitTime = 1800f;  //30분
-                    break;
-                case 4:
-                    limitTime = 3600f;    //1시간
-                    break;
-                case 5:
-                    limitTime = 14400f;  //4시간
-                    break;
-                case 6:
-                    limitTime = 43200f;  //12시간
-                    break;
+                case 0: limitTime = 10f; break;        //10초
+                case 1: limitTime = 60f; break;        //1분
+                case 2: limitTime = 600f; break;      //10분
+                case 3: limitTime = 1800f; break;    //30분
+                case 4: limitTime = 3600f; break;    //1시간
+                case 5: limitTime = 14400f; break;  //4시간
+                case 6: limitTime = 43200f; break;  //12시간
             }
 
             myTime = limitTime;
@@ -55,27 +41,13 @@ public class FacilityTimer : MonoBehaviour
         {
             switch (ID)
             {
-                case 0:
-                    myTime = 10f;    //10초
-                    break;
-                case 1:
-                    myTime = 60f;    //1분
-                    break;
-                case 2:
-                    myTime = 600f;   //10분
-                    break;
-                case 3:
-                    myTime = 1800f;  //30분
-                    break;
-                case 4:
-                    myTime = 3600f;    //1시간
-                    break;
-                case 5:
-                    myTime = 14400f;  //4시간
-                    break;
-                case 6:
-                    myTime = 43200f;  //12시간
-                    break;
+                case 0: myTime = 10f; break;        //10초
+                case 1: myTime = 60f; break;        //1분
+                case 2: myTime = 600f; break;      //10분
+                case 3: myTime = 1800f; break;    //30분
+                case 4: myTime = 3600f; break;    //1시간
+                case 5: myTime = 14400f; break;  //4시간
+                case 6: myTime = 43200f; break;  //12시간
             }
 
             limitTime = dataMgr.gameData.facilLimitTime[ID];

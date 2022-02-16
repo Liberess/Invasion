@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyData00_Man
   m_EditorClassIdentifier: 
   myStat:
-    name: Man
+    name: ManA
     ID: 0
     exp: 0
     level: 0
@@ -21,8 +21,8 @@ MonoBehaviour:
     hp: 10
     ap: 2
     dp: 1
-    critical: 0
-    dodge: 0
+    critical: 5
+    dodge: 5
     distance: 0.2
     mySprite: {fileID: 7058787313458793172, guid: 1618eae39a61bd345ab4d414bdeec9ea,
       type: 3}

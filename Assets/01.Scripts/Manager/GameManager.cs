@@ -36,8 +36,6 @@ public class GameManager : MonoBehaviour
     public bool isPlay; //몬스터 이동 제어 등
     public bool isPanel; //Panel이 켜져 있는가
 
-    public string stage { get; private set; }
-
     #region 인스턴스화
     private static GameObject Container;
 
@@ -173,10 +171,11 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    public void OnClickGameStartBtn(string _stage)
+    public void OnClickGameStartBtn(string _stageNum)
     {
-        stage = _stage;
-        SetStageInfo(new StageInfo(_stage, StageLevel.Easy, 0, 3));
+        //var _stageName = DataManager.Instance.gameData.stageNameDic[_stageNum];
+        string _stageName = "도심";
+        SetStageInfo(new StageInfo(_stageName, _stageNum, StageLevel.Easy, 0, 1));
         SceneManager.LoadScene("Battle");
     }
 

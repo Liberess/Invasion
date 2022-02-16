@@ -17,6 +17,23 @@ public class UnitStatus
     public Sprite mySprite;
     public RuntimeAnimatorController animCtrl;
 
+    public UnitStatus(UnitStatus status)
+    {
+        this.name = status.name;
+        this.ID = status.ID;
+        this.exp = status.exp;
+        this.level = status.level;
+        this.cost = status.cost;
+        this.hp = status.hp;
+        this.ap = status.ap;
+        this.dp = status.dp;
+        this.critical = status.critical;
+        this.dodge = status.dodge;
+        this.distance = status.distance;
+        this.mySprite = status.mySprite;
+        this.animCtrl = status.animCtrl;
+    }
+
     /// <summary>
     /// Lobby에서 생성되는 Hero Unit들의 Status를 설정한다.
     /// </summary>
@@ -60,7 +77,7 @@ public class UnitStatus
     /// Battle을 진행할 때, 생성되는 Unit들의 Status를 설정한다.
     /// </summary>
     public UnitStatus(string _name, int _id, float _exp, int _level, int _cost,
-        int _hp, int _ap, float _dp, float _critical, float _dodge)
+        int _hp, int _ap, float _dp, float _critical, float _dodge, float _distance)
     {
         this.name = _name;
         this.ID = _id;
@@ -72,5 +89,6 @@ public class UnitStatus
         this.dp = _dp;
         this.critical = _critical;
         this.dodge = _dodge;
+        this.distance = _distance;
     }
 }

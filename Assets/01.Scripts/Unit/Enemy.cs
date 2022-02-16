@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class Enemy : Unit
 {
-    [SerializeField] private UnityEngine.UI.Text hpTxt;
-
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -34,13 +32,7 @@ public class Enemy : Unit
         isMove = false;
     }
 
-    //private void Update() => Move();
-    
-    private void Update()
-    {
-        Move();
-        hpTxt.text = myStat.hp.ToString();
-    }
+    private void Update() => Move();
 
     private void FixedUpdate() => Scan();
 

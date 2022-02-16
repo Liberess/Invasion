@@ -102,13 +102,13 @@ public class DataManager : MonoBehaviour
     {
         heroData.heroSpriteList.Clear();
 
-        object[] temp = Resources.LoadAll("HeroSprite");
+        Sprite[] temp = Resources.LoadAll<Sprite>("HeroSprite");
 
-        foreach (var obj in temp)
-            heroData.heroSpriteList.Add(obj as Sprite);
-
-        if(heroData.heroSpriteList[0] == null)
-            heroData.heroSpriteList.RemoveAt(0);
+        for (int i = 0; i < temp.Length; i++)
+        {
+            if (temp[i] != null)
+                heroData.heroSpriteList.Add(temp[i]);
+        }
     }
 
     [ContextMenu("Update Hero Card Sprite")]
@@ -116,13 +116,13 @@ public class DataManager : MonoBehaviour
     {
         heroData.heroCardSpriteList.Clear();
 
-        object[] temp = Resources.LoadAll("HeroCardSprite");
+        Sprite[] temp = Resources.LoadAll<Sprite>("HeroCardSprite");
 
-        foreach (var obj in temp)
-            heroData.heroCardSpriteList.Add(obj as Sprite);
-
-        if(heroData.heroCardSpriteList[0] == null)
-            heroData.heroCardSpriteList.RemoveAt(0);
+        for (int i = 0; i < temp.Length; i++)
+        {
+            if (temp[i] != null)
+                heroData.heroCardSpriteList.Add(temp[i]);
+        }
     }
 
     [ContextMenu("Update Hero Anim Controller")]
@@ -130,13 +130,14 @@ public class DataManager : MonoBehaviour
     {
         heroData.heroAnimCtrlList.Clear();
 
-        object[] temp = Resources.LoadAll("HeroAnimCtrl");
+        RuntimeAnimatorController[] temp =
+            Resources.LoadAll<RuntimeAnimatorController>("HeroAnimCtrl");
 
-        foreach (var obj in temp)
-            heroData.heroAnimCtrlList.Add(obj as RuntimeAnimatorController);
-
-        if(heroData.heroAnimCtrlList[0] == null)
-            heroData.heroAnimCtrlList.RemoveAt(0);
+        for (int i = 0; i < temp.Length; i++)
+        {
+            if (temp[i] != null)
+                heroData.heroAnimCtrlList.Add(temp[i]);
+        }
     }
 
     [ContextMenu("Update Enemy Data")]
@@ -146,13 +147,11 @@ public class DataManager : MonoBehaviour
 
         EnemyData[] temp = Resources.LoadAll<EnemyData>("Scriptable");
 
-        foreach (var obj in temp)
+        for (int i = 0; i < temp.Length; i++)
         {
-            mEnemyDataList.Add(obj);
+            if (temp[i] != null)
+                mEnemyDataList.Add(temp[i]);
         }
-
-        if (mEnemyDataList[0] == null)
-            mEnemyDataList.RemoveAt(0);
     }
     #endregion
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum QueueType
 {
@@ -22,6 +23,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Text costTxt;
     [SerializeField] private Slider costSlider;
     [SerializeField] private Image leaderImg;
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private Text pauseStageInfoTxt;
 
     [Header("== Setting Hero Card =="), Space(10)]
     [SerializeField] private GameObject heroCardGrid;
@@ -72,7 +75,7 @@ public class BattleManager : MonoBehaviour
 
         dataMgr = DataManager.Instance;
 
-        stageTxt.text = GameManager.Instance.stage;
+        SetStageInfo();
 
         redBase.UnitSetup(new UnitStatus("RedBase", 100, 0f, 0f));
         blueBase.UnitSetup(new UnitStatus("BlueBase", 100, 0f, 0f));
@@ -158,13 +161,13 @@ public class BattleManager : MonoBehaviour
             case QueueType.Hero:
                 obj.transform.position = blueBase.transform.position;
                 Hero hero = obj.GetComponent<Hero>();
-                hero.UnitSetup(dataMgr.heroData.partyList[id]);
+                hero.UnitSetup(new UnitStatus(dataMgr.heroData.partyList[id]));
                 hero.DeathAction += () => ReturnObj(QueueType.Hero, hero.gameObject);
                 break;
             case QueueType.Enemy:
                 obj.transform.position = redBase.transform.position;
                 Enemy enemy = obj.GetComponent<Enemy>();
-                enemy.UnitSetup(dataMgr.enemyDataList[id].myStat);
+                enemy.UnitSetup(new UnitStatus(dataMgr.enemyDataList[id].myStat));
                 enemy.DeathAction += () => ReturnObj(type, enemy.gameObject);
                 break;
             default:
@@ -209,13 +212,8 @@ public class BattleManager : MonoBehaviour
                     GameManager.Instance.stageInfo.minEnemyID,
                     GameManager.Instance.stageInfo.maxEnemyID
                 );
-            InstantiateObj(QueueType.Enemy, rand);
 
-/*            var obj = GetObj(QueueType.Enemy);
-            var enemy = obj.GetComponent<Enemy>();
-            enemy.transform.position = redBase.transform.position;
-            enemy.UnitSetup(dataMgr.enemyDataList[0].myStat);
-            enemy.DeathAction += () => ReturnObj(QueueType.Enemy, enemy.gameObject);*/
+            InstantiateObj(QueueType.Enemy, rand);
 
             yield return new WaitForSeconds(enemySpawnDelay);
         }
@@ -280,6 +278,14 @@ public class BattleManager : MonoBehaviour
     }
 
     #region Set UI (PlayTime, Cost, Leader)
+    private void SetStageInfo()
+    {
+        stageTxt.text = GameManager.Instance.stageInfo.stageNum;
+
+        pauseStageInfoTxt.text = "STAGE " + GameManager.Instance.stageInfo.stageName
+            + "\n" + GameManager.Instance.stageInfo.stageNum;
+    }
+
     private void SetPlayTimeText()
     {
         int minute = (int)playTime / 60;
@@ -320,9 +326,30 @@ public class BattleManager : MonoBehaviour
     #endregion
 
     #region OnClick Events
-    public void OnClickPauseBtn()
+    public void OnClickPauseBtn(bool isPause)
     {
-        isPlay = false;
+        if(isPause)
+        {
+            isPlay = false;
+            pausePanel.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            isPlay = true;
+            pausePanel.SetActive(false);
+        }
+    }
+
+    public void OnClickRetryBtn()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void OnClickQuitBtn()
+    {
+        SceneManager.LoadScene("Main");
     }
 
     private void OnClickHeroCard(int id)

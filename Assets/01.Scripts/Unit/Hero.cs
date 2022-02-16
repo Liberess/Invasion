@@ -38,8 +38,14 @@ public class Hero : Unit
     protected override void CustomUnitSetup(UnitStatus status)
     {
         mMyStat = status;
-        sprite.sprite = DataManager.Instance.heroData.heroSpriteList[status.ID];
+        
+        mMyStat.mySprite = status.mySprite;
+        sprite.sprite = mMyStat.mySprite;
+
+        mMyStat.animCtrl = status.animCtrl;
+        anim.runtimeAnimatorController = mMyStat.animCtrl;
+/*        sprite.sprite = DataManager.Instance.heroData.heroSpriteList[status.ID];
         anim.runtimeAnimatorController =
-            DataManager.Instance.heroData.heroAnimCtrlList[status.ID];
+            DataManager.Instance.heroData.heroAnimCtrlList[status.ID];*/
     }
 }

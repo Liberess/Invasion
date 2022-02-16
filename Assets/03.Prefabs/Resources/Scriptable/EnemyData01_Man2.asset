@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyData01_Man2
   m_EditorClassIdentifier: 
   myStat:
-    name: Man2
+    name: ManB
     ID: 1
     exp: 0
     level: 0

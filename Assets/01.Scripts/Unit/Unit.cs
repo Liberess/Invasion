@@ -24,7 +24,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] private GameObject dust;
     [SerializeField] private GameObject shadow;
 
-    [SerializeField] private GameObject enemy;
+    [SerializeField] private GameObject target;
 
     [SerializeField] private UnitJob mJob;
     public UnitJob job { get => mJob; }
@@ -35,10 +35,10 @@ public abstract class Unit : MonoBehaviour
 
     protected float distance;
     protected string allyValue;
-    protected string enemyValue;
+    protected string targetValue;
 
     protected bool isDust;
-    [SerializeField] protected bool isMove;
+    protected bool isMove;
 
     protected float attackTime = 0;
 
@@ -52,7 +52,6 @@ public abstract class Unit : MonoBehaviour
 
     public void UnitSetup(UnitStatus status)
     {
-        Debug.Log(name + " UnitSetup");
         CustomUnitSetup(status);
         //ChangeAc();
     }
@@ -68,7 +67,7 @@ public abstract class Unit : MonoBehaviour
         direction = (this.gameObject.layer == 9) ? 1 : -1; //Team Value
 
         allyValue = (direction == 1) ? "Hero" : "Enemy"; //Layer Mask - Check Ally
-        enemyValue = (direction == 1) ? "Enemy" : "Hero"; //Layer Mask - Check Enemy
+        targetValue = (direction == 1) ? "Enemy" : "Hero"; //Layer Mask - Check Enemy
 
         switch (mJob) //Set Distance
         {
@@ -118,12 +117,12 @@ public abstract class Unit : MonoBehaviour
 
             switch (job)
             {
-                case UnitJob.ShortRange: enemy.GetComponent<Unit>().Hit(myStat.ap); break;
+                case UnitJob.ShortRange: target.GetComponent<Unit>().Hit(myStat.ap); break;
                 case UnitJob.LongRange: Shot(); break;
-                //case UnitJob.Wizard: Spell(enemy.transform.position); break;
+                //case UnitJob.Wizard: Spell(target.transform.position); break;
             }
 
-            enemy.GetComponent<Unit>().Hit(myStat.ap);
+            target.GetComponent<Unit>().Hit(myStat.ap);
         }
         else
         {
@@ -159,18 +158,18 @@ public abstract class Unit : MonoBehaviour
 #endif
 
         RaycastHit2D rayHitEnemy = Physics2D.Raycast(transform.position,
-            Vector2.right * direction, distance, LayerMask.GetMask(enemyValue));
+            Vector2.right * direction, distance, LayerMask.GetMask(targetValue));
 
         if (rayHitEnemy.collider != null)
         {
-            enemy = rayHitEnemy.collider.gameObject;
+            target = rayHitEnemy.collider.gameObject;
 
             Stop();
             Attack();
         }
         else
         {
-            enemy = null;
+            target = null;
 
             if (rayHitAlly.collider != null && rayHitAlly.collider.gameObject != gameObject
                 && rayHitAlly.collider.CompareTag(allyValue))

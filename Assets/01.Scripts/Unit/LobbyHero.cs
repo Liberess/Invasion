@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class LobbyHero : Unit
 {
-    private bool isBorder = false;
-
     [SerializeField] private float speedX;
     [SerializeField] private float speedY;
 
@@ -81,20 +79,10 @@ public class LobbyHero : Unit
     {
         if (collision.CompareTag("BorderLine"))
         {
-            isBorder = true;
-
             speedX *= -0.5f;
             speedY *= -0.5f;
 
             FlipX();
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("BorderLine"))
-        {
-            isBorder = false;
         }
     }
 }
