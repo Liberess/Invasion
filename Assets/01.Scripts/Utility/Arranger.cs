@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Arranger : MonoBehaviour
 {
-    List<Transform> slotList = new List<Transform>();
+    [SerializeField] private List<Transform> slotList = new List<Transform>();
 
     private void Start()
     {
@@ -26,6 +26,13 @@ public class Arranger : MonoBehaviour
         slotList.RemoveRange(transform.childCount, slotList.Count - transform.childCount);
     }
 
+    public void InsertSlot(Transform slot, int index)
+    {
+        slotList.Add(slot);
+        slot.SetSiblingIndex(index);
+        UpdateSlot();
+    }
+
     public int GetIndexByPosition(Transform slot, int skipIndex = 1)
     {
         int result = 0;
@@ -39,5 +46,12 @@ public class Arranger : MonoBehaviour
         }
 
         return result;
+    }
+
+    public void SwapSlot(int index1, int index2)
+    {
+        Central.SwapSlots(slotList[index1], slotList[index2]);
+
+        UpdateSlot();
     }
 }

@@ -14,6 +14,9 @@ public class UnitStatus
     public float critical;     // 치명타율. Critical Chance
     public float dodge;      // 회피율. Dodge Chance
     public float distance;  // 공격 거리. Attack Distance
+    public float attackDelay;   // 공격 딜레이. Attack Delay Time
+    public float DPS =>           // 초당 공격력. Damage per Second
+        (1f / attackDelay) * ap;    
     public Sprite mySprite;
     public RuntimeAnimatorController animCtrl;
 

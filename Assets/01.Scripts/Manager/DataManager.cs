@@ -12,7 +12,7 @@ public class DataManager : MonoBehaviour
     private const string HeroDataFileName = "/HeroData.json";
     private const string EnemyDataFileName = "/EnemyData.json";
 
-    [Header("== Hero Object Prefab ==")]
+    [Header("==== Hero Object Prefab ====")]
     [SerializeField] private GameObject heroPrefab;
     [SerializeField] private GameObject lobbyHeroPrefab;
 
@@ -36,7 +36,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    [Header("== Game Data Information =="), Space(10)]
+    [Header("==== Game Data Information ===="), Space(10)]
     [SerializeField] private GameData mGameData;
     public GameData gameData
     {
@@ -52,7 +52,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    [Header("== Hero Data Information =="), Space(10)]
+    [Header("==== Hero Data Information ===="), Space(10)]
     [SerializeField] private HeroData mHeroData;
     public HeroData heroData
     {
@@ -68,7 +68,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    [Header("== Enemy Data Information =="), Space(10)]
+    [Header("==== Enemy Data Information ===="), Space(10)]
     [SerializeField] private List<EnemyData> mEnemyDataList = new List<EnemyData>();
     public List<EnemyData> enemyDataList { get => mEnemyDataList; }
     #endregion
@@ -91,6 +91,11 @@ public class DataManager : MonoBehaviour
     private void Start()
     {
         LoadHeroData();
+
+        UpdateHeroSprite();
+        UpdateHeroAnimCtrl();
+        UpdateHeroCardSprite();
+        UpdateEnemyData();
 
         SaveGameData();
         SaveHeroData();

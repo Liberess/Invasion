@@ -89,6 +89,8 @@ GameObject:
   - component: {fileID: 79052511980300479}
   - component: {fileID: 79052511980300465}
   - component: {fileID: 79052511980300478}
+  - component: {fileID: 716009213483162032}
+  - component: {fileID: 8857297985048770547}
   m_Layer: 5
   m_Name: HeroSlot
   m_TagString: Untagged
@@ -154,6 +156,47 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &716009213483162032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79052511980300476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6618971f0c1f5f449a44e0a9a866a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lvTxt: {fileID: 79052511059550272}
+  heroImg: {fileID: 79052512698766605}
+  myStatus:
+    name: 
+    ID: 0
+    exp: 0
+    level: 0
+    cost: 0
+    hp: 0
+    ap: 0
+    dp: 0
+    critical: 0
+    dodge: 0
+    distance: 0
+    attackDelay: 0
+    mySprite: {fileID: 0}
+    animCtrl: {fileID: 0}
+--- !u!114 &8857297985048770547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79052511980300476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfd736a417fd0574cae4d87e28f073b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &79052512698766603
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,7 +209,7 @@ GameObject:
   - component: {fileID: 79052512698766604}
   - component: {fileID: 79052512698766605}
   m_Layer: 5
-  m_Name: FacilImg
+  m_Name: HeroImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
