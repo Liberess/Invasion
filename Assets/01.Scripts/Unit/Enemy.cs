@@ -39,7 +39,6 @@ public class Enemy : Unit
     protected override void CustomUnitSetup(UnitStatus status)
     {
         mMyStat = status;
-        sprite.sprite = mMyStat.mySprite;
         anim.runtimeAnimatorController = mMyStat.animCtrl;
     }
 }

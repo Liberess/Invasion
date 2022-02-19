@@ -209,8 +209,8 @@ public class BattleManager : MonoBehaviour
         {
             int rand = UnityEngine.Random.Range
                 (
-                    GameManager.Instance.stageInfo.minEnemyID,
-                    GameManager.Instance.stageInfo.maxEnemyID
+                    dataMgr.gameData.stageInfo.minEnemyID,
+                    dataMgr.gameData.stageInfo.maxEnemyID
                 );
 
             InstantiateObj(QueueType.Enemy, rand);
@@ -280,10 +280,10 @@ public class BattleManager : MonoBehaviour
     #region Set UI (PlayTime, Cost, Leader)
     private void SetStageInfo()
     {
-        stageTxt.text = GameManager.Instance.stageInfo.stageNum;
+        stageTxt.text = dataMgr.gameData.stageInfo.stageNum;
 
-        pauseStageInfoTxt.text = "STAGE " + GameManager.Instance.stageInfo.stageName
-            + "\n" + GameManager.Instance.stageInfo.stageNum;
+        pauseStageInfoTxt.text = "STAGE " + dataMgr.gameData.stageInfo.stageName
+            + "\n" + dataMgr.gameData.stageInfo.stageNum;
     }
 
     private void SetPlayTimeText()

@@ -10,10 +10,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
     private DataManager dataMgr;
-
-    [SerializeField] private StageInfo mStageInfo;
-    public StageInfo stageInfo { get => mStageInfo; }
 
     public GameObject OptionPanel;
     public GameObject clearImg;
@@ -36,40 +34,12 @@ public class GameManager : MonoBehaviour
     public bool isPlay; //몬스터 이동 제어 등
     public bool isPanel; //Panel이 켜져 있는가
 
-    #region 인스턴스화
-    private static GameObject Container;
-
-    private static GameManager mInstance;
-    public static GameManager Instance 
-    {
-        get
-        {
-            if (!mInstance)
-            {
-                Container = new GameObject();
-                Container.name = "GameManager";
-                mInstance = Container.AddComponent(typeof(GameManager)) as GameManager;
-                DontDestroyOnLoad(Container);
-            }
-
-            return mInstance;
-        }
-    }
-    #endregion
-
     private void Awake()
     {
         isPlay = true;
 
-        if (mInstance == null)
-        {
-            mInstance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (mInstance != this)
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null)
+            Instance = this;
 
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.SetResolution(1920, 1080, true);
@@ -81,18 +51,6 @@ public class GameManager : MonoBehaviour
 
         //_soulGem = (int)DataManager.Instance.gameData.soulGem;
         //_gold = DataManager.Instance.gameData.gold;
-
-        GameClear();
-
-        if(dataMgr.gameData.isNew == false)
-        {
-            StartCoroutine(WebChk());
-            offNotice.gameObject.GetComponent<Animator>().SetTrigger("doShow");
-        }
-        else
-        {
-            dataMgr.gameData.isNew = false;
-        }
     }
 
     private void Update()
@@ -105,8 +63,23 @@ public class GameManager : MonoBehaviour
         ShowMoneyTxt();
     }
 
+    public void OnApplicationStart()
+    {
+        GameClear();
+
+        if (DataManager.Instance.gameData.isNew == false)
+        {
+            StartCoroutine(WebChk());
+            offNotice.gameObject.GetComponent<Animator>().SetTrigger("doShow");
+        }
+        else
+        {
+            dataMgr.gameData.isNew = false;
+        }
+    }
+
     #region 오프라인 시간
-    IEnumerator WebChk()
+    private IEnumerator WebChk()
     {
         UnityWebRequest request = new UnityWebRequest();
 
@@ -171,12 +144,11 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    public void OnClickGameStartBtn(string _stageNum)
+    public void OnClickGameStartBtn(StageInfo info)
     {
         //var _stageName = DataManager.Instance.gameData.stageNameDic[_stageNum];
-        string _stageName = "도심";
-        SetStageInfo(new StageInfo(_stageName, _stageNum, StageLevel.Easy, 0, 1));
-        SceneManager.LoadScene("Battle");
+        dataMgr.SetStageInfo(info);
+        SceneManager.LoadSceneAsync("Battle", LoadSceneMode.Single);
     }
 
     public void GameClear()
@@ -215,8 +187,6 @@ public class GameManager : MonoBehaviour
                 moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strDrink);*/
     }
 
-    private void SetStageInfo(StageInfo info) => mStageInfo = info;
-
     private void CancelBtn() //인 게임 Cancel 동작
     {
         if (isPanel)
@@ -239,7 +209,7 @@ public class GameManager : MonoBehaviour
 
             if (isPanel)
             {
-                UIManager.Instance.hidePanelAction();
+                UIManager.Instance.HidePanelAction();
             }
         }
         else

@@ -75,30 +75,39 @@ public class DataManager : MonoBehaviour
 
     private void Awake()
     {
-       if(mInstance == null)
+        if (mInstance == null)
         {
             mInstance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else if(mInstance != this)
+        else if (mInstance != this)
         {
             Destroy(gameObject);
         }
-
-        LoadGameData();
-    }
-
-    private void Start()
-    {
-        LoadHeroData();
 
         UpdateHeroSprite();
         UpdateHeroAnimCtrl();
         UpdateHeroCardSprite();
         UpdateEnemyData();
 
+        LoadGameData();
+    }
+
+    private void Start()
+    {
+        GameManager.Instance.OnApplicationStart();
+
+        LoadHeroData();
+
         SaveGameData();
         SaveHeroData();
+    }
+
+    public void SetStageInfo(StageInfo info) => gameData.stageInfo = info;
+
+    public void SetMapUI()
+    {
+
     }
 
     #region Update Resources
@@ -199,6 +208,18 @@ public class DataManager : MonoBehaviour
             string FromJsonData = System.Text.Encoding.UTF8.GetString(bytes);
             mHeroData = JsonUtility.FromJson<HeroData>(FromJsonData);
 
+            for (int i = 0; i < heroData.heroList.Count; i++)
+            {
+                heroData.heroList[i].mySprite = heroData.heroSpriteList[heroData.heroList[i].ID];
+                heroData.heroList[i].animCtrl = heroData.heroAnimCtrlList[heroData.heroList[i].ID];
+            }
+
+            for (int i = 0; i < heroData.partyList.Count; i++)
+            {
+                heroData.partyList[i].mySprite = heroData.heroSpriteList[heroData.partyList[i].ID];
+                heroData.partyList[i].animCtrl = heroData.heroAnimCtrlList[heroData.partyList[i].ID];
+            }
+
             ConstructHeroDic();
 
             for (int i = 0; i < heroData.heroList.Count; i++)
@@ -206,7 +227,7 @@ public class DataManager : MonoBehaviour
                 //만약 heroDic에 해당 heroList의 "Jelly0"가 있다면
                 var targetName = heroData.heroList[i].name;
 
-                if(!heroData.heroDic.ContainsKey(targetName))
+                if (!heroData.heroDic.ContainsKey(targetName))
                     heroData.heroDic.Add(targetName, heroData.heroList[i]);
             }
 
@@ -272,7 +293,7 @@ public class DataManager : MonoBehaviour
     {
         string filePath = Application.persistentDataPath + GameDataFileName;
 
-        if(File.Exists(filePath))
+        if (File.Exists(filePath))
         {
             string code = File.ReadAllText(filePath);
             byte[] bytes = Convert.FromBase64String(code);

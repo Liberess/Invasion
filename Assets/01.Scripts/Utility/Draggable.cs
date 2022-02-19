@@ -9,6 +9,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     private Transform root;
 
     [SerializeField] private bool canDrag = false;
+    public bool CanDrag { get => canDrag; }
     [SerializeField] private bool isPressed = false;
     [SerializeField] private float pressTime = 0f;
     private float maxPressTime = 1.5f;
@@ -25,6 +26,11 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         {
             if(pressTime >= maxPressTime)
             {
+                var heroSlot = GetComponent<HeroSlot>();
+
+                if (heroSlot != null)
+                    heroSlot.SlotDragEvent();
+
                 canDrag = true;
                 isPressed = false;
             }

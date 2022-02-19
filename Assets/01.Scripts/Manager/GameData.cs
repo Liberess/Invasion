@@ -9,6 +9,7 @@ public class GameData
     public string saveTimeStr;
     public DateTime saveTime;
 
+    public StageInfo stageInfo;
     public Dictionary<string, string> stageNameDic = new Dictionary<string, string>();
 
     public int[] facilGold = new int[7];

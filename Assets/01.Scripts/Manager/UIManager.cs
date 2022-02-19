@@ -46,7 +46,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private List<HeroSlot> heroSlotList = new List<HeroSlot>();
     [SerializeField] private List<HeroSlot> tempHeroSlotList = new List<HeroSlot>();
 
-    public UnityAction hidePanelAction;
+    [Header("==== Map UI ===="), Space(10)]
+    [SerializeField] private StageInfoPanel stageReadyPanel;
+    private List<Button> mapBtnList = new List<Button>();
+    private List<GameObject> detailStagePanelList = new List<GameObject>();
+    private Dictionary<int, List<Button>> detailStageBtnDic = new Dictionary<int, List<Button>>();
+
+    public UnityAction HidePanelAction;
+    public UnityAction HideHeroInfoPanelAction;
 
     private void Awake()
     {
@@ -59,6 +66,8 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         dataMgr = DataManager.Instance;
+
+        SetupMapUI();
 
         InitHeroSlotObjectPool();
         InitSortButton();
@@ -112,6 +121,88 @@ public class UIManager : MonoBehaviour
             heroSlot.UnitSetup(dataMgr.heroData.heroList[i]);
             heroSlotList.Add(heroSlot);
         }
+    }
+
+    private void InitMapButton()
+    {
+        GameObject mapPanel = GameObject.Find("MapCanvas").transform.Find("MapPanel").gameObject;
+
+        // Set Map Button List
+        GameObject btnParent = mapPanel.transform.
+            Find("Scroll View").Find("Viewport").gameObject;
+
+        mapBtnList.Clear();
+        for (int i = 0; i < btnParent.transform.childCount; i++)
+        {
+            int temp = i;
+            var child = btnParent.transform.GetChild(i).GetComponent<Button>();
+            child.name = "Stage" + (i + 1) + "Panel";
+            child.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = "Stage " + (i + 1);
+            child.transform.GetChild(1).GetChild(1).GetComponent<Text>().text = "골목길";
+            child.onClick.AddListener(() => DetailStagePanelCtrl(temp));
+            mapBtnList.Add(child);
+        }
+    }
+
+    private void InitDetailStagePanel()
+    {
+        GameObject mapPanel = GameObject.Find("MapCanvas").transform.Find("MapPanel").gameObject;
+
+        // Set Detail Stage Panel
+        GameObject panelParent = mapPanel.transform.
+            Find("DetailStagePanelGroup").gameObject;
+
+        detailStagePanelList.Clear();
+        for (int i = 0; i < panelParent.transform.childCount; i++)
+        {
+            var child = panelParent.transform.GetChild(i).gameObject;
+            child.name = "DetailStage" + (i + 1) + "Panel";
+            detailStagePanelList.Add(child);
+        }
+    }
+
+    private void InitDetailButton()
+    {
+        // Set Detail Button List
+        detailStageBtnDic.Clear();
+        for (int i = 0; i < detailStagePanelList.Count; i++)
+        {
+            detailStageBtnDic.Add(i, new List<Button>());
+            for (int j = 0; j < detailStagePanelList[i].transform.childCount; j++)
+            {
+                Button btn = detailStagePanelList[i].transform.GetChild(j).
+                    gameObject.GetComponent<Button>();
+
+                if (btn != null && btn.name != "QuitBtn")
+                {
+                    string text = (i + 1) + "-" + (j + 1);
+                    btn.name = text + "Btn";
+
+                    if (btn.GetComponentInChildren<Text>() != null)
+                        btn.GetComponentInChildren<Text>().text = text;
+
+                    btn.onClick.AddListener(() => stageReadyPanel.gameObject.SetActive(true));
+                    btn.onClick.AddListener(() => stageReadyPanel.SetupStageInfo(
+                        new StageInfo("테헤란로", text, StageLevel.Easy, 0, 1)));
+                    detailStageBtnDic[i].Add(btn);
+                }
+            }
+        }
+    }
+
+    private void SetupMapUI()
+    {
+        InitMapButton();
+        InitDetailStagePanel();
+        InitDetailButton();
+    }
+
+    private void DetailStagePanelCtrl(int index)
+    {
+        if (detailStagePanelList[index].activeSelf)
+            detailStagePanelList[index].SetActive(false);
+        else
+            detailStagePanelList[index].SetActive(true);
     }
 
     private void OnClickSortButton(HeroSortType sortType)

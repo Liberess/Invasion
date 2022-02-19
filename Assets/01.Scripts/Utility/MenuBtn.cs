@@ -34,7 +34,7 @@ public class MenuBtn : MonoBehaviour
         isShow = false;
 
         if(btnType != MenuBtnTypes.Dungeon && btnType != MenuBtnTypes.Adventure)
-            UIManager.Instance.hidePanelAction += () => MyPanelHide();
+            UIManager.Instance.HidePanelAction += () => MyPanelHide();
     }
 
     private void MyPanelShow()
@@ -77,7 +77,7 @@ public class MenuBtn : MonoBehaviour
                 myPanel.SetActive(false);
         }
 
-        UIManager.Instance.hidePanelAction();
+        UIManager.Instance.HidePanelAction();
         SoundManager.Instance.PlaySFX("Button");
     }
 }

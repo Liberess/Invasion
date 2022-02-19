@@ -79,6 +79,9 @@ public abstract class Unit : MonoBehaviour
 
     protected virtual void Move()
     {
+        if (!IsAlive)
+            return;
+
         if (battleMgr != null && !battleMgr.isPlay)
             return;
 
@@ -147,6 +150,9 @@ public abstract class Unit : MonoBehaviour
 
     protected void Scan()
     {
+        if (!IsAlive)
+            return;
+
         if (battleMgr != null && !battleMgr.isPlay)
             return;
 
@@ -194,7 +200,27 @@ public abstract class Unit : MonoBehaviour
 
     protected virtual void Die()
     {
+        StartCoroutine(DeathAnim());
+    }
+
+    private IEnumerator DeathAnim()
+    {
+        sprite.color = Color.gray;
+        Color alpha = sprite.color;
+
+        float time = 0f;
+
+        while (alpha.a > 0f)
+        {
+            time += Time.deltaTime / 1f;
+            alpha.a = Mathf.Lerp(1, 0, time);
+            sprite.color = alpha;
+            yield return null;
+        }
+
         if (DeathAction != null)
             DeathAction();
+
+        yield return null;
     }
 }
