@@ -85,11 +85,7 @@ public class DataManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        UpdateHeroSprite();
-        UpdateHeroAnimCtrl();
-        UpdateHeroCardSprite();
-        UpdateEnemyData();
-
+        UpdateResources();
         LoadGameData();
     }
 
@@ -111,7 +107,16 @@ public class DataManager : MonoBehaviour
     }
 
     #region Update Resources
-    [ContextMenu("Update Hero Sprite")]
+    [ContextMenu("Update Resources")]
+    private void UpdateResources()
+    {
+        UpdateHeroSprite();
+        UpdateHeroAnimCtrl();
+        UpdateHeroCardSprite();
+        UpdateEnemyData();
+    }
+
+    //[ContextMenu("Update Hero Sprite")]
     private void UpdateHeroSprite()
     {
         heroData.heroSpriteList.Clear();
@@ -125,7 +130,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    [ContextMenu("Update Hero Card Sprite")]
+    //[ContextMenu("Update Hero Card Sprite")]
     private void UpdateHeroCardSprite()
     {
         heroData.heroCardSpriteList.Clear();
@@ -139,7 +144,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    [ContextMenu("Update Hero Anim Controller")]
+    //[ContextMenu("Update Hero Anim Controller")]
     private void UpdateHeroAnimCtrl()
     {
         heroData.heroAnimCtrlList.Clear();
@@ -154,7 +159,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    [ContextMenu("Update Enemy Data")]
+    //[ContextMenu("Update Enemy Data")]
     private void UpdateEnemyData()
     {
         mEnemyDataList.Clear();
@@ -272,10 +277,13 @@ public class DataManager : MonoBehaviour
     #region Game Load & Save
     private void InitGameData()
     {
-        gameData.dia = 0;
-        gameData.gold = 0;
+        for (int i = 0; i < gameData.goods.Length; i++)
+        {
+            gameData.goods[i].name = gameData.goodsNames[i];
+            gameData.goods[i].count = 0;
+        }
+
         gameData.soulGem = 0;
-        gameData.drink = 0;
 
         for (int i = 0; i < gameData.facilGold.Length; i++)
             gameData.facilGold[i] = 0;

@@ -39,6 +39,50 @@ public class CameraMove : MonoBehaviour
 
     private void InputMouse()
     {
+//#if (UNITY_ANDROID && !UNITY_EDITOR)
+#if UNITY_EDITOR
+        if(Input.touchCount > 0)
+        {
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            {
+                StopCoroutine(DecelerateCoru());
+
+                isMove = true;
+                accel = 1f;
+                direction = 0;
+
+                prePos = Input.mousePosition;
+                prePos = Camera.main.ScreenToWorldPoint(prePos);
+                prePos.z = originPos.z;
+            }
+            else if (Input.GetTouch(0).phase == TouchPhase.Ended)
+            {
+                StartCoroutine(DecelerateCoru());
+            }
+            else if (Input.GetTouch(0).phase == TouchPhase.Moved)
+            {
+                isMove = true;
+
+                movePos = Input.mousePosition;
+                movePos = Camera.main.ScreenToWorldPoint(movePos);
+                movePos.z = originPos.z;
+
+                targetPos = prePos - movePos;
+
+                float distance = Vector3.Distance(prePos, movePos);
+
+                // Set Move Direction
+                if (targetPos.x > 0) // 오른쪽으로 가는 중
+                    direction = 1;
+                else
+                    direction = -1;
+
+                if (accel < 3f)
+                    accel = distance;
+            }
+        }
+
+#else
         if (Input.GetMouseButtonDown(2))
         {
             StopCoroutine(DecelerateCoru());
@@ -76,6 +120,7 @@ public class CameraMove : MonoBehaviour
             if (accel < 3f)
                 accel = distance;
         }
+#endif
     }
 
     private IEnumerator DecelerateCoru()

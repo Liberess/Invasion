@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            dataMgr.gameData.isNew = false;
+            DataManager.Instance.gameData.isNew = false;
         }
     }
 
@@ -167,9 +167,12 @@ public class GameManager : MonoBehaviour
     public void ShowMoneyTxt()
     {
         //재화 텍스트 애니메이션 효과
-        float dia = Mathf.SmoothStep(_dia, DataManager.Instance.gameData.dia, 0.5f);
-        float gold = Mathf.SmoothStep(_gold, DataManager.Instance.gameData.gold, 0.5f);
-        float drink = Mathf.SmoothStep(_drink, DataManager.Instance.gameData.drink, 0.5f);
+        float dia = Mathf.SmoothStep(_dia,
+            DataManager.Instance.gameData.goods[(int)Goods.Dia].count, 0.5f);
+        float gold = Mathf.SmoothStep(_gold,
+            DataManager.Instance.gameData.goods[(int)Goods.Gold].count, 0.5f);
+        float drink = Mathf.SmoothStep(_drink,
+            DataManager.Instance.gameData.goods[(int)Goods.Stamina].count, 0.5f);
         //float soulGem = Mathf.SmoothStep(_soulGem, DataManager.Instance.gameData.soulGem, 0.5f);
 
         _dia = (int)dia;
@@ -177,9 +180,12 @@ public class GameManager : MonoBehaviour
         _drink = (int)drink;
 
         //천 단위로 콤마(,) 삽입
-        moneyTxt[0].text = string.Format("{0:n0}", DataManager.Instance.gameData.drink);
-        moneyTxt[1].text = string.Format("{0:n0}", DataManager.Instance.gameData.gold);
-        moneyTxt[2].text = string.Format("{0:n0}", DataManager.Instance.gameData.dia);
+        moneyTxt[0].text = string.Format("{0:n0}",
+            DataManager.Instance.gameData.goods[(int)Goods.Stamina].count);
+        moneyTxt[1].text = string.Format("{0:n0}",
+            DataManager.Instance.gameData.goods[(int)Goods.Gold].count);
+        moneyTxt[2].text = string.Format("{0:n0}",
+            DataManager.Instance.gameData.goods[(int)Goods.Dia].count);
 
         /*        string str = string.Format("{0:n0}", DataManager.Instance.gameData.soulGem);
                 DataManager.Instance.gameData.soulUnit = str.Split(',');

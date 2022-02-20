@@ -44,6 +44,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private int heroSlotIndex = 0;
     [SerializeField] private int heroSlotMaxCount = 20;
     [SerializeField] private List<HeroSlot> heroSlotList = new List<HeroSlot>();
+    [SerializeField] private List<HeroSlot> partySlotList = new List<HeroSlot>();
     [SerializeField] private List<HeroSlot> tempHeroSlotList = new List<HeroSlot>();
 
     [Header("==== Map UI ===="), Space(10)]
@@ -101,7 +102,7 @@ public class UIManager : MonoBehaviour
             heroSlot.transform.SetParent(heroPartyGrid.transform);
             heroSlot.transform.localScale = new Vector3(1f, 1f, 1f);
             heroSlot.UnitSetup(dataMgr.heroData.heroList[i]);
-            heroSlotList.Add(heroSlot);
+            partySlotList.Add(heroSlot);
         }
     }
 
@@ -217,7 +218,6 @@ public class UIManager : MonoBehaviour
                 break;
 
             case HeroSortType.Level:
-
                 if (sortingType == SortingType.Ascending)
                     heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.level).ToList();
                 else
@@ -241,6 +241,7 @@ public class UIManager : MonoBehaviour
                     slot.transform.SetParent(heroSlotGrid.transform);
                 }
                 break;
+
             case HeroSortType.DPS:
                 if (sortingType == SortingType.Ascending)
                     heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.DPS).ToList();
@@ -252,6 +253,7 @@ public class UIManager : MonoBehaviour
                     slot.transform.SetParent(heroSlotGrid.transform);
                 }
                 break;
+
             default:
                 break;
         }

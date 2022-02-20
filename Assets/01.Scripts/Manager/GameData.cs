@@ -3,6 +3,20 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 
+public enum Goods
+{
+    Stamina = 0,
+    Gold,
+    Dia
+}
+
+[System.Serializable]
+public class GoodsData
+{
+    public string name;
+    public int count;
+}
+
 [System.Serializable]
 public class GameData
 {
@@ -18,10 +32,10 @@ public class GameData
     public float[] facilLimitTime = new float[7];
     public float[] facilSliderTime = new float[7];
 
-    public int dia;
-    public int gold;
+    public GoodsData[] goods = new GoodsData[3];
+    [HideInInspector] public string[] goodsNames = { "Stamina", "Gold", "Dia" };
+
     public int soulGem;
-    public int drink;
 
     public float bgm;
     public float sfx;
