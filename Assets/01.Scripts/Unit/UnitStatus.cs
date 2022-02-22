@@ -3,6 +3,7 @@
 [System.Serializable]
 public class UnitStatus
 {
+    public int index;
     public string name; // 고유 닉네임
     public int ID;                 // 고유 판별 ID
     public float exp;           // 경험치. Experience

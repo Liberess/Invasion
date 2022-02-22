@@ -191,6 +191,37 @@ public class DataManager : MonoBehaviour
             heroData.heroList = new List<UnitStatus>(heroData.heroDic.Values);
     }
 
+    /// <summary>
+    /// PartyList에 id가 존재하는지 확인한다.
+    /// </summary>
+    public bool IsContainsInParty(int id)
+    {
+        foreach(var heroData in heroData.partyList)
+        {
+            if (heroData.ID == id)
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// PartyList에서 id가 몇 번째에 존재하는지 확인한다.
+    /// </summary>
+    public int GetIndexOfHeroInParty(int id)
+    {
+        int index = 0;
+
+        for(index = 0; index < heroData.partyList.Count; index++)
+        {
+            heroData.partyList[index].index = index;
+            if (id == heroData.partyList[index].ID)
+                return index;
+        }
+
+        return index;
+    }
+
     #region Hero Load & Save
     private void InitHeroData()
     {

@@ -8,7 +8,7 @@ public class Central : MonoBehaviour
     [SerializeField] private List<Arranger> arrangerList = new List<Arranger>();
 
     private int originIndex;
-    private Arranger workingArranger;
+    [SerializeField] private Arranger workingArranger;
 
     private void Start()
     {
@@ -52,6 +52,7 @@ public class Central : MonoBehaviour
     {
         workingArranger = arrangerList.Find(
             t =>ContainPosition(t.transform as RectTransform, slot.position));
+
         originIndex = slot.GetSiblingIndex();
 
         SwapSlotsInHierarchy(invisibleSlot, slot);
