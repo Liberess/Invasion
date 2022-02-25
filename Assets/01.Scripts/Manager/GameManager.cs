@@ -146,6 +146,12 @@ public class GameManager : MonoBehaviour
 
     public void OnClickGameStartBtn(StageInfo info)
     {
+        if(dataMgr.heroData.partyList.Count <= 0)
+        {
+            NoticeManager.Instance.Notice(NoticeType.NotParty);
+            return;
+        }
+
         //var _stageName = DataManager.Instance.gameData.stageNameDic[_stageNum];
         dataMgr.SetStageInfo(info);
         SceneManager.LoadSceneAsync("Battle", LoadSceneMode.Single);
@@ -155,12 +161,12 @@ public class GameManager : MonoBehaviour
     {
         if (DataManager.Instance.gameData.isClear)
         {
-            NoticeManager.instance.Notice("Clear");
+            NoticeManager.Instance.Notice(NoticeType.Clear);
             clearImg.SetActive(true);
         }
         else
         {
-            NoticeManager.instance.Notice("Start");
+            NoticeManager.Instance.Notice(NoticeType.Start);
         }
     }
 

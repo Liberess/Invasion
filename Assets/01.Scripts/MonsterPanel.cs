@@ -89,7 +89,7 @@ public class MonsterPanel : MonoBehaviour
         else
         {
             SoundManager.Instance.PlaySFX("Fail");
-            NoticeManager.instance.Notice("NotJelatin");
+            NoticeManager.Instance.Notice(NoticeType.NotGold);
         }
     }
 

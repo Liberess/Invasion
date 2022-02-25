@@ -39,8 +39,7 @@ public class CameraMove : MonoBehaviour
 
     private void InputMouse()
     {
-//#if (UNITY_ANDROID && !UNITY_EDITOR)
-#if UNITY_EDITOR
+#if (UNITY_ANDROID && !UNITY_EDITOR)
         if(Input.touchCount > 0)
         {
             if (Input.GetTouch(0).phase == TouchPhase.Began)
@@ -81,7 +80,6 @@ public class CameraMove : MonoBehaviour
                     accel = distance;
             }
         }
-
 #else
         if (Input.GetMouseButtonDown(2))
         {

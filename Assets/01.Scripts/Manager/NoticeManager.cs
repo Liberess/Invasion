@@ -3,63 +3,55 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum NoticeType
+{
+    Start = 0,
+    Clear,
+    Sell,
+    NotDia,
+    NotGold,
+    NotStamina,
+    NotParty
+}
+
+[System.Serializable]
+public class NoticeMsg
+{
+    public string name;
+    public string text;
+}
+
 public class NoticeManager : MonoBehaviour
 {
-    public static NoticeManager instance;
+    public static NoticeManager Instance { get; private set; }
+
+    [SerializeField] private List<NoticeMsg> noticeList = new List<NoticeMsg>();
 
     public GameObject noticePanel;
     public Text noticeTxt;
 
-    private string txt = null;
     public bool isNegative;
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
-    public void Notice(string msg)
+    public void Notice(NoticeType msg)
     {
-        switch (msg)
-        {
-            case "Start":
-                txt = "모든 젤리를 해금하는 것이 목표입니다.";
-                break;
-            case "Clear":
-                txt = "모든 젤리를 해금했습니다.";
-                break;
-            case "Sell":
-                txt = "젤리를 드래그해서 주머니에 놓아 팔 수 있습니다.";
-                break;
-            case "NotJelatin":
-                txt = "젤라틴이 부족합니다.";
-                break;
-            case "NotGold":
-                txt = "골드가 부족합니다.";
-                break;
-            case "NotNum":
-                txt = "젤리 수용량이 부족합니다.";
-                break;
-            case "NotJelly":
-                txt = "젤리가 두 마리 이상 있어야 판매 가능합니다.";
-                break;
-        }
-
-        noticeTxt.text = txt;
+        noticeTxt.text = noticeList[(int)msg].text;
 
         Negative(msg);
     }
 
-    private void Negative(string _msg)
+    private void Negative(NoticeType msg)
     {
-        if (_msg.Substring(0, 3) == "Not")
-        {
+        string message = msg.ToString();
+
+        if (message.Substring(0, 3) == "Not")
             isNegative = true;
-        }
         else
-        {
             isNegative = false;
-        }
 
         Change();
     }
@@ -67,13 +59,9 @@ public class NoticeManager : MonoBehaviour
     private void Change()
     {
         if (isNegative)
-        {
             noticePanel.GetComponent<Image>().color = new Color(1, 0.3f, 0.3f);
-        }
         else
-        {
             noticePanel.GetComponent<Image>().color = new Color(0, 0.85f, 1);
-        }
 
         noticePanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -14);
         Invoke("NoticeOff", 5f);

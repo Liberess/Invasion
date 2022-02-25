@@ -96,18 +96,22 @@ public class UIManager : MonoBehaviour
 
     private void InitPartySlot()
     {
+        partySlotList.Clear();
+
         for (int i = 0; i < dataMgr.heroData.partyList.Count; i++)
         {
             HeroSlot heroSlot = GetObj();
             heroSlot.transform.SetParent(heroPartyGrid.transform);
             heroSlot.transform.localScale = new Vector3(1f, 1f, 1f);
-            heroSlot.UnitSetup(dataMgr.heroData.heroList[i]);
+            heroSlot.UnitSetup(dataMgr.heroData.partyList[i]);
             partySlotList.Add(heroSlot);
         }
     }
 
     private void InitHeroSlot()
     {
+        heroSlotList.Clear();
+
         List<int> IDList = new List<int>();
 
         foreach (var hero in dataMgr.heroData.partyList)
@@ -122,6 +126,34 @@ public class UIManager : MonoBehaviour
             heroSlot.UnitSetup(dataMgr.heroData.heroList[i]);
             heroSlotList.Add(heroSlot);
         }
+    }
+
+    public void SwapSlotToParty(int id)
+    {
+        int index = 0;
+
+        for (index = 0; index < heroSlotList.Count; index++)
+        {
+            if (heroSlotList[index].MyStatus.ID == id)
+                break;
+        }
+
+        partySlotList.Add(heroSlotList[index]);
+        heroSlotList.RemoveAt(index);
+    }
+
+    public void SwapPartyToSlot(int id)
+    {
+        int index = 0;
+
+        for (index = 0; index < partySlotList.Count; index++)
+        {
+            if (partySlotList[index].MyStatus.ID == id)
+                break;
+        }
+
+        heroSlotList.Add(partySlotList[index]);
+        partySlotList.RemoveAt(index);
     }
 
     private void InitMapButton()
@@ -227,6 +259,7 @@ public class UIManager : MonoBehaviour
                     slot.transform.SetParent(null);
                     slot.transform.SetParent(heroSlotGrid.transform);
                 }
+                sortPanel.SetActive(false);
                 break;
 
             case HeroSortType.Grade:
@@ -240,6 +273,7 @@ public class UIManager : MonoBehaviour
                     slot.transform.SetParent(null);
                     slot.transform.SetParent(heroSlotGrid.transform);
                 }
+                sortPanel.SetActive(false);
                 break;
 
             case HeroSortType.DPS:
@@ -252,6 +286,7 @@ public class UIManager : MonoBehaviour
                     slot.transform.SetParent(null);
                     slot.transform.SetParent(heroSlotGrid.transform);
                 }
+                sortPanel.SetActive(false);
                 break;
 
             default:
@@ -262,6 +297,8 @@ public class UIManager : MonoBehaviour
     #region Object Pooling
     private void InitHeroSlotObjectPool()
     {
+        tempHeroSlotList.Clear();
+
         for (int i = 0; i < heroSlotMaxCount; i++)
             tempHeroSlotList.Add(CreateNewObj(i));
     }
@@ -314,16 +351,4 @@ public class UIManager : MonoBehaviour
             Instance.heroSlotIndex = Instance.heroSlotMaxCount;
     }
     #endregion
-
-    public void UpdateHeroSlotUI()
-    {
-        for (int i = 0; i < dataMgr.heroData.heroList.Count; i++)
-        {
-            if (dataMgr.heroData.partyList.Contains(dataMgr.heroData.heroList[i]))
-            {
-                Debug.Log("파티에 추가되어있음");
-                continue;
-            }
-        }
-    }
 }

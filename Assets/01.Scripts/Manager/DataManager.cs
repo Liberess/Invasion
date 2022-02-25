@@ -61,6 +61,7 @@ public class DataManager : MonoBehaviour
             if (mHeroData == null)
             {
                 LoadHeroData();
+                UpdateResources();
                 //SaveHeroData();
             }
 
@@ -228,7 +229,6 @@ public class DataManager : MonoBehaviour
         for (int i = 0; i < HeroData.HeroMaxSize; i++)
             heroData.heroUnlockList[i] = false;
 
-        heroData.heroIndex = 0;
         heroData.heroDic.Clear();
         heroData.heroList.Clear();
     }

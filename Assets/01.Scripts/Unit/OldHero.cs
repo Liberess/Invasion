@@ -60,7 +60,6 @@ public class OldHero : MonoBehaviour
     private void LateUpdate()
     {
         dataManager.heroData.heroDic[name].ID = mID;
-        dataManager.heroData.heroDic[name].exp = mExp;
         dataManager.heroData.heroDic[name].level = mLevel;
     }
 

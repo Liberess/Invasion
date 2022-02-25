@@ -77,8 +77,8 @@ public class BattleManager : MonoBehaviour
 
         SetStageInfo();
 
-        redBase.UnitSetup(new UnitStatus("RedBase", 100, 0f, 0f));
-        blueBase.UnitSetup(new UnitStatus("BlueBase", 100, 0f, 0f));
+        redBase.UnitSetup(new UnitStatus("RedBase", 100));
+        blueBase.UnitSetup(new UnitStatus("BlueBase", 100));
 
         quePrefabDic.Add(QueueType.Hero, Resources.Load("Unit/Hero") as GameObject);
         quePrefabDic.Add(QueueType.Enemy, Resources.Load("Unit/Enemy") as GameObject);
