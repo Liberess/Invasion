@@ -128,6 +128,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 영웅 슬롯에서 파티 슬롯으로 스왑했을 때 사용한다.
+    /// </summary>
+    /// <param name="id"> Hero의 ID </param>
     public void SwapSlotToParty(int id)
     {
         int index = 0;
@@ -142,6 +146,10 @@ public class UIManager : MonoBehaviour
         heroSlotList.RemoveAt(index);
     }
 
+    /// <summary>
+    /// 파티 슬롯에서 영웅 슬롯으로 스왑했을 때 사용한다.
+    /// </summary>
+    /// <param name="id"> Hero의 ID </param>
     public void SwapPartyToSlot(int id)
     {
         int index = 0;
