@@ -10,31 +10,15 @@ public class DataManager : MonoBehaviour
 {
     private const string GameDataFileName = "/GameData.json";
     private const string HeroDataFileName = "/HeroData.json";
-    private const string EnemyDataFileName = "/EnemyData.json";
 
     [Header("==== Hero Object Prefab ====")]
     [SerializeField] private GameObject heroPrefab;
     [SerializeField] private GameObject lobbyHeroPrefab;
 
+    public UnitStatus leaderHero { get; private set; }
+
     #region 인스턴스화
-    private static GameObject mContainer;
-
-    private static DataManager mInstance;
-    public static DataManager Instance
-    {
-        get
-        {
-            if (!mInstance)
-            {
-                mContainer = new GameObject();
-                mContainer.name = "DataManager";
-                mInstance = mContainer.AddComponent(typeof(DataManager)) as DataManager;
-                DontDestroyOnLoad(mContainer);
-            }
-
-            return mInstance;
-        }
-    }
+    public static DataManager Instance { get; private set; }
 
     [Header("==== Game Data Information ===="), Space(10)]
     [SerializeField] private GameData mGameData;
@@ -76,12 +60,12 @@ public class DataManager : MonoBehaviour
 
     private void Awake()
     {
-        if (mInstance == null)
+        if (Instance == null)
         {
-            mInstance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else if (mInstance != this)
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
@@ -109,12 +93,13 @@ public class DataManager : MonoBehaviour
 
     #region Update Resources
     [ContextMenu("Update Resources")]
-    private void UpdateResources()
+    public IEnumerator UpdateResources()
     {
         UpdateHeroSprite();
         UpdateHeroAnimCtrl();
         UpdateHeroCardSprite();
         UpdateEnemyData();
+        yield return null;
     }
 
     //[ContextMenu("Update Hero Sprite")]
@@ -207,20 +192,37 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// PartyList에서 id가 몇 번째에 존재하는지 확인한다.
+    /// PartyList에서 hero가 몇 번째에 존재하는지 확인한다.
     /// </summary>
-    public int GetIndexOfHeroInParty(int id)
+    public int GetIndexOfHeroInParty(UnitStatus data)
     {
-        int index = 0;
+        return Utility.FindIndexOf(heroData.partyList, data);
+    }
 
-        for(index = 0; index < heroData.partyList.Count; index++)
+    public int GetIndexOfHeroInList(UnitStatus data)
+    {
+        return Utility.FindIndexOf(heroData.heroList, data);
+    }
+
+    public void SwapPartyData(int from, int to)
+    {
+        Utility.SwapListElement(heroData.partyList, from, to);
+    }
+
+    public void UpdatePartyLeader()
+    {
+        for(int i = 0; i < heroData.partyList.Count; i++)
         {
-            heroData.partyList[index].index = index;
-            if (id == heroData.partyList[index].ID)
-                return index;
+            if (i == 0)
+            {
+                heroData.partyList[i].isLeader = true;
+                leaderHero = heroData.partyList[i];
+            }
+            else
+            {
+                heroData.partyList[i].isLeader = false;
+            }
         }
-
-        return index;
     }
 
     #region Hero Load & Save

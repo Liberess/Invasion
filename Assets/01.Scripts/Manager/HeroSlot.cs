@@ -39,19 +39,38 @@ public class HeroSlot : MonoBehaviour
             menuPanel = GameObject.Find("UICanvas").transform.Find("HeroPanel").Find("MenuPanel").gameObject;
 
         if (partyMenuTxt == null)
-            partyMenuTxt = menuPanel.transform.Find("PartyMenuBtn").Find("Text").GetComponent<Text>();
+            partyMenuTxt = menuPanel.transform.Find("MenuPanel").Find("PartyMenuBtn").Find("Text").GetComponent<Text>();
 
         menuPos = transform.Find("MenuPos").transform.localPosition;
 
-        UIManager.Instance.HideHeroInfoPanelAction += () => menuPanel.SetActive(false);
+        //btn.onClick.AddListener(OnClickEvent);
+        //menuPanel.GetComponent<Button>().onClick.AddListener(OnClickOther);
+    }
 
-        btn.onClick.AddListener(OnClickEvent);
+    public void UnitSetup(UnitStatus status)
+    {
+        myStatus = status;
+        heroImg.sprite = status.mySprite;
     }
 
     public void SlotDragEvent()
     {
         UIManager.Instance.HideHeroInfoPanelAction();
-    }    
+    }
+
+    public void UpdateSlotImage()
+    {
+        if (MyStatus.isLeader)
+            GetComponent<Image>().color = new Color(250, 250, 130);
+        else
+            GetComponent<Image>().color = Color.white;
+    }
+
+    private void OnClickOther()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+            menuPanel.SetActive(false);
+    }
 
     private void OnClickEvent()
     {
@@ -60,36 +79,23 @@ public class HeroSlot : MonoBehaviour
         if (drag != null && drag.CanDrag)
             return;
 
-        UIManager.Instance.HideHeroInfoPanelAction();
+        //UIManager.Instance.HideHeroInfoPanelAction();
 
-        if (menuPanel.activeSelf)
+        //Vector3 newPos = transform.position + new Vector3(rt.rect.x, rt.rect.y, 0f);
+        Vector3 newPos = transform.position + menuPos;
+        //menuPanel.GetComponent<RectTransform>().transform.position = newPos;
+        menuPanel.transform.position = newPos;
+        menuPanel.SetActive(true);
+
+        if (isParty)
         {
-            menuPanel.SetActive(false);
+            partyMenuTxt.text = "파티 해제";
+            menuPanel.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
         }
         else
         {
-            //Vector3 newPos = transform.position + new Vector3(rt.rect.x, rt.rect.y, 0f);
-            Vector3 newPos = transform.position + menuPos;
-            //menuPanel.GetComponent<RectTransform>().transform.position = newPos;
-            menuPanel.transform.position = newPos;
-            menuPanel.SetActive(true);
-
-            if (isParty)
-            {
-                partyMenuTxt.text = "파티 해제";
-                menuPanel.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
-            }
-            else
-            {
-                partyMenuTxt.text = "파티 추가";
-                menuPanel.transform.localScale = new Vector3(1f, 1f, 1f);
-            }
+            partyMenuTxt.text = "파티 추가";
+            menuPanel.transform.localScale = new Vector3(1f, 1f, 1f);
         }
-    }
-
-    public void UnitSetup(UnitStatus status)
-    {
-        myStatus = status;
-        heroImg.sprite = myStatus.mySprite;
     }
 }

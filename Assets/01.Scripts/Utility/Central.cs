@@ -5,10 +5,10 @@ using UnityEngine;
 public class Central : MonoBehaviour
 {
     [SerializeField] private Transform invisibleSlot;
-    [SerializeField] private List<Arranger> arrangerList = new List<Arranger>();
+    private List<Arranger> arrangerList = new List<Arranger>();
 
     private int originIndex;
-    [SerializeField] private Arranger workingArranger;
+    private Arranger workingArranger;
 
     private void Start()
     {

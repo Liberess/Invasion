@@ -3,18 +3,20 @@
 [System.Serializable]
 public class UnitStatus
 {
-    public int index;
-    public string name; // 고유 닉네임
-    public int ID;                 // 고유 판별 ID
-    public int level;            // 유닛 레벨
-    public int cost;            // 유닛 생성 비용
-    public int hp;               // 체력. Health Point
-    public int ap;               // 공격력. Attack Power
-    public float critical;     // 치명타율. Critical Chance
-    public float distance;  // 공격 거리. Attack Distance
+    public string name;            // 고유 닉네임
+    public int ID;                      // 고유 판별 ID
+    public int level;                  // 유닛 레벨
+    public int cost;                   // 유닛 생성 비용
+    public int hp;                      // 체력. Health Point
+    public int ap;                      // 공격력. Attack Power
+    public float critical;            // 치명타율. Critical Chance
+    public float distance;         // 공격 거리. Attack Distance
     public float attackDelay;   // 공격 딜레이. Attack Delay Time
     public float DPS =>           // 초당 공격력. Damage per Second
-        (1f / attackDelay) * ap;    
+        (1f / attackDelay) * ap;
+
+    public bool isLeader;          // 영웅 파티의 리더인가?
+
     public Sprite mySprite;
     public RuntimeAnimatorController animCtrl;
 

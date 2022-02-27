@@ -29,6 +29,7 @@ public class UIManager : MonoBehaviour
     [Header("==== Hero UI ====")]
     [SerializeField] private GameObject heroPartyGrid;
     [SerializeField] private GameObject heroSlotGrid;
+    [SerializeField] private GameObject heroMenuPanel;
 
     [Header("==== Sort UI ===="), Space(10)]
     [SerializeField] private Button sortBtn;
@@ -36,16 +37,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button desSortBtn;
     [SerializeField] private GameObject sortPanel;
     [SerializeField] private List<Button> sortBtnList = new List<Button>();
-    [SerializeField] private SortingType sortingType;
-    [SerializeField] private HeroSortType heroSortingType;
+    private SortingType sortingType;
+    private HeroSortType heroSortingType;
 
     [Header("==== HeroSlot Object Pooling ===="), Space(10)]
     [SerializeField] private GameObject heroSlotPrefab;
-    [SerializeField] private int heroSlotIndex = 0;
+    private int heroSlotIndex = 0;
     [SerializeField] private int heroSlotMaxCount = 20;
-    [SerializeField] private List<HeroSlot> heroSlotList = new List<HeroSlot>();
-    [SerializeField] private List<HeroSlot> partySlotList = new List<HeroSlot>();
-    [SerializeField] private List<HeroSlot> tempHeroSlotList = new List<HeroSlot>();
+    private List<HeroSlot> heroSlotList = new List<HeroSlot>();
+    private List<HeroSlot> partySlotList = new List<HeroSlot>();
+    private List<HeroSlot> tempHeroSlotList = new List<HeroSlot>();
 
     [Header("==== Map UI ===="), Space(10)]
     [SerializeField] private StageInfoPanel stageReadyPanel;
@@ -68,12 +69,14 @@ public class UIManager : MonoBehaviour
     {
         dataMgr = DataManager.Instance;
 
+        HideHeroInfoPanelAction += () => heroMenuPanel.SetActive(false);
+
         SetupMapUI();
 
         InitHeroSlotObjectPool();
         InitSortButton();
-        InitPartySlot();
-        InitHeroSlot();
+
+        StartCoroutine(InitHeroPanelCoru());
     }
 
     private void InitSortButton()
@@ -92,6 +95,14 @@ public class UIManager : MonoBehaviour
             sortBtnList[i].onClick.AddListener(() => OnClickSortButton((HeroSortType)temp));
             sortBtnList[i].onClick.AddListener(() => heroSortingType = (HeroSortType)temp);
         }
+    }
+
+    private IEnumerator InitHeroPanelCoru()
+    {
+        yield return StartCoroutine(DataManager.Instance.UpdateResources());
+
+        InitPartySlot();
+        InitHeroSlot();
     }
 
     private void InitPartySlot()
@@ -124,6 +135,7 @@ public class UIManager : MonoBehaviour
 
             HeroSlot heroSlot = GetObj();
             heroSlot.UnitSetup(dataMgr.heroData.heroList[i]);
+
             heroSlotList.Add(heroSlot);
         }
     }

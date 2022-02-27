@@ -15,7 +15,8 @@ public class Arranger : MonoBehaviour
 
     private void Start()
     {
-        UpdateSlot();
+        slotList.Clear();
+        Invoke(nameof(UpdateSlot), 1.5f);
     }
 
     public void UpdateSlot()
@@ -42,12 +43,26 @@ public class Arranger : MonoBehaviour
                 if (heroSlot == null)
                     continue;
                 
+                // 슬롯에서 파티로 추가했을 경우
                 if(!DataManager.Instance.IsContainsInParty(heroSlot.MyStatus.ID))
                 {
                     UIManager.Instance.SwapSlotToParty(heroSlot.MyStatus.ID);
-                    DataManager.Instance.heroData.partyList.Add(heroSlot.MyStatus);
+
+                    if (i == 0)
+                        DataManager.Instance.heroData.partyList.Insert(0, heroSlot.MyStatus);
+                    else
+                        DataManager.Instance.heroData.partyList.Add(heroSlot.MyStatus);
                 }
+
+                if(i == 0)
+                    heroSlot.MyStatus.isLeader = true;
+                else
+                    heroSlot.MyStatus.isLeader = false;
+
+                heroSlot.UpdateSlotImage();
             }
+
+            DataManager.Instance.UpdatePartyLeader();
         }
         else if(myType == ArrangerType.Hero)
         {
@@ -58,13 +73,20 @@ public class Arranger : MonoBehaviour
                 if (heroSlot == null)
                     continue;
 
+                // 만약 파티에 같은 정보의 영웅 슬롯이 존재한다면
                 if (DataManager.Instance.IsContainsInParty(heroSlot.MyStatus.ID))
                 {
+                    heroSlot.MyStatus.isLeader = false;
+                    int partyIndex = DataManager.Instance.GetIndexOfHeroInParty(heroSlot.MyStatus);
+
                     UIManager.Instance.SwapPartyToSlot(heroSlot.MyStatus.ID);
-                    int index = DataManager.Instance.GetIndexOfHeroInParty(heroSlot.MyStatus.ID);
-                    DataManager.Instance.heroData.partyList.RemoveAt(index);
+                    DataManager.Instance.heroData.partyList.RemoveAt(partyIndex);
                 }
+
+                heroSlot.UpdateSlotImage();
             }
+
+            DataManager.Instance.UpdatePartyLeader();
         }
     }
 
@@ -93,6 +115,9 @@ public class Arranger : MonoBehaviour
 
     public void SwapSlot(int index1, int index2)
     {
+        if(slotList[index1].name != "InvisibleSlot" && slotList[index2].name != "InvisibleSlot")
+            DataManager.Instance.SwapPartyData(index1, index2);
+
         Central.SwapSlots(slotList[index1], slotList[index2]);
 
         UpdateSlot();

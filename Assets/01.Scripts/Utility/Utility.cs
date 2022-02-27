@@ -1,4 +1,6 @@
-﻿public static class ChanceMaker
+﻿using System.Collections.Generic;
+
+public static class Utility
 {
     public static bool GetThisChanceResult(float Chance)
     {
@@ -32,5 +34,17 @@
             Success = true;
 
         return Success;
+    }
+
+    public static void SwapListElement<T> (this List<T> list, int from, int to)
+    {
+        T temp = list[from];
+        list[from] = list[to];
+        list[to] = temp;
+    }
+
+    public static int FindIndexOf<T> (this List<T> list, T element)
+    {
+        return list.IndexOf(element);
     }
 }
