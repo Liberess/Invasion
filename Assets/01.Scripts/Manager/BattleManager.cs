@@ -199,13 +199,17 @@ public class BattleManager : MonoBehaviour
 
         isPlay = true;
         StartCoroutine(GetCostCoru());
-        StartCoroutine(EnemySpawnCoru());
         StartCoroutine(GetLeaderGaugeCoru());
+
+        yield return new WaitForSeconds(2f);
+        StartCoroutine(EnemySpawnCoru());
     }
 
     private IEnumerator EnemySpawnCoru()
     {
-        while(isPlay)
+        WaitForSeconds delay = new WaitForSeconds(enemySpawnDelay);
+
+        while (isPlay)
         {
             int rand = UnityEngine.Random.Range
                 (
@@ -215,16 +219,17 @@ public class BattleManager : MonoBehaviour
 
             InstantiateObj(QueueType.Enemy, rand);
 
-            yield return new WaitForSeconds(enemySpawnDelay);
+            yield return delay;
         }
     }
 
     #region Get Cost & LeaderGauge
     private IEnumerator GetCostCoru()
     {
+        WaitForSeconds delay = new WaitForSeconds(getCostDelay);
         while (isPlay)
         {
-            yield return new WaitForSeconds(getCostDelay);
+            yield return delay;
 
             if (cost < maxCost)
             {
@@ -236,9 +241,10 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator GetLeaderGaugeCoru()
     {
+        WaitForSeconds delay = new WaitForSeconds(5f);
         while (isPlay)
         {
-            yield return new WaitForSeconds(5f);
+            yield return delay;
 
             if (leaderGauge < maxLeaderGauge)
             {

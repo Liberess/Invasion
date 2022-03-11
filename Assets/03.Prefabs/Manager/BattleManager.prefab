@@ -48,14 +48,16 @@ MonoBehaviour:
   costTxt: {fileID: 0}
   costSlider: {fileID: 0}
   leaderImg: {fileID: 0}
+  pausePanel: {fileID: 0}
+  pauseStageInfoTxt: {fileID: 0}
   heroCardGrid: {fileID: 0}
   heroCardPrefab: {fileID: 1914066237963822779, guid: 491401595416d0741b0f48d17f33f9db,
     type: 3}
   heroCardList: []
-  getCostDelay: 3
+  getCostDelay: 2.5
   maxCost: 10
   maxLeaderGauge: 10
-  enemySpawnDelay: 6
+  enemySpawnDelay: 3
   isPlay: 0
   defaultHeroCount: 20
   defaultEnemyCount: 20
