@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7058787313458793172, guid: 1618eae39a61bd345ab4d414bdeec9ea,
+  m_Sprite: {fileID: 5207544987158716770, guid: aecb4008359fcfe43ad86e1399943690,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -96,7 +96,7 @@ Animator:
   m_GameObject: {fileID: 6075884017345327041}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: e99e7a4c3fdf40843a496fb01fb0e1b8, type: 2}
+  m_Controller: {fileID: 9100000, guid: cc0472d870a420444b7952cf3278c42f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -118,7 +118,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1}
+  m_Offset: {x: 0.2, y: 1}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -129,7 +129,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 2}
+  m_Size: {x: 0.6, y: 2}
   m_EdgeRadius: 0
 --- !u!114 &6075884017345327040
 MonoBehaviour:
@@ -146,22 +146,20 @@ MonoBehaviour:
   mMyStat:
     name: 
     ID: 0
-    exp: 0
     level: 0
     cost: 0
     hp: 0
     ap: 0
-    dp: 0
     critical: 0
-    dodge: 0
     distance: 0
+    attackDelay: 0
+    isLeader: 0
     mySprite: {fileID: 0}
     animCtrl: {fileID: 0}
   dust: {fileID: 4011201378189581654}
   shadow: {fileID: 0}
-  enemy: {fileID: 0}
+  target: {fileID: 0}
   mJob: 0
-  isMove: 0
 --- !u!1001 &6075884018620961998
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,67 +1,55 @@
 fileFormatVersion: 2
-guid: 3765a367fb48f9040bca18add088d6d3
+guid: 402ef05d02e48754490fbaae171fe004
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3580014446115393626
-    second: Portrait S
+      213: 1867636742854791316
+    second: Idle_0
   - first:
-      213: 6943562768184086589
-    second: Portrait A
+      213: -3751089026852443366
+    second: Idle_1
   - first:
-      213: 7293623749340134194
-    second: Portrait G
+      213: 8447224420693500293
+    second: Idle_2
   - first:
-      213: 6492391481879774325
-    second: Portrait W
+      213: 5762835732975860624
+    second: Idle_3
   - first:
-      213: 4545135470104253956
-    second: Portrait SU
+      213: -3026975030211263372
+    second: Idle_4
   - first:
-      213: -4535586968756965052
-    second: Portrait AU
+      213: 7167392333169505366
+    second: Idle_5
   - first:
-      213: -5878569456898858483
-    second: Portrait GU
+      213: 5060660075468742284
+    second: Walk_0
   - first:
-      213: 1964160008454016175
-    second: Portrait WU
+      213: 7743137640283580201
+    second: Walk_1
   - first:
-      213: -4325431805895911581
-    second: Portrait WZ
+      213: -4266234107742112187
+    second: Walk_2
   - first:
-      213: -2145097280388239572
-    second: Health C
+      213: 8887213356332137940
+    second: Walk_3
   - first:
-      213: 1436338628549066657
-    second: Health L
+      213: -6812131064208176077
+    second: Attack_0
   - first:
-      213: -5866952569684716689
-    second: Health R
+      213: 2368519291515267928
+    second: Attack_1
   - first:
-      213: 2047483964318851028
-    second: Icon Cost
+      213: 242205459412082910
+    second: Die_0
   - first:
-      213: 4611056272523551969
-    second: Icon Clear
+      213: 4370892379942382837
+    second: Die_1
   - first:
-      213: -6522886353871927248
-    second: Panel
+      213: -2224130145566744416
+    second: Die_2
   - first:
-      213: 6998131782875741384
-    second: Bar Front
-  - first:
-      213: 5300179025838392481
-    second: Bar Back
-  - first:
-      213: -5471960214337275544
-    second: Icon Clear
-  - first:
-      213: 4655956496605667762
-    second: Icon Atk
-  - first:
-      213: -2269638749862755701
-    second: Icon Hp
+      213: -7805517706541262060
+    second: Die_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -105,7 +93,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 20
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -121,7 +109,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 512
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -133,7 +121,19 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 512
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -145,7 +145,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Android
-    maxTextureSize: 512
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -157,7 +157,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
-    maxTextureSize: 512
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -171,421 +171,337 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Portrait S
+      name: Idle_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 61
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        y: 96
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a509977cb24cea130800000000000000
-      internalID: 3580014446115393626
+      spriteID: 490d353f8bd2be910800000000000000
+      internalID: 1867636742854791316
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Portrait A
+      name: Idle_1
       rect:
         serializedVersion: 2
-        x: 25
-        y: 61
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 32
+        y: 96
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d309d319c8d7c5060800000000000000
-      internalID: 6943562768184086589
+      spriteID: a1b2899776471fbc0800000000000000
+      internalID: -3751089026852443366
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Portrait G
+      name: Idle_2
       rect:
         serializedVersion: 2
-        x: 50
-        y: 61
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 64
+        y: 96
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 23b75c02828283560800000000000000
-      internalID: 7293623749340134194
+      spriteID: 581e075fad19a3570800000000000000
+      internalID: 8447224420693500293
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Portrait W
+      name: Idle_3
       rect:
         serializedVersion: 2
-        x: 75
-        y: 61
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 96
+        y: 96
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 574473497ab991a50800000000000000
-      internalID: 6492391481879774325
+      spriteID: 09b34faf094b9ff40800000000000000
+      internalID: 5762835732975860624
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Portrait SU
+      name: Idle_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 96
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 474c7446f360ef5d0800000000000000
+      internalID: -3026975030211263372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 96
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6543d604a51b77360800000000000000
+      internalID: 7167392333169505366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Walk_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 36
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        y: 64
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 406979ff0a0931f30800000000000000
-      internalID: 4545135470104253956
+      spriteID: c8ed05fa6831b3640800000000000000
+      internalID: 5060660075468742284
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Portrait AU
+      name: Walk_1
       rect:
         serializedVersion: 2
-        x: 25
-        y: 36
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 32
+        y: 64
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 441b957beab5e01c0800000000000000
-      internalID: -4535586968756965052
+      spriteID: 9272f00b8a6257b60800000000000000
+      internalID: 7743137640283580201
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Portrait GU
+      name: Walk_2
       rect:
         serializedVersion: 2
-        x: 50
-        y: 36
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 64
+        y: 64
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d02251699302b6ea0800000000000000
-      internalID: -5878569456898858483
+      spriteID: 5463067beaa4bc4c0800000000000000
+      internalID: -4266234107742112187
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Portrait WU
+      name: Walk_3
       rect:
         serializedVersion: 2
-        x: 75
-        y: 36
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 96
+        y: 64
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fac0ee10f19124b10800000000000000
-      internalID: 1964160008454016175
+      spriteID: 4ddb84b0679b55b70800000000000000
+      internalID: 8887213356332137940
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Portrait WZ
+      name: Attack_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 11
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        y: 32
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 367d56d80baf8f3c0800000000000000
-      internalID: -4325431805895911581
+      spriteID: 33cc77aa3e27671a0800000000000000
+      internalID: -6812131064208176077
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Health C
+      name: Attack_1
       rect:
         serializedVersion: 2
-        x: 25
-        y: 18
-        width: 20
-        height: 17
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c2f6dc183651b32e0800000000000000
-      internalID: -2145097280388239572
+      spriteID: 85b6d662fbbaed020800000000000000
+      internalID: 2368519291515267928
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Health L
+      name: Die_0
       rect:
         serializedVersion: 2
-        x: 46
-        y: 18
-        width: 20
-        height: 17
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1afb6d36f56eee310800000000000000
-      internalID: 1436338628549066657
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Health R
-      rect:
-        serializedVersion: 2
-        x: 67
-        y: 18
-        width: 20
-        height: 17
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f6390e9e8b5649ea0800000000000000
-      internalID: -5866952569684716689
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Icon Cost
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 1
-        width: 9
-        height: 9
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4df988841df1a6c10800000000000000
-      internalID: 2047483964318851028
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Icon Upgrade
-      rect:
-        serializedVersion: 2
-        x: 11
+        x: 0
         y: 0
-        width: 12
-        height: 10
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1e46a1bdf33cdff30800000000000000
-      internalID: 4611056272523551969
+      spriteID: ed0eae2059c7c5300800000000000000
+      internalID: 242205459412082910
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Panel
+      name: Die_1
       rect:
         serializedVersion: 2
-        x: 25
+        x: 32
         y: 0
-        width: 20
-        height: 17
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 5, y: 7, z: 5, w: 6}
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 038883fbb6d0a75a0800000000000000
-      internalID: -6522886353871927248
+      spriteID: 5fc6de9267788ac30800000000000000
+      internalID: 4370892379942382837
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bar Front
+      name: Die_2
       rect:
         serializedVersion: 2
-        x: 46
+        x: 64
         y: 0
-        width: 20
-        height: 17
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 2, y: 2, z: 2, w: 2}
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8ccfda167cb5e1160800000000000000
-      internalID: 6998131782875741384
+      spriteID: 0a0a143aa6d4221e0800000000000000
+      internalID: -2224130145566744416
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bar Back
+      name: Die_3
       rect:
         serializedVersion: 2
-        x: 67
+        x: 96
         y: 0
-        width: 20
-        height: 17
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 2, y: 2, z: 2, w: 2}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1a4c2111eb40e8940800000000000000
-      internalID: 5300179025838392481
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Icon Clear
-      rect:
-        serializedVersion: 2
-        x: 88
-        y: 4
-        width: 9
-        height: 11
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8693b5f3d21bf04b0800000000000000
-      internalID: -5471960214337275544
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Icon Atk
-      rect:
-        serializedVersion: 2
-        x: 88
-        y: 16
-        width: 9
-        height: 9
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2b16adde3c74d9040800000000000000
-      internalID: 4655956496605667762
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Icon Hp
-      rect:
-        serializedVersion: 2
-        x: 88
-        y: 26
-        width: 9
-        height: 9
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b8208f1059f9080e0800000000000000
-      internalID: -2269638749862755701
+      spriteID: 41b1695500b3da390800000000000000
+      internalID: -7805517706541262060
       vertices: []
       indices: 
       edges: []

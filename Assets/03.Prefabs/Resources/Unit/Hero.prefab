@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2685105824918265981}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.77, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5095875417140454873}
@@ -74,10 +74,10 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2834552850196481573, guid: 1618eae39a61bd345ab4d414bdeec9ea,
+  m_Sprite: {fileID: 1867636742854791316, guid: 402ef05d02e48754490fbaae171fe004,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1.5, y: 1}
@@ -96,7 +96,7 @@ Animator:
   m_GameObject: {fileID: 2685105824918265981}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4e58d23a856186d459e0fdb527517a67, type: 2}
+  m_Controller: {fileID: 9100000, guid: 933dee70b14c7ab439771c969ea95579, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -143,10 +143,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c07a896a7f7e64caeb5fadc0b79a5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mMyStat:
+    name: 
+    ID: 0
+    level: 0
+    cost: 0
+    hp: 0
+    ap: 0
+    critical: 0
+    distance: 0
+    attackDelay: 0
+    isLeader: 0
+    mySprite: {fileID: 0}
+    animCtrl: {fileID: 0}
   dust: {fileID: 5095875417140454872}
   shadow: {fileID: 0}
+  target: {fileID: 0}
   mJob: 0
-  isMove: 0
 --- !u!1001 &2685105823828503616
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -15,15 +15,14 @@ MonoBehaviour:
   myStat:
     name: ManB
     ID: 1
-    exp: 0
     level: 0
     cost: 1
     hp: 10
     ap: 2
-    dp: 1
     critical: 0
-    dodge: 0
     distance: 0.2
-    mySprite: {fileID: -7873313509577613512, guid: 1618eae39a61bd345ab4d414bdeec9ea,
+    attackDelay: 0
+    isLeader: 0
+    mySprite: {fileID: 5207544987158716770, guid: aecb4008359fcfe43ad86e1399943690,
       type: 3}
-    animCtrl: {fileID: 9100000, guid: ffda24e6868b9a64eb371e90801c60c5, type: 2}
+    animCtrl: {fileID: 9100000, guid: cc0472d870a420444b7952cf3278c42f, type: 2}

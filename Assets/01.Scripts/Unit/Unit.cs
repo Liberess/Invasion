@@ -92,6 +92,7 @@ public abstract class Unit : MonoBehaviour
             if (dust != null && isDust)
             {
                 isDust = false;
+                anim.SetBool("isWalk", true);
                 //anim.SetTrigger("doMove");
                 dust.GetComponent<ParticleSystem>().Play();
             }
@@ -102,10 +103,11 @@ public abstract class Unit : MonoBehaviour
     {
         isDust = true;
         isMove = false;
+        anim.SetBool("isWalk", false);
         //anim.SetTrigger("doStop");
         //anim.ResetTrigger("doMove");
 
-        if(dust != null)
+        if (dust != null)
             dust.GetComponent<ParticleSystem>().Stop();
     }
 
@@ -116,7 +118,7 @@ public abstract class Unit : MonoBehaviour
         if (attackTime >= delay)
         {
             attackTime = 0;
-            //anim.SetTrigger("doAttack");
+            anim.SetTrigger("doAttack");
 
             switch (job)
             {
@@ -200,6 +202,7 @@ public abstract class Unit : MonoBehaviour
 
     protected virtual void Die()
     {
+        anim.SetTrigger("doDie");
         StartCoroutine(DeathAnim());
     }
 

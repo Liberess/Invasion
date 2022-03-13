@@ -16,6 +16,7 @@ public class Hero : Unit
     private void Start()
     {
         battleMgr = BattleManager.Instance;
+        sprite.flipX = true;
         TeamValueSet();
     }
 
