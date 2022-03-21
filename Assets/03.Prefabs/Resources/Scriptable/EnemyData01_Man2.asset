@@ -16,7 +16,7 @@ MonoBehaviour:
     name: ManB
     ID: 1
     level: 0
-    cost: 1
+    cost: 5
     hp: 10
     ap: 2
     critical: 0

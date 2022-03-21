@@ -127,7 +127,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 7792586601101855674}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 7792586601101855675}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4557f4ef43ff9a74c8a8c86b4b074b0f, type: 3}
@@ -3338,3 +3338,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02381664a1421b24194a78b6371b32f0, type: 3}
+--- !u!1 &7792586601101855675 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7792586601105605535, guid: 02381664a1421b24194a78b6371b32f0,
+    type: 3}
+  m_PrefabInstance: {fileID: 7792586601101855674}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7792586601101855676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7792586601101855675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b03295d3d50a11c4e82de2f17c687944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemySpawnDelay: 2
+  cost: 0
+  getCostDelay: 1

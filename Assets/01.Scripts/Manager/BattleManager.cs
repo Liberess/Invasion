@@ -34,8 +34,8 @@ public class BattleManager : MonoBehaviour
     [Header("== Setting Game Variable =="), Space(10)]
     [SerializeField, Range(0f, 3f)] private float getCostDelay = 1f;
     [SerializeField, Range(0, 10)] private int maxCost = 10;
+    public int MaxCost { get => maxCost; }
     [SerializeField, Range(0f, 10f)] private float maxLeaderGauge = 10f;
-    [SerializeField, Range(0f, 10f)] private float enemySpawnDelay = 2f;
     private float playTime = 0f;
     private int cost = 0;
     private float leaderGauge = 0f;
@@ -152,7 +152,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void InstantiateObj(QueueType type, int id = 0)
+    public GameObject InstantiateObj(QueueType type, int id = 0)
     {
         var obj = GetObj(type);
 
@@ -173,6 +173,8 @@ public class BattleManager : MonoBehaviour
             default:
                 break;
         }
+
+        return obj;
     }
 
     public static void ReturnObj(QueueType type, GameObject obj)
@@ -198,29 +200,12 @@ public class BattleManager : MonoBehaviour
         // 게임 시작
 
         isPlay = true;
+
+        var battleAI = GetComponent<BattleAI>();
+        battleAI.SetupAI();
+
         StartCoroutine(GetCostCoru());
         StartCoroutine(GetLeaderGaugeCoru());
-
-        yield return new WaitForSeconds(2f);
-        StartCoroutine(EnemySpawnCoru());
-    }
-
-    private IEnumerator EnemySpawnCoru()
-    {
-        WaitForSeconds delay = new WaitForSeconds(enemySpawnDelay);
-
-        while (isPlay)
-        {
-            int rand = UnityEngine.Random.Range
-                (
-                    dataMgr.gameData.stageInfo.minEnemyID,
-                    dataMgr.gameData.stageInfo.maxEnemyID
-                );
-
-            InstantiateObj(QueueType.Enemy, rand);
-
-            yield return delay;
-        }
     }
 
     #region Get Cost & LeaderGauge
