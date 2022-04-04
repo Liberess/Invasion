@@ -8,10 +8,7 @@ public class BattleAI : MonoBehaviour
     private DataManager dataMgr;
     private BattleManager battleMgr;
 
-    [SerializeField] private int cost = 0;
-    private int highCost = 0;
     private bool isHighEnemy;
-    private int maxCost;
     private float getCostDelay = 1f;
 
     private void Start()
@@ -22,8 +19,6 @@ public class BattleAI : MonoBehaviour
 
     public void SetupAI()
     {
-        maxCost = battleMgr.MaxCost;
-
         getCostDelay = 3f;
 
         var stageNum = int.Parse(dataMgr.gameData.stageInfo.stageNum.Substring(2));
@@ -33,10 +28,8 @@ public class BattleAI : MonoBehaviour
                 getCostDelay -= 0.1f;
         }
 
-        highCost = FindHighCost();
-
         StartCoroutine(AICo());
-        StartCoroutine(GetCostCo());
+        //StartCoroutine(GetCostCo());
     }
 
     /// <summary>
@@ -55,12 +48,13 @@ public class BattleAI : MonoBehaviour
 
     private IEnumerator AICo()
     {
-        while(battleMgr.IsPlay)
+        WaitForSeconds delay = new WaitForSeconds(getCostDelay);
+
+        while (battleMgr.IsPlay)
         {
             EnemySpawn();
 
-            float randDelay = Random.Range(1f, 3f);
-            yield return new WaitForSeconds(randDelay);
+            yield return delay;
         }
 
         yield return null;
@@ -74,8 +68,8 @@ public class BattleAI : MonoBehaviour
         {
             yield return delay;
 
-            if (cost < maxCost)
-                ++cost;
+/*            if (cost < maxCost)
+                ++cost;*/
         }
     }
 
@@ -87,36 +81,8 @@ public class BattleAI : MonoBehaviour
                 dataMgr.gameData.stageInfo.maxEnemyID
             );
 
-        // 만약 cost가 부족하다면 종료
-        if (cost < dataMgr.enemyDataList[rand].myStat.cost)
-        {
-            Debug.Log("코스트 부족!");
-            return;
-        }
-
-        // 만약 생성된 enemy가 가장 높은 cost라면
-        if (dataMgr.enemyDataList[rand].myStat.cost == highCost && isHighEnemy)
-        {
-            Debug.Log("이미 높은 cost의 적군 생성함!");
-            isHighEnemy = false;
-            EnemySpawn();
-            return;
-        }
-        else if(dataMgr.enemyDataList[rand].myStat.cost == highCost && !isHighEnemy)
-        {
-            Debug.Log("높은 cost 적군 생성!");
-            isHighEnemy = true;
-
-            // enemy 생성
-            var enemy = battleMgr.InstantiateObj(QueueType.Enemy, rand).GetComponent<Enemy>();
-            cost -= enemy.myStat.cost;
-        }
-        else
-        {
-            // enemy 생성
-            Debug.Log("일반 enemy 생성!");
-            var enemy = battleMgr.InstantiateObj(QueueType.Enemy, rand).GetComponent<Enemy>();
-            cost -= enemy.myStat.cost;
-        }
+        // enemy 생성
+        Debug.Log("enemy 생성!");
+        var enemy = battleMgr.InstantiateObj(QueueType.Enemy, rand).GetComponent<Enemy>();
     }
 }
