@@ -27,6 +27,5 @@ public class Base : Unit
     protected override void Die()
     {
         Destroy(gameObject);
-        battleMgr.isPlay = false;
     }
 }

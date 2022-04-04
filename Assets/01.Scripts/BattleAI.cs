@@ -55,7 +55,7 @@ public class BattleAI : MonoBehaviour
 
     private IEnumerator AICo()
     {
-        while(battleMgr.isPlay)
+        while(battleMgr.IsPlay)
         {
             EnemySpawn();
 
@@ -70,7 +70,7 @@ public class BattleAI : MonoBehaviour
     {
         WaitForSeconds delay = new WaitForSeconds(getCostDelay);
 
-        while (battleMgr.isPlay)
+        while (battleMgr.IsPlay)
         {
             yield return delay;
 

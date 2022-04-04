@@ -39,8 +39,7 @@ public class BattleManager : MonoBehaviour
     private float playTime = 0f;
     private int cost = 0;
     private float leaderGauge = 0f;
-    //public bool isPlay { get; private set; }
-    public bool isPlay;
+    public bool IsPlay { get; private set; }
 
     [Header("== Setting Object Pooling =="), Space(10)]
     [SerializeField] private int defaultHeroCount = 20;
@@ -96,7 +95,7 @@ public class BattleManager : MonoBehaviour
 
     private void Update()
     {
-        if (isPlay == false)
+        if (IsPlay == false)
             return;
 
         // Set PlayTime
@@ -199,7 +198,7 @@ public class BattleManager : MonoBehaviour
 
         // 게임 시작
 
-        isPlay = true;
+        IsPlay = true;
 
         var battleAI = GetComponent<BattleAI>();
         battleAI.SetupAI();
@@ -212,7 +211,7 @@ public class BattleManager : MonoBehaviour
     private IEnumerator GetCostCoru()
     {
         WaitForSeconds delay = new WaitForSeconds(getCostDelay);
-        while (isPlay)
+        while (IsPlay)
         {
             yield return delay;
 
@@ -227,7 +226,7 @@ public class BattleManager : MonoBehaviour
     private IEnumerator GetLeaderGaugeCoru()
     {
         WaitForSeconds delay = new WaitForSeconds(5f);
-        while (isPlay)
+        while (IsPlay)
         {
             yield return delay;
 
@@ -321,14 +320,14 @@ public class BattleManager : MonoBehaviour
     {
         if(isPause)
         {
-            isPlay = false;
+            IsPlay = false;
             pausePanel.SetActive(true);
             Time.timeScale = 0f;
         }
         else
         {
             Time.timeScale = 1f;
-            isPlay = true;
+            IsPlay = true;
             pausePanel.SetActive(false);
         }
     }

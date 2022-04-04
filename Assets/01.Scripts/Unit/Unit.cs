@@ -82,7 +82,7 @@ public abstract class Unit : MonoBehaviour
         if (!IsAlive)
             return;
 
-        if (battleMgr != null && !battleMgr.isPlay)
+        if (battleMgr != null && !battleMgr.IsPlay)
             return;
 
         if (isMove)
@@ -155,7 +155,7 @@ public abstract class Unit : MonoBehaviour
         if (!IsAlive)
             return;
 
-        if (battleMgr != null && !battleMgr.isPlay)
+        if (battleMgr != null && !battleMgr.IsPlay)
             return;
 
         RaycastHit2D rayHitAlly = Physics2D.Raycast(new Vector2(transform.position.x + 0.4f * direction, transform.position.y),
