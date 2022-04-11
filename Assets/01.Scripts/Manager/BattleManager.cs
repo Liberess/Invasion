@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public enum QueueType
@@ -53,9 +54,11 @@ public class BattleManager : MonoBehaviour
 
     [Header("== Setting Base =="), Space(10)]
     [SerializeField] private Base redBase;
+    public Base RedBase { get => redBase; }
     [SerializeField] private Base blueBase;
 
     private Action UpdateCardAction;
+
     #endregion
 
     private void Awake()
@@ -151,28 +154,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public GameObject InstantiateObj(QueueType type, int id = 0)
+    public GameObject InstantiateObj(QueueType type)
     {
         var obj = GetObj(type);
-
-        switch (type)
-        {
-            case QueueType.Hero:
-                obj.transform.position = blueBase.transform.position;
-                Hero hero = obj.GetComponent<Hero>();
-                hero.UnitSetup(new UnitStatus(dataMgr.heroData.partyList[id]));
-                hero.DeathAction += () => ReturnObj(QueueType.Hero, hero.gameObject);
-                break;
-            case QueueType.Enemy:
-                obj.transform.position = redBase.transform.position;
-                Enemy enemy = obj.GetComponent<Enemy>();
-                enemy.UnitSetup(new UnitStatus(dataMgr.enemyDataList[id].myStat));
-                enemy.DeathAction += () => ReturnObj(type, enemy.gameObject);
-                break;
-            default:
-                break;
-        }
-
         return obj;
     }
 
@@ -350,12 +334,11 @@ public class BattleManager : MonoBehaviour
         {
             cost -= targetCost;
             SetCostSlider();
-            InstantiateObj(QueueType.Hero, id);
-/*            var obj = GetObj(QueueType.Hero);
-            var hero = obj.GetComponent<Hero>();
+
+            var hero = InstantiateObj(QueueType.Hero).GetComponent<Hero>();
             hero.transform.position = blueBase.transform.position;
-            hero.UnitSetup(dataMgr.heroData.partyList[id]);
-            hero.DeathAction += () => ReturnObj(QueueType.Hero, hero.gameObject);*/
+            hero.UnitSetup(new UnitStatus(dataMgr.heroData.partyList[id]));
+            hero.DeathAction += () => ReturnObj(QueueType.Hero, hero.gameObject);
         }
     }
     #endregion

@@ -41,4 +41,10 @@ public class Enemy : Unit
         mMyStat = status;
         anim.runtimeAnimatorController = mMyStat.animCtrl;
     }
+
+    public void Enrage()
+    {
+        mMyStat.ap = Mathf.FloorToInt(mMyStat.ap * 1.5f);
+        mMyStat.moveSpeed *= 1.5f;
+    }
 }

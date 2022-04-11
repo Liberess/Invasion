@@ -3135,6 +3135,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5275806055065264375, guid: d24c96602c3ebbc4eb6e9f4cbb20d4e6,
+        type: 3}
+      propertyPath: baseType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5417372803484336778, guid: d24c96602c3ebbc4eb6e9f4cbb20d4e6,
         type: 3}
       propertyPath: m_Camera
@@ -3356,6 +3361,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b03295d3d50a11c4e82de2f17c687944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySpawnDelay: 2
-  cost: 0
-  getCostDelay: 1

@@ -8,7 +8,9 @@ public class UnitStatus
     public int level;                  // 유닛 레벨
     public int cost;                   // 유닛 생성 비용
     public int hp;                      // 체력. Health Point
+    public int maxHp;               // 최대 체력. Max Health Point
     public int ap;                      // 공격력. Attack Power
+    public float moveSpeed;    // 이동속도.
     public float critical;            // 치명타율. Critical Chance
     public float distance;         // 공격 거리. Attack Distance
     public float attackDelay;   // 공격 딜레이. Attack Delay Time

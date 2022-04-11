@@ -52,6 +52,7 @@ public abstract class Unit : MonoBehaviour
 
     public void UnitSetup(UnitStatus status)
     {
+        sprite.color = Color.white;
         CustomUnitSetup(status);
         //ChangeAc();
     }

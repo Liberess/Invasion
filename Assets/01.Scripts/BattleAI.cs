@@ -2,14 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BattleAI : MonoBehaviour
 {
     private DataManager dataMgr;
     private BattleManager battleMgr;
 
-    private bool isHighEnemy;
-    private float getCostDelay = 1f;
+    [SerializeField] private float spawnTime = 0f;
+    [SerializeField] private float spawnDelayTime = 1f;
+    [SerializeField] private float spawnSpeed = 1f;
+
+    public UnityAction EnrageAction { get; private set; }
 
     private void Start()
     {
@@ -19,16 +23,17 @@ public class BattleAI : MonoBehaviour
 
     public void SetupAI()
     {
-        getCostDelay = 3f;
+        spawnDelayTime = 3f;
 
         var stageNum = int.Parse(dataMgr.gameData.stageInfo.stageNum.Substring(2));
         for (int i = 0; i < stageNum; i++)
         {
-            if (getCostDelay > 2.2f)
-                getCostDelay -= 0.1f;
+            if (spawnDelayTime > 2.2f)
+                spawnDelayTime -= 0.1f;
         }
 
         StartCoroutine(AICo());
+        StartCoroutine(EnrageStateCo());
         //StartCoroutine(GetCostCo());
     }
 
@@ -48,29 +53,44 @@ public class BattleAI : MonoBehaviour
 
     private IEnumerator AICo()
     {
-        WaitForSeconds delay = new WaitForSeconds(getCostDelay);
+        spawnTime = 0f;
 
         while (battleMgr.IsPlay)
         {
-            EnemySpawn();
+            if(spawnTime >= spawnDelayTime)
+            {
+                spawnTime = 0f;
+                EnemySpawn();
+            }
+            else
+            {
+                spawnTime += Time.deltaTime * spawnSpeed;
+            }
 
-            yield return delay;
+            yield return null;
         }
 
         yield return null;
     }
 
-    private IEnumerator GetCostCo()
+    private IEnumerator EnrageStateCo()
     {
-        WaitForSeconds delay = new WaitForSeconds(getCostDelay);
+        var enrageTemp = battleMgr.RedBase.myStat.maxHp * 30.0f / 100.0f;
 
         while (battleMgr.IsPlay)
         {
-            yield return delay;
+            if (battleMgr.RedBase.myStat.hp <= enrageTemp)
+                EnrageAction.Invoke();
 
-/*            if (cost < maxCost)
-                ++cost;*/
+            yield return null;
         }
+
+        yield return null;
+    }
+
+    public void SpawnRush(bool isRush)
+    {
+        spawnSpeed = (isRush == true) ? spawnSpeed * 1.5f : 1f;
     }
 
     private void EnemySpawn()
@@ -81,8 +101,11 @@ public class BattleAI : MonoBehaviour
                 dataMgr.gameData.stageInfo.maxEnemyID
             );
 
-        // enemy 생성
-        Debug.Log("enemy 생성!");
-        var enemy = battleMgr.InstantiateObj(QueueType.Enemy, rand).GetComponent<Enemy>();
+        var enemy = battleMgr.InstantiateObj(QueueType.Enemy).GetComponent<Enemy>();
+        enemy.transform.position = battleMgr.RedBase.transform.position;
+        enemy.UnitSetup(new UnitStatus(dataMgr.enemyDataList[rand].myStat));
+        EnrageAction += enemy.Enrage;
+        enemy.DeathAction += () => EnrageAction -= enemy.Enrage;
+        enemy.DeathAction += () => BattleManager.ReturnObj(QueueType.Enemy, enemy.gameObject);
     }
 }
