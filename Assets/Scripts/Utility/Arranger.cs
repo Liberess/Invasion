@@ -49,9 +49,9 @@ public class Arranger : MonoBehaviour
                     UIManager.Instance.SwapSlotToParty(heroSlot.MyStatus.ID);
 
                     if (i == 0)
-                        DataManager.Instance.heroData.partyList.Insert(0, heroSlot.MyStatus);
+                        DataManager.Instance.HeroData.partyList.Insert(0, heroSlot.MyStatus);
                     else
-                        DataManager.Instance.heroData.partyList.Add(heroSlot.MyStatus);
+                        DataManager.Instance.HeroData.partyList.Add(heroSlot.MyStatus);
                 }
 
                 if(i == 0)
@@ -80,7 +80,7 @@ public class Arranger : MonoBehaviour
                     int partyIndex = DataManager.Instance.GetIndexOfHeroInParty(heroSlot.MyStatus);
 
                     UIManager.Instance.SwapPartyToSlot(heroSlot.MyStatus.ID);
-                    DataManager.Instance.heroData.partyList.RemoveAt(partyIndex);
+                    DataManager.Instance.HeroData.partyList.RemoveAt(partyIndex);
                 }
 
                 heroSlot.UpdateSlotImage();

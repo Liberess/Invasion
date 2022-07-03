@@ -60,7 +60,7 @@ public abstract class Unit : MonoBehaviour
     public virtual void ChangeAc()
     {
         anim.runtimeAnimatorController =
-            DataManager.Instance.heroData.heroAnimCtrlList[myStat.ID];
+            DataManager.Instance.HeroData.heroAnimCtrlList[myStat.ID];
     }
 
     protected void TeamValueSet()

@@ -43,6 +43,7 @@ public class HeroSlot : MonoBehaviour
 
         menuPos = transform.Find("MenuPos").transform.localPosition;
 
+        btn.onClick.AddListener(OnClickEvent);
         //btn.onClick.AddListener(OnClickEvent);
         //menuPanel.GetComponent<Button>().onClick.AddListener(OnClickOther);
     }
@@ -84,8 +85,10 @@ public class HeroSlot : MonoBehaviour
         //Vector3 newPos = transform.position + new Vector3(rt.rect.x, rt.rect.y, 0f);
         Vector3 newPos = transform.position + menuPos;
         //menuPanel.GetComponent<RectTransform>().transform.position = newPos;
-        menuPanel.transform.position = newPos;
+        menuPanel.transform.Find("MenuPanel").position = newPos;
         menuPanel.SetActive(true);
+
+        UIManager.Instance.UpdateHeroDetailInfo(myStatus.ID);
 
         if (isParty)
         {

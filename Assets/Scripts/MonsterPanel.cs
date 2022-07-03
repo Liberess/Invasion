@@ -37,11 +37,11 @@ public class MonsterPanel : MonoBehaviour
 
     private void Change()
     {
-        if(dataManager.heroData.heroUnlockList[page] == false)
+        if(dataManager.HeroData.heroUnlockList[page] == false)
         {
             lockGroup.SetActive(true);
         }
-        else if (dataManager.heroData.heroUnlockList[page] == true)
+        else if (dataManager.HeroData.heroUnlockList[page] == true)
         {
             lockGroup.SetActive(false);
         }
@@ -60,18 +60,18 @@ public class MonsterPanel : MonoBehaviour
 
     public void Unlock()
     {
-        if (dataManager.gameData.soulGem >= dataManager.heroData.heroSoulGemList[page])
+        if (dataManager.gameData.soulGem >= dataManager.HeroData.heroSoulGemList[page])
         {
-            dataManager.gameData.soulGem -= dataManager.heroData.heroSoulGemList[page];
-            dataManager.heroData.heroUnlockList[page] = true;
+            dataManager.gameData.soulGem -= dataManager.HeroData.heroSoulGemList[page];
+            dataManager.HeroData.heroUnlockList[page] = true;
 
             Change();
 
             SoundManager.Instance.PlaySFX("Unlock");
 
-            for(int i = 0; i < dataManager.heroData.heroUnlockList.Length; i++)
+            for(int i = 0; i < dataManager.HeroData.heroUnlockList.Length; i++)
             {
-                if(dataManager.heroData.heroUnlockList[i] == true)
+                if(dataManager.HeroData.heroUnlockList[i] == true)
                 {
                     dataManager.gameData.isClear = true;
                 }

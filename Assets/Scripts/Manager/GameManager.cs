@@ -117,10 +117,10 @@ public class GameManager : MonoBehaviour
     {
         if(_minute >= 10)
         {
-            for (int i = 0; i < dataMgr.heroData.heroList.Count; i++)
+            for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
             {
-                reward = (((dataMgr.heroData.heroList[i].ID + 1)
-                    * dataMgr.heroData.heroList[i].level * stopWatch)) / rewardLimit;
+                reward = (((dataMgr.HeroData.heroList[i].ID + 1)
+                    * dataMgr.HeroData.heroList[i].level * stopWatch)) / rewardLimit;
             }
 
             offNotice.transform.Find("OffTxt").gameObject.GetComponent<Text>().text =
@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
 
     public void OnClickGameStartBtn(StageInfo info)
     {
-        if(dataMgr.heroData.partyList.Count <= 0)
+        if(dataMgr.HeroData.partyList.Count <= 0)
         {
             NoticeManager.Instance.Notice(NoticeType.NotParty);
             return;

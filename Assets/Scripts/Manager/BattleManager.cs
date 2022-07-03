@@ -227,21 +227,21 @@ public class BattleManager : MonoBehaviour
     {
         heroCardList.Clear();
 
-        for (int i = 0; i < dataMgr.heroData.partyList.Count; i++)
+        for (int i = 0; i < dataMgr.HeroData.partyList.Count; i++)
         {
             var heroCard = Instantiate(heroCardPrefab, Vector3.zero, Quaternion.identity);
             heroCard.transform.SetParent(heroCardGrid.transform);
             heroCard.transform.localScale = Vector3.one;
 
-            var heroID = dataMgr.heroData.partyList[i].ID;
+            var heroID = dataMgr.HeroData.partyList[i].ID;
 
             // Set Hero Card Sprite
             heroCard.transform.GetChild(0).GetComponent<Image>().sprite =
-                dataMgr.heroData.heroCardSpriteList[heroID];
+                dataMgr.HeroData.heroCardSpriteList[heroID];
 
             // Set Hero Cost Text
             heroCard.transform.GetChild(1).GetComponent<Text>().text =
-                dataMgr.heroData.heroCostList[heroID].ToString();
+                dataMgr.HeroData.heroCostList[heroID].ToString();
 
             // Set Hero Card OnClick Event
             heroCard.GetComponent<Button>().onClick.AddListener(() => OnClickHeroCard(heroID));
@@ -281,7 +281,7 @@ public class BattleManager : MonoBehaviour
 
     private void UpdateCardEvent(GameObject target, int id)
     {
-        var targetCost = dataMgr.heroData.heroCostList[id];
+        var targetCost = dataMgr.HeroData.heroCostList[id];
 
         var button = target.GetComponent<Button>();
         var lockImg = target.transform.GetChild(2).gameObject;
@@ -328,7 +328,7 @@ public class BattleManager : MonoBehaviour
 
     private void OnClickHeroCard(int id)
     {
-        var targetCost = dataMgr.heroData.heroCostList[id];
+        var targetCost = dataMgr.HeroData.heroCostList[id];
 
         if (cost >= targetCost)
         {
@@ -337,7 +337,7 @@ public class BattleManager : MonoBehaviour
 
             var hero = InstantiateObj(QueueType.Hero).GetComponent<Hero>();
             hero.transform.position = blueBase.transform.position;
-            hero.UnitSetup(new UnitStatus(dataMgr.heroData.partyList[id]));
+            hero.UnitSetup(new UnitStatus(dataMgr.HeroData.partyList[id]));
             hero.DeathAction += () => ReturnObj(QueueType.Hero, hero.gameObject);
         }
     }

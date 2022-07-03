@@ -45,8 +45,8 @@ public class Hero : Unit
 
         mMyStat.animCtrl = status.animCtrl;
         anim.runtimeAnimatorController = mMyStat.animCtrl;
-/*        sprite.sprite = DataManager.Instance.heroData.heroSpriteList[status.ID];
+/*        sprite.sprite = DataManager.Instance.HeroData.heroSpriteList[status.ID];
         anim.runtimeAnimatorController =
-            DataManager.Instance.heroData.heroAnimCtrlList[status.ID];*/
+            DataManager.Instance.HeroData.heroAnimCtrlList[status.ID];*/
     }
 }

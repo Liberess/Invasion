@@ -10,8 +10,10 @@ public class UnitStatus
     public int hp;                      // 체력. Health Point
     public int maxHp;               // 최대 체력. Max Health Point
     public int ap;                      // 공격력. Attack Power
+    public int dp;                      // 방어력. Defense Power
     public float moveSpeed;    // 이동속도.
     public float critical;            // 치명타율. Critical Chance
+    public float dodge;             // 회피율.
     public float distance;         // 공격 거리. Attack Distance
     public float attackDelay;   // 공격 딜레이. Attack Delay Time
     public float DPS =>           // 초당 공격력. Damage per Second
@@ -30,7 +32,9 @@ public class UnitStatus
         this.cost = status.cost;
         this.hp = status.hp;
         this.ap = status.ap;
+        this.dp = status.dp;
         this.critical = status.critical;
+        this.dodge = status.dodge;
         this.distance = status.distance;
         this.mySprite = status.mySprite;
         this.animCtrl = status.animCtrl;

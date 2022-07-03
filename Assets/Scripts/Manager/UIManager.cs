@@ -15,21 +15,23 @@ public class UIManager : MonoBehaviour
         Grade,
         DPS
     }
-
-    private enum SortingType
-    {
-        Ascending = 0, //오름차
-        Descending      //내림차
-    }
+    //오름차                내림차
+    private enum SortingType { Ascending = 0, Descending }
+    private enum StatusType { HP = 0, Critical, AP, Dodge, DP, Cost }
 
     public static UIManager Instance { get; private set; }
 
     private DataManager dataMgr;
+    private UnityMainThreadDispatcher dispatcher;
 
     [Header("==== Hero UI ====")]
     [SerializeField] private GameObject heroPartyGrid;
     [SerializeField] private GameObject heroSlotGrid;
     [SerializeField] private GameObject heroMenuPanel;
+    [SerializeField] private HeroDetailInfoPanel heroDetailInfoPanel;
+    [SerializeField] private GameObject nextHeroBtn;
+    [SerializeField] private GameObject previousHeroBtn;
+    private int currentHeroIndex;
 
     [Header("==== Sort UI ===="), Space(10)]
     [SerializeField] private Button sortBtn;
@@ -69,6 +71,12 @@ public class UIManager : MonoBehaviour
     {
         dataMgr = DataManager.Instance;
 
+        if (UnityMainThreadDispatcher.Exists())
+            dispatcher = UnityMainThreadDispatcher.Instance();
+
+        if (heroDetailInfoPanel == null)
+            heroDetailInfoPanel = FindObjectOfType<HeroDetailInfoPanel>();
+
         HideHeroInfoPanelAction += () => heroMenuPanel.SetActive(false);
 
         SetupMapUI();
@@ -79,6 +87,7 @@ public class UIManager : MonoBehaviour
         StartCoroutine(InitHeroPanelCoru());
     }
 
+    #region Hero Panel
     private void InitSortButton()
     {
         sortBtn.onClick.AddListener(() => OnClickSortButton(HeroSortType.Menu));
@@ -109,12 +118,12 @@ public class UIManager : MonoBehaviour
     {
         partySlotList.Clear();
 
-        for (int i = 0; i < dataMgr.heroData.partyList.Count; i++)
+        for (int i = 0; i < dataMgr.HeroData.partyList.Count; i++)
         {
             HeroSlot heroSlot = GetObj();
             heroSlot.transform.SetParent(heroPartyGrid.transform);
             heroSlot.transform.localScale = new Vector3(1f, 1f, 1f);
-            heroSlot.UnitSetup(dataMgr.heroData.partyList[i]);
+            heroSlot.UnitSetup(dataMgr.HeroData.partyList[i]);
             partySlotList.Add(heroSlot);
         }
     }
@@ -125,16 +134,16 @@ public class UIManager : MonoBehaviour
 
         List<int> IDList = new List<int>();
 
-        foreach (var hero in dataMgr.heroData.partyList)
+        foreach (var hero in dataMgr.HeroData.partyList)
             IDList.Add(hero.ID);
 
-        for (int i = 0; i < dataMgr.heroData.heroList.Count; i++)
+        for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
         {
-            if (IDList.Contains(dataMgr.heroData.heroList[i].ID))
+            if (IDList.Contains(dataMgr.HeroData.heroList[i].ID))
                 continue;
 
             HeroSlot heroSlot = GetObj();
-            heroSlot.UnitSetup(dataMgr.heroData.heroList[i]);
+            heroSlot.UnitSetup(dataMgr.HeroData.heroList[i]);
 
             heroSlotList.Add(heroSlot);
         }
@@ -176,6 +185,63 @@ public class UIManager : MonoBehaviour
         partySlotList.RemoveAt(index);
     }
 
+    private void OnClickSortButton(HeroSortType sortType)
+    {
+        switch (sortType)
+        {
+            case HeroSortType.Menu:
+                if (sortPanel.activeSelf)
+                    sortPanel.SetActive(false);
+                else
+                    sortPanel.SetActive(true);
+                break;
+
+            case HeroSortType.Level:
+                if (sortingType == SortingType.Ascending)
+                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.level).ToList();
+                else
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.level).ToList();
+                foreach (var slot in heroSlotList)
+                {
+                    slot.transform.SetParent(null);
+                    slot.transform.SetParent(heroSlotGrid.transform);
+                }
+                sortPanel.SetActive(false);
+                break;
+
+            case HeroSortType.Grade:
+                if (sortingType == SortingType.Ascending)
+                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.level).ToList();
+                else
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.level).ToList();
+                foreach (var slot in heroSlotList)
+                {
+                    slot.transform.SetParent(null);
+                    slot.transform.SetParent(heroSlotGrid.transform);
+                }
+                sortPanel.SetActive(false);
+                break;
+
+            case HeroSortType.DPS:
+                if (sortingType == SortingType.Ascending)
+                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.DPS).ToList();
+                else
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.DPS).ToList();
+                foreach (var slot in heroSlotList)
+                {
+                    slot.transform.SetParent(null);
+                    slot.transform.SetParent(heroSlotGrid.transform);
+                }
+                sortPanel.SetActive(false);
+                break;
+
+            default:
+                break;
+        }
+    }
+    #endregion
+
+    #region Map Panel
     private void InitMapButton()
     {
         GameObject mapPanel = GameObject.Find("MapCanvas").transform.Find("MapPanel").gameObject;
@@ -216,6 +282,8 @@ public class UIManager : MonoBehaviour
 
     private void InitDetailButton()
     {
+        Debug.Log("수정 필요!! StageInfo");
+
         // Set Detail Button List
         detailStageBtnDic.Clear();
         for (int i = 0; i < detailStagePanelList.Count; i++)
@@ -257,64 +325,9 @@ public class UIManager : MonoBehaviour
         else
             detailStagePanelList[index].SetActive(true);
     }
+    #endregion
 
-    private void OnClickSortButton(HeroSortType sortType)
-    {
-        switch (sortType)
-        {
-            case HeroSortType.Menu:
-                if (sortPanel.activeSelf)
-                    sortPanel.SetActive(false);
-                else
-                    sortPanel.SetActive(true);
-                break;
-
-            case HeroSortType.Level:
-                if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.level).ToList();
-                else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.level).ToList();
-                foreach (var slot in heroSlotList)
-                {
-                    slot.transform.SetParent(null);
-                    slot.transform.SetParent(heroSlotGrid.transform);
-                }
-                sortPanel.SetActive(false);
-                break;
-
-            case HeroSortType.Grade:
-                Debug.Log("OnClickSortBtn : Grade");
-                if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.level).ToList();
-                else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.level).ToList();
-                foreach (var slot in heroSlotList)
-                {
-                    slot.transform.SetParent(null);
-                    slot.transform.SetParent(heroSlotGrid.transform);
-                }
-                sortPanel.SetActive(false);
-                break;
-
-            case HeroSortType.DPS:
-                if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.DPS).ToList();
-                else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.DPS).ToList();
-                foreach (var slot in heroSlotList)
-                {
-                    slot.transform.SetParent(null);
-                    slot.transform.SetParent(heroSlotGrid.transform);
-                }
-                sortPanel.SetActive(false);
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    #region Object Pooling
+    #region Hero Slot Object Pooling
     private void InitHeroSlotObjectPool()
     {
         tempHeroSlotList.Clear();
@@ -369,6 +382,58 @@ public class UIManager : MonoBehaviour
 
         if (Instance.heroSlotIndex < 0)
             Instance.heroSlotIndex = Instance.heroSlotMaxCount;
+    }
+    #endregion
+
+    #region Hero Detail Info Panel
+    public void SetHeroIndex(int value)
+    {
+        if (value < 0 || value >= dataMgr.HeroData.heroList.Count)
+            return;
+
+        currentHeroIndex = value;
+        UpdateHeroOrderBtn();
+    }
+
+    /// <summary>
+    /// HeroDetailInfoPanel의 내용을 Update한다.
+    /// </summary>
+    /// <param name="heroID"> 세부 정보 패널에 표시할 영웅의 번호 </param>
+    public void UpdateHeroDetailInfo(int heroID)
+    {
+        if (heroDetailInfoPanel == null)
+            return;
+
+        currentHeroIndex = dataMgr.GetIndexOfHeroInList(dataMgr.GetDataByHeroID(heroID));
+        UpdateHeroOrderBtn();
+
+        dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
+            dataMgr.GetDataByHeroID(heroID)));
+    }
+
+    private void UpdateHeroOrderBtn()
+    {
+        if (dataMgr.IsValidInHeroListByIndex(currentHeroIndex + 1))
+            nextHeroBtn.GetComponent<Button>().interactable = true;
+        else
+            nextHeroBtn.GetComponent<Button>().interactable = false;
+
+        if (dataMgr.IsValidInHeroListByIndex(currentHeroIndex - 1))
+            previousHeroBtn.GetComponent<Button>().interactable = true;
+        else
+            previousHeroBtn.GetComponent<Button>().interactable = false;
+    }
+
+    public void OnClickNextHero()
+    {
+        dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
+            dataMgr.GetDataByOrder("Next", currentHeroIndex)));
+    }
+
+    public void OnClickPreviousHero()
+    {
+        dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
+            dataMgr.GetDataByOrder("Previous", currentHeroIndex)));
     }
     #endregion
 }
