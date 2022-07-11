@@ -15,6 +15,12 @@ public class GoodsData
 {
     public string name;
     public int count;
+
+    public GoodsData(string _name, int _count)
+    {
+        name = _name;
+        count = _count;
+    }
 }
 
 [System.Serializable]
@@ -32,7 +38,7 @@ public class GameData
     public float[] facilLimitTime = new float[7];
     public float[] facilSliderTime = new float[7];
 
-    public GoodsData[] goods = new GoodsData[3];
+    public List<GoodsData> goodsList = new List<GoodsData>();
     [HideInInspector] public string[] goodsNames = { "Stamina", "Gold", "Dia" };
 
     public int soulGem;

@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 660911240, guid: f624596d5fe1bd5459a5da424a8abc1b, type: 3}
   m_Name: TheBackendSettings
   m_EditorClassIdentifier: 
-  clientAppID: d12cfe20-b21b-11eb-9940-d37e1fb57f772178
+  clientAppID: dc5ffad0-00bd-11ed-9993-0f9de381f2302178
   signatureKey: d12cfe21-b21b-11eb-9940-d37e1fb57f772178
   functionAuthKey: 
-  packageName: com.IndieGo.Invasion
+  packageName: com.copiasoft.invasion
   isAllPlatform: 1
   sendLogReport: 1
   timeOutSec: 100
-  Version: 5.4.1
+  Version: 5.7.0

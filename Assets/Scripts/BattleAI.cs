@@ -75,7 +75,7 @@ public class BattleAI : MonoBehaviour
 
     private IEnumerator EnrageStateCo()
     {
-        var enrageTemp = battleMgr.RedBase.myStat.maxHp * 30.0f / 100.0f;
+        var enrageTemp = battleMgr.RedBase.myStat.hp * 30.0f / 100.0f;
 
         while (battleMgr.IsPlay)
         {

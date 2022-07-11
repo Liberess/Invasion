@@ -70,7 +70,7 @@ public class DataManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        UpdateResources();
+        StartCoroutine(UpdateResources());
         LoadGameData();
     }
 
@@ -283,6 +283,7 @@ public class DataManager : MonoBehaviour
 
         HeroData.heroDic.Clear();
         HeroData.heroList.Clear();
+        HeroData.partyList.Clear();
     }
 
     private void LoadHeroData()
@@ -360,11 +361,10 @@ public class DataManager : MonoBehaviour
     #region Game Load & Save
     private void InitGameData()
     {
-        for (int i = 0; i < gameData.goods.Length; i++)
-        {
-            gameData.goods[i].name = gameData.goodsNames[i];
-            gameData.goods[i].count = 0;
-        }
+        gameData.goodsList.Clear();
+
+        for (int i = 0; i < gameData.goodsNames.Length; i++)
+            gameData.goodsList.Add(new GoodsData(gameData.goodsNames[i], 0));
 
         gameData.soulGem = 0;
 

@@ -3,12 +3,11 @@
 [System.Serializable]
 public class UnitStatus
 {
-    public string name;            // 고유 닉네임
-    public int ID;                      // 고유 판별 ID
-    public int level;                  // 유닛 레벨
-    public int cost;                   // 유닛 생성 비용
+    public int ID;                      // 고유 판별 ID.
+    public string name;            // 고유 닉네임.
+    public int level;                  // 유닛 레벨.
+    public int cost;                   // 유닛 생성 비용.
     public int hp;                      // 체력. Health Point
-    public int maxHp;               // 최대 체력. Max Health Point
     public int ap;                      // 공격력. Attack Power
     public int dp;                      // 방어력. Defense Power
     public float moveSpeed;    // 이동속도.
