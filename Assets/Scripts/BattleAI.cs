@@ -79,7 +79,7 @@ public class BattleAI : MonoBehaviour
 
         while (battleMgr.IsPlay)
         {
-            if (battleMgr.RedBase.myStat.hp <= enrageTemp)
+            if (battleMgr.RedBase.Hp <= enrageTemp)
                 EnrageAction.Invoke();
 
             yield return null;

@@ -8,6 +8,7 @@ public class Base : Unit
     private enum BaseType { Red, Blue }
 
     [SerializeField] private BaseType baseType;
+
     private bool isRush = false;
 
     private Vector3 rayPos;
@@ -61,10 +62,12 @@ public class Base : Unit
     protected override void CustomUnitSetup(UnitStatus status)
     {
         mMyStat = status;
+        hp = status.hp;
     }
 
     protected override void Die()
     {
+        battleMgr.GameOverAction();
         gameObject.SetActive(false);
     }
 }

@@ -21,13 +21,16 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected UnitStatus mMyStat;
     public UnitStatus myStat { get => mMyStat; }
 
+    [SerializeField] protected int hp;
+    public int Hp { get => hp; }
+
     [SerializeField] private GameObject dust;
     [SerializeField] private GameObject shadow;
 
     [SerializeField] private GameObject target;
 
     [SerializeField] private UnitJob mJob;
-    public UnitJob job { get => mJob; }
+    public UnitJob Job { get => mJob; }
 
     protected QueueType myObjType;
 
@@ -42,7 +45,7 @@ public abstract class Unit : MonoBehaviour
 
     protected float attackTime = 0;
 
-    private bool IsAlive => myStat.hp > 0;
+    private bool IsAlive => hp > 0;
 
     protected Animator anim;
     protected Rigidbody2D rigid;
@@ -54,6 +57,7 @@ public abstract class Unit : MonoBehaviour
     {
         sprite.color = Color.white;
         CustomUnitSetup(status);
+        hp = status.hp;
         //ChangeAc();
     }
 
@@ -121,7 +125,7 @@ public abstract class Unit : MonoBehaviour
             attackTime = 0;
             anim.SetTrigger("doAttack");
 
-            switch (job)
+            switch (Job)
             {
                 case UnitJob.ShortRange: target.GetComponent<Unit>().Hit(myStat.ap); break;
                 case UnitJob.LongRange: Shot(); break;
@@ -192,7 +196,7 @@ public abstract class Unit : MonoBehaviour
     {
         if(IsAlive)
         {
-            myStat.hp -= _atk;
+            hp -= _atk;
             //anim.SetTrigger("doHit");
         }
         else

@@ -8,7 +8,6 @@ public class HeroData
     public const int HeroMaxSize = 11;
 
     public bool[] heroUnlockList = new bool[HeroMaxSize];
-    public int[] heroCostList = new int[HeroMaxSize];
     public int[] heroGoldList = new int[HeroMaxSize];
     public int[] heroSoulGemList = new int[HeroMaxSize];
 

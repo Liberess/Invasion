@@ -16,7 +16,9 @@ public class BattleManager : MonoBehaviour
 {
     #region Variables
     public static BattleManager Instance { get; private set; }
+
     private DataManager dataMgr;
+    private UnityMainThreadDispatcher dispatcher;
 
     [Header("== Setting Game UI ==")]
     [SerializeField] private Text stageTxt;
@@ -57,8 +59,15 @@ public class BattleManager : MonoBehaviour
     public Base RedBase { get => redBase; }
     [SerializeField] private Base blueBase;
 
-    private Action UpdateCardAction;
+    [Header("== Setting Game Result =="), Space(10)]
+    [SerializeField] private GameObject resultPanel;
+    [SerializeField] private GameObject victoryPanel;
+    [SerializeField] private GameObject defeatPanel;
+    [SerializeField] private GameObject rewardGrid;
+    [SerializeField] private GameObject rewardSlotPrefab;
 
+    private Action UpdateCardAction;
+    public Action GameOverAction;
     #endregion
 
     private void Awake()
@@ -77,7 +86,15 @@ public class BattleManager : MonoBehaviour
 
         dataMgr = DataManager.Instance;
 
+        if (UnityMainThreadDispatcher.Exists())
+            dispatcher = UnityMainThreadDispatcher.Instance();
+
+        GameOverAction += GameOver;
+        GameOverAction += InactiveAllHeroCard;
+
         SetStageInfo();
+
+        InitializeResultUI();
 
         redBase.UnitSetup(new UnitStatus("RedBase", 100));
         blueBase.UnitSetup(new UnitStatus("BlueBase", 100));
@@ -223,34 +240,6 @@ public class BattleManager : MonoBehaviour
     }
     #endregion
 
-    private void SetHeroCard()
-    {
-        heroCardList.Clear();
-
-        for (int i = 0; i < dataMgr.HeroData.partyList.Count; i++)
-        {
-            var heroCard = Instantiate(heroCardPrefab, Vector3.zero, Quaternion.identity);
-            heroCard.transform.SetParent(heroCardGrid.transform);
-            heroCard.transform.localScale = Vector3.one;
-
-            var heroID = dataMgr.HeroData.partyList[i].ID;
-
-            // Set Hero Card Sprite
-            heroCard.transform.GetChild(0).GetComponent<Image>().sprite =
-                dataMgr.HeroData.heroCardSpriteList[heroID];
-
-            // Set Hero Cost Text
-            heroCard.transform.GetChild(1).GetComponent<Text>().text =
-                dataMgr.HeroData.heroCostList[heroID].ToString();
-
-            // Set Hero Card OnClick Event
-            heroCard.GetComponent<Button>().onClick.AddListener(() => OnClickHeroCard(heroID));
-            UpdateCardAction += () => UpdateCardEvent(heroCard, heroID);
-
-            heroCardList.Add(heroCard);
-        }
-    }
-
     #region Set UI (PlayTime, Cost, Leader)
     private void SetStageInfo()
     {
@@ -271,7 +260,7 @@ public class BattleManager : MonoBehaviour
 
     private void SetCostSlider()
     {
-        UpdateCardAction();
+        dispatcher.Enqueue(UpdateCardAction);
         costSlider.value = cost;
         costTxt.text = cost + "/" + 10;
     }
@@ -279,9 +268,12 @@ public class BattleManager : MonoBehaviour
     private void SetLeaderGaugeImg() =>
         leaderImg.fillAmount = leaderGauge / maxLeaderGauge;
 
-    private void UpdateCardEvent(GameObject target, int id)
+    private void UpdateCardEvent(GameObject target, int index)
     {
-        var targetCost = dataMgr.HeroData.heroCostList[id];
+        if (index < 0 || index >= dataMgr.HeroData.partyList.Count)
+            throw new Exception("UpdateCardEvent - 잘못된 index값입니다.");
+
+        var targetCost = dataMgr.HeroData.partyList[index].cost;
 
         var button = target.GetComponent<Button>();
         var lockImg = target.transform.GetChild(2).gameObject;
@@ -296,6 +288,92 @@ public class BattleManager : MonoBehaviour
             button.interactable = false;
             lockImg.SetActive(true);
         }
+    }
+
+    private void SetHeroCard()
+    {
+        heroCardList.Clear();
+
+        for (int i = 0; i < dataMgr.HeroData.partyList.Count; i++)
+        {
+            var heroCard = Instantiate(heroCardPrefab, Vector3.zero, Quaternion.identity);
+            heroCard.transform.SetParent(heroCardGrid.transform);
+            heroCard.transform.localScale = Vector3.one;
+
+            var heroID = dataMgr.HeroData.partyList[i].ID;
+
+            // Set Hero Card Sprite
+            heroCard.transform.GetChild(0).GetComponent<Image>().sprite =
+                dataMgr.HeroData.heroCardSpriteList[heroID];
+
+            // Set Hero Cost Text
+            heroCard.transform.GetChild(1).GetComponent<Text>().text =
+                dataMgr.HeroData.partyList[i].cost.ToString();
+
+            // Set Hero Card OnClick Event
+            int index = i;
+            heroCard.GetComponent<Button>().onClick.AddListener(() => OnClickHeroCard(index));
+            UpdateCardAction += () => UpdateCardEvent(heroCard, index);
+
+            heroCardList.Add(heroCard);
+        }
+    }
+
+    private void InactiveAllHeroCard()
+    {
+        foreach(var card in heroCardList)
+        {
+            var button = card.GetComponent<Button>();
+            button.interactable = false;
+
+            var lockImg = card.transform.GetChild(2).gameObject;
+            lockImg.SetActive(true);
+        }
+    }
+    #endregion
+
+    #region Result
+    public void GameOver()
+    {
+        Debug.Log("GameOver");
+
+        IsPlay = false;
+
+        resultPanel.SetActive(true);
+
+        if (redBase.Hp <= 0)
+            GameVictory();
+        else if (blueBase.Hp <= 0)
+            GameDefeat();
+    }
+
+    public void GameDefeat()
+    {
+        IsPlay = false;
+        defeatPanel.SetActive(true);
+        Debug.Log("GameDefeat");
+    }
+
+    public void GameVictory()
+    {
+        IsPlay = false;
+        victoryPanel.SetActive(true);
+        Debug.Log("GameVictory");
+    }
+
+    private void InitializeResultUI()
+    {
+        resultPanel.SetActive(false);
+        victoryPanel.SetActive(false);
+        defeatPanel.SetActive(false);
+
+        for (int i = 0; i < rewardGrid.transform.childCount; i++)
+            Destroy(rewardGrid.transform.GetChild(i).gameObject);
+    }
+
+    private void SetupReward()
+    {
+
     }
     #endregion
 
@@ -326,9 +404,9 @@ public class BattleManager : MonoBehaviour
         SceneManager.LoadScene("Main");
     }
 
-    private void OnClickHeroCard(int id)
+    private void OnClickHeroCard(int index)
     {
-        var targetCost = dataMgr.HeroData.heroCostList[id];
+        var targetCost = dataMgr.HeroData.partyList[index].cost;
 
         if (cost >= targetCost)
         {
@@ -337,7 +415,7 @@ public class BattleManager : MonoBehaviour
 
             var hero = InstantiateObj(QueueType.Hero).GetComponent<Hero>();
             hero.transform.position = blueBase.transform.position;
-            hero.UnitSetup(new UnitStatus(dataMgr.HeroData.partyList[id]));
+            hero.UnitSetup(new UnitStatus(dataMgr.HeroData.partyList[index]));
             hero.DeathAction += () => ReturnObj(QueueType.Hero, hero.gameObject);
         }
     }
