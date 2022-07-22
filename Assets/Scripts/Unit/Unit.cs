@@ -192,15 +192,17 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
-    public virtual void Hit(int _atk)
+    protected virtual void Hit(int _atk)
     {
-        if(IsAlive)
+        if (!IsAlive)
+            return;
+
+        hp -= _atk;
+        //anim.SetTrigger("doHit");
+
+        if (hp <= 0)
         {
-            hp -= _atk;
-            //anim.SetTrigger("doHit");
-        }
-        else
-        {
+            hp = 0;
             Die();
         }
     }

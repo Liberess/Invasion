@@ -174,11 +174,11 @@ public class GameManager : MonoBehaviour
     {
         //재화 텍스트 애니메이션 효과
         float dia = Mathf.SmoothStep(_dia,
-            DataManager.Instance.gameData.goodsList[(int)Goods.Dia].count, 0.5f);
+            DataManager.Instance.gameData.goodsList[(int)GoodsType.Dia].count, 0.5f);
         float gold = Mathf.SmoothStep(_gold,
-            DataManager.Instance.gameData.goodsList[(int)Goods.Gold].count, 0.5f);
+            DataManager.Instance.gameData.goodsList[(int)GoodsType.Gold].count, 0.5f);
         float drink = Mathf.SmoothStep(_drink,
-            DataManager.Instance.gameData.goodsList[(int)Goods.Stamina].count, 0.5f);
+            DataManager.Instance.gameData.goodsList[(int)GoodsType.Stamina].count, 0.5f);
         //float soulGem = Mathf.SmoothStep(_soulGem, DataManager.Instance.gameData.soulGem, 0.5f);
 
         _dia = (int)dia;
@@ -187,11 +187,11 @@ public class GameManager : MonoBehaviour
 
         //천 단위로 콤마(,) 삽입
         moneyTxt[0].text = string.Format("{0:n0}",
-            DataManager.Instance.gameData.goodsList[(int)Goods.Stamina].count);
+            DataManager.Instance.gameData.goodsList[(int)GoodsType.Stamina].count);
         moneyTxt[1].text = string.Format("{0:n0}",
-            DataManager.Instance.gameData.goodsList[(int)Goods.Gold].count);
+            DataManager.Instance.gameData.goodsList[(int)GoodsType.Gold].count);
         moneyTxt[2].text = string.Format("{0:n0}",
-            DataManager.Instance.gameData.goodsList[(int)Goods.Dia].count);
+            DataManager.Instance.gameData.goodsList[(int)GoodsType.Dia].count);
 
         /*        string str = string.Format("{0:n0}", DataManager.Instance.gameData.soulGem);
                 DataManager.Instance.gameData.soulUnit = str.Split(',');

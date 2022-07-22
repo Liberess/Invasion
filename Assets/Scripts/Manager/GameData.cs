@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 
-public enum Goods
+public enum GoodsType
 {
     Stamina = 0,
     Gold,
-    Dia
+    Dia,
+    AwakeJewel,      //각성석
+    EvolutionJewel  //진화석
 }
 
 [System.Serializable]
@@ -39,6 +41,7 @@ public class GameData
     public float[] facilSliderTime = new float[7];
 
     public List<GoodsData> goodsList = new List<GoodsData>();
+    public List<Sprite> goodsSpriteList = new List<Sprite>();
     [HideInInspector] public string[] goodsNames = { "Stamina", "Gold", "Dia" };
 
     public int soulGem;

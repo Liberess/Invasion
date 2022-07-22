@@ -95,11 +95,25 @@ public class DataManager : MonoBehaviour
     [ContextMenu("Update Resources")]
     public IEnumerator UpdateResources()
     {
+        UpdateGoodsData();
         UpdateHeroSprite();
         UpdateHeroAnimCtrl();
         UpdateHeroCardSprite();
         UpdateEnemyData();
         yield return null;
+    }
+
+    private void UpdateGoodsData()
+    {
+        gameData.goodsSpriteList.Clear();
+
+        Sprite[] temp = Resources.LoadAll<Sprite>("Goods");
+
+        for (int i = 0; i < temp.Length; i++)
+        {
+            if (temp[i] != null)
+                gameData.goodsSpriteList.Add(temp[i]);
+        }
     }
 
     //[ContextMenu("Update Hero Sprite")]

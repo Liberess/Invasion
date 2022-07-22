@@ -12,6 +12,7 @@ public class BattleAI : MonoBehaviour
     [SerializeField] private float spawnTime = 0f;
     [SerializeField] private float spawnDelayTime = 1f;
     [SerializeField] private float spawnSpeed = 1f;
+    private int spawnCount = 0;
 
     public UnityAction EnrageAction { get; private set; }
 
@@ -57,7 +58,7 @@ public class BattleAI : MonoBehaviour
 
         while (battleMgr.IsPlay)
         {
-            if(spawnTime >= spawnDelayTime)
+            if(spawnTime >= spawnDelayTime && spawnCount < 5)
             {
                 spawnTime = 0f;
                 EnemySpawn();
@@ -101,10 +102,12 @@ public class BattleAI : MonoBehaviour
                 dataMgr.gameData.stageInfo.maxEnemyID
             );
 
+        ++spawnCount;
         var enemy = battleMgr.InstantiateObj(QueueType.Enemy).GetComponent<Enemy>();
         enemy.transform.position = battleMgr.RedBase.transform.position;
         enemy.UnitSetup(new UnitStatus(dataMgr.EnemyDataList[rand].myStat));
         EnrageAction += enemy.Enrage;
+        enemy.DeathAction += () => --spawnCount;
         enemy.DeathAction += () => EnrageAction -= enemy.Enrage;
         enemy.DeathAction += () => BattleManager.ReturnObj(QueueType.Enemy, enemy.gameObject);
     }

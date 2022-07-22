@@ -42,6 +42,7 @@ public class BattleManager : MonoBehaviour
     private float playTime = 0f;
     private int cost = 0;
     private float leaderGauge = 0f;
+    private int starNum = 0;
     public bool IsPlay { get; private set; }
 
     [Header("== Setting Object Pooling =="), Space(10)]
@@ -65,6 +66,11 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private GameObject defeatPanel;
     [SerializeField] private GameObject rewardGrid;
     [SerializeField] private GameObject rewardSlotPrefab;
+    [SerializeField] private GameObject[] conditions = new GameObject[3];
+    [SerializeField] private Sprite starOn;
+    [SerializeField] private Sprite starOff;
+    [SerializeField] private Image startImg;
+    [SerializeField] private Sprite[] startSprites = new Sprite[4];
 
     private Action UpdateCardAction;
     public Action GameOverAction;
@@ -335,6 +341,9 @@ public class BattleManager : MonoBehaviour
     #region Result
     public void GameOver()
     {
+        if (!IsPlay)
+            return;
+
         Debug.Log("GameOver");
 
         IsPlay = false;
@@ -349,14 +358,15 @@ public class BattleManager : MonoBehaviour
 
     public void GameDefeat()
     {
-        IsPlay = false;
         defeatPanel.SetActive(true);
         Debug.Log("GameDefeat");
     }
 
     public void GameVictory()
     {
-        IsPlay = false;
+        GetReward();
+        SetupConditions();
+
         victoryPanel.SetActive(true);
         Debug.Log("GameVictory");
     }
@@ -371,9 +381,59 @@ public class BattleManager : MonoBehaviour
             Destroy(rewardGrid.transform.GetChild(i).gameObject);
     }
 
-    private void SetupReward()
+    private void SetupConditions()
     {
+        starNum = 0;
 
+        if (blueBase.Hp >= 10)
+        {
+            ++starNum;
+            conditions[0].GetComponentInChildren<Image>().sprite = starOn;
+        }
+        else
+        {
+            conditions[0].GetComponentInChildren<Image>().sprite = starOff;
+        }
+
+        if (blueBase.Hp >= 50)
+        {
+            ++starNum;
+            conditions[1].GetComponentInChildren<Image>().sprite = starOn;
+        }
+        else
+        {
+            conditions[1].GetComponentInChildren<Image>().sprite = starOff;
+        }
+
+        if (playTime < 180)
+        {
+            ++starNum;
+            conditions[2].GetComponentInChildren<Image>().sprite = starOn;
+        }
+        else
+        {
+            conditions[2].GetComponentInChildren<Image>().sprite = starOff;
+        }
+
+        startImg.sprite = startSprites[starNum];
+    }
+
+    private void GetReward()
+    {
+        List<Reward> rewardList = new List<Reward>();
+
+        rewardList.Add(new Reward("골드", GoodsType.Gold, 1000));
+        rewardList.Add(new Reward("각성석", GoodsType.AwakeJewel, 5));
+
+        for(int i = 0; i < rewardList.Count; i++)
+        {
+            var reward = Instantiate(rewardSlotPrefab);
+            reward.transform.SetParent(rewardGrid.transform);
+            reward.transform.localScale = new Vector3(1, 1, 1);
+            reward.transform.GetChild(0).GetComponent<Image>().sprite =
+                dataMgr.gameData.goodsSpriteList[(int)rewardList[i].type];
+            reward.GetComponentInChildren<Text>().text = rewardList[i].num.ToString();
+        }
     }
     #endregion
 

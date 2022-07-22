@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Base : Unit
 {
     private BattleAI battleAI;
+    private Text hpTxt;
+
     private enum BaseType { Red, Blue }
 
     [SerializeField] private BaseType baseType;
@@ -22,6 +25,7 @@ public class Base : Unit
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
+        hpTxt = GetComponentInChildren<Text>();
     }
 
     private void Start()
@@ -31,6 +35,8 @@ public class Base : Unit
 
         rayPos = new Vector3(transform.position.x,
             transform.position.y + sprite.size.y / 3f, 0f);
+
+        hpTxt.text = hp + "/" + myStat.hp;
     }
 
     private void FixedUpdate()
@@ -63,6 +69,13 @@ public class Base : Unit
     {
         mMyStat = status;
         hp = status.hp;
+    }
+
+    protected override void Hit(int _atk)
+    {
+        base.Hit(_atk);
+
+        hpTxt.text = hp + "/" + myStat.hp;
     }
 
     protected override void Die()
