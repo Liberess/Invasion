@@ -378,7 +378,7 @@ public class DataManager : MonoBehaviour
         gameData.goodsList.Clear();
 
         for (int i = 0; i < gameData.goodsNames.Length; i++)
-            gameData.goodsList.Add(new GoodsData(gameData.goodsNames[i], 0));
+            gameData.goodsList.Add(new Goods(gameData.goodsNames[i], 0));
 
         gameData.soulGem = 0;
 

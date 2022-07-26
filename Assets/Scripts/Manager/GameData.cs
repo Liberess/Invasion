@@ -13,12 +13,12 @@ public enum GoodsType
 }
 
 [System.Serializable]
-public class GoodsData
+public class Goods
 {
     public string name;
     public int count;
 
-    public GoodsData(string _name, int _count)
+    public Goods(string _name, int _count)
     {
         name = _name;
         count = _count;
@@ -40,9 +40,10 @@ public class GameData
     public float[] facilLimitTime = new float[7];
     public float[] facilSliderTime = new float[7];
 
-    public List<GoodsData> goodsList = new List<GoodsData>();
+    public List<Goods> goodsList = new List<Goods>();
     public List<Sprite> goodsSpriteList = new List<Sprite>();
-    [HideInInspector] public string[] goodsNames = { "Stamina", "Gold", "Dia" };
+    [HideInInspector] public string[] goodsNames =
+        { "Stamina", "Gold", "Dia", "Awake Jewel" };
 
     public int soulGem;
 

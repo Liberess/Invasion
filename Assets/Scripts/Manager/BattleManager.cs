@@ -434,6 +434,8 @@ public class BattleManager : MonoBehaviour
                 dataMgr.gameData.goodsSpriteList[(int)rewardList[i].type];
             reward.GetComponentInChildren<Text>().text = rewardList[i].num.ToString();
         }
+
+        //dataMgr.gameData.goodsList[(int)GoodsType.Gold] = 
     }
     #endregion
 
