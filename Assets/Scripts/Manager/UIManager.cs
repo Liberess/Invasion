@@ -24,7 +24,12 @@ public class UIManager : MonoBehaviour
     private DataManager dataMgr;
     private UnityMainThreadDispatcher dispatcher;
 
-    [Header("==== Hero UI ====")]
+    [Header("==== Game UI ====")]
+    [SerializeField] private GameObject optionPanel;
+    [SerializeField] private GameObject offNotice;
+    public bool IsPanel { get; private set; }
+
+    [Header("==== Hero UI ===="), Space(10)]
     [SerializeField] private GameObject heroPartyGrid;
     [SerializeField] private GameObject heroSlotGrid;
     [SerializeField] private GameObject heroMenuPanel;
@@ -86,6 +91,39 @@ public class UIManager : MonoBehaviour
 
         StartCoroutine(InitHeroPanelCoru());
     }
+
+    public void SetActivePauseUI()
+    {
+        if (!optionPanel.activeSelf)
+        {
+            optionPanel.SetActive(true);
+            SoundManager.Instance.PlaySFX("Pause In");
+
+            if (IsPanel)
+                HidePanelAction();
+        }
+        else
+        {
+            optionPanel.SetActive(false);
+            SoundManager.Instance.PlaySFX("Pause Out");
+        }
+    }
+
+    #region Offline Reward
+    public void SetActiveOfflineRewardNotice(bool active)
+    {
+        if(active)
+            offNotice.gameObject.GetComponent<Animator>().SetTrigger("doShow");
+        else
+            offNotice.gameObject.GetComponent<Animator>().SetTrigger("doHide");
+    }
+
+    public void SetOfflineRewardUI(string infoTxt, string numTxt)
+    {
+        offNotice.transform.Find("OffTxt").gameObject.GetComponent<Text>().text = infoTxt;
+        offNotice.transform.Find("JelatinNumTxt").gameObject.GetComponent<Text>().text = numTxt;
+    }
+    #endregion
 
     #region Hero Panel
     private void InitSortButton()

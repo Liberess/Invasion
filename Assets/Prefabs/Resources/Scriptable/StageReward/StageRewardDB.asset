@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 539d47115fd8d8d4592c124db2103ea9, type: 3}
+  m_Name: StageRewardDB
+  m_EditorClassIdentifier: 
+  rewardDBList:
+  - stageName: Stage_1
+    rewardDBList:
+    - {fileID: 11400000, guid: a09b59cdeb52a7c4e915699fe7ec5dc1, type: 2}
+    - {fileID: 11400000, guid: b0ec9808a5845434db710a235946bd1e, type: 2}
+    - {fileID: 11400000, guid: 191747e12d613394694fffd82693ddd3, type: 2}
+    - {fileID: 11400000, guid: b6dca42a801fbad4d92c6fbf477fb4b8, type: 2}
+    - {fileID: 11400000, guid: a5b2c3e58a147af4cac1e70d76e55c26, type: 2}
+    - {fileID: 11400000, guid: ae8e315aa53eb4a41b5efc6ee51753d1, type: 2}
+    - {fileID: 11400000, guid: 869e214749da9e04cb5c0d0ef42f6659, type: 2}
+    - {fileID: 11400000, guid: e4a8d54315fb72e44bd421c65b8f9e22, type: 2}
+    - {fileID: 11400000, guid: feb56384a4d71874e8a95f90bac02f7d, type: 2}
+    - {fileID: 11400000, guid: 8a2d840ff4941f04099690c0d8fbfe20, type: 2}
+  - stageName: Stage_2
+    rewardDBList: []
+  - stageName: Stage_3
+    rewardDBList:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - stageName: Stage_4
+    rewardDBList: []

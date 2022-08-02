@@ -47076,6 +47076,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8687b3adbb926ad48b03c53b187f9f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  optionPanel: {fileID: 0}
+  offNotice: {fileID: 0}
   heroPartyGrid: {fileID: 1617015552}
   heroSlotGrid: {fileID: 1991328077}
   heroMenuPanel: {fileID: 505991253}
@@ -54644,28 +54646,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aec19291de5c5746b391cea8686bbd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OptionPanel: {fileID: 332451516}
-  clearImg: {fileID: 0}
-  offNotice: {fileID: 612423954}
-  moneyTxt:
-  - {fileID: 796481818}
-  - {fileID: 100204834}
-  - {fileID: 932611533}
-  monsNameList:
-  - "\uC2AC\uB77C\uC784"
-  - "\uBD84\uD64D"
-  - "\uD3EC\uB3C4"
-  - "\uACF0"
-  - "\uD478\uB529"
-  - "\uCD08\uCF54"
-  - "\uB0E5\uBC1C\uBC14\uB2E5"
-  - "\uC655\uAFC8\uD2C0\uC774"
-  - "\uC0C1\uC5B4"
-  - "\uCD08\uBC25"
-  - "\uC6B0\uC720"
-  - "\uC9C0\uAD6C"
+  rewardListA:
+  - name: 
+    type: 0
+    num: 0
+  - name: 
+    type: 0
+    num: 0
+  - name: 
+    type: 0
+    num: 0
+  - name: 
+    type: 0
+    num: 0
+  - name: 
+    type: 0
+    num: 0
+  - name: 
+    type: 0
+    num: 0
+  - name: 
+    type: 0
+    num: 0
+  - name: 
+    type: 0
+    num: 0
+  - name: 
+    type: 0
+    num: 0
+  - name: 
+    type: 0
+    num: 0
+  rewardListB: []
+  rewardListC: []
+  rewardListD: []
   isPlay: 0
-  isPanel: 0
 --- !u!1 &1977649549
 GameObject:
   m_ObjectHideFlags: 0

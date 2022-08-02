@@ -52,4 +52,9 @@ public class GameData
 
     public bool isNew;
     public bool isClear;
+
+    public void SetGoods(GoodsType goodsType, int num)
+    {
+        goodsList[(int)goodsType].count += num;
+    }
 }

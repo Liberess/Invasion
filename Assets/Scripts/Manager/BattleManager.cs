@@ -61,6 +61,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Base blueBase;
 
     [Header("== Setting Game Result =="), Space(10)]
+    [SerializeField] private StageReward stageRewardDB;
     [SerializeField] private GameObject resultPanel;
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject defeatPanel;
@@ -420,22 +421,27 @@ public class BattleManager : MonoBehaviour
 
     private void GetReward()
     {
-        List<Reward> rewardList = new List<Reward>();
+        var rewards = GetRewardDatabase();
 
-        rewardList.Add(new Reward("골드", GoodsType.Gold, 1000));
-        rewardList.Add(new Reward("각성석", GoodsType.AwakeJewel, 5));
-
-        for(int i = 0; i < rewardList.Count; i++)
+        for (int i = 0; i < rewards.Length; i++)
         {
             var reward = Instantiate(rewardSlotPrefab);
             reward.transform.SetParent(rewardGrid.transform);
             reward.transform.localScale = new Vector3(1, 1, 1);
             reward.transform.GetChild(0).GetComponent<Image>().sprite =
-                dataMgr.gameData.goodsSpriteList[(int)rewardList[i].type];
-            reward.GetComponentInChildren<Text>().text = rewardList[i].num.ToString();
-        }
+                dataMgr.gameData.goodsSpriteList[(int)rewards[i].type];
+            reward.GetComponentInChildren<Text>().text = rewards[i].num.ToString();
 
-        //dataMgr.gameData.goodsList[(int)GoodsType.Gold] = 
+            dataMgr.gameData.SetGoods(rewards[i].type, rewards[i].num);
+        }
+    }
+
+    private Reward[] GetRewardDatabase()
+    {
+        int stageIndex = int.Parse(dataMgr.gameData.stageInfo.stageNum.Split('-')[0]);
+        int levelIndex = int.Parse(dataMgr.gameData.stageInfo.stageNum.Split('-')[1]);
+        return stageRewardDB.rewardDBList[stageIndex - 1].
+            rewardDBList[levelIndex - 1].GetAllReward();
     }
     #endregion
 

@@ -164,7 +164,7 @@ public class DataManager : MonoBehaviour
     {
         mEnemyDataList.Clear();
 
-        EnemyData[] temp = Resources.LoadAll<EnemyData>("Scriptable");
+        EnemyData[] temp = Resources.LoadAll<EnemyData>("Scriptable/EnemyData");
 
         for (int i = 0; i < temp.Length; i++)
         {
