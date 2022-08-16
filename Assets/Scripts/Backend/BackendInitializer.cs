@@ -11,7 +11,8 @@ public class BackendInitializer : MonoBehaviour
 
         if(bro.IsSuccess())
         {
-            Debug.Log("초기화 성공!");
+            Debug.Log(Backend.Utils.GetGoogleHash());
+            NoticeManager.Instance.Notice(Backend.Utils.GetGoogleHash());
         }
         else
         {

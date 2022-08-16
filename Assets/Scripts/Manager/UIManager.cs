@@ -64,6 +64,8 @@ public class UIManager : MonoBehaviour
     public UnityAction HidePanelAction;
     public UnityAction HideHeroInfoPanelAction;
 
+    public UnityAction UpdateGoodsUIAction;
+
     private void Awake()
     {
         if (Instance == null)

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 660911240, guid: f624596d5fe1bd5459a5da424a8abc1b, type: 3}
   m_Name: TheBackendSettings
   m_EditorClassIdentifier: 
-  clientAppID: dc5ffad0-00bd-11ed-9993-0f9de381f2302178
+  clientAppID: 84b0bd40-1965-11ed-8096-c73b15629f4f2178
   signatureKey: d12cfe21-b21b-11eb-9940-d37e1fb57f772178
   functionAuthKey: 
   packageName: com.copiasoft.invasion

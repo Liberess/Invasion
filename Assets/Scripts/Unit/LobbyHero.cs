@@ -41,12 +41,12 @@ public class LobbyHero : Unit
     {
         if (isMove)
         {
-            anim.SetBool("isWalk", true);
+            //anim.SetBool("isWalk", true);
             rigid.velocity = new Vector3(speedX, speedY, speedY);
         }
         else
         {
-            anim.SetBool("isWalk", false);
+            //anim.SetBool("isWalk", false);
             rigid.velocity = Vector3.zero;
         }
     }

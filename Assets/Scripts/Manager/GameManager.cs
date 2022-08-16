@@ -4,12 +4,14 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    [SerializeField] private BackendManager backendMgr;
     private DataManager dataMgr;
 
     private string url = "www.naver.com";
@@ -22,6 +24,8 @@ public class GameManager : MonoBehaviour
     private int rewardLimit = 60;
 
     [HideInInspector] public bool isPlay; //몬스터 이동 제어 등
+
+    private List<Text> moneyTxtList = new List<Text>();
 
     private void Awake()
     {
@@ -37,6 +41,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         dataMgr = DataManager.Instance;
+
+        backendMgr = BackendManager.Instance;
 
         //_soulGem = (int)dataMgr.gameData.soulGem;
         //_gold = dataMgr.gameData.gold;

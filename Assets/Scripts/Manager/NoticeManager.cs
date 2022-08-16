@@ -44,11 +44,27 @@ public class NoticeManager : MonoBehaviour
         Negative(msg);
     }
 
+    public void Notice(string msg)
+    {
+        noticeTxt.text = msg;
+        Negative(msg);
+    }
+
     private void Negative(NoticeType msg)
     {
         string message = msg.ToString();
 
         if (message.Substring(0, 3) == "Not")
+            isNegative = true;
+        else
+            isNegative = false;
+
+        Change();
+    }
+
+    private void Negative(string msg)
+    {
+        if (msg.Substring(0, 3) == "Not")
             isNegative = true;
         else
             isNegative = false;
