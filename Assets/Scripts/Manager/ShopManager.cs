@@ -25,7 +25,7 @@ public class ShopManager : MonoBehaviour
     {
         try
         {
-            DataManager.Instance.gameData.SetGoods(
+            DataManager.Instance.SetGoods(
                 priceComponent.GoodsType, -priceComponent.Price);
 
             for (int i = 0; i < priceComponent.Num; i++)
@@ -46,7 +46,7 @@ public class ShopManager : MonoBehaviour
     {
         try
         {
-            DataManager.Instance.gameData.SetGoods(
+            DataManager.Instance.SetGoods(
                 priceComponent.GoodsType, -priceComponent.Price);
 
             for (int i = 0; i < priceComponent.Num; i++)

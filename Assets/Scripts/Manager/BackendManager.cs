@@ -43,6 +43,13 @@ public class BackendManager : MonoBehaviour
 
     private void Start()
     {
-        BkendFedAuth.OnClickGPGSLogin();
+        try
+        {
+            BkendFedAuth.OnClickGPGSLogin();
+        }
+        catch
+        {
+
+        }
     }
 }

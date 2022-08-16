@@ -44,8 +44,8 @@ public class GameManager : MonoBehaviour
 
         backendMgr = BackendManager.Instance;
 
-        //_soulGem = (int)dataMgr.gameData.soulGem;
-        //_gold = dataMgr.gameData.gold;
+        //_soulGem = (int)dataMgr.GameData.soulGem;
+        //_gold = dataMgr.GameData.gold;
     }
 
     private void Update()
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        ShowMoneyTxt();
+
     }
 
     public void OnApplicationStart()
@@ -63,14 +63,14 @@ public class GameManager : MonoBehaviour
         if (dataMgr == null)
             return;
 
-        if (dataMgr.gameData.isNew == false)
+        if (dataMgr.GameData.isNew == false)
         {
             StartCoroutine(WebChk());
             UIManager.Instance.SetActiveOfflineRewardNotice(true);
         }
         else
         {
-            dataMgr.gameData.isNew = false;
+            dataMgr.GameData.isNew = false;
         }
     }
 
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 string date = request.GetResponseHeader("date");
-                string offTime = dataMgr.gameData.saveTimeStr;
+                string offTime = dataMgr.GameData.saveTimeStr;
                 DateTime exitTime = Convert.ToDateTime(offTime);
 
                 //DateTime dateTime = DateTime.Parse(date).ToUniversalTime();
@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
 
     public void GetOffReward()
     {
-        dataMgr.gameData.soulGem += reward;
+        dataMgr.GameData.soulGem += reward;
 
         SoundManager.Instance.PlaySFX("Button");
         UIManager.Instance.SetActiveOfflineRewardNotice(false);
@@ -150,7 +150,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        //var _stageName = dataMgr.gameData.stageNameDic[_stageNum];
+        //var _stageName = dataMgr.GameData.stageNameDic[_stageNum];
         dataMgr.SetStageInfo(info);
         SceneManager.LoadSceneAsync("Battle", LoadSceneMode.Single);
     }
@@ -159,12 +159,12 @@ public class GameManager : MonoBehaviour
     {
         //재화 텍스트 애니메이션 효과
         float dia = Mathf.SmoothStep(_dia,
-            dataMgr.gameData.goodsList[(int)GoodsType.Dia].count, 0.5f);
+            dataMgr.GameData.goodsList[(int)GoodsType.Dia].count, 0.5f);
         float gold = Mathf.SmoothStep(_gold,
-            dataMgr.gameData.goodsList[(int)GoodsType.Gold].count, 0.5f);
+            dataMgr.GameData.goodsList[(int)GoodsType.Gold].count, 0.5f);
         float drink = Mathf.SmoothStep(_drink,
-            dataMgr.gameData.goodsList[(int)GoodsType.Stamina].count, 0.5f);
-        //float soulGem = Mathf.SmoothStep(_soulGem, dataMgr.gameData.soulGem, 0.5f);
+            dataMgr.GameData.goodsList[(int)GoodsType.Stamina].count, 0.5f);
+        //float soulGem = Mathf.SmoothStep(_soulGem, dataMgr.GameData.soulGem, 0.5f);
 
         _dia = (int)dia;
         _gold = (int)gold;
@@ -172,11 +172,11 @@ public class GameManager : MonoBehaviour
 
         //천 단위로 콤마(,) 삽입
 /*        moneyTxt[0].text = string.Format("{0:n0}",
-            dataMgr.gameData.goodsList[(int)GoodsType.Stamina].count);
+            dataMgr.GameData.goodsList[(int)GoodsType.Stamina].count);
         moneyTxt[1].text = string.Format("{0:n0}",
-            dataMgr.gameData.goodsList[(int)GoodsType.Gold].count);
+            dataMgr.GameData.goodsList[(int)GoodsType.Gold].count);
         moneyTxt[2].text = string.Format("{0:n0}",
-            dataMgr.gameData.goodsList[(int)GoodsType.Dia].count);*/
+            dataMgr.GameData.goodsList[(int)GoodsType.Dia].count);*/
     }
 
     private void CancelBtn() //인 게임 Cancel 동작

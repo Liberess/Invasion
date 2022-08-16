@@ -38,7 +38,7 @@ public class BackendFederationAuth : MonoBehaviour
                 }
 
                 Debug.Log("GetIDToken : " + PlayGamesPlatform.Instance.GetIdToken());
-                Debug.Log("Emain : " + ((PlayGamesLocalUser)Social.localUser).Email);
+                //Debug.Log("Email : " + ((PlayGamesLocalUser)Social.localUser).Email);
                 Debug.Log("GoogleID : " + Social.localUser.id);
                 Debug.Log("UserName : " + Social.localUser.userName);
                 Debug.Log("UserName : " + PlayGamesPlatform.Instance.GetUserDisplayName());

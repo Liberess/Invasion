@@ -250,10 +250,10 @@ public class BattleManager : MonoBehaviour
     #region Set UI (PlayTime, Cost, Leader)
     private void SetStageInfo()
     {
-        stageTxt.text = dataMgr.gameData.stageInfo.stageNum;
+        stageTxt.text = dataMgr.GameData.stageInfo.stageNum;
 
-        pauseStageInfoTxt.text = "STAGE " + dataMgr.gameData.stageInfo.stageName
-            + "\n" + dataMgr.gameData.stageInfo.stageNum;
+        pauseStageInfoTxt.text = "STAGE " + dataMgr.GameData.stageInfo.stageName
+            + "\n" + dataMgr.GameData.stageInfo.stageNum;
     }
 
     private void SetPlayTimeText()
@@ -429,17 +429,17 @@ public class BattleManager : MonoBehaviour
             reward.transform.SetParent(rewardGrid.transform);
             reward.transform.localScale = new Vector3(1, 1, 1);
             reward.transform.GetChild(0).GetComponent<Image>().sprite =
-                dataMgr.gameData.goodsSpriteList[(int)rewards[i].type];
+                dataMgr.GameData.goodsSpriteList[(int)rewards[i].type];
             reward.GetComponentInChildren<Text>().text = rewards[i].num.ToString();
 
-            dataMgr.gameData.SetGoods(rewards[i].type, rewards[i].num);
+            dataMgr.SetGoods(rewards[i].type, rewards[i].num);
         }
     }
 
     private Reward[] GetRewardDatabase()
     {
-        int stageIndex = int.Parse(dataMgr.gameData.stageInfo.stageNum.Split('-')[0]);
-        int levelIndex = int.Parse(dataMgr.gameData.stageInfo.stageNum.Split('-')[1]);
+        int stageIndex = int.Parse(dataMgr.GameData.stageInfo.stageNum.Split('-')[0]);
+        int levelIndex = int.Parse(dataMgr.GameData.stageInfo.stageNum.Split('-')[1]);
         return stageRewardDB.rewardDBList[stageIndex - 1].
             rewardDBList[levelIndex - 1].GetAllReward();
     }

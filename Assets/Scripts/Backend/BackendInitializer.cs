@@ -12,7 +12,6 @@ public class BackendInitializer : MonoBehaviour
         if(bro.IsSuccess())
         {
             Debug.Log(Backend.Utils.GetGoogleHash());
-            NoticeManager.Instance.Notice(Backend.Utils.GetGoogleHash());
         }
         else
         {

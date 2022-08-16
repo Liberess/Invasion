@@ -8,8 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class DataManager : MonoBehaviour
 {
-    private const string GameDataFileName = "/GameData.json";
-    private const string HeroDataFileName = "/HeroData.json";
+    private const string GameDataFileName = "GameData.json";
+    private const string HeroDataFileName = "HeroData.json";
 
     [Header("==== Hero Object Prefab ====")]
     [SerializeField] private GameObject heroPrefab;
@@ -21,35 +21,28 @@ public class DataManager : MonoBehaviour
     public static DataManager Instance { get; private set; }
 
     [Header("==== Game Data Information ===="), Space(10)]
-    [SerializeField] private GameData mGameData;
-    public GameData gameData
+    [SerializeField] private GameData m_GameData;
+    public GameData GameData
     {
         get
         {
-            if (mGameData == null)
-            {
+            if (m_GameData == null)
                 LoadGameData();
-                //SaveGameData();
-            }
 
-            return mGameData;
+            return m_GameData;
         }
     }
 
     [Header("==== Hero Data Information ===="), Space(10)]
-    [SerializeField] private HeroData mHeroData;
+    [SerializeField] private HeroData m_HeroData;
     public HeroData HeroData
     {
         get
         {
-            if (mHeroData == null)
-            {
+            if (m_HeroData == null)
                 LoadHeroData();
-                UpdateResources();
-                //SaveHeroData();
-            }
 
-            return mHeroData;
+            return m_HeroData;
         }
     }
 
@@ -72,47 +65,55 @@ public class DataManager : MonoBehaviour
 
         StartCoroutine(UpdateResources());
         LoadGameData();
+        LoadHeroData();
     }
 
     private void Start()
     {
         GameManager.Instance.OnApplicationStart();
 
-        LoadHeroData();
-
         SaveGameData();
         SaveHeroData();
     }
 
-    public void SetStageInfo(StageInfo info) => gameData.stageInfo = info;
-
-    public void SetMapUI()
-    {
-
-    }
+    public void SetStageInfo(StageInfo info) => GameData.stageInfo = info;
 
     #region Update Resources
     [ContextMenu("Update Resources")]
     public IEnumerator UpdateResources()
     {
-        UpdateGoodsData();
+        UpdateGoodsSprite();
         UpdateHeroSprite();
+        UpdateOriginHeroData();
         UpdateHeroAnimCtrl();
         UpdateHeroCardSprite();
         UpdateEnemyData();
         yield return null;
     }
 
-    private void UpdateGoodsData()
+    private void UpdateGoodsSprite()
     {
-        gameData.goodsSpriteList.Clear();
+        GameData.goodsSpriteList.Clear();
 
         Sprite[] temp = Resources.LoadAll<Sprite>("Goods");
 
         for (int i = 0; i < temp.Length; i++)
         {
             if (temp[i] != null)
-                gameData.goodsSpriteList.Add(temp[i]);
+                GameData.goodsSpriteList.Add(temp[i]);
+        }
+    }
+
+    private void UpdateOriginHeroData()
+    {
+        HeroData.originHeroDataList.Clear();
+
+        EnemyData[] temp = Resources.LoadAll<EnemyData>("Scriptable/OriginHeroData");
+
+        for (int i = 0; i < temp.Length; i++)
+        {
+            if (temp[i] != null)
+                HeroData.originHeroDataList.Add(temp[i].myStat);
         }
     }
 
@@ -174,21 +175,22 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
+    #region Hero List - Dic
     public void ConstructHeroDic()
     {
-        HeroData.heroDic = new Dictionary<string, UnitStatus>();
+        m_HeroData.heroDic = new Dictionary<string, UnitStatus>();
 
         //Json에 저장된 heroList안의 내용들을 heroDic에 저장
-        for (int i = 0; i < HeroData.heroList.Count; i++)
-            HeroData.heroDic.Add(HeroData.heroList[i].name, HeroData.heroList[i]);
+        for (int i = 0; i < m_HeroData.heroList.Count; i++)
+            m_HeroData.heroDic.Add(m_HeroData.heroList[i].name, m_HeroData.heroList[i]);
     }
 
     public void ResettingHeroList()
     {
-        HeroData.heroList.Clear();
+        m_HeroData.heroList.Clear();
 
-        for (int i = 0; i < HeroData.heroDic.Count; i++)
-            HeroData.heroList = new List<UnitStatus>(HeroData.heroDic.Values);
+        for (int i = 0; i < m_HeroData.heroDic.Count; i++)
+            m_HeroData.heroList = new List<UnitStatus>(m_HeroData.heroDic.Values);
     }
 
     /// <summary>
@@ -196,7 +198,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public bool IsContainsInParty(int id)
     {
-        foreach(var HeroData in HeroData.partyList)
+        foreach(var HeroData in m_HeroData.partyList)
         {
             if (HeroData.ID == id)
                 return true;
@@ -211,7 +213,7 @@ public class DataManager : MonoBehaviour
     /// <returns></returns>
     public bool IsValidInHeroListByIndex(int index)
     {
-        if (index < 0 || index >= HeroData.heroList.Count)
+        if (index < 0 || index >= m_HeroData.heroList.Count)
             return false;
 
         return true;
@@ -222,17 +224,17 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public int GetIndexOfHeroInParty(UnitStatus data)
     {
-        return Utility.FindIndexOf(HeroData.partyList, data);
+        return Utility.FindIndexOf(m_HeroData.partyList, data);
     }
 
     public int GetIndexOfHeroInList(UnitStatus data)
     {
-        return Utility.FindIndexOf(HeroData.heroList, data);
+        return Utility.FindIndexOf(m_HeroData.heroList, data);
     }
 
     public UnitStatus GetDataByHeroID(int id)
     {
-        foreach(var hero in HeroData.heroList)
+        foreach(var hero in m_HeroData.heroList)
         {
             if (hero.ID == id)
                 return hero;
@@ -252,7 +254,7 @@ public class DataManager : MonoBehaviour
                 throw new Exception("유효하지 않은 Index 값입니다.");
 
             UIManager.Instance.SetHeroIndex(index + 1);
-            return HeroData.heroList[index + 1];
+            return m_HeroData.heroList[index + 1];
         }
         else if(key == "Previous")
         {
@@ -260,7 +262,7 @@ public class DataManager : MonoBehaviour
                 throw new Exception("유효하지 않은 Index 값입니다.");
 
             UIManager.Instance.SetHeroIndex(index - 1);
-            return HeroData.heroList[index - 1];
+            return m_HeroData.heroList[index - 1];
         }
         else
         {
@@ -270,93 +272,123 @@ public class DataManager : MonoBehaviour
 
     public void SwapPartyData(int from, int to)
     {
-        Utility.SwapListElement(HeroData.partyList, from, to);
+        Utility.SwapListElement(m_HeroData.partyList, from, to);
     }
 
     public void UpdatePartyLeader()
     {
-        for(int i = 0; i < HeroData.partyList.Count; i++)
+        for (int i = 0; i < m_HeroData.partyList.Count; i++)
         {
             if (i == 0)
             {
-                HeroData.partyList[i].isLeader = true;
-                LeaderHero = HeroData.partyList[i];
+                m_HeroData.partyList[i].isLeader = true;
+                LeaderHero = m_HeroData.partyList[i];
             }
             else
             {
-                HeroData.partyList[i].isLeader = false;
+                m_HeroData.partyList[i].isLeader = false;
             }
         }
+    }
+    #endregion
+
+    public void GetGold()
+    {
+        try
+        {
+            SetGoods(GoodsType.Gold, 1000);
+            //GameData.goodsList[(int)GoodsType.Gold].count += 1000;
+        }
+        catch(Exception exp)
+        {
+            Debug.Log(exp);
+        }
+    }
+
+    public void SetGoods(GoodsType goodsType, int num)
+    {
+        if (m_GameData.goodsList.Count <= 0)
+            throw new Exception("goodsList is empty");
+
+        var count = m_GameData.goodsList[(int)goodsType].count;
+        if (count + num > int.MaxValue)
+            throw new Exception("Overflow Max Goods Value");
+        else if (count + num < 0)
+            throw new Exception("Insufficient Goods Value");
+        else
+            m_GameData.goodsList[(int)goodsType].count += num;
     }
 
     #region Hero Load & Save
     private void InitHeroData()
     {
         for (int i = 0; i < HeroData.HeroMaxSize; i++)
-            HeroData.heroUnlockList[i] = false;
+            m_HeroData.heroUnlockList[i] = false;
 
-        HeroData.heroDic.Clear();
-        HeroData.heroList.Clear();
-        HeroData.partyList.Clear();
+        m_HeroData.heroDic.Clear();
+        m_HeroData.heroList.Clear();
+        m_HeroData.partyList.Clear();
+
+        if (m_HeroData.originHeroDataList.Count <= 0)
+            UpdateOriginHeroData();
+
+        m_HeroData.heroUnlockList[0] = true;
+        m_HeroData.heroList.Add(m_HeroData.originHeroDataList[0]);
     }
 
     private void LoadHeroData()
     {
-        string filePath = Application.persistentDataPath + HeroDataFileName;
+        string filePath = Path.Combine(Application.persistentDataPath, HeroDataFileName);
 
         if (File.Exists(filePath))
         {
             string code = File.ReadAllText(filePath);
             byte[] bytes = Convert.FromBase64String(code);
             string FromJsonData = System.Text.Encoding.UTF8.GetString(bytes);
-            mHeroData = JsonUtility.FromJson<HeroData>(FromJsonData);
+            m_HeroData = JsonUtility.FromJson<HeroData>(FromJsonData);
 
-            for (int i = 0; i < HeroData.heroList.Count; i++)
+            for (int i = 0; i < m_HeroData.heroList.Count; i++)
             {
-                HeroData.heroList[i].mySprite = HeroData.heroSpriteList[HeroData.heroList[i].ID];
-                HeroData.heroList[i].animCtrl = HeroData.heroAnimCtrlList[HeroData.heroList[i].ID];
+                m_HeroData.heroList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.heroList[i].ID];
+                m_HeroData.heroList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.heroList[i].ID];
             }
 
-            for (int i = 0; i < HeroData.partyList.Count; i++)
+            for (int i = 0; i < m_HeroData.partyList.Count; i++)
             {
-                HeroData.partyList[i].mySprite = HeroData.heroSpriteList[HeroData.partyList[i].ID];
-                HeroData.partyList[i].animCtrl = HeroData.heroAnimCtrlList[HeroData.partyList[i].ID];
+                m_HeroData.partyList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.partyList[i].ID];
+                m_HeroData.partyList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.partyList[i].ID];
             }
 
             ConstructHeroDic();
 
-            for (int i = 0; i < HeroData.heroList.Count; i++)
+            for (int i = 0; i < m_HeroData.heroList.Count; i++)
             {
                 //만약 heroDic에 해당 heroList의 "Jelly0"가 있다면
-                var targetName = HeroData.heroList[i].name;
+                var targetName = m_HeroData.heroList[i].name;
 
-                if (!HeroData.heroDic.ContainsKey(targetName))
-                    HeroData.heroDic.Add(targetName, HeroData.heroList[i]);
+                if (!m_HeroData.heroDic.ContainsKey(targetName))
+                    m_HeroData.heroDic.Add(targetName, m_HeroData.heroList[i]);
             }
 
             if (SceneManager.GetActiveScene().name == "Lobby")
             {
-                for (int i = 0; i < HeroData.heroList.Count; i++)
+                for (int i = 0; i < m_HeroData.heroList.Count; i++)
                 {
                     var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
                         Quaternion.identity).GetComponent<LobbyHero>();
 
-                    var heroStat = HeroData.heroList[i];
+                    var heroStat = m_HeroData.heroList[i];
                     //heroStat.mySprite = HeroData.heroSpriteList[heroStat.ID];
                     //heroStat.animCtrl = HeroData.heroAnimCtrlList[heroStat.ID];
 
                     hero.UnitSetup(heroStat);
                 }
             }
-
-            //var newStat = new UnitStatus("나나", 0, 0, 1);
-            //HeroData.partyList.Add(newStat);
-            //HeroData.heroList.Add(newStat);
         }
         else
         {
-            mHeroData = new HeroData();
-            File.Create(Application.persistentDataPath + HeroDataFileName);
+            m_HeroData = new HeroData();
+            File.Create(filePath);
 
             InitHeroData();
         }
@@ -364,8 +396,9 @@ public class DataManager : MonoBehaviour
 
     private void SaveHeroData()
     {
-        string filePath = Application.persistentDataPath + HeroDataFileName;
-        string ToJsonData = JsonUtility.ToJson(HeroData);
+        string filePath = Path.Combine(Application.persistentDataPath, HeroDataFileName);
+
+        string ToJsonData = JsonUtility.ToJson(m_HeroData, true);
         byte[] bytes = System.Text.Encoding.UTF8.GetBytes(ToJsonData);
         string code = Convert.ToBase64String(bytes);
         File.WriteAllText(filePath, code);
@@ -375,40 +408,43 @@ public class DataManager : MonoBehaviour
     #region Game Load & Save
     private void InitGameData()
     {
-        gameData.goodsList.Clear();
+        string[] names = { "Stamina", "Gold", "Dia", "Awake Jewel" };
+        GameData.goodsNames.Initialize();
+        GameData.goodsNames = names;
 
-        for (int i = 0; i < gameData.goodsNames.Length; i++)
-            gameData.goodsList.Add(new Goods(gameData.goodsNames[i], 0));
+        GameData.goodsList.Clear();
+        for (int i = 0; i < GameData.goodsNames.Length; i++)
+            GameData.goodsList.Add(new Goods(GameData.goodsNames[i], 0));
 
-        gameData.soulGem = 0;
+        GameData.soulGem = 0;
 
-        for (int i = 0; i < gameData.facilGold.Length; i++)
-            gameData.facilGold[i] = 0;
+        for (int i = 0; i < GameData.facilGold.Length; i++)
+            GameData.facilGold[i] = 0;
 
-        gameData.sfx = 1f;
-        gameData.bgm = 1f;
+        GameData.sfx = 1f;
+        GameData.bgm = 1f;
 
-        gameData.isNew = true;
-        gameData.isClear = false;
+        GameData.isNew = true;
+        GameData.isClear = false;
 
-        gameData.saveTime = DateTime.Now;
+        GameData.saveTime = DateTime.Now;
     }
 
     private void LoadGameData()
     {
-        string filePath = Application.persistentDataPath + GameDataFileName;
+        string filePath = Path.Combine(Application.persistentDataPath, GameDataFileName);
 
         if (File.Exists(filePath))
         {
             string code = File.ReadAllText(filePath);
             byte[] bytes = Convert.FromBase64String(code);
             string FromJsonData = System.Text.Encoding.UTF8.GetString(bytes);
-            mGameData = JsonUtility.FromJson<GameData>(FromJsonData);
+            m_GameData = JsonUtility.FromJson<GameData>(FromJsonData);
         }
         else
         {
-            mGameData = new GameData();
-            File.Create(Application.persistentDataPath + GameDataFileName);
+            m_GameData = new GameData();
+            File.Create(filePath);
 
             InitGameData();
         }
@@ -416,18 +452,17 @@ public class DataManager : MonoBehaviour
 
     private void SaveGameData()
     {
-        string filePath = Application.persistentDataPath + GameDataFileName;
-
-        string ToJsonData = JsonUtility.ToJson(gameData);
+        string ToJsonData = JsonUtility.ToJson(m_GameData, true);
         byte[] bytes = System.Text.Encoding.UTF8.GetBytes(ToJsonData);
         string code = Convert.ToBase64String(bytes);
-        File.WriteAllText(filePath, code);
+        string path = Path.Combine(Application.persistentDataPath, GameDataFileName);
+        File.WriteAllText(path, code);
     }
 
     private void SaveTime()
     {
-        gameData.saveTime = DateTime.Now;
-        gameData.saveTimeStr = gameData.saveTime.ToString();
+        GameData.saveTime = DateTime.Now;
+        GameData.saveTimeStr = GameData.saveTime.ToString();
     }
     #endregion
 

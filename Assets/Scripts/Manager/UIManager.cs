@@ -92,6 +92,8 @@ public class UIManager : MonoBehaviour
         InitSortButton();
 
         StartCoroutine(InitHeroPanelCoru());
+
+        UpdateGoodsUIAction();
     }
 
     public void SetActivePauseUI()

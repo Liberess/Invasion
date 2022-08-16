@@ -52,15 +52,4 @@ public class GameData
 
     public bool isNew;
     public bool isClear;
-
-    public void SetGoods(GoodsType goodsType, int num)
-    {
-        var count = goodsList[(int)goodsType].count;
-        if (count + num > int.MaxValue)
-            throw new Exception("Overflow Max Goods Value");
-        else if(count - num < 0 )
-            throw new Exception("Insufficient Goods Value");
-        else
-            goodsList[(int)goodsType].count += num;
-    }
 }

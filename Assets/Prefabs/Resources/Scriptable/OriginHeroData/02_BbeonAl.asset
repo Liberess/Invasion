@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fd8d5bdadee9a4786aa3d05a0cf342, type: 3}
+  m_Name: 02_BbeonAl
+  m_EditorClassIdentifier: 
+  myStat:
+    ID: 2
+    name: "\uBF1D\uC54C\uC774"
+    level: 1
+    cost: 1
+    hp: 125
+    ap: 95
+    dp: 2
+    moveSpeed: 1
+    critical: 10
+    dodge: 8
+    distance: 1
+    attackDelay: 1
+    isLeader: 0
+    mySprite: {fileID: 2368519291515267928, guid: 402ef05d02e48754490fbaae171fe004,
+      type: 3}
+    animCtrl: {fileID: 9100000, guid: ca65ed5850760434e828b0a22e4cfd7a, type: 2}

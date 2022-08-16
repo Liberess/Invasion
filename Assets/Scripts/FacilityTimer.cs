@@ -22,7 +22,7 @@ public class FacilityTimer : MonoBehaviour
     {
         dataMgr = DataManager.Instance;
 
-        if (dataMgr.gameData.facilLimitTime == null)
+        if (dataMgr.GameData.facilLimitTime == null)
         {
             switch (ID)
             {
@@ -50,8 +50,8 @@ public class FacilityTimer : MonoBehaviour
                 case 6: myTime = 43200f; break;  //12시간
             }
 
-            limitTime = dataMgr.gameData.facilLimitTime[ID];
-            sliderTime = dataMgr.gameData.facilSliderTime[ID];
+            limitTime = dataMgr.GameData.facilLimitTime[ID];
+            sliderTime = dataMgr.GameData.facilSliderTime[ID];
         }
 
         ChangeTimerTxt();
@@ -84,14 +84,14 @@ public class FacilityTimer : MonoBehaviour
 
     public void SaveLimitTime()
     {
-        dataMgr.gameData.facilLimitTime[ID] = limitTime;
-        dataMgr.gameData.facilSliderTime[ID] = sliderTime;
+        dataMgr.GameData.facilLimitTime[ID] = limitTime;
+        dataMgr.GameData.facilSliderTime[ID] = sliderTime;
     }
 
     #region 타이머
     private void Timer()
     {
-        if(dataMgr.gameData.facilUnlockList[ID])
+        if(dataMgr.GameData.facilUnlockList[ID])
         {
             if (limitTime >= 0)
             {
@@ -124,43 +124,43 @@ public class FacilityTimer : MonoBehaviour
 
     public void FacilLvUp()
     {
-        dataMgr.gameData.facilLevelList[ID]++;
+        dataMgr.GameData.facilLevelList[ID]++;
 
         SetLvTxt();
         SetGoldTxt();
 
-        dataMgr.gameData.goodsList[(int)GoodsType.Gold].count -=
-            (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.gameData.facilLevelList[ID] + 1));
+        dataMgr.GameData.goodsList[(int)GoodsType.Gold].count -=
+            (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.GameData.facilLevelList[ID] + 1));
     }
 
     public void SetLvTxt()
     {
         if (ID != 2)
         {
-            lvTxt.text = FacilityManager.Instance.facilNameList[ID] + " Lv." + dataMgr.gameData.facilLevelList[ID].ToString();
+            lvTxt.text = FacilityManager.Instance.facilNameList[ID] + " Lv." + dataMgr.GameData.facilLevelList[ID].ToString();
         }
         else
         {
-            lvTxt.text = "Lv." + dataMgr.gameData.facilLevelList[ID].ToString();
+            lvTxt.text = "Lv." + dataMgr.GameData.facilLevelList[ID].ToString();
         }
     }
 
     public void SetGoldTxt()
     {
         /* FacilityManager.Instance.facilSliders[ID].transform.Find("MaxTxt").GetComponent<Text>().text
-            = (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.gameData.facilLevelList[ID] + 1)).ToString(); */
+            = (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.GameData.facilLevelList[ID] + 1)).ToString(); */
 
         string maxGold = (FacilityManager.Instance.facilGoldList[ID] *
-            (dataMgr.gameData.facilLevelList[ID] + 1)).ToString();
-        dataMgr.gameData.facilGold[ID] = int.Parse(maxGold);
+            (dataMgr.GameData.facilLevelList[ID] + 1)).ToString();
+        dataMgr.GameData.facilGold[ID] = int.Parse(maxGold);
         FacilityManager.Instance.facilSliders[ID].transform.Find("MaxTxt").GetComponent<Text>().text
             = maxGold;
 
-        string upGold = (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.gameData.facilLevelList[ID] + 1)).ToString();
+        string upGold = (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.GameData.facilLevelList[ID] + 1)).ToString();
         upBtn.transform.Find("PlusGoldTxt").GetComponent<Text>().text
             = "+" + upGold;
 
-        string needGold = (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.gameData.facilLevelList[ID] + 1)).ToString();
+        string needGold = (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.GameData.facilLevelList[ID] + 1)).ToString();
         upBtn.transform.Find("NeedGoldTxt").GetComponent<Text>().text
             = needGold;
     }
@@ -174,8 +174,8 @@ public class FacilityTimer : MonoBehaviour
         rewardBtn.image.enabled = false;
         rewardBtn.transform.Find("Text").gameObject.SetActive(false);
 
-        dataMgr.gameData.goodsList[(int)GoodsType.Gold].count +=
-            FacilityManager.Instance.facilGoldList[ID] * (dataMgr.gameData.facilLevelList[ID] + 1);
+        dataMgr.GameData.goodsList[(int)GoodsType.Gold].count +=
+            FacilityManager.Instance.facilGoldList[ID] * (dataMgr.GameData.facilLevelList[ID] + 1);
     }
 
     private void OnApplicationPause(bool pause)

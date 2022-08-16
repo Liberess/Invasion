@@ -62,9 +62,9 @@ public class FacilityManager : MonoBehaviour
 
     public void Change()
     {
-        for(int i = 0; i < DataManager.Instance.gameData.facilUnlockList.Length; i++)
+        for(int i = 0; i < DataManager.Instance.GameData.facilUnlockList.Length; i++)
         {
-            if (DataManager.Instance.gameData.facilUnlockList[i] == false)
+            if (DataManager.Instance.GameData.facilUnlockList[i] == false)
             {
                 locks[i].SetActive(true);
             }
