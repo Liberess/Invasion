@@ -7,10 +7,10 @@ using GooglePlayGames.BasicApi;
 
 public class BackendFederationAuth : MonoBehaviour
 {
-    private void Start()
+    public void SetupGPGS()
     {
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration
-            .Builder()
+                .Builder()
             .RequestServerAuthCode(false)
             .RequestEmail()
             .RequestIdToken()
@@ -20,11 +20,30 @@ public class BackendFederationAuth : MonoBehaviour
         PlayGamesPlatform.DebugLogEnabled = false;
 
         PlayGamesPlatform.Activate();
-        GoogleAuth();
+        GPGSLogin();
     }
 
-    private void GoogleAuth()
+    private void GPGSLogin()
     {
+        if (Social.localUser.authenticated == true)
+        {
+            BackendLoginWithGPGS();
+        }
+        else
+        {
+            Social.localUser.Authenticate((bool success) =>
+            {
+                if (success)
+                {
+                    BackendLoginWithGPGS();
+                }
+                else
+                {
+                    Debug.Log("Login failed for some reason");
+                }
+            });
+        }
+        
         if (PlayGamesPlatform.Instance.localUser.authenticated == false)
         {
             Social.localUser.Authenticate(Success =>
@@ -38,12 +57,21 @@ public class BackendFederationAuth : MonoBehaviour
                 }
 
                 Debug.Log("GetIDToken : " + PlayGamesPlatform.Instance.GetIdToken());
-                //Debug.Log("Email : " + ((PlayGamesLocalUser)Social.localUser).Email);
+                Debug.Log("Email : " + ((PlayGamesLocalUser)Social.localUser).Email);
                 Debug.Log("GoogleID : " + Social.localUser.id);
                 Debug.Log("UserName : " + Social.localUser.userName);
                 Debug.Log("UserName : " + PlayGamesPlatform.Instance.GetUserDisplayName());
             });
         }
+        else
+        {
+            Debug.Log("이미 구글 로그인 함");
+        }
+    }
+    
+    public void OnClickGPGSLogin()
+    {
+        GPGSLogin();
     }
 
     private string GetTokens()
@@ -56,21 +84,19 @@ public class BackendFederationAuth : MonoBehaviour
         else
         {
             Debug.Log("접속되어있지 않습니다. 잠시 후 다시 시도하세요.");
-            //BackEndManager.Instance.logErrorTxt.text = "접속되어있지 않습니다. 잠시 후 다시 시도하세요.";
-            GoogleAuth();
             return null;
         }
     }
 
-    public void OnClickGPGSLogin()
+    private void BackendLoginWithGPGS()
     {
-        BackendReturnObject BRO = Backend.BMember.AuthorizeFederation(GetTokens(), FederationType.Google, "GPGS로 만든 계정");
+        Debug.Log("BackendLoginWithGPGS");
+        BackendReturnObject BRO = Backend.BMember.AuthorizeFederation(
+            GetTokens(), FederationType.Google, "gpgs");
 
         if (BRO.IsSuccess())
         {
             Debug.Log("구글 토큰으로 뒤끝서버 로그인 성공 (동기 방식)");
-            NoticeManager.Instance.Notice("구글 토큰으로 뒤끝서버 로그인 성공 (동기 방식)");
-            //BackEndManager.Instance.logTxt.text = "구글 토큰으로 뒤끝서버 로그인 성공 (동기 방식)";
         }
         else
         {
@@ -78,20 +104,17 @@ public class BackendFederationAuth : MonoBehaviour
             {
                 case "200":
                     Debug.Log("이미 회원가입된 회원입니다.");
-                    //BackEndManager.Instance.logErrorTxt.text = "이미 회원가입된 회원입니다.";
                     break;
                 case "403":
                     Debug.Log("차단된 사용자입니다. 차단 사유 : " + BRO.GetErrorCode());
-                    //BackEndManager.Instance.logErrorTxt.text = "차단된 사용자입니다. 차단 사유 : " + BRO.GetErrorCode();
                     break;
                 default:
                     Debug.Log("서버 공통 에러 발생 : " + BRO.GetMessage());
-                    //BackEndManager.Instance.logErrorTxt.text = "서버 공통 에러 발생 : " + BRO.GetMessage();
                     break;
             }
         }
     }
-
+    
     //이미 가입한 회원의 이메일 정보 저장
     public void OnClickUpdateEmail()
     {
@@ -100,19 +123,16 @@ public class BackendFederationAuth : MonoBehaviour
         if (BRO.IsSuccess())
         {
             Debug.Log("이메일 주소 저장 완료");
-            //BackEndManager.Instance.logTxt.text = "이메일 주소 저장 완료";
         }
         else
         {
             if (BRO.GetStatusCode() == "404")
             {
                 Debug.Log("FederationID not found, Federation을 찾을 수 없습니다.");
-                //BackEndManager.Instance.logErrorTxt.text = "FederationID not found, Federation을 찾을 수 없습니다.";
             }
             else
             {
                 Debug.Log("서버 공통 에러 발생 : " + BRO.GetMessage());
-                //BackEndManager.Instance.logErrorTxt.text = "서버 공통 에러 발생 : " + BRO.GetMessage();
             }
         }
     }

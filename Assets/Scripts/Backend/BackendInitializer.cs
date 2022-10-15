@@ -1,17 +1,22 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BackEnd;
 
 public class BackendInitializer : MonoBehaviour
 {
-    private void Start()
+    private void Awake()
     {
         var bro = Backend.Initialize(true);
 
         if(bro.IsSuccess())
         {
             Debug.Log(Backend.Utils.GetGoogleHash());
+            
+            var federationAuth = GetComponent<BackendFederationAuth>();
+            if (federationAuth != null)
+                federationAuth.SetupGPGS();
         }
         else
         {

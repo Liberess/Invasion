@@ -1,9 +1,9 @@
 lastUpgrade=01014
 proj.pluginVersion=0.10.14
-proj.AppId=861668927683
+proj.AppId=549545148168
 and.BundleId=com.copiasoft.invasion
 proj.classDir=Assets
 proj.ConstantsClassName=GPGSIds
-and.ResourceData=%3c%3fxml+version%3d%221.0%22+encoding%3d%22utf-8%22%3f%3e%0d%0a%3c%21--Google+Play+game+services+IDs.+Save+this+file+as+res%2fvalues%2fgames-ids.xml+in+your+project.--%3e%0d%0a%3cresources%3e%0d%0a++%3c%21--app_id--%3e%0d%0a++%3cstring+name%3d%22app_id%22+translatable%3d%22false%22%3e861668927683%3c%2fstring%3e%0d%0a++%3c%21--package_name--%3e%0d%0a++%3cstring+name%3d%22package_name%22+translatable%3d%22false%22%3ecom.copiasoft.invasion%3c%2fstring%3e%0d%0a++%3c%21--achievement+InvasionAchievement--%3e%0d%0a++%3cstring+name%3d%22achievement_invasionachievement%22+translatable%3d%22false%22%3eCgkIw9Hh-4kZEAIQAA%3c%2fstring%3e%0d%0a%3c%2fresources%3e
-and.ClientId=861668927683-8bdok9dimahih1p3st5cjd2fp4lcjk88.apps.googleusercontent.com
+and.ResourceData=%3c%3fxml+version%3d%221.0%22+encoding%3d%22utf-8%22%3f%3e%0d%0a%3c%21--Google+Play+game+services+IDs.+Save+this+file+as+res%2fvalues%2fgames-ids.xml+in+your+project.--%3e%0d%0a%3cresources%3e%0d%0a++%3c%21--app_id--%3e%0d%0a++%3cstring+name%3d%22app_id%22+translatable%3d%22false%22%3e549545148168%3c%2fstring%3e%0d%0a++%3c%21--package_name--%3e%0d%0a++%3cstring+name%3d%22package_name%22+translatable%3d%22false%22%3ecom.copiasoft.invasion%3c%2fstring%3e%0d%0a++%3c%21--achievement+%ed%85%8c%ec%8a%a4%ed%8a%b8+%ec%97%85%ec%a0%81--%3e%0d%0a++%3cstring+name%3d%22achievement%22+translatable%3d%22false%22%3eCgkIiP7Fm_8PEAIQAA%3c%2fstring%3e%0d%0a%3c%2fresources%3e
+and.ClientId=549545148168-la91u5sgos4dsc62cep6kcectf56hp8g.apps.googleusercontent.com
 android.SetupDone=true
