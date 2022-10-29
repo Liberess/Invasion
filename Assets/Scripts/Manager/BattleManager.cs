@@ -469,7 +469,7 @@ public class BattleManager : MonoBehaviour
 
     public void OnClickQuitBtn()
     {
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("Lobby");
     }
 
     private void OnClickHeroCard(int index)

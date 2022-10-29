@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public enum GoodsType
@@ -8,8 +9,8 @@ public enum GoodsType
     Stamina = 0,
     Gold,
     Dia,
-    AwakeJewel,      //각성석
-    EvolutionJewel  //진화석
+    AwakeJewel      //각성석
+    //EvolutionJewel  //진화석
 }
 
 [System.Serializable]
@@ -40,16 +41,43 @@ public class GameData
     public float[] facilLimitTime = new float[7];
     public float[] facilSliderTime = new float[7];
 
-    public List<Goods> goodsList = new List<Goods>();
+    [SerializeField] private List<Goods> goodsList = new List<Goods>();
+
+    public List<Goods> GoodsList
+    {
+        get => goodsList;
+        
+        set
+        {
+            goodsList = value;
+            
+            if (UIManager.Instance)
+                UIManager.Instance.UpdateGoodsUIAction();
+        }
+    }
+
+    public void SetElementInGoodsList(int goodsIndex, int value)
+    {
+        goodsList[goodsIndex].count = value;
+        
+        if (UIManager.Instance)
+            UIManager.Instance.UpdateGoodsUIAction();
+    }
+    
+    public void AddElementInGoodsList(int goodsIndex, int value)
+    {
+        goodsList[goodsIndex].count += value;
+        
+        if (UIManager.Instance)
+            UIManager.Instance.UpdateGoodsUIAction();
+    }
+    
     public List<Sprite> goodsSpriteList = new List<Sprite>();
     [HideInInspector] public string[] goodsNames =
         { "Stamina", "Gold", "Dia", "Awake Jewel" };
-
-    public int soulGem;
 
     public float bgm;
     public float sfx;
 
     public bool isNew;
-    public bool isClear;
 }

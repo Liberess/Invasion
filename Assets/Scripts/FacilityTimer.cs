@@ -129,7 +129,7 @@ public class FacilityTimer : MonoBehaviour
         SetLvTxt();
         SetGoldTxt();
 
-        dataMgr.GameData.goodsList[(int)GoodsType.Gold].count -=
+        dataMgr.GameData.GoodsList[(int)GoodsType.Gold].count -=
             (FacilityManager.Instance.facilGoldList[ID] * (dataMgr.GameData.facilLevelList[ID] + 1));
     }
 
@@ -174,7 +174,7 @@ public class FacilityTimer : MonoBehaviour
         rewardBtn.image.enabled = false;
         rewardBtn.transform.Find("Text").gameObject.SetActive(false);
 
-        dataMgr.GameData.goodsList[(int)GoodsType.Gold].count +=
+        dataMgr.GameData.GoodsList[(int)GoodsType.Gold].count +=
             FacilityManager.Instance.facilGoldList[ID] * (dataMgr.GameData.facilLevelList[ID] + 1);
     }
 

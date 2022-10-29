@@ -5,30 +5,7 @@ using UnityEngine;
 public class BackendManager : MonoBehaviour
 {
     private static BackendManager m_Instance;
-    public static BackendManager Instance
-    {
-        get
-        {
-            if (!m_Instance)
-            {
-                m_Container = new GameObject();
-                m_Container.name = "BackendManager";
-                m_Instance = m_Container.AddComponent(
-                    typeof(BackendManager)) as BackendManager;
-                m_Instance = m_Container.AddComponent(
-                    typeof(BackendInitializer)) as BackendManager;
-                m_Instance = m_Container.AddComponent(
-                    typeof(BackendFederationAuth)) as BackendManager;
-                m_Instance = m_Container.AddComponent(
-                    typeof(BackendChart)) as BackendManager;
-                DontDestroyOnLoad(m_Container);
-            }
-
-            return m_Instance;
-        }
-    }
-
-    private static GameObject m_Container;
+    public static BackendManager Instance { get => m_Instance; }
 
     public BackendInitializer BkendInizer { get; private set; }
     public BackendFederationAuth BkendFedAuth { get; private set; }
@@ -36,9 +13,24 @@ public class BackendManager : MonoBehaviour
 
     private void Awake()
     {
+        if (m_Instance == null)
+        {
+            m_Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else if (m_Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        
         BkendInizer = GetComponent<BackendInitializer>();
+        BkendInizer.enabled = true;
+        
         BkendFedAuth = GetComponent<BackendFederationAuth>();
+        BkendFedAuth.enabled = true;
+        
         BkendChart = GetComponent<BackendChart>();
+        BkendChart.enabled = true;
     }
 
     private void Start()

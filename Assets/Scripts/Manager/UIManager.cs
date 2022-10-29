@@ -92,7 +92,12 @@ public class UIManager : MonoBehaviour
         InitSortButton();
 
         StartCoroutine(InitHeroPanelCoru());
+        StartCoroutine(UpdateGoodsUICo(0.5f));
+    }
 
+    private IEnumerator UpdateGoodsUICo(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         UpdateGoodsUIAction();
     }
 

@@ -112,7 +112,7 @@ public class OldHero : MonoBehaviour
     #region 재화 습득(Karma, Gold)
     IEnumerator SetSoulGem()
     {
-        DataManager.Instance.GameData.soulGem += mID + 1 * mLevel;
+        //DataManager.Instance.GameData.soulGem += mID + 1 * mLevel;
 
         yield return new WaitForSeconds(3f);
 

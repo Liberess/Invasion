@@ -51,7 +51,7 @@ public class BackendFederationAuth : MonoBehaviour
                 if (Success == false)
                 {
                     Debug.Log("구글 로그인 실패");
-                    NoticeManager.Instance.Notice("구글 로그인 실패");
+                    //NoticeManager.Instance.Notice("구글 로그인 실패");
                     //BackEndManager.Instance.logErrorTxt.text = "구글 로그인 실패";
                     return;
                 }

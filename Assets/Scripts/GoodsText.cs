@@ -24,12 +24,12 @@ public class GoodsText : MonoBehaviour
     {
         try
         {
-            text.text = string.Format("{0:n0}", DataManager.Instance.GameData.
-                goodsList[(int)goodsType].count);
+            text.text = string.Format("{0:n0}",
+                DataManager.Instance.GameData.GoodsList[(int)goodsType].count);
         }
         catch
         {
-
+            
         }
 
     }

@@ -74,6 +74,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void OnClickGetGold()
+    {
+        DataManager.Instance.GetGold();
+    }
+
     #region 오프라인 시간
     private IEnumerator WebChk()
     {
@@ -135,7 +140,7 @@ public class GameManager : MonoBehaviour
 
     public void GetOffReward()
     {
-        dataMgr.GameData.soulGem += reward;
+        //dataMgr.GameData.soulGem += reward;
 
         SoundManager.Instance.PlaySFX("Button");
         UIManager.Instance.SetActiveOfflineRewardNotice(false);
@@ -159,11 +164,11 @@ public class GameManager : MonoBehaviour
     {
         //재화 텍스트 애니메이션 효과
         float dia = Mathf.SmoothStep(_dia,
-            dataMgr.GameData.goodsList[(int)GoodsType.Dia].count, 0.5f);
+            dataMgr.GameData.GoodsList[(int)GoodsType.Dia].count, 0.5f);
         float gold = Mathf.SmoothStep(_gold,
-            dataMgr.GameData.goodsList[(int)GoodsType.Gold].count, 0.5f);
+            dataMgr.GameData.GoodsList[(int)GoodsType.Gold].count, 0.5f);
         float drink = Mathf.SmoothStep(_drink,
-            dataMgr.GameData.goodsList[(int)GoodsType.Stamina].count, 0.5f);
+            dataMgr.GameData.GoodsList[(int)GoodsType.Stamina].count, 0.5f);
         //float soulGem = Mathf.SmoothStep(_soulGem, dataMgr.GameData.soulGem, 0.5f);
 
         _dia = (int)dia;
