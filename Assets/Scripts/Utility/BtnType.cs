@@ -7,20 +7,21 @@ using UnityEngine.SceneManagement;
 
 public enum EBtnType
 {
-    New,
-    Load,
-    Save,
+    GPGSLogin,
+    GPGSLogout,
+    QuitGame,
+    InitializedData,
     Option,
-    Back,
-    Main,
-    Exit,
-    Restart,
-    BackDungeon,
-    KarmaDungeon
+    CloseUI,
+    GoToMain,
+    RestartBattle,
+    PlayFabLogin
 }
 
 public class BtnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    private PlayFabManager playFabMgr;
+
     public EBtnType crtType;
     public Transform btnScale;
 
@@ -47,6 +48,8 @@ public class BtnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void Start()
     {
+        playFabMgr = PlayFabManager.Instance;
+
         defaultScale = btnScale.localScale;
         if (defaultScale == Vector3.zero)
             defaultScale = Vector3.one;
@@ -61,29 +64,31 @@ public class BtnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         switch (crtType)
         {
-            case EBtnType.New:
-                //SceneLoad.LoadSceneHandle(3, 1);
+            case EBtnType.GPGSLogin:
+                playFabMgr.StartCoroutine(playFabMgr.GoogleLogInCo());
                 break;
-            case EBtnType.Load:
-                //gameManager.GameLoad();
+            case EBtnType.GPGSLogout:
+                playFabMgr.StartCoroutine(playFabMgr.GoogleLogOutCo());
                 break;
-            case EBtnType.Save:
-                //gameManager.GameSave();
-                break;
-            case EBtnType.Main:
-                //SceneLoad.LoadSceneHandle(1, 0);
-                break;
-            case EBtnType.Exit:
+            case EBtnType.QuitGame:
                 Application.Quit();
                 break;
-            case EBtnType.Restart:
+            case EBtnType.InitializedData:
+                DataManager.Instance.InitializedData();
+                //SceneLoad.LoadSceneHandle(3, 1);
+                break;
+            case EBtnType.Option:
+                break;
+            case EBtnType.CloseUI:
+                break;
+            case EBtnType.GoToMain:
+                //SceneLoad.LoadSceneHandle(1, 0);
+                break;
+            case EBtnType.RestartBattle:
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 break;
-            case EBtnType.BackDungeon:
-                //SceneManager.LoadScene(0);
-                break;
-            case EBtnType.KarmaDungeon:
-                //SceneManager.LoadScene("Karma");
+            case EBtnType.PlayFabLogin:
+                playFabMgr.StartCoroutine(playFabMgr.PlayFabLogInCo());
                 break;
         }
 

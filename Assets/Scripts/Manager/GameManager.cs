@@ -151,7 +151,7 @@ public class GameManager : MonoBehaviour
     {
         if(dataMgr.HeroData.partyList.Count <= 0)
         {
-            NoticeManager.Instance.Notice(NoticeType.NotParty);
+            PopUpManager.Instance.PopUp("파티 정보가 없습니다!", EPopUpType.Caution);
             return;
         }
 

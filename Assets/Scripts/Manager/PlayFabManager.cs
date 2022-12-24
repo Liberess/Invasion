@@ -15,6 +15,19 @@ public class PlayFabManager : MonoBehaviour
 
     private void Awake()
     {
+        if(Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        if (string.IsNullOrEmpty(PlayFabSettings.staticSettings.TitleId))
+            PlayFabSettings.staticSettings.TitleId = "76E48";
+
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
     }
@@ -39,7 +52,7 @@ public class PlayFabManager : MonoBehaviour
             else
             {
                 Debug.Log("구글 로그인 실패");
-                popUpMgr.PopUp("구글 로그인 실패!\nawdawd\nawdawd\nwadawd", EPopUpType.Caution);
+                popUpMgr.PopUp("구글 로그인 실패!", EPopUpType.Caution);
             }
         });
 
@@ -64,6 +77,7 @@ public class PlayFabManager : MonoBehaviour
         };
 
         PlayFabClientAPI.LoginWithEmailAddress(request, OnLogInSuccess, OnLogInFailure);
+
         yield return null;
     }
 
@@ -76,6 +90,11 @@ public class PlayFabManager : MonoBehaviour
         StartCoroutine(LoadDataCo());
     }
 
+    private void OnLogInFailure(PlayFabError error)
+    {
+        StartCoroutine(PlayFabRegisterCo());
+    }
+
     private IEnumerator LoadDataCo()
     {
         yield return DataManager.Instance.StartCoroutine(DataManager.Instance.LoadDataCo());
@@ -83,13 +102,7 @@ public class PlayFabManager : MonoBehaviour
         yield return null;
     }
 
-    private void OnLogInFailure(PlayFabError error)
-    {
-        Debug.Log("플레이팹 로그인 실패");
-        popUpMgr.PopUp("플레이팹 로그인 실패!", EPopUpType.Caution);
-    }
-
-    public IEnumerator PlayFabRegister()
+    public IEnumerator PlayFabRegisterCo()
     {
         var request = new RegisterPlayFabUserRequest
         {

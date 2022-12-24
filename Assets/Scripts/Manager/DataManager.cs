@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using PlayFab.ClientModels;
 using PlayFab;
+using GooglePlayGames;
 
 public class DataManager : MonoBehaviour
 {
@@ -480,7 +481,10 @@ public class DataManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        SaveTime();
-        SaveData();
+        if(Social.localUser.authenticated)
+        {
+            SaveTime();
+            SaveData();
+        }
     }
 }

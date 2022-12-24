@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TitleId: 76E48
   DeveloperSecretKey: 3B3TE13BJUBQUBZ47BXG71G5GCX9AHKYHXTJ68KN5TZPCEEUHX
-  ProductionEnvironmentUrl: .playfabapi.com
+  ProductionEnvironmentUrl: https://76E48.playfabapi.com
   RequestType: 0
   DisableDeviceInfo: 0
   DisableFocusTimeCollection: 0
