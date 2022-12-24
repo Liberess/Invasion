@@ -43,7 +43,7 @@ public class BackendFederationAuth : MonoBehaviour
                 }
             });
         }
-        
+
         if (PlayGamesPlatform.Instance.localUser.authenticated == false)
         {
             Social.localUser.Authenticate(Success =>
@@ -68,7 +68,7 @@ public class BackendFederationAuth : MonoBehaviour
             Debug.Log("이미 구글 로그인 함");
         }
     }
-    
+
     public void OnClickGPGSLogin()
     {
         GPGSLogin();
@@ -114,7 +114,7 @@ public class BackendFederationAuth : MonoBehaviour
             }
         }
     }
-    
+
     //이미 가입한 회원의 이메일 정보 저장
     public void OnClickUpdateEmail()
     {

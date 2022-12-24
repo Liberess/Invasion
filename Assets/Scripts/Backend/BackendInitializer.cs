@@ -14,9 +14,9 @@ public class BackendInitializer : MonoBehaviour
         {
             Debug.Log(Backend.Utils.GetGoogleHash());
             
-            var federationAuth = GetComponent<BackendFederationAuth>();
+  /*          var federationAuth = GetComponent<BackendFederationAuth>();
             if (federationAuth != null)
-                federationAuth.SetupGPGS();
+                federationAuth.SetupGPGS();*/
         }
         else
         {
