@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    [SerializeField] private BackendManager backendMgr;
+    private PlayFabManager playFabMgr;
     private DataManager dataMgr;
 
     private string url = "www.naver.com";
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     {
         dataMgr = DataManager.Instance;
 
-        backendMgr = BackendManager.Instance;
+        playFabMgr = PlayFabManager.Instance;
 
         //_soulGem = (int)dataMgr.GameData.soulGem;
         //_gold = dataMgr.GameData.gold;
@@ -164,11 +164,11 @@ public class GameManager : MonoBehaviour
     {
         //재화 텍스트 애니메이션 효과
         float dia = Mathf.SmoothStep(_dia,
-            dataMgr.GameData.GoodsList[(int)GoodsType.Dia].count, 0.5f);
+            dataMgr.GameData.GoodsList[(int)EGoodsType.Dia].count, 0.5f);
         float gold = Mathf.SmoothStep(_gold,
-            dataMgr.GameData.GoodsList[(int)GoodsType.Gold].count, 0.5f);
+            dataMgr.GameData.GoodsList[(int)EGoodsType.Gold].count, 0.5f);
         float drink = Mathf.SmoothStep(_drink,
-            dataMgr.GameData.GoodsList[(int)GoodsType.Stamina].count, 0.5f);
+            dataMgr.GameData.GoodsList[(int)EGoodsType.Stamina].count, 0.5f);
         //float soulGem = Mathf.SmoothStep(_soulGem, dataMgr.GameData.soulGem, 0.5f);
 
         _dia = (int)dia;
@@ -177,11 +177,11 @@ public class GameManager : MonoBehaviour
 
         //천 단위로 콤마(,) 삽입
 /*        moneyTxt[0].text = string.Format("{0:n0}",
-            dataMgr.GameData.goodsList[(int)GoodsType.Stamina].count);
+            dataMgr.GameData.goodsList[(int)EGoodsType.Stamina].count);
         moneyTxt[1].text = string.Format("{0:n0}",
-            dataMgr.GameData.goodsList[(int)GoodsType.Gold].count);
+            dataMgr.GameData.goodsList[(int)EGoodsType.Gold].count);
         moneyTxt[2].text = string.Format("{0:n0}",
-            dataMgr.GameData.goodsList[(int)GoodsType.Dia].count);*/
+            dataMgr.GameData.goodsList[(int)EGoodsType.Dia].count);*/
     }
 
     private void CancelBtn() //인 게임 Cancel 동작

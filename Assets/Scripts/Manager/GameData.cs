@@ -4,7 +4,7 @@ using System.Numerics;
 using JetBrains.Annotations;
 using UnityEngine;
 
-public enum GoodsType
+public enum EGoodsType
 {
     Stamina = 0,
     Gold,

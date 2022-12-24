@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class GoodsText : MonoBehaviour
 {
-    [SerializeField] private GoodsType goodsType;
-    public GoodsType GoodsType { get => goodsType; }
+    [SerializeField] private EGoodsType goodsType;
+    public EGoodsType GoodsType { get => goodsType; }
 
     private Text text;
 

@@ -296,8 +296,8 @@ public class DataManager : MonoBehaviour
     {
         try
         {
-            SetGoods(GoodsType.Gold, 1000);
-            //GameData.goodsList[(int)GoodsType.Gold].count += 1000;
+            SetGoods(EGoodsType.Gold, 1000);
+            //GameData.goodsList[(int)EGoodsType.Gold].count += 1000;
         }
         catch(Exception exp)
         {
@@ -305,19 +305,19 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void SetGoods(GoodsType goodsType, int num)
+    public void SetGoods(EGoodsType EGoodsType, int num)
     {
         if (m_GameData.GoodsList.Count <= 0)
             throw new Exception("goodsList is empty");
 
-        var count = m_GameData.GoodsList[(int)goodsType].count;
+        var count = m_GameData.GoodsList[(int)EGoodsType].count;
         if (count + num > int.MaxValue)
             throw new Exception("Overflow Max Goods Value");
         else if (count + num < 0)
             throw new Exception("Insufficient Goods Value");
         else
-            m_GameData.AddElementInGoodsList((int)goodsType, num);
-            //m_GameData.GoodsList[(int)goodsType].count += num;
+            m_GameData.AddElementInGoodsList((int)EGoodsType, num);
+            //m_GameData.GoodsList[(int)EGoodsType].count += num;
     }
 
     public void InitializedData()
@@ -415,29 +415,18 @@ public class DataManager : MonoBehaviour
     #region Game Load & Save
     private void InitGameData()
     {
-        if (m_GameData.goodsNames == null)
+        string[] names = { "Stamina", "Gold", "Dia", "Awake Jewel" };
+        m_GameData.goodsNames.Initialize();
+        m_GameData.goodsNames = names;
+
+        m_GameData.GoodsList.Clear();
+        m_GameData.GoodsList = new List<Goods>();
+        for (int i = 0; i < GameData.goodsNames.Length; i++)
         {
-            string[] names = { "Stamina", "Gold", "Dia", "Awake Jewel" };
-            m_GameData.goodsNames.Initialize();
-            m_GameData.goodsNames = names;
+            m_GameData.GoodsList.Add(new Goods(GameData.goodsNames[i], 0));
+            m_GameData.SetElementInGoodsList(i, 0);
         }
 
-        if (m_GameData.GoodsList == null)
-        {
-            m_GameData.GoodsList.Clear();
-            m_GameData.GoodsList = new List<Goods>();
-            for (int i = 0; i < GameData.goodsNames.Length; i++)
-            {
-                m_GameData.GoodsList.Add(new Goods(GameData.goodsNames[i], 0));
-                m_GameData.SetElementInGoodsList(i, 0);
-            }
-        }
-        else
-        {
-            for (int i = 0; i < GameData.goodsNames.Length; i++)
-                m_GameData.SetElementInGoodsList(i, 0);
-        }
-        
         for (int i = 0; i < m_GameData.facilGold.Length; i++)
             m_GameData.facilGold[i] = 0;
 
