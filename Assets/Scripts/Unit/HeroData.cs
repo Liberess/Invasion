@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class HeroData
 {
+    public bool isLoadComplete = false;
     public const int HeroMaxSize = 11;
 
     public bool[] heroUnlockList = new bool[HeroMaxSize];

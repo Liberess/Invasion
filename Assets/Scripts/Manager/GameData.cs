@@ -29,6 +29,7 @@ public class Goods
 [System.Serializable]
 public class GameData
 {
+    public bool isLoadComplete = false;
     public string saveTimeStr;
     public DateTime saveTime;
 

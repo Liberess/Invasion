@@ -65,6 +65,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -74,8 +76,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -96,9 +98,12 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
   applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
@@ -468,6 +473,21 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      Man_Die_3: 5388803828461002019
+      Man_Walk_3: 6146765075070113607
+      Man_Die_1: 5224013421481538002
+      Man_Idle_5: -526423914407090313
+      Man_Idle_1: -2250128633291984448
+      Man_Die_2: 6081756889002796704
+      Man_Idle_4: -761530471776030657
+      Man_Idle_0: 5207544987158716770
+      Man_Idle_2: -672509754820783249
+      Man_Walk_2: -3907811233784148841
+      Man_Idle_3: -5657222779149273551
+      Man_Walk_1: -4532698330198780497
+      Man_Walk_0: 5427590300147334247
+      Man_Die_0: -3331590989316002027
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

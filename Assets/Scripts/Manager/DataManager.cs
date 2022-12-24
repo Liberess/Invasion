@@ -5,12 +5,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using PlayFab.ClientModels;
+using PlayFab;
 
 public class DataManager : MonoBehaviour
 {
-    private const string GameDataFileName = "GameData.json";
-    private const string HeroDataFileName = "HeroData.json";
-
     [Header("==== Hero Object Prefab ====")]
     [SerializeField] private GameObject heroPrefab;
     [SerializeField] private GameObject lobbyHeroPrefab;
@@ -22,29 +21,11 @@ public class DataManager : MonoBehaviour
 
     [Header("==== Game Data Information ===="), Space(10)]
     [SerializeField] private GameData m_GameData;
-    public GameData GameData
-    {
-        get
-        {
-            if (m_GameData == null)
-                LoadGameData();
-
-            return m_GameData;
-        }
-    }
+    public GameData GameData { get => m_GameData; }
 
     [Header("==== Hero Data Information ===="), Space(10)]
     [SerializeField] private HeroData m_HeroData;
-    public HeroData HeroData
-    {
-        get
-        {
-            if (m_HeroData == null)
-                LoadHeroData();
-
-            return m_HeroData;
-        }
-    }
+    public HeroData HeroData { get => m_HeroData; }
 
     [Header("==== Enemy Data Information ===="), Space(10)]
     [SerializeField] private List<EnemyData> mEnemyDataList = new List<EnemyData>();
@@ -64,16 +45,11 @@ public class DataManager : MonoBehaviour
         }
 
         StartCoroutine(UpdateResources());
-        LoadGameData();
-        LoadHeroData();
     }
 
     private void Start()
     {
         GameManager.Instance.OnApplicationStart();
-
-        SaveGameData();
-        SaveHeroData();
     }
 
     public void SetStageInfo(StageInfo info) => GameData.stageInfo = info;
@@ -322,12 +298,18 @@ public class DataManager : MonoBehaviour
 
     public void InitializedData()
     {
-        InitGameData();
-        InitHeroData();
+        InitializedGameData();
+        InitializedHeroData();
     }
 
-    #region Hero Load & Save
-    private void InitHeroData()
+    public IEnumerator LoadDataCo()
+    {
+        yield return LoadHeroDataCo();
+        yield return LoadGameDataCo();
+    }
+
+    #region Load & Save
+    private void InitializedHeroData()
     {
         for (int i = 0; i < HeroData.HeroMaxSize; i++)
             m_HeroData.heroUnlockList[i] = false;
@@ -341,79 +323,11 @@ public class DataManager : MonoBehaviour
 
         m_HeroData.heroUnlockList[0] = true;
         m_HeroData.heroList.Add(m_HeroData.originHeroDataList[0]);
+
+        m_HeroData.isLoadComplete = true;
     }
 
-    private void LoadHeroData()
-    {
-        string filePath = Path.Combine(Application.persistentDataPath, HeroDataFileName);
-
-        if (File.Exists(filePath))
-        {
-            string code = File.ReadAllText(filePath);
-            byte[] bytes = Convert.FromBase64String(code);
-            string FromJsonData = System.Text.Encoding.UTF8.GetString(bytes);
-            m_HeroData = JsonUtility.FromJson<HeroData>(FromJsonData);
-
-            for (int i = 0; i < m_HeroData.heroList.Count; i++)
-            {
-                m_HeroData.heroList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.heroList[i].ID];
-                m_HeroData.heroList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.heroList[i].ID];
-            }
-
-            for (int i = 0; i < m_HeroData.partyList.Count; i++)
-            {
-                m_HeroData.partyList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.partyList[i].ID];
-                m_HeroData.partyList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.partyList[i].ID];
-            }
-
-            ConstructHeroDic();
-
-            for (int i = 0; i < m_HeroData.heroList.Count; i++)
-            {
-                //만약 heroDic에 해당 heroList의 "Jelly0"가 있다면
-                var targetName = m_HeroData.heroList[i].name;
-
-                if (!m_HeroData.heroDic.ContainsKey(targetName))
-                    m_HeroData.heroDic.Add(targetName, m_HeroData.heroList[i]);
-            }
-
-            if (SceneManager.GetActiveScene().name == "Lobby")
-            {
-                for (int i = 0; i < m_HeroData.heroList.Count; i++)
-                {
-                    var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
-                        Quaternion.identity).GetComponent<LobbyHero>();
-
-                    var heroStat = m_HeroData.heroList[i];
-                    //heroStat.mySprite = HeroData.heroSpriteList[heroStat.ID];
-                    //heroStat.animCtrl = HeroData.heroAnimCtrlList[heroStat.ID];
-
-                    hero.UnitSetup(heroStat);
-                }
-            }
-        }
-        else
-        {
-            m_HeroData = new HeroData();
-            File.Create(filePath);
-
-            InitHeroData();
-        }
-    }
-
-    private void SaveHeroData()
-    {
-        string filePath = Path.Combine(Application.persistentDataPath, HeroDataFileName);
-
-        string ToJsonData = JsonUtility.ToJson(m_HeroData, true);
-        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(ToJsonData);
-        string code = Convert.ToBase64String(bytes);
-        File.WriteAllText(filePath, code);
-    }
-    #endregion
-
-    #region Game Load & Save
-    private void InitGameData()
+    private void InitializedGameData()
     {
         string[] names = { "Stamina", "Gold", "Dia", "Awake Jewel" };
         m_GameData.goodsNames.Initialize();
@@ -436,48 +350,137 @@ public class DataManager : MonoBehaviour
         m_GameData.isNew = true;
 
         m_GameData.saveTime = DateTime.Now;
+
+        m_GameData.isLoadComplete = true;
     }
 
-    private void LoadGameData()
+    public IEnumerator LoadHeroDataCo()
     {
-        string filePath = Path.Combine(Application.persistentDataPath, GameDataFileName);
-
-        if (File.Exists(filePath))
+        var request = new GetUserDataRequest() { PlayFabId = PlayFabManager.Instance.PlayFabId };
+        PlayFabClientAPI.GetUserData(request, (result) =>
         {
-            string code = File.ReadAllText(filePath);
-            byte[] bytes = Convert.FromBase64String(code);
-            string FromJsonData = System.Text.Encoding.UTF8.GetString(bytes);
-            m_GameData = JsonUtility.FromJson<GameData>(FromJsonData);
-        }
-        else
-        {
-            m_GameData = new GameData();
-            File.Create(filePath);
+            foreach (var eachData in result.Data)
+            {
+                string key = eachData.Key;
 
-            InitGameData();
-        }
+                if (eachData.Key.Contains("HeroData"))
+                {
+                    m_HeroData = JsonUtility.FromJson<HeroData>(eachData.Value.Value);
+                    m_HeroData.isLoadComplete = true;
+
+                    for (int i = 0; i < m_HeroData.heroList.Count; i++)
+                    {
+                        m_HeroData.heroList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.heroList[i].ID];
+                        m_HeroData.heroList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.heroList[i].ID];
+                    }
+
+                    for (int i = 0; i < m_HeroData.partyList.Count; i++)
+                    {
+                        m_HeroData.partyList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.partyList[i].ID];
+                        m_HeroData.partyList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.partyList[i].ID];
+                    }
+
+                    ConstructHeroDic();
+
+                    for (int i = 0; i < m_HeroData.heroList.Count; i++)
+                    {
+                        //만약 heroDic에 해당 heroList의 "Jelly0"가 있다면
+                        var targetName = m_HeroData.heroList[i].name;
+
+                        if (!m_HeroData.heroDic.ContainsKey(targetName))
+                            m_HeroData.heroDic.Add(targetName, m_HeroData.heroList[i]);
+                    }
+
+                    if (SceneManager.GetActiveScene().name == "Lobby")
+                    {
+                        for (int i = 0; i < m_HeroData.heroList.Count; i++)
+                        {
+                            var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
+                                Quaternion.identity).GetComponent<LobbyHero>();
+
+                            var heroStat = m_HeroData.heroList[i];
+                            //heroStat.mySprite = HeroData.heroSpriteList[heroStat.ID];
+                            //heroStat.animCtrl = HeroData.heroAnimCtrlList[heroStat.ID];
+
+                            hero.UnitSetup(heroStat);
+                        }
+                    }
+                }
+                else
+                {
+                    InitializedHeroData();
+                }
+            }
+        }, DisplayPlayfabError);
+
+        yield return new WaitForEndOfFrame();
+    }
+    
+    public IEnumerator LoadGameDataCo()
+    {
+        var request = new GetUserDataRequest() { PlayFabId = PlayFabManager.Instance.PlayFabId };
+        PlayFabClientAPI.GetUserData(request, (result) =>
+        {
+            foreach (var eachData in result.Data)
+            {
+                string key = eachData.Key;
+
+                if (eachData.Key.Contains("GameData"))
+                {
+                    m_GameData = JsonUtility.FromJson<GameData>(eachData.Value.Value);
+                    m_GameData.isLoadComplete = true;
+                }
+                else
+                {
+                    InitializedGameData();
+                }
+            }
+        }, DisplayPlayfabError);
+
+        yield return new WaitForEndOfFrame();
     }
 
-    private void SaveGameData()
+    public void SaveData()
     {
-        string ToJsonData = JsonUtility.ToJson(m_GameData, true);
-        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(ToJsonData);
-        string code = Convert.ToBase64String(bytes);
-        string path = Path.Combine(Application.persistentDataPath, GameDataFileName);
-        File.WriteAllText(path, code);
+        SaveTime();
+        Dictionary<string, string> dataDic = new Dictionary<string, string>();
+        dataDic.Add("GameData", JsonUtility.ToJson(m_GameData));
+        dataDic.Add("HeroData", JsonUtility.ToJson(m_HeroData));
+        SetData(dataDic);
+    }
+
+    private void SetData(Dictionary<string, string> dataDic)
+    {
+        var request = new UpdateUserDataRequest() { Data = dataDic, Permission = UserDataPermission.Public };
+
+        try
+        {
+            PlayFabClientAPI.UpdateUserData(request, (result) =>
+            {
+                Debug.Log("Update Data!");
+            }, DisplayPlayfabError);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
     }
 
     private void SaveTime()
     {
-        GameData.saveTime = DateTime.Now;
-        GameData.saveTimeStr = GameData.saveTime.ToString();
+        m_GameData.saveTime = DateTime.Now;
+        m_GameData.saveTimeStr = m_GameData.saveTime.ToString();
     }
     #endregion
+
+    private void DisplayPlayfabError(PlayFabError error)
+    {
+        Debug.LogError("error : " + error.GenerateErrorReport());
+    }
 
     private void OnApplicationQuit()
     {
         SaveTime();
-        SaveGameData();
-        SaveHeroData();
+        SaveData();
     }
 }
