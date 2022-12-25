@@ -6,7 +6,7 @@ public class HeroDetailInfoPanel : MonoBehaviour
 {
     [SerializeField] private HeroDetailInfo heroInfo;
 
-    public void UpdateHeroInfo(UnitStatus HeroData)
+    public void UpdateHeroInfo(UnitData HeroData)
     {
         heroInfo.nameTxt.text = HeroData.name;
         heroInfo.levelTxt.text = "Lv." + HeroData.level.ToString();

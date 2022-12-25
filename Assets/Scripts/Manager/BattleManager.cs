@@ -483,7 +483,7 @@ public class BattleManager : MonoBehaviour
 
             var hero = InstantiateObj(QueueType.Hero).GetComponent<Hero>();
             hero.transform.position = blueBase.transform.position;
-            hero.UnitSetup(new UnitStatus(dataMgr.HeroData.partyList[index]));
+            hero.UnitSetup(dataMgr.HeroData.partyList[index]);
             hero.DeathAction += () => ReturnObj(QueueType.Hero, hero.gameObject);
         }
     }

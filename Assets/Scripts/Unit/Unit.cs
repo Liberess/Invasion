@@ -17,9 +17,8 @@ public abstract class Unit : MonoBehaviour
 
     public event Action DeathAction;
 
-    //public UnitStatus myStat { get; protected set; }
-    [SerializeField] protected UnitStatus mMyStat;
-    public UnitStatus MyStat { get => mMyStat; }
+    [SerializeField] protected UnitData mMyData;
+    public UnitData MyData { get => mMyData; }
 
     [SerializeField] protected int hp;
     public int Hp { get => hp; }
@@ -51,20 +50,28 @@ public abstract class Unit : MonoBehaviour
     protected Rigidbody2D rigid;
     protected SpriteRenderer sprite;
 
-    protected abstract void CustomUnitSetup(UnitStatus status);
-
-    public void UnitSetup(UnitStatus status)
+    public void UnitSetup(UnitData unitData)
     {
+        mMyData = unitData;
         sprite.color = Color.white;
-        CustomUnitSetup(status);
-        hp = status.hp;
+        hp = unitData.hp;
         //ChangeAc();
+
+        Debug.Log(name + " :: ap = " + unitData.ap);
+
+        distance = unitData.distance;
+
+        mMyData.mySprite = unitData.mySprite;
+        sprite.sprite = mMyData.mySprite;
+
+        mMyData.animCtrl = unitData.animCtrl;
+        anim.runtimeAnimatorController = mMyData.animCtrl;
     }
 
     public virtual void ChangeAc()
     {
         anim.runtimeAnimatorController =
-            DataManager.Instance.HeroData.heroAnimCtrlList[MyStat.ID];
+            DataManager.Instance.HeroData.heroAnimCtrlList[mMyData.ID];
     }
 
     protected void TeamValueSet()
@@ -120,12 +127,12 @@ public abstract class Unit : MonoBehaviour
 
             switch (Job)
             {
-                case UnitJob.ShortRange: target.GetComponent<Unit>().Hit(MyStat.ap); break;
+                case UnitJob.ShortRange: target.GetComponent<Unit>().Hit(mMyData.ap); break;
                 case UnitJob.LongRange: Shot(); break;
                 //case UnitJob.Wizard: Spell(target.transform.position); break;
             }
 
-            target.GetComponent<Unit>().Hit(MyStat.ap);
+            target.GetComponent<Unit>().Hit(mMyData.ap);
         }
         else
         {

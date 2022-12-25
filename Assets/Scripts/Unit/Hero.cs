@@ -35,18 +35,4 @@ public class Hero : Unit
     private void Update() => Move();
 
     private void FixedUpdate() => Scan();
-
-    protected override void CustomUnitSetup(UnitStatus status)
-    {
-        mMyStat = status;
-        
-        mMyStat.mySprite = status.mySprite;
-        sprite.sprite = mMyStat.mySprite;
-
-        mMyStat.animCtrl = status.animCtrl;
-        anim.runtimeAnimatorController = mMyStat.animCtrl;
-/*        sprite.sprite = DataManager.Instance.HeroData.heroSpriteList[status.ID];
-        anim.runtimeAnimatorController =
-            DataManager.Instance.HeroData.heroAnimCtrlList[status.ID];*/
-    }
 }

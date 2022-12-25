@@ -27,15 +27,6 @@ public class LobbyHero : Unit
         Movement();
     }
 
-    protected override void CustomUnitSetup(UnitStatus status)
-    {
-        mMyStat = status;
-        mMyStat.mySprite = DataManager.Instance.HeroData.heroSpriteList[status.ID];
-        sprite.sprite = mMyStat.mySprite;
-        mMyStat.animCtrl = DataManager.Instance.HeroData.heroAnimCtrlList[status.ID];
-        anim.runtimeAnimatorController = mMyStat.animCtrl;
-    }
-
     #region 이동 세팅
     private void Movement()
     {

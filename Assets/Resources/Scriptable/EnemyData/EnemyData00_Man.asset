@@ -9,23 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23fd8d5bdadee9a4786aa3d05a0cf342, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e6517b5c3475724fa7ad933d063bca0, type: 3}
   m_Name: EnemyData00_Man
   m_EditorClassIdentifier: 
-  myStat:
-    ID: 0
-    name: ManA
-    level: 0
-    cost: 1
-    hp: 10
-    ap: 2
-    dp: 0
-    moveSpeed: 0
-    critical: 5
-    dodge: 0
-    distance: 1
-    attackDelay: 0
-    isLeader: 0
-    mySprite: {fileID: 5207544987158716770, guid: aecb4008359fcfe43ad86e1399943690,
-      type: 3}
-    animCtrl: {fileID: 9100000, guid: cc0472d870a420444b7952cf3278c42f, type: 2}
+  ID: 0
+  name: ManA
+  level: 0
+  cost: 1
+  hp: 10
+  ap: 2
+  dp: 0
+  moveSpeed: Infinity
+  critical: 1
+  dodge: 0
+  distance: 1
+  attackDelay: 1
+  isLeader: 0
+  mySprite: {fileID: -3331590989316002027, guid: aecb4008359fcfe43ad86e1399943690,
+    type: 3}
+  animCtrl: {fileID: 9100000, guid: cc0472d870a420444b7952cf3278c42f, type: 2}

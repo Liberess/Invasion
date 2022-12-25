@@ -50,13 +50,13 @@ public class BattleAI : MonoBehaviour
     /// </summary>
     private int FindHighCost()
     {
-        List<EnemyData> enemyDataList = new List<EnemyData>();
+        List<UnitData> enemyDataList = new List<UnitData>();
 
         for (int i = dataMgr.GameData.stageInfo.minEnemyID; i <= dataMgr.GameData.stageInfo.maxEnemyID; i++)
             enemyDataList.Add(dataMgr.EnemyDataList[i]);
 
-        enemyDataList = enemyDataList.OrderByDescending(x => x.myStat.cost).ToList();
-        return enemyDataList[0].myStat.cost;
+        enemyDataList = enemyDataList.OrderByDescending(x => x.cost).ToList();
+        return enemyDataList[0].cost;
     }
 
     private IEnumerator AICo()
@@ -123,7 +123,8 @@ public class BattleAI : MonoBehaviour
             enemy.gameObject.SetActive(false);
         }
 
-        enemy.UnitSetup(new UnitStatus(dataMgr.EnemyDataList[rand].myStat));
+        enemy.UnitSetup(dataMgr.EnemyDataList[rand]);
+        Debug.Log(enemy.name + " :: dataMgr ap = " + dataMgr.EnemyDataList[rand].ap);
         EnrageAction += enemy.Enrage;
         enemy.DeathAction += () => --spawnCount;
         enemy.DeathAction += () => EnrageAction -= enemy.Enrage;
@@ -140,10 +141,7 @@ public class BattleAI : MonoBehaviour
         float gap = 0.0f;
         for(int i = 0; i < spawnedEnemyList.Count; i++)
         {
-            gap = (spawnedEnemyList[i].transform.position - battleMgr.RedBase.transform.position).sqrMagnitude;
-            Debug.Log(spawnedEnemyList[i].name + " gap1 : " + gap);
             gap = Vector2.Distance(spawnedEnemyList[i].transform.position, battleMgr.RedBase.transform.position);
-            Debug.Log(spawnedEnemyList[i].name + " gap2 : " + gap);
             if (spawnedEnemyList[i].transform.position == battleMgr.RedBase.transform.position
                 || gap <= 1.0f)
             {
@@ -157,7 +155,7 @@ public class BattleAI : MonoBehaviour
 
     private IEnumerator CheckSpawnableCo()
     {
-        WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
+        WaitForSeconds waitForSeconds = new WaitForSeconds(1.0f);
 
         while(battleMgr.IsPlay)
         {
@@ -168,7 +166,7 @@ public class BattleAI : MonoBehaviour
                 Debug.Log("Active : " + enemy.name);
             }
 
-            yield return waitForFixedUpdate;
+            yield return waitForSeconds;
         }
 
         yield return null;
