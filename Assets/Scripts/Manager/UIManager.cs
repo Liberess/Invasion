@@ -92,7 +92,10 @@ public class UIManager : MonoBehaviour
         InitSortButton();
 
         StartCoroutine(InitHeroPanelCoru());
-        StartCoroutine(UpdateGoodsUICo(0.5f));
+        StartCoroutine(UpdateGoodsUICo(0.1f));
+
+        PlayFabManager.OnPlayFabLoginAction += () => StartCoroutine(InitHeroPanelCoru());
+        PlayFabManager.OnPlayFabLoginAction += () => StartCoroutine(UpdateGoodsUICo(0.0f));
     }
 
     private IEnumerator UpdateGoodsUICo(float delay)

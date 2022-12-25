@@ -12,7 +12,10 @@ public class BattleAI : MonoBehaviour
     [SerializeField] private float spawnTime = 0f;
     [SerializeField] private float spawnDelayTime = 1f;
     [SerializeField] private float spawnSpeed = 1f;
-    private int spawnCount = 0;
+    [SerializeField] private int spawnCount = 0;
+
+    [SerializeField] private List<Enemy> spawnedEnemyList = new List<Enemy>();
+    [SerializeField] private Queue<Enemy> notSpawnedEnemyQueue= new Queue<Enemy>();
 
     public UnityAction EnrageAction { get; private set; }
 
@@ -20,6 +23,9 @@ public class BattleAI : MonoBehaviour
     {
         dataMgr = DataManager.Instance;
         battleMgr = BattleManager.Instance;
+
+        spawnedEnemyList.Clear();
+        notSpawnedEnemyQueue.Clear();
     }
 
     public void SetupAI()
@@ -35,6 +41,7 @@ public class BattleAI : MonoBehaviour
 
         StartCoroutine(AICo());
         StartCoroutine(EnrageStateCo());
+        StartCoroutine(CheckSpawnableCo());
         //StartCoroutine(GetCostCo());
     }
 
@@ -58,7 +65,7 @@ public class BattleAI : MonoBehaviour
 
         while (battleMgr.IsPlay)
         {
-            if(spawnTime >= spawnDelayTime && spawnCount < 5)
+            if(spawnCount < 5 && spawnTime >= spawnDelayTime)
             {
                 spawnTime = 0f;
                 EnemySpawn();
@@ -76,7 +83,7 @@ public class BattleAI : MonoBehaviour
 
     private IEnumerator EnrageStateCo()
     {
-        var enrageTemp = battleMgr.RedBase.myStat.hp * 30.0f / 100.0f;
+        var enrageTemp = battleMgr.RedBase.Hp * 30.0f / 100.0f;
 
         while (battleMgr.IsPlay)
         {
@@ -105,10 +112,65 @@ public class BattleAI : MonoBehaviour
         ++spawnCount;
         var enemy = battleMgr.InstantiateObj(QueueType.Enemy).GetComponent<Enemy>();
         enemy.transform.position = battleMgr.RedBase.transform.position;
+
+        if (IsInstantiate())
+        {
+            spawnedEnemyList.Add(enemy);
+        }
+        else
+        {
+            notSpawnedEnemyQueue.Enqueue(enemy);
+            enemy.gameObject.SetActive(false);
+        }
+
         enemy.UnitSetup(new UnitStatus(dataMgr.EnemyDataList[rand].myStat));
         EnrageAction += enemy.Enrage;
         enemy.DeathAction += () => --spawnCount;
         enemy.DeathAction += () => EnrageAction -= enemy.Enrage;
+        enemy.DeathAction += () => spawnedEnemyList.Remove(enemy);
         enemy.DeathAction += () => BattleManager.ReturnObj(QueueType.Enemy, enemy.gameObject);
+    }
+
+    /// <summary>
+    /// 만약, Enemy 스폰 위치에 Enemy가 없다면 스폰할 수 있게 한다.
+    /// </summary>
+    /// <returns></returns>
+    private bool IsInstantiate()
+    {
+        float gap = 0.0f;
+        for(int i = 0; i < spawnedEnemyList.Count; i++)
+        {
+            gap = (spawnedEnemyList[i].transform.position - battleMgr.RedBase.transform.position).sqrMagnitude;
+            Debug.Log(spawnedEnemyList[i].name + " gap1 : " + gap);
+            gap = Vector2.Distance(spawnedEnemyList[i].transform.position, battleMgr.RedBase.transform.position);
+            Debug.Log(spawnedEnemyList[i].name + " gap2 : " + gap);
+            if (spawnedEnemyList[i].transform.position == battleMgr.RedBase.transform.position
+                || gap <= 1.0f)
+            {
+                Debug.Log(spawnedEnemyList[i].name + " gap : " + gap);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private IEnumerator CheckSpawnableCo()
+    {
+        WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
+
+        while(battleMgr.IsPlay)
+        {
+            if(notSpawnedEnemyQueue.Count > 0 && IsInstantiate())
+            {
+                var enemy = notSpawnedEnemyQueue.Dequeue();
+                enemy.gameObject.SetActive(true);
+                Debug.Log("Active : " + enemy.name);
+            }
+
+            yield return waitForFixedUpdate;
+        }
+
+        yield return null;
     }
 }

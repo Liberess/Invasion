@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using PlayFab;
 using PlayFab.ClientModels;
 using GooglePlayGames;
@@ -12,6 +13,8 @@ public class PlayFabManager : MonoBehaviour
     private PopUpManager popUpMgr;
 
     public string PlayFabId { get; private set; }
+
+    public static UnityAction OnPlayFabLoginAction;
 
     private void Awake()
     {
@@ -30,6 +33,8 @@ public class PlayFabManager : MonoBehaviour
 
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
+
+        OnPlayFabLoginAction = null;
     }
 
     private void Start()
@@ -45,13 +50,11 @@ public class PlayFabManager : MonoBehaviour
         {
             if (success)
             {
-                Debug.Log("구글 로그인 성공");
                 popUpMgr.PopUp("구글 로그인 성공!", EPopUpType.Notice);
                 StartCoroutine(PlayFabLogInCo());
             }
             else
             {
-                Debug.Log("구글 로그인 실패");
                 popUpMgr.PopUp("구글 로그인 실패!", EPopUpType.Caution);
             }
         });
@@ -62,7 +65,6 @@ public class PlayFabManager : MonoBehaviour
     public IEnumerator GoogleLogOutCo()
     {
         ((PlayGamesPlatform)Social.Active).SignOut();
-        Debug.Log("구글 로그아웃");
         popUpMgr.PopUp("구글 로그아웃!", EPopUpType.Notice);
 
         yield return null;
@@ -84,7 +86,6 @@ public class PlayFabManager : MonoBehaviour
     private void OnLogInSuccess(LoginResult result)
     {
         PlayFabId = result.PlayFabId;
-        Debug.Log("플레이팹 로그인 성공\n" + Social.localUser.userName);
         popUpMgr.PopUp("플레이팹 로그인 성공\n" + Social.localUser.userName, EPopUpType.Notice);
 
         StartCoroutine(LoadDataCo());
@@ -98,6 +99,7 @@ public class PlayFabManager : MonoBehaviour
     private IEnumerator LoadDataCo()
     {
         yield return DataManager.Instance.StartCoroutine(DataManager.Instance.LoadDataCo());
+        OnPlayFabLoginAction();
         //yield return AudioManager.Instance.StartCoroutine(AudioManager.Instance.InitializedAudioSettingCo());
         yield return null;
     }
@@ -117,7 +119,6 @@ public class PlayFabManager : MonoBehaviour
 
     private void RegisterSuccess(RegisterPlayFabUserResult result)
     {
-        Debug.Log("플레이팹 회원가입 성공\n" + Social.localUser.userName);
         popUpMgr.PopUp("플레이팹 회원가입 성공\n" + Social.localUser.userName, EPopUpType.Notice);
         StartCoroutine(PlayFabLogInCo());
         //popUpMgr.PopUp("회원가입 성공!\n", EPopUpType.NOTICE);
@@ -125,7 +126,6 @@ public class PlayFabManager : MonoBehaviour
 
     private void RegisterFailure(PlayFabError error)
     {
-        Debug.Log("플레이팹 회원가입 실패");
         popUpMgr.PopUp("플레이팹 회원가입 실패!", EPopUpType.Caution);
         //popUpMgr.PopUp("회원가입 실패!\n" + error.GenerateErrorReport(), EPopUpType.CAUTION);
     }

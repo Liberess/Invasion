@@ -40,6 +40,8 @@ public class Enemy : Unit
     {
         mMyStat = status;
         hp = status.hp;
+        Debug.Log("ap : " + MyStat.ap);
+
         anim.runtimeAnimatorController = mMyStat.animCtrl;
     }
 

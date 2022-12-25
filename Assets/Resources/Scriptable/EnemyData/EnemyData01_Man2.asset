@@ -10,17 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23fd8d5bdadee9a4786aa3d05a0cf342, type: 3}
-  m_Name: EnemyData00_Man
+  m_Name: EnemyData01_Man2
   m_EditorClassIdentifier: 
   myStat:
-    name: ManA
-    ID: 0
+    ID: 1
+    name: ManB
     level: 0
-    cost: 1
+    cost: 5
     hp: 10
     ap: 2
-    critical: 5
-    distance: 0.2
+    dp: 0
+    moveSpeed: 0
+    critical: 0
+    dodge: 0
+    distance: 1
     attackDelay: 0
     isLeader: 0
     mySprite: {fileID: 5207544987158716770, guid: aecb4008359fcfe43ad86e1399943690,

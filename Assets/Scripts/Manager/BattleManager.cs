@@ -103,8 +103,8 @@ public class BattleManager : MonoBehaviour
 
         InitializeResultUI();
 
-        redBase.UnitSetup(new UnitStatus("RedBase", 100));
-        blueBase.UnitSetup(new UnitStatus("BlueBase", 100));
+        //redBase.UnitSetup(new UnitStatus("RedBase", 1000));
+        //blueBase.UnitSetup(new UnitStatus("BlueBase", 1000));
 
         quePrefabDic.Add(QueueType.Hero, Resources.Load("Unit/Hero") as GameObject);
         quePrefabDic.Add(QueueType.Enemy, Resources.Load("Unit/Enemy") as GameObject);

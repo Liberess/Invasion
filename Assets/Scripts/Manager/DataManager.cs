@@ -297,10 +297,19 @@ public class DataManager : MonoBehaviour
             //m_GameData.GoodsList[(int)EGoodsType].count += num;
     }
 
+    #region Load & Save
     public void InitializedData()
     {
         InitializedGameData();
         InitializedHeroData();
+
+        PlayFabManager.OnPlayFabLoginAction();
+
+#if UNITY_EDITOR
+        SetupHero();
+#endif
+
+        SaveData();
     }
 
     public IEnumerator LoadDataCo()
@@ -309,7 +318,6 @@ public class DataManager : MonoBehaviour
         yield return LoadGameDataCo();
     }
 
-    #region Load & Save
     private void InitializedHeroData()
     {
         for (int i = 0; i < HeroData.HeroMaxSize; i++)
@@ -355,6 +363,47 @@ public class DataManager : MonoBehaviour
         m_GameData.isLoadComplete = true;
     }
 
+    private void SetupHero()
+    {
+        for (int i = 0; i < m_HeroData.heroList.Count; i++)
+        {
+            m_HeroData.heroList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.heroList[i].ID];
+            m_HeroData.heroList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.heroList[i].ID];
+        }
+
+        for (int i = 0; i < m_HeroData.partyList.Count; i++)
+        {
+            m_HeroData.partyList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.partyList[i].ID];
+            m_HeroData.partyList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.partyList[i].ID];
+        }
+
+        ConstructHeroDic();
+
+        for (int i = 0; i < m_HeroData.heroList.Count; i++)
+        {
+            //만약 heroDic에 해당 heroList의 "Jelly0"가 있다면
+            var targetName = m_HeroData.heroList[i].name;
+
+            if (!m_HeroData.heroDic.ContainsKey(targetName))
+                m_HeroData.heroDic.Add(targetName, m_HeroData.heroList[i]);
+        }
+
+        if (SceneManager.GetActiveScene().name == "Lobby")
+        {
+            for (int i = 0; i < m_HeroData.heroList.Count; i++)
+            {
+                var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
+                    Quaternion.identity).GetComponent<LobbyHero>();
+
+                var heroStat = m_HeroData.heroList[i];
+                //heroStat.mySprite = HeroData.heroSpriteList[heroStat.ID];
+                //heroStat.animCtrl = HeroData.heroAnimCtrlList[heroStat.ID];
+
+                hero.UnitSetup(heroStat);
+            }
+        }
+    }
+
     public IEnumerator LoadHeroDataCo()
     {
         var request = new GetUserDataRequest() { PlayFabId = PlayFabManager.Instance.PlayFabId };
@@ -369,43 +418,7 @@ public class DataManager : MonoBehaviour
                     m_HeroData = JsonUtility.FromJson<HeroData>(eachData.Value.Value);
                     m_HeroData.isLoadComplete = true;
 
-                    for (int i = 0; i < m_HeroData.heroList.Count; i++)
-                    {
-                        m_HeroData.heroList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.heroList[i].ID];
-                        m_HeroData.heroList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.heroList[i].ID];
-                    }
-
-                    for (int i = 0; i < m_HeroData.partyList.Count; i++)
-                    {
-                        m_HeroData.partyList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.partyList[i].ID];
-                        m_HeroData.partyList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.partyList[i].ID];
-                    }
-
-                    ConstructHeroDic();
-
-                    for (int i = 0; i < m_HeroData.heroList.Count; i++)
-                    {
-                        //만약 heroDic에 해당 heroList의 "Jelly0"가 있다면
-                        var targetName = m_HeroData.heroList[i].name;
-
-                        if (!m_HeroData.heroDic.ContainsKey(targetName))
-                            m_HeroData.heroDic.Add(targetName, m_HeroData.heroList[i]);
-                    }
-
-                    if (SceneManager.GetActiveScene().name == "Lobby")
-                    {
-                        for (int i = 0; i < m_HeroData.heroList.Count; i++)
-                        {
-                            var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
-                                Quaternion.identity).GetComponent<LobbyHero>();
-
-                            var heroStat = m_HeroData.heroList[i];
-                            //heroStat.mySprite = HeroData.heroSpriteList[heroStat.ID];
-                            //heroStat.animCtrl = HeroData.heroAnimCtrlList[heroStat.ID];
-
-                            hero.UnitSetup(heroStat);
-                        }
-                    }
+                    SetupHero();
                 }
                 else
                 {
@@ -463,7 +476,7 @@ public class DataManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError(e.Message);
+            Debug.LogError("Error : " + e.Message);
         }
     }
 

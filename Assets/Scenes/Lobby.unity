@@ -40171,9 +40171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd736a417fd0574cae4d87e28f073b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDrag: 0
-  isPressed: 0
-  pressTime: 0
+  maxPressTime: 1.5
 --- !u!114 &1425364733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47324,7 +47322,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: -10}
-  m_SizeDelta: {x: 95, y: 0}
+  m_SizeDelta: {x: 95, y: 85}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1617015554
 MonoBehaviour:
@@ -47333,13 +47331,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1617015552}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
-  m_VerticalFit: 1
+  m_VerticalFit: 0
 --- !u!114 &1617015555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64460,6 +64458,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5366426050918915826, guid: 61820d1122036014195ea0895f08846e,
+        type: 3}
+      propertyPath: m_HeroData.heroList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5366426050918915826, guid: 61820d1122036014195ea0895f08846e,
         type: 3}
       propertyPath: m_GameData.<Age>k__BackingField

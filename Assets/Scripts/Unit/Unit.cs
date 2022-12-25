@@ -19,7 +19,7 @@ public abstract class Unit : MonoBehaviour
 
     //public UnitStatus myStat { get; protected set; }
     [SerializeField] protected UnitStatus mMyStat;
-    public UnitStatus myStat { get => mMyStat; }
+    public UnitStatus MyStat { get => mMyStat; }
 
     [SerializeField] protected int hp;
     public int Hp { get => hp; }
@@ -64,7 +64,7 @@ public abstract class Unit : MonoBehaviour
     public virtual void ChangeAc()
     {
         anim.runtimeAnimatorController =
-            DataManager.Instance.HeroData.heroAnimCtrlList[myStat.ID];
+            DataManager.Instance.HeroData.heroAnimCtrlList[MyStat.ID];
     }
 
     protected void TeamValueSet()
@@ -73,13 +73,6 @@ public abstract class Unit : MonoBehaviour
 
         allyValue = (direction == 1) ? "Hero" : "Enemy"; //Layer Mask - Check Ally
         targetValue = (direction == 1) ? "Enemy" : "Hero"; //Layer Mask - Check Enemy
-
-        switch (mJob) //Set Distance
-        {
-            case UnitJob.ShortRange: distance = 0.7f; myStat.ap = 2; myStat.hp = 10; break;
-            case UnitJob.LongRange: distance = 2.5f; myStat.ap = 1; myStat.hp = 5; break;
-            case UnitJob.Bullet: distance = 0.4f; break;
-        }
     }
 
     protected virtual void Move()
@@ -127,12 +120,12 @@ public abstract class Unit : MonoBehaviour
 
             switch (Job)
             {
-                case UnitJob.ShortRange: target.GetComponent<Unit>().Hit(myStat.ap); break;
+                case UnitJob.ShortRange: target.GetComponent<Unit>().Hit(MyStat.ap); break;
                 case UnitJob.LongRange: Shot(); break;
                 //case UnitJob.Wizard: Spell(target.transform.position); break;
             }
 
-            target.GetComponent<Unit>().Hit(myStat.ap);
+            target.GetComponent<Unit>().Hit(MyStat.ap);
         }
         else
         {
