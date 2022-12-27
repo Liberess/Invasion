@@ -61,7 +61,7 @@ public class HeroSlot : MonoBehaviour
 
     public void UpdateSlotImage()
     {
-        if (MyStatus.isLeader)
+        if (MyStatus.IsLeader)
             GetComponent<Image>().color = new Color(250, 250, 130);
         else
             GetComponent<Image>().color = Color.white;

@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e6517b5c3475724fa7ad933d063bca0, type: 3}
   m_Name: EnemyData00_Man
   m_EditorClassIdentifier: 
-  ID: 0
+  id: 0
   name: ManA
   level: 0
   cost: 1
   hp: 10
   ap: 2
   dp: 0
-  moveSpeed: Infinity
+  moveSpeed: 1
   critical: 1
   dodge: 0
   distance: 1

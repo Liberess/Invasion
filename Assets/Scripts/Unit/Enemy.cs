@@ -38,7 +38,7 @@ public class Enemy : Unit
 
     public void Enrage()
     {
-        mMyData.ap = Mathf.FloorToInt(mMyData.ap * 1.5f);
-        mMyData.moveSpeed *= 1.5f;
+        ap = Mathf.FloorToInt(mMyData.Ap * 1.5f);
+        moveSpeed *= 1.5f;
     }
 }

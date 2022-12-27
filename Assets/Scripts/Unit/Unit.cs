@@ -22,6 +22,10 @@ public abstract class Unit : MonoBehaviour
 
     [SerializeField] protected int hp;
     public int Hp { get => hp; }
+    [SerializeField] protected int ap;
+    public int Ap { get => ap; }
+    [SerializeField] protected float moveSpeed;
+    public float MoveSpeed { get => moveSpeed; }
 
     [SerializeField] private GameObject dust;
     [SerializeField] private GameObject shadow;
@@ -54,12 +58,13 @@ public abstract class Unit : MonoBehaviour
     {
         mMyData = unitData;
         sprite.color = Color.white;
-        hp = unitData.hp;
         //ChangeAc();
 
-        Debug.Log(name + " :: ap = " + unitData.ap);
+        hp = unitData.HP;
+        ap = unitData.Ap;
 
-        distance = unitData.distance;
+        moveSpeed = unitData.MoveSpeed;
+        distance = unitData.Distance;
 
         mMyData.mySprite = unitData.mySprite;
         sprite.sprite = mMyData.mySprite;
@@ -127,12 +132,12 @@ public abstract class Unit : MonoBehaviour
 
             switch (Job)
             {
-                case UnitJob.ShortRange: target.GetComponent<Unit>().Hit(mMyData.ap); break;
+                case UnitJob.ShortRange: target.GetComponent<Unit>().Hit(ap); break;
                 case UnitJob.LongRange: Shot(); break;
-                //case UnitJob.Wizard: Spell(target.transform.position); break;
+                    //case UnitJob.Wizard: Spell(target.transform.position); break;
             }
 
-            target.GetComponent<Unit>().Hit(mMyData.ap);
+            target.GetComponent<Unit>().Hit(ap);
         }
         else
         {

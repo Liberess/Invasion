@@ -59,8 +59,8 @@ public class OldHero : MonoBehaviour
 
     private void LateUpdate()
     {
-        dataManager.HeroData.heroDic[name].ID = mID;
-        dataManager.HeroData.heroDic[name].level = mLevel;
+        //dataManager.HeroData.heroDic[name].ID = mID;
+        //dataManager.HeroData.heroDic[name].level = mLevel;
     }
 
     private void FixedUpdate()

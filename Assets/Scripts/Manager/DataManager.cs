@@ -258,12 +258,14 @@ public class DataManager : MonoBehaviour
         {
             if (i == 0)
             {
-                m_HeroData.partyList[i].isLeader = true;
+                m_HeroData.partyList[i].SetLeader(true);
+                //m_HeroData.partyList[i].IsLeader = true;
                 LeaderHero = m_HeroData.partyList[i];
             }
             else
             {
-                m_HeroData.partyList[i].isLeader = false;
+                m_HeroData.partyList[i].SetLeader(false);
+                //m_HeroData.partyList[i].IsLeader = false;
             }
         }
     }
