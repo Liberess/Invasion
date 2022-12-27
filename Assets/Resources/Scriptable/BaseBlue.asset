@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e6517b5c3475724fa7ad933d063bca0, type: 3}
-  m_Name: 10_Bella
+  m_Name: BaseBlue
   m_EditorClassIdentifier: 
   ID: 0
-  name: 
+  name: BlueBase
   level: 0
   cost: 0
-  hp: 0
+  hp: 1000
   ap: 0
   dp: 0
   moveSpeed: 0

@@ -9,23 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23fd8d5bdadee9a4786aa3d05a0cf342, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e6517b5c3475724fa7ad933d063bca0, type: 3}
   m_Name: 09_Hose
   m_EditorClassIdentifier: 
-  myStat:
-    ID: 9
-    name: Hose
-    level: 1
-    cost: 2
-    hp: 300
-    ap: 100
-    dp: 5
-    moveSpeed: 1
-    critical: 15
-    dodge: 10
-    distance: 1
-    attackDelay: 1
-    isLeader: 0
-    mySprite: {fileID: 2368519291515267928, guid: 402ef05d02e48754490fbaae171fe004,
-      type: 3}
-    animCtrl: {fileID: 9100000, guid: 933dee70b14c7ab439771c969ea95579, type: 2}
+  ID: 0
+  name: 
+  level: 0
+  cost: 0
+  hp: 0
+  ap: 0
+  dp: 0
+  moveSpeed: 0
+  critical: 0
+  dodge: 0
+  distance: 0
+  attackDelay: 0
+  isLeader: 0
+  mySprite: {fileID: 0}
+  animCtrl: {fileID: 0}

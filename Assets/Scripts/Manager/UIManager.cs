@@ -248,9 +248,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.Level:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.level).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.Level).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.level).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.Level).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -261,9 +261,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.Grade:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.level).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.Level).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.level).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.Level).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);

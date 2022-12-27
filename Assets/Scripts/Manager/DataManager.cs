@@ -15,7 +15,7 @@ public class DataManager : MonoBehaviour
     [SerializeField] private GameObject heroPrefab;
     [SerializeField] private GameObject lobbyHeroPrefab;
 
-    public UnitStatus LeaderHero { get; private set; }
+    public UnitData LeaderHero { get; private set; }
 
     #region 인스턴스화
     public static DataManager Instance { get; private set; }
@@ -29,8 +29,8 @@ public class DataManager : MonoBehaviour
     public HeroData HeroData { get => m_HeroData; }
 
     [Header("==== Enemy Data Information ===="), Space(10)]
-    [SerializeField] private List<EnemyData> mEnemyDataList = new List<EnemyData>();
-    public List<EnemyData> EnemyDataList { get => mEnemyDataList; }
+    [SerializeField] private List<UnitData> mEnemyDataList = new List<UnitData>();
+    public List<UnitData> EnemyDataList { get => mEnemyDataList; }
     #endregion
 
     private void Awake()
@@ -85,12 +85,12 @@ public class DataManager : MonoBehaviour
     {
         HeroData.originHeroDataList.Clear();
 
-        EnemyData[] temp = Resources.LoadAll<EnemyData>("Scriptable/OriginHeroData");
+        UnitData[] temp = Resources.LoadAll<UnitData>("Scriptable/OriginHeroData");
 
         for (int i = 0; i < temp.Length; i++)
         {
             if (temp[i] != null)
-                HeroData.originHeroDataList.Add(temp[i].myStat);
+                HeroData.originHeroDataList.Add(temp[i]);
         }
     }
 
@@ -142,7 +142,7 @@ public class DataManager : MonoBehaviour
     {
         mEnemyDataList.Clear();
 
-        EnemyData[] temp = Resources.LoadAll<EnemyData>("Scriptable/EnemyData");
+        UnitData[] temp = Resources.LoadAll<UnitData>("Scriptable/EnemyData");
 
         for (int i = 0; i < temp.Length; i++)
         {
@@ -155,7 +155,7 @@ public class DataManager : MonoBehaviour
     #region Hero List - Dic
     public void ConstructHeroDic()
     {
-        m_HeroData.heroDic = new Dictionary<string, UnitStatus>();
+        m_HeroData.heroDic = new Dictionary<string, UnitData>();
 
         //Json에 저장된 heroList안의 내용들을 heroDic에 저장
         for (int i = 0; i < m_HeroData.heroList.Count; i++)
@@ -167,7 +167,7 @@ public class DataManager : MonoBehaviour
         m_HeroData.heroList.Clear();
 
         for (int i = 0; i < m_HeroData.heroDic.Count; i++)
-            m_HeroData.heroList = new List<UnitStatus>(m_HeroData.heroDic.Values);
+            m_HeroData.heroList = new List<UnitData>(m_HeroData.heroDic.Values);
     }
 
     /// <summary>
@@ -199,17 +199,17 @@ public class DataManager : MonoBehaviour
     /// <summary>
     /// PartyList에서 hero가 몇 번째에 존재하는지 확인한다.
     /// </summary>
-    public int GetIndexOfHeroInParty(UnitStatus data)
+    public int GetIndexOfHeroInParty(UnitData data)
     {
         return Utility.FindIndexOf(m_HeroData.partyList, data);
     }
 
-    public int GetIndexOfHeroInList(UnitStatus data)
+    public int GetIndexOfHeroInList(UnitData data)
     {
         return Utility.FindIndexOf(m_HeroData.heroList, data);
     }
 
-    public UnitStatus GetDataByHeroID(int id)
+    public UnitData GetDataByHeroID(int id)
     {
         foreach(var hero in m_HeroData.heroList)
         {
@@ -220,7 +220,7 @@ public class DataManager : MonoBehaviour
         throw new Exception("ID : " + id + "는(은) 존재하지 않는 ID입니다.");
     }
 
-    public UnitStatus GetDataByOrder(string key, int index)
+    public UnitData GetDataByOrder(string key, int index)
     {
         if (!IsValidInHeroListByIndex(index))
             throw new Exception("유효하지 않은 Index 값입니다.");
@@ -258,12 +258,14 @@ public class DataManager : MonoBehaviour
         {
             if (i == 0)
             {
-                m_HeroData.partyList[i].isLeader = true;
+                m_HeroData.partyList[i].SetLeader(true);
+                //m_HeroData.partyList[i].IsLeader = true;
                 LeaderHero = m_HeroData.partyList[i];
             }
             else
             {
-                m_HeroData.partyList[i].isLeader = false;
+                m_HeroData.partyList[i].SetLeader(false);
+                //m_HeroData.partyList[i].IsLeader = false;
             }
         }
     }

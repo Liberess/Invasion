@@ -1013,6 +1013,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5275806055065264375, guid: d24c96602c3ebbc4eb6e9f4cbb20d4e6,
         type: 3}
+      propertyPath: mMyData
+      value: 
+      objectReference: {fileID: 11400000, guid: fb22bf831d100bc4a8edb7224f6b9704,
+        type: 2}
+    - target: {fileID: 5275806055065264375, guid: d24c96602c3ebbc4eb6e9f4cbb20d4e6,
+        type: 3}
       propertyPath: mMyStat.hp
       value: 1000
       objectReference: {fileID: 0}
@@ -5542,6 +5548,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5275806055065264375, guid: d24c96602c3ebbc4eb6e9f4cbb20d4e6,
+        type: 3}
+      propertyPath: mMyData
+      value: 
+      objectReference: {fileID: 11400000, guid: 9fbd514b603b39548ab078917667c5a2,
+        type: 2}
     - target: {fileID: 5275806055065264375, guid: d24c96602c3ebbc4eb6e9f4cbb20d4e6,
         type: 3}
       propertyPath: baseType

@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
             {
                 reward = (((dataMgr.HeroData.heroList[i].ID + 1)
-                    * dataMgr.HeroData.heroList[i].level * stopWatch)) / rewardLimit;
+                    * dataMgr.HeroData.heroList[i].Level * stopWatch)) / rewardLimit;
             }
 
             infoTxt = "자동 파밍 시간 : " + _hour.ToString() + "시간 "
