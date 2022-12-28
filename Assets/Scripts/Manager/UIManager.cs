@@ -354,7 +354,7 @@ public class UIManager : MonoBehaviour
 
                     btn.onClick.AddListener(() => stageReadyPanel.gameObject.SetActive(true));
                     btn.onClick.AddListener(() => stageReadyPanel.SetupStageInfo(
-                        new StageInfo("테헤12란로", text, StageLevel.Easy, 0, 1)));
+                        new StageInfo("테헤12란로", text, EStageLevel.Easy, 0, 1)));
                     detailStageBtnDic[i].Add(btn);
                 }
             }

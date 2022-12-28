@@ -4,15 +4,6 @@ using System.Numerics;
 using JetBrains.Annotations;
 using UnityEngine;
 
-public enum EGoodsType
-{
-    Stamina = 0,
-    Gold,
-    Dia,
-    AwakeJewel      //각성석
-    //EvolutionJewel  //진화석
-}
-
 [System.Serializable]
 public class Goods
 {

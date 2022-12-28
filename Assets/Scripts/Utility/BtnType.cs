@@ -5,19 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-public enum EBtnType
-{
-    GPGSLogin,
-    GPGSLogout,
-    QuitGame,
-    InitializedData,
-    Option,
-    CloseUI,
-    GoToMain,
-    RestartBattle,
-    PlayFabLogin
-}
-
 public class BtnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private PlayFabManager playFabMgr;
@@ -67,28 +54,45 @@ public class BtnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             case EBtnType.GPGSLogin:
                 playFabMgr.StartCoroutine(playFabMgr.GoogleLogInCo());
                 break;
+
             case EBtnType.GPGSLogout:
                 playFabMgr.StartCoroutine(playFabMgr.GoogleLogOutCo());
                 break;
+
             case EBtnType.QuitGame:
                 Application.Quit();
                 break;
+
             case EBtnType.InitializedData:
                 DataManager.Instance.InitializedData();
                 //SceneLoad.LoadSceneHandle(3, 1);
                 break;
+
             case EBtnType.Option:
                 break;
+
             case EBtnType.CloseUI:
+                UIManager.Instance.HidePanelAction();
+                transform.GetComponentInParent<Animator>().SetTrigger("doHide");
+                yield return new WaitForSeconds(1f);
+                //transform.parent.gameObject.SetActive(false);
                 break;
+
             case EBtnType.GoToMain:
                 //SceneLoad.LoadSceneHandle(1, 0);
                 break;
+
             case EBtnType.RestartBattle:
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 break;
+
             case EBtnType.PlayFabLogin:
                 playFabMgr.StartCoroutine(playFabMgr.PlayFabLogInCo());
+                break;
+
+            case EBtnType.Buy:
+                if (TryGetComponent(out PriceComponent price))
+                    ShopManager.Instance.OnClickBuy(price);
                 break;
         }
 

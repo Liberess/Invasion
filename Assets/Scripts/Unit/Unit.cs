@@ -4,13 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public enum UnitJob
-{
-    ShortRange = 0,
-    LongRange,
-    Bullet
-}
-
 public abstract class Unit : MonoBehaviour
 {
     protected BattleManager battleMgr;
@@ -32,10 +25,10 @@ public abstract class Unit : MonoBehaviour
 
     [SerializeField] private GameObject target;
 
-    [SerializeField] private UnitJob mJob;
-    public UnitJob Job { get => mJob; }
+    [SerializeField] private EUnitJob mJob;
+    public EUnitJob Job { get => mJob; }
 
-    protected QueueType myObjType;
+    protected EUnitQueueType myObjType;
 
     protected int direction;
 
@@ -132,9 +125,9 @@ public abstract class Unit : MonoBehaviour
 
             switch (Job)
             {
-                case UnitJob.ShortRange: target.GetComponent<Unit>().Hit(ap); break;
-                case UnitJob.LongRange: Shot(); break;
-                    //case UnitJob.Wizard: Spell(target.transform.position); break;
+                case EUnitJob.ShortRange: target.GetComponent<Unit>().Hit(ap); break;
+                case EUnitJob.LongRange: Shot(); break;
+                    //case EUnitJob.Wizard: Spell(target.transform.position); break;
             }
 
             target.GetComponent<Unit>().Hit(ap);

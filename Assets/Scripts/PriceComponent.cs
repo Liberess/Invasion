@@ -3,8 +3,11 @@
 [System.Serializable]
 public class PriceComponent : MonoBehaviour
 {
-    [SerializeField] private EGoodsType goodsType;
-    public EGoodsType GoodsType { get => goodsType; }
+    [SerializeField] private EBuyingType buyingType;
+    public EBuyingType BuyingType { get => buyingType; }
+
+    [SerializeField] private EGoodsType payGoodsType;
+    public EGoodsType PayGoodsType { get => payGoodsType; }
 
     [SerializeField] private int price;
     public int Price { get => price; }

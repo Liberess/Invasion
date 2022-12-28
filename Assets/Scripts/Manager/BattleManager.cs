@@ -6,12 +6,6 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public enum QueueType
-{
-    Hero = 0,
-    Enemy
-}
-
 public class BattleManager : MonoBehaviour
 {
     #region Variables
@@ -48,10 +42,10 @@ public class BattleManager : MonoBehaviour
     [Header("== Setting Object Pooling =="), Space(10)]
     [SerializeField] private int defaultHeroCount = 20;
     [SerializeField] private int defaultEnemyCount = 20;
-    private Dictionary<QueueType, Queue<GameObject>> queDic =
-        new Dictionary<QueueType, Queue<GameObject>>();
-    private Dictionary<QueueType, GameObject> quePrefabDic =
-        new Dictionary<QueueType, GameObject>();
+    private Dictionary<EUnitQueueType, Queue<GameObject>> queDic =
+        new Dictionary<EUnitQueueType, Queue<GameObject>>();
+    private Dictionary<EUnitQueueType, GameObject> quePrefabDic =
+        new Dictionary<EUnitQueueType, GameObject>();
     //private Queue<Hero> heroQueue = new Queue<Hero>();
     //private Queue<Enemy> enemyQueue = new Queue<Enemy>();
 
@@ -106,12 +100,12 @@ public class BattleManager : MonoBehaviour
         //redBase.UnitSetup(new UnitStatus("RedBase", 1000));
         //blueBase.UnitSetup(new UnitStatus("BlueBase", 1000));
 
-        quePrefabDic.Add(QueueType.Hero, Resources.Load("Unit/Hero") as GameObject);
-        quePrefabDic.Add(QueueType.Enemy, Resources.Load("Unit/Enemy") as GameObject);
+        quePrefabDic.Add(EUnitQueueType.Hero, Resources.Load("Unit/Hero") as GameObject);
+        quePrefabDic.Add(EUnitQueueType.Enemy, Resources.Load("Unit/Enemy") as GameObject);
 
         queDic.Clear();
-        Initialize(QueueType.Hero, defaultHeroCount);
-        Initialize(QueueType.Enemy, defaultEnemyCount);
+        Initialize(EUnitQueueType.Hero, defaultHeroCount);
+        Initialize(EUnitQueueType.Enemy, defaultEnemyCount);
 
         SetHeroCard();
         SetCostSlider();
@@ -131,7 +125,7 @@ public class BattleManager : MonoBehaviour
     }
 
     #region Object Pooling
-    private void Initialize(QueueType type, int initCount)
+    private void Initialize(EUnitQueueType type, int initCount)
     {
         queDic.Add(type, new Queue<GameObject>());
 
@@ -139,7 +133,7 @@ public class BattleManager : MonoBehaviour
             queDic[type].Enqueue(CreateNewObj(type, i));
     }
 
-    private GameObject CreateNewObj(QueueType type, int index = 0)
+    private GameObject CreateNewObj(EUnitQueueType type, int index = 0)
     {
         if (!quePrefabDic.ContainsKey(type))
         {
@@ -160,7 +154,7 @@ public class BattleManager : MonoBehaviour
         return newObj;
     }
 
-    public static GameObject GetObj(QueueType type)
+    public static GameObject GetObj(EUnitQueueType type)
     {
         if (Instance.queDic[type].Count > 0)
         {
@@ -178,13 +172,13 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public GameObject InstantiateObj(QueueType type)
+    public GameObject InstantiateObj(EUnitQueueType type)
     {
         var obj = GetObj(type);
         return obj;
     }
 
-    public static void ReturnObj(QueueType type, GameObject obj)
+    public static void ReturnObj(EUnitQueueType type, GameObject obj)
     {
         obj.gameObject.SetActive(false);
         obj.transform.SetParent(Instance.transform);
@@ -481,10 +475,10 @@ public class BattleManager : MonoBehaviour
             cost -= targetCost;
             SetCostSlider();
 
-            var hero = InstantiateObj(QueueType.Hero).GetComponent<Hero>();
+            var hero = InstantiateObj(EUnitQueueType.Hero).GetComponent<Hero>();
             hero.transform.position = blueBase.transform.position;
             hero.UnitSetup(dataMgr.HeroData.partyList[index]);
-            hero.DeathAction += () => ReturnObj(QueueType.Hero, hero.gameObject);
+            hero.DeathAction += () => ReturnObj(EUnitQueueType.Hero, hero.gameObject);
         }
     }
     #endregion

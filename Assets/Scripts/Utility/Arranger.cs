@@ -3,14 +3,7 @@ using UnityEngine;
 
 public class Arranger : MonoBehaviour
 {
-    private enum ArrangerType
-    {
-        Party = 0,
-        Hero,
-        Item
-    }
-
-    [SerializeField] private ArrangerType myType;
+    [SerializeField] private EArrangerType myType;
     [SerializeField] private List<Transform> slotList = new List<Transform>();
 
     private void Start()
@@ -34,7 +27,7 @@ public class Arranger : MonoBehaviour
 
         slotList.RemoveRange(transform.childCount, slotList.Count - transform.childCount);
 
-        if (myType == ArrangerType.Party)
+        if (myType == EArrangerType.Party)
         {
             for (int i = 0; i < slotList.Count; i++)
             {
@@ -64,7 +57,7 @@ public class Arranger : MonoBehaviour
 
             DataManager.Instance.UpdatePartyLeader();
         }
-        else if(myType == ArrangerType.Hero)
+        else if(myType == EArrangerType.Hero)
         {
             for (int i = 0; i < slotList.Count; i++)
             {

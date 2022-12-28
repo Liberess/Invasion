@@ -5,9 +5,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public enum EPopUpType { Notice = 0, Caution, Warning }
-public enum EPopUpResponse { Ok, Yes, No, Error }
-
 public class PopUpManager : MonoBehaviour
 {
     public static PopUpManager Instance { get; private set; }

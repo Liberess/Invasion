@@ -110,7 +110,7 @@ public class BattleAI : MonoBehaviour
             );
 
         ++spawnCount;
-        var enemy = battleMgr.InstantiateObj(QueueType.Enemy).GetComponent<Enemy>();
+        var enemy = battleMgr.InstantiateObj(EUnitQueueType.Enemy).GetComponent<Enemy>();
         enemy.transform.position = battleMgr.RedBase.transform.position;
 
         if (IsInstantiate())
@@ -128,7 +128,7 @@ public class BattleAI : MonoBehaviour
         enemy.DeathAction += () => --spawnCount;
         enemy.DeathAction += () => EnrageAction -= enemy.Enrage;
         enemy.DeathAction += () => spawnedEnemyList.Remove(enemy);
-        enemy.DeathAction += () => BattleManager.ReturnObj(QueueType.Enemy, enemy.gameObject);
+        enemy.DeathAction += () => BattleManager.ReturnObj(EUnitQueueType.Enemy, enemy.gameObject);
     }
 
     /// <summary>
