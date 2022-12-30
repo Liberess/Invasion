@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using PlayFab.ClientModels;
 using PlayFab;
 using GooglePlayGames;
+using static UnityEditor.Progress;
 
 public class DataManager : MonoBehaviour
 {
@@ -31,6 +32,10 @@ public class DataManager : MonoBehaviour
     [Header("==== Enemy Data Information ===="), Space(10)]
     [SerializeField] private List<UnitData> mEnemyDataList = new List<UnitData>();
     public List<UnitData> EnemyDataList { get => mEnemyDataList; }
+
+    [Header("==== Item Data Information ===="), Space(10)]
+    [SerializeField] private List<ItemData> mItemDataList= new List<ItemData>();
+    public List<ItemData> ItemDataList => mItemDataList;
     #endregion
 
     private void Awake()
@@ -65,6 +70,8 @@ public class DataManager : MonoBehaviour
         UpdateHeroAnimCtrl();
         UpdateHeroCardSprite();
         UpdateEnemyData();
+        UpdateItemData();
+
         yield return null;
     }
 
@@ -148,6 +155,19 @@ public class DataManager : MonoBehaviour
         {
             if (temp[i] != null)
                 mEnemyDataList.Add(temp[i]);
+        }
+    }
+
+    private void UpdateItemData()
+    {
+        mItemDataList.Clear();
+
+        ItemData[] temp = Resources.LoadAll<ItemData>("Scriptable/ItemData");
+
+        for (int i = 0; i < temp.Length; i++)
+        {
+            if (temp[i] != null)
+                mItemDataList.Add(temp[i]);
         }
     }
     #endregion
@@ -275,7 +295,7 @@ public class DataManager : MonoBehaviour
     {
         try
         {
-            SetGoods(EGoodsType.Gold, 1000);
+            SetGoodsAmount(EGoodsType.Gold, 1000);
             //GameData.goodsList[(int)EGoodsType.Gold].count += 1000;
         }
         catch(Exception exp)
@@ -284,7 +304,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void SetGoods(EGoodsType EGoodsType, int num)
+    public void SetGoodsAmount(EGoodsType EGoodsType, int num)
     {
         if (m_GameData.GoodsList.Count <= 0)
             throw new Exception("goodsList is empty");
@@ -360,7 +380,8 @@ public class DataManager : MonoBehaviour
 
         m_GameData.isNew = true;
 
-        m_GameData.saveTime = DateTime.Now;
+        m_GameData.lastLogInTime = DateTime.Now;
+        m_GameData.lastLogInTimeStr = m_GameData.lastLogInTime.ToString();
 
         m_GameData.isLoadComplete = true;
     }
@@ -458,7 +479,6 @@ public class DataManager : MonoBehaviour
 
     public void SaveData()
     {
-        SaveTime();
         Dictionary<string, string> dataDic = new Dictionary<string, string>();
         dataDic.Add("GameData", JsonUtility.ToJson(m_GameData));
         dataDic.Add("HeroData", JsonUtility.ToJson(m_HeroData));
@@ -484,14 +504,64 @@ public class DataManager : MonoBehaviour
 
     private void SaveTime()
     {
-        m_GameData.saveTime = DateTime.Now;
-        m_GameData.saveTimeStr = m_GameData.saveTime.ToString();
+        m_GameData.lastLogInTime = DateTime.Now;
+        m_GameData.lastLogInTimeStr = m_GameData.lastLogInTime.ToString();
     }
     #endregion
 
     private void DisplayPlayfabError(PlayFabError error)
     {
         Debug.LogError("error : " + error.GenerateErrorReport());
+    }
+
+    public void AddInventoryItem(Item item, int amount)
+    {
+        if(m_GameData.inventoryDic.TryGetValue(item.Data.Name, out Item currentItem))
+        {
+            if (currentItem as ConsumeItem != null)
+            {
+                ((ConsumeItem)currentItem).AddAmount(amount);
+                ((ConsumeItem)currentItem).AddTodayBuyingAmount(1);
+            }
+        }
+        else
+        {
+            m_GameData.inventoryDic.Add(item.Data.Name, item);
+            if (item as ConsumeItem != null)
+            {
+                ((ConsumeItem)item).SetAmount(amount);
+                ((ConsumeItem)item).AddTodayBuyingAmount(1);
+            }
+        }
+    }
+
+    public Item GetItemByKey(string key)
+    {
+        Item tempItem = null;
+
+        foreach(var item in m_GameData.inventoryDic.Values)
+        {
+            if(item.Data.Name == key)
+            {
+                tempItem = item;
+                break;
+            }
+        }
+
+        return tempItem;
+    }
+
+    public ItemData GetItemDataByKey(string key)
+    {
+        return mItemDataList.Find(x => x.Name == key);
+    }
+
+    public int GetTodayBuyingAmountOfItemByKey(string key)
+    {
+        if(m_GameData.inventoryDic.TryGetValue(key, out Item item))
+              return item.GetTodayBuyingAmount();
+
+        throw new Exception("does not exist Key");
     }
 
     private void OnApplicationQuit()

@@ -40,7 +40,6 @@ public class PlayFabManager : MonoBehaviour
     private void Start()
     {
         popUpMgr = PopUpManager.Instance;
-
         StartCoroutine(GoogleLogInCo());
     }
 

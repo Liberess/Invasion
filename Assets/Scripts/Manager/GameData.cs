@@ -21,8 +21,10 @@ public class Goods
 public class GameData
 {
     public bool isLoadComplete = false;
-    public string saveTimeStr;
-    public DateTime saveTime;
+    public string lastLogInTimeStr;
+    public DateTime lastLogInTime;
+
+    public Dictionary<string, Item> inventoryDic = new Dictionary<string, Item>();
 
     public StageInfo stageInfo;
     public Dictionary<string, string> stageNameDic = new Dictionary<string, string>();

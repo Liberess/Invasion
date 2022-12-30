@@ -45715,7 +45715,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1589258105
 RectTransform:
   m_ObjectHideFlags: 0
@@ -49994,6 +49994,11 @@ PrefabInstance:
       propertyPath: price
       value: 10000
       objectReference: {fileID: 0}
+    - target: {fileID: 2855394552131272208, guid: b30dbffc8319de040b4eeb09f33d3377,
+        type: 3}
+      propertyPath: buyingType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8436654414086808282, guid: b30dbffc8319de040b4eeb09f33d3377,
         type: 3}
       propertyPath: m_Text
@@ -50108,6 +50113,13 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8436654414793234554, guid: b30dbffc8319de040b4eeb09f33d3377,
+        type: 3}
+      propertyPath: m_Text
+      value: '10000 Gold
+
+        (0/3)'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b30dbffc8319de040b4eeb09f33d3377, type: 3}
@@ -63571,7 +63583,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2139223675
 RectTransform:
   m_ObjectHideFlags: 0

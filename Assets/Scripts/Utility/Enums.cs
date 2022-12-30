@@ -14,6 +14,12 @@ public enum EBuyingType
     Can
 }
 
+public enum EItem
+{
+    CatAde = 0,
+    Can
+}
+
 public enum EBtnType
 {
     GPGSLogin,
@@ -40,6 +46,10 @@ public enum EUnitQueueType { Hero = 0, Enemy }
 public enum EUnitJob { ShortRange = 0, LongRange, Bullet }
 
 public enum EShopMenu { Humal = 0, Item, Package }
+
+public enum EItemType { None = 0, Consume, Equipment }
+
+public enum EGrade { Normal = 0, Rare, Epic, Legend }
 
 [System.Serializable]
 public class Enums

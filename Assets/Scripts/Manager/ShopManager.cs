@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayFab;
 
 public class ShopManager : MonoBehaviour
 {
@@ -49,8 +50,7 @@ public class ShopManager : MonoBehaviour
         for (int i = 0; i < shopPanelParent.transform.childCount; i++)
             shopPanelList.Add(shopPanelParent.GetChild(i).gameObject);
 
-        shopPanelList[0].gameObject.SetActive(true);
-        shopBtnList[0].GetComponent<Animator>().SetBool("isHighlight", true);
+        OnClickShopMenu(EShopMenu.Humal);
     }
 
     public void OnClickShopMenu(EShopMenu shopMenu)
@@ -74,12 +74,15 @@ public class ShopManager : MonoBehaviour
     {
         try
         {
-            DataManager.Instance.SetGoods(
-                priceComponent.PayGoodsType, -priceComponent.Price);
-
-            for (int i = 0; i < priceComponent.Num; i++)
+            var item = dataMgr.GetItemByKey(priceComponent.BuyingType.ToString());
+            if(item == null)
             {
-
+                Buy(priceComponent);
+            }
+            else
+            {
+                if (item.GetTodayBuyingAmount() < item.Data.MaxBuyingAmount)
+                    Buy(priceComponent);
             }
         }
         catch (Exception exp)
@@ -91,6 +94,33 @@ public class ShopManager : MonoBehaviour
             }
 
             return;
+        }
+    }
+
+    private void Buy(PriceComponent priceComponent)
+    {
+        dataMgr.SetGoodsAmount(priceComponent.PayGoodsType, -priceComponent.Price);
+
+        for (int i = 0; i < priceComponent.Num; i++)
+            BuyItem(priceComponent.BuyingType);
+    }
+
+    private void BuyItem(EBuyingType buyingType)
+    {
+        switch (buyingType)
+        {
+            case EBuyingType.Humal:
+                break;
+
+            case EBuyingType.CatAde:
+                var itemData = dataMgr.GetItemDataByKey(buyingType.ToString());
+                ConsumeItem item = new ConsumeItem((ConsumeItemData)itemData, 1);
+                dataMgr.AddInventoryItem(item, 1);
+                break;
+
+            case EBuyingType.Can:
+                //dataMgr.AddInventoryItem(, 1);
+                break;
         }
     }
 }

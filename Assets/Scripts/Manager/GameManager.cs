@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
             else
             {
                 string date = request.GetResponseHeader("date");
-                string offTime = dataMgr.GameData.saveTimeStr;
+                string offTime = dataMgr.GameData.lastLogInTimeStr;
                 DateTime exitTime = Convert.ToDateTime(offTime);
 
                 //DateTime dateTime = DateTime.Parse(date).ToUniversalTime();
