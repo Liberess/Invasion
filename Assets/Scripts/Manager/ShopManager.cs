@@ -75,13 +75,14 @@ public class ShopManager : MonoBehaviour
         try
         {
             var item = dataMgr.GetItemByKey(priceComponent.BuyingType.ToString());
-            if(item == null)
+            var countableItem = Utility.ConvertItemType<CountableItem>(item);
+            if (item == null || countableItem == null)
             {
                 Buy(priceComponent);
             }
             else
             {
-                if (item.GetTodayBuyingAmount() < item.Data.MaxBuyingAmount)
+                if (countableItem.TodayBuyingAmount < countableItem.MaxBuyingAmount)
                     Buy(priceComponent);
             }
         }

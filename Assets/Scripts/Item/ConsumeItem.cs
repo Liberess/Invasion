@@ -26,9 +26,4 @@ public class ConsumeItem : CountableItem, IUsableItem
 
         Debug.Log("use " + _csItemType.ToString() + " item");
     }
-
-    public override int GetTodayBuyingAmount()
-    {
-        return TodayBuyingAmount;
-    }
 }

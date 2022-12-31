@@ -386,6 +386,28 @@ public class DataManager : MonoBehaviour
         m_GameData.isLoadComplete = true;
     }
 
+    private void CalculateSaveTime()
+    {
+        string offTime = m_GameData.lastLogInTimeStr;
+        DateTime exitTime = Convert.ToDateTime(offTime);
+
+        DateTime dateTime = DateTime.Now;
+        TimeSpan timeStamp = dateTime - exitTime;
+
+        int timeCalDay = timeStamp.Days;
+        if(timeCalDay > 0 )
+            InitializedTodayBuyingLimit();
+    }
+
+    private void InitializedTodayBuyingLimit()
+    {
+        foreach(var item in m_GameData.inventoryDic.Values)
+        {
+            if (item as CountableItem != null)
+                ((CountableItem)item).SetTodayBuyingAmount(0);
+        }
+    }
+
     private void SetupHero()
     {
         for (int i = 0; i < m_HeroData.heroList.Count; i++)
@@ -466,6 +488,8 @@ public class DataManager : MonoBehaviour
                 {
                     m_GameData = JsonUtility.FromJson<GameData>(eachData.Value.Value);
                     m_GameData.isLoadComplete = true;
+
+                    CalculateSaveTime();
                 }
                 else
                 {
@@ -559,7 +583,10 @@ public class DataManager : MonoBehaviour
     public int GetTodayBuyingAmountOfItemByKey(string key)
     {
         if(m_GameData.inventoryDic.TryGetValue(key, out Item item))
-              return item.GetTodayBuyingAmount();
+        {
+            if(item as CountableItem != null)
+              return ((CountableItem)item).TodayBuyingAmount;
+        }
 
         throw new Exception("does not exist Key");
     }
