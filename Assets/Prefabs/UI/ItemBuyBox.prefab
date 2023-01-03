@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 8436654414793234555}
   - component: {fileID: 8436654414793234554}
   m_Layer: 5
-  m_Name: Text
+  m_Name: InfoTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -453,6 +453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff04ef84a28c367479b888f1f5a36d3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  infoTxt: {fileID: 8436654414793234554}
   buyingType: 1
   payGoodsType: 1
   price: 0

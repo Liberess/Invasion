@@ -91,7 +91,7 @@ public class BtnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 break;
 
             case EBtnType.Buy:
-                if (TryGetComponent(out PriceComponent price))
+                if (TryGetComponent(out BuyingButton price))
                     ShopManager.Instance.OnClickBuy(price);
                 break;
         }

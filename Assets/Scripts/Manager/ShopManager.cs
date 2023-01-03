@@ -9,15 +9,16 @@ public class ShopManager : MonoBehaviour
 {
     public static ShopManager Instance { get; private set; }
 
+    private DataManager dataMgr;
+    private PopUpManager popUpMgr;
+
     [HideInInspector] public List<Button> shopBtnList = new List<Button>();
 
     public GameObject shopPanel;
     private Transform shopPanelParent;
 
     [HideInInspector] public List<GameObject> shopPanelList = new List<GameObject>();
-
-    private DataManager dataMgr;
-    private PopUpManager popUpMgr;
+    //private buyingBtns = 
 
     private void Awake()
     {
@@ -70,27 +71,34 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    public void OnClickBuy(PriceComponent priceComponent)
+    public void OnClickBuy(BuyingButton buyingBtn)
     {
         try
         {
-            var item = dataMgr.GetItemByKey(priceComponent.BuyingType.ToString());
-            var countableItem = Utility.ConvertItemType<CountableItem>(item);
-            if (item == null || countableItem == null)
+            if(dataMgr.GetItemByKey(buyingBtn.BuyingType.ToString(), out Item item))
             {
-                Buy(priceComponent);
+                if(Utility.DownCastingItem(item, out CountableItem cItem))
+                {
+                    if (cItem.TodayBuyingAmount < cItem.MaxBuyingAmount)
+                        StartCoroutine(BuyCo(buyingBtn));
+                    else
+                        popUpMgr.PopUp("하루 구매 횟수를 모두 소모했습니다!", EPopUpType.Caution);
+                }
+                else
+                {
+                    StartCoroutine(BuyCo(buyingBtn));
+                }
             }
             else
             {
-                if (countableItem.TodayBuyingAmount < countableItem.MaxBuyingAmount)
-                    Buy(priceComponent);
+                StartCoroutine(BuyCo(buyingBtn));
             }
         }
         catch (Exception exp)
         {
             if (exp.Message.Contains("Insufficient"))
             {
-                string msg = string.Concat(priceComponent.PayGoodsType.ToString(), " 재화가 부족합니다.");
+                string msg = string.Concat(buyingBtn.PayGoodsType.ToString(), " 재화가 부족합니다.");
                 popUpMgr.PopUp(msg, EPopUpType.Caution);
             }
 
@@ -98,30 +106,32 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    private void Buy(PriceComponent priceComponent)
+    private IEnumerator BuyCo(BuyingButton buyingBtn)
     {
-        dataMgr.SetGoodsAmount(priceComponent.PayGoodsType, -priceComponent.Price);
+        dataMgr.SetGoodsAmount(buyingBtn.PayGoodsType, -buyingBtn.Price);
 
-        for (int i = 0; i < priceComponent.Num; i++)
-            BuyItem(priceComponent.BuyingType);
+        for (int i = 0; i < buyingBtn.Num; i++)
+            yield return StartCoroutine(BuyItemCo(buyingBtn.BuyingType));
+
+        buyingBtn.UpdateInfoUI();
+
+        yield return null;
+
     }
 
-    private void BuyItem(EBuyingType buyingType)
+    private IEnumerator BuyItemCo(EBuyingType buyingType)
     {
-        switch (buyingType)
+        if(buyingType == EBuyingType.Humal)
         {
-            case EBuyingType.Humal:
-                break;
 
-            case EBuyingType.CatAde:
-                var itemData = dataMgr.GetItemDataByKey(buyingType.ToString());
-                ConsumeItem item = new ConsumeItem((ConsumeItemData)itemData, 1);
-                dataMgr.AddInventoryItem(item, 1);
-                break;
-
-            case EBuyingType.Can:
-                //dataMgr.AddInventoryItem(, 1);
-                break;
         }
+        else
+        {
+            var itemData = dataMgr.GetItemDataByKey(buyingType.ToString());
+            ConsumeItem item = new ConsumeItem((ConsumeItemData)itemData, 1);
+            dataMgr.AddInventoryItem(item, 1);
+        }
+
+        yield return null;
     }
 }

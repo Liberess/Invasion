@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using PlayFab.ClientModels;
 using PlayFab;
-using GooglePlayGames;
+using UnityEngine.Events;
 using static UnityEditor.Progress;
 
 public class DataManager : MonoBehaviour
@@ -38,6 +38,8 @@ public class DataManager : MonoBehaviour
     public List<ItemData> ItemDataList => mItemDataList;
     #endregion
 
+    public UnityAction OnDataLoadSuccessAction;
+
     private void Awake()
     {
         if (Instance == null)
@@ -56,6 +58,8 @@ public class DataManager : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.OnApplicationStart();
+
+        OnDataLoadSuccessAction = null;
     }
 
     public void SetStageInfo(StageInfo info) => GameData.stageInfo = info;
@@ -229,7 +233,7 @@ public class DataManager : MonoBehaviour
         return Utility.FindIndexOf(m_HeroData.heroList, data);
     }
 
-    public UnitData GetDataByHeroID(int id)
+    public UnitData GetDataByHero(int id)
     {
         foreach(var hero in m_HeroData.heroList)
         {
@@ -311,9 +315,15 @@ public class DataManager : MonoBehaviour
 
         var count = m_GameData.GoodsList[(int)EGoodsType].count;
         if (count + num > int.MaxValue)
+        {
+            PopUpManager.Instance.PopUp(EGoodsType.ToString() + " 재화가 한계치입니다!", EPopUpType.Caution);
             throw new Exception("Overflow Max Goods Value");
+        }
         else if (count + num < 0)
+        {
+            PopUpManager.Instance.PopUp(EGoodsType.ToString() + " 재화가 부족합니다!", EPopUpType.Caution);
             throw new Exception("Insufficient Goods Value");
+        }
         else
             m_GameData.AddElementInGoodsList((int)EGoodsType, num);
             //m_GameData.GoodsList[(int)EGoodsType].count += num;
@@ -325,7 +335,7 @@ public class DataManager : MonoBehaviour
         InitializedGameData();
         InitializedHeroData();
 
-        PlayFabManager.OnPlayFabLoginAction();
+        PlayFabManager.Instance?.OnPlayFabLoginSuccessAction();
 
 #if UNITY_EDITOR
         SetupHero();
@@ -370,6 +380,12 @@ public class DataManager : MonoBehaviour
         {
             m_GameData.GoodsList.Add(new Goods(GameData.goodsNames[i], 0));
             m_GameData.SetElementInGoodsList(i, 0);
+        }
+
+        m_GameData.inventoryDic.Clear();
+        foreach(var itemData in ItemDataList)
+        {
+            //m_GameData.inventoryDic.Add(itemData.Name, itemData);
         }
 
         for (int i = 0; i < m_GameData.facilGold.Length; i++)
@@ -441,8 +457,8 @@ public class DataManager : MonoBehaviour
                     Quaternion.identity).GetComponent<LobbyHero>();
 
                 var heroStat = m_HeroData.heroList[i];
-                //heroStat.mySprite = HeroData.heroSpriteList[heroStat.ID];
-                //heroStat.animCtrl = HeroData.heroAnimCtrlList[heroStat.ID];
+                //heroStat.mySprite = HeroData.heroSpriteList[heroStat.Data.ID];
+                //heroStat.animCtrl = HeroData.heroAnimCtrlList[heroStat.Data.ID];
 
                 hero.UnitSetup(heroStat);
             }
@@ -554,25 +570,24 @@ public class DataManager : MonoBehaviour
             if (item as ConsumeItem != null)
             {
                 ((ConsumeItem)item).SetAmount(amount);
-                ((ConsumeItem)item).AddTodayBuyingAmount(1);
+                ((ConsumeItem)item).SetTodayBuyingAmount(1);
             }
         }
     }
 
-    public Item GetItemByKey(string key)
+    public bool GetItemByKey(string key, out Item outItem)
     {
-        Item tempItem = null;
-
         foreach(var item in m_GameData.inventoryDic.Values)
         {
             if(item.Data.Name == key)
             {
-                tempItem = item;
-                break;
+                outItem = item;
+                return true;
             }
         }
 
-        return tempItem;
+        outItem = null;
+        return false;
     }
 
     public ItemData GetItemDataByKey(string key)

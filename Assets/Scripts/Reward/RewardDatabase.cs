@@ -6,7 +6,7 @@ using UnityEngine;
 public struct Reward
 {
     public EGoodsType type;
-    public int num;
+    public int amount;
 }
 
 [CreateAssetMenu(fileName = "Reward Data",

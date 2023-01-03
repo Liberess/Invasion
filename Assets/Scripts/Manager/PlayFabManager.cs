@@ -14,7 +14,7 @@ public class PlayFabManager : MonoBehaviour
 
     public string PlayFabId { get; private set; }
 
-    public static UnityAction OnPlayFabLoginAction;
+    public UnityAction OnPlayFabLoginSuccessAction;
 
     private void Awake()
     {
@@ -34,7 +34,7 @@ public class PlayFabManager : MonoBehaviour
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
 
-        OnPlayFabLoginAction = null;
+        OnPlayFabLoginSuccessAction = null;
     }
 
     private void Start()
@@ -98,7 +98,7 @@ public class PlayFabManager : MonoBehaviour
     private IEnumerator LoadDataCo()
     {
         yield return DataManager.Instance.StartCoroutine(DataManager.Instance.LoadDataCo());
-        OnPlayFabLoginAction();
+        OnPlayFabLoginSuccessAction();
         //yield return AudioManager.Instance.StartCoroutine(AudioManager.Instance.InitializedAudioSettingCo());
         yield return null;
     }

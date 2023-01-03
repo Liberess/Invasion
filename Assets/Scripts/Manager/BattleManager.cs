@@ -424,9 +424,9 @@ public class BattleManager : MonoBehaviour
             reward.transform.localScale = new Vector3(1, 1, 1);
             reward.transform.GetChild(0).GetComponent<Image>().sprite =
                 dataMgr.GameData.goodsSpriteList[(int)rewards[i].type];
-            reward.GetComponentInChildren<Text>().text = rewards[i].num.ToString();
+            reward.GetComponentInChildren<Text>().text = rewards[i].amount.ToString();
 
-            dataMgr.SetGoodsAmount(rewards[i].type, rewards[i].num);
+            dataMgr.SetGoodsAmount(rewards[i].type, rewards[i].amount);
         }
     }
 

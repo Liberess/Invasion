@@ -91,11 +91,11 @@ public class UIManager : MonoBehaviour
         InitHeroSlotObjectPool();
         InitSortButton();
 
-        StartCoroutine(InitHeroPanelCoru());
-        StartCoroutine(UpdateGoodsUICo(0.1f));
+        //StartCoroutine(InitHeroPanelCoru());
+        //StartCoroutine(UpdateGoodsUICo(0.1f));
 
-        PlayFabManager.OnPlayFabLoginAction += () => StartCoroutine(InitHeroPanelCoru());
-        PlayFabManager.OnPlayFabLoginAction += () => StartCoroutine(UpdateGoodsUICo(0.0f));
+        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => StartCoroutine(InitHeroPanelCoru());
+        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => StartCoroutine(UpdateGoodsUICo(0.0f));
     }
 
     private IEnumerator UpdateGoodsUICo(float delay)
@@ -202,7 +202,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// 영웅 슬롯에서 파티 슬롯으로 스왑했을 때 사용한다.
     /// </summary>
-    /// <param name="id"> Hero의 ID </param>
+    /// <param name="id"> Hero의 Data.ID </param>
     public void SwapSlotToParty(int id)
     {
         int index = 0;
@@ -448,17 +448,17 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// HeroDetailInfoPanel의 내용을 Update한다.
     /// </summary>
-    /// <param name="heroID"> 세부 정보 패널에 표시할 영웅의 번호 </param>
-    public void UpdateHeroDetailInfo(int heroID)
+    /// <param name="ID"> 세부 정보 패널에 표시할 영웅의 번호 </param>
+    public void UpdateHeroDetailInfo(int ID)
     {
         if (heroDetailInfoPanel == null)
             return;
 
-        currentHeroIndex = dataMgr.GetIndexOfHeroInList(dataMgr.GetDataByHeroID(heroID));
+        currentHeroIndex = dataMgr.GetIndexOfHeroInList(dataMgr.GetDataByHero(ID));
         UpdateHeroOrderBtn();
 
         dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-            dataMgr.GetDataByHeroID(heroID)));
+            dataMgr.GetDataByHero(ID)));
     }
 
     private void UpdateHeroOrderBtn()

@@ -6,11 +6,11 @@ public abstract class CountableItem : Item
 {
     public CountableItemData CountableData { get; private set; }
 
-    public int Amount { get; protected set; }
+    public int Amount { get; protected set; } = 0;
     public int MaxAmount => CountableData.MaxAmount;
     public bool IsMax => Amount >= CountableData.MaxAmount;
 
-    public int TodayBuyingAmount { get; protected set; }
+    public int TodayBuyingAmount { get; protected set; } = 0;
     public int MaxBuyingAmount => CountableData.MaxBuyingAmount;
 
     public CountableItem(CountableItemData data, int amount = 1)

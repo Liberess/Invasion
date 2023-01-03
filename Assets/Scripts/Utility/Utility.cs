@@ -49,11 +49,17 @@ public static class Utility
         return list.IndexOf(element);
     }
 
-    public static T ConvertItemType<T> (object item) where T : Item
+    public static bool DownCastingItem<T> (Item item, out T childItem) where T : Item
     {
-        if (item is T)
-            return (T)item;
+        if(item is T)
+        {
+            childItem = (T)item;
+            return true;
+        }
         else
-            return default;
+        {
+            childItem = default;
+            return false;
+        }
     }
 }

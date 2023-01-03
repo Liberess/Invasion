@@ -5,14 +5,6 @@ using UnityEngine.UI;
 
 public class FacilityManager : MonoBehaviour
 {
-    public GameObject[] timeTxtList;
-    public Sprite[] facilSpriteList;
-    public string[] facilNameList;
-    public int[] facilGoldList;
-
-    public Slider[] facilSliders;
-    public GameObject[] locks;
-
     #region 인스턴스화
     static GameObject _container;
     static GameObject Container
@@ -23,36 +15,38 @@ public class FacilityManager : MonoBehaviour
         }
     }
 
-    public static FacilityManager _instance;
+    public static FacilityManager mInstance;
     public static FacilityManager Instance
     {
         get
         {
-            if (!_instance)
+            if (!mInstance)
             {
                 _container = new GameObject();
                 _container.name = "FacilityManager";
-                _instance = _container.AddComponent(typeof(FacilityManager)) as FacilityManager;
+                mInstance = _container.AddComponent(typeof(FacilityManager)) as FacilityManager;
                 DontDestroyOnLoad(_container);
             }
 
-            return _instance;
+            return mInstance;
         }
     }
     #endregion
 
+    public GameObject[] timeTxtList;
+    public Sprite[] facilSpriteList;
+    public string[] facilNameList;
+    public int[] facilGoldList;
+
+    public Slider[] facilSliders;
+    public GameObject[] locks;
+
     private void Awake()
     {
-        if (_instance == null)
-        {
-            _instance = this;
-        }
-        else if (_instance != this)
-        {
-            Destroy(gameObject);
-        }
-
-        DontDestroyOnLoad(gameObject);
+        if (mInstance == null)
+            mInstance = this;
+        else if (mInstance != this)
+            Destroy(this.gameObject);
     }
 
     private void Update()
@@ -73,5 +67,10 @@ public class FacilityManager : MonoBehaviour
                 locks[i].SetActive(false);
             }
         }
+    }
+
+    public void BuildFacility()
+    {
+
     }
 }
