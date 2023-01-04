@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
-using PlayFab;
 
 public class ShopManager : MonoBehaviour
 {
@@ -12,13 +12,17 @@ public class ShopManager : MonoBehaviour
     private DataManager dataMgr;
     private PopUpManager popUpMgr;
 
-    [HideInInspector] public List<Button> shopBtnList = new List<Button>();
+    private List<Button> shopBtnList = new List<Button>();
 
     public GameObject shopPanel;
     private Transform shopPanelParent;
 
-    [HideInInspector] public List<GameObject> shopPanelList = new List<GameObject>();
-    //private buyingBtns = 
+    public List<GameObject> shopPanelList = new List<GameObject>();
+
+    private List<BuyingButton> buyingBtnList = new List<BuyingButton>();
+    private BuyingButton currentBuyingBtn;
+
+    public UnityAction OnShopInitAction;
 
     private void Awake()
     {
@@ -46,17 +50,29 @@ public class ShopManager : MonoBehaviour
         }
 
         shopPanelParent = shopPanel.transform.Find("PickPanelGroup");
-
         shopPanelList.Clear();
+        buyingBtnList.Clear();
         for (int i = 0; i < shopPanelParent.transform.childCount; i++)
+        {
             shopPanelList.Add(shopPanelParent.GetChild(i).gameObject);
+
+            var buyingBtns = shopPanelParent.GetChild(i).GetComponentsInChildren<BuyingButton>();
+            foreach(var btn in buyingBtns)
+            {
+                buyingBtnList.Add(btn);
+                OnShopInitAction += btn.SetupItem;
+                OnShopInitAction += btn.UpdateInfoUI;
+            }
+        }
+
+        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += OnShopInitAction;
 
         OnClickShopMenu(EShopMenu.Humal);
     }
 
     public void OnClickShopMenu(EShopMenu shopMenu)
     {
-        for(int i = 0; i < shopBtnList.Count; i++)
+        for (int i = 0; i < shopBtnList.Count; i++)
         {
             if(i == (int)shopMenu)
             {
@@ -71,8 +87,15 @@ public class ShopManager : MonoBehaviour
         }
     }
 
+    private void SetupBuyingButton()
+    {
+
+    }
+
     public void OnClickBuy(BuyingButton buyingBtn)
     {
+        currentBuyingBtn = buyingBtn;
+
         try
         {
             if(dataMgr.GetItemByKey(buyingBtn.BuyingType.ToString(), out Item item))
@@ -80,18 +103,18 @@ public class ShopManager : MonoBehaviour
                 if(Utility.DownCastingItem(item, out CountableItem cItem))
                 {
                     if (cItem.TodayBuyingAmount < cItem.MaxBuyingAmount)
-                        StartCoroutine(BuyCo(buyingBtn));
+                        StartCoroutine(BuyCo());
                     else
                         popUpMgr.PopUp("하루 구매 횟수를 모두 소모했습니다!", EPopUpType.Caution);
                 }
                 else
                 {
-                    StartCoroutine(BuyCo(buyingBtn));
+                    StartCoroutine(BuyCo());
                 }
             }
             else
             {
-                StartCoroutine(BuyCo(buyingBtn));
+                StartCoroutine(BuyCo());
             }
         }
         catch (Exception exp)
@@ -106,17 +129,20 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    private IEnumerator BuyCo(BuyingButton buyingBtn)
+    private IEnumerator BuyCo()
     {
-        dataMgr.SetGoodsAmount(buyingBtn.PayGoodsType, -buyingBtn.Price);
+        if (currentBuyingBtn != null)
+        {
+            dataMgr.SetGoodsAmount(currentBuyingBtn.PayGoodsType, -currentBuyingBtn.Price);
 
-        for (int i = 0; i < buyingBtn.Num; i++)
-            yield return StartCoroutine(BuyItemCo(buyingBtn.BuyingType));
+            for (int i = 0; i < currentBuyingBtn.Num; i++)
+                yield return StartCoroutine(BuyItemCo(currentBuyingBtn.BuyingType));
 
-        buyingBtn.UpdateInfoUI();
+            currentBuyingBtn.UpdateInfoUI();
+            currentBuyingBtn = null;
+        }
 
         yield return null;
-
     }
 
     private IEnumerator BuyItemCo(EBuyingType buyingType)

@@ -1,14 +1,10 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
-[System.Serializable]
 public class BuyingButton : MonoBehaviour
 {
     private DataManager dataMgr;
-
-    [SerializeField] private Text infoTxt;
 
     [SerializeField] private EBuyingType buyingType;
     public EBuyingType BuyingType { get => buyingType; }
@@ -23,23 +19,22 @@ public class BuyingButton : MonoBehaviour
     public int Num { get => num; }
 
     private Item item;
+    private Text infoTxt;
+
+    private void Awake()
+    {
+        infoTxt = GetComponentInChildren<Text>();
+    }
 
     private void Start()
     {
         dataMgr = DataManager.Instance;
-
-        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += SetupItem;
-        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += UpdateInfoUI;
-
-        GetComponent<Button>().onClick.AddListener(UpdateInfoUI);
     }
 
     public void SetupItem()
     {
-        if (dataMgr.GetItemByKey(buyingType.ToString(), out Item item))
+        if (DataManager.Instance.GetItemByKey(buyingType.ToString(), out Item item))
             this.item = item;
-
-        UpdateInfoUI();
     }
 
     public void UpdateInfoUI()
@@ -50,16 +45,13 @@ public class BuyingButton : MonoBehaviour
 
             if (buyingType == EBuyingType.Humal)
             {
-                Debug.Log("1");
-                str = string.Concat(num, "회 뽑기\n", price, payGoodsType);
+                str = string.Concat(num, "회 뽑기\n", price, " ", payGoodsType);
             }
             else
             {
-                Debug.Log("2");
-                CountableItem cItem = (CountableItem)item;
+                CountableItem cItem = item as CountableItem;
                 if (cItem != null)
                 {
-                    Debug.Log("3");
                     str = string.Concat(
                         price,
                         " ",

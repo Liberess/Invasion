@@ -7,8 +7,8 @@ public class UnitData : ScriptableObject
     [SerializeField] private int id;                      // 고유 판별 ID.
     public int ID { get => id; }
 
-    [SerializeField] private string name;            // 고유 닉네임.
-    public string Name { get => name; }
+    [SerializeField] private string m_name;            // 고유 닉네임.
+    public string Name { get => m_name; }
 
     [SerializeField] private int level;                  // 유닛 레벨.
     public int Level { get => level; }

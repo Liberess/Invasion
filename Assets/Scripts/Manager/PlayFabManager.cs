@@ -98,7 +98,7 @@ public class PlayFabManager : MonoBehaviour
     private IEnumerator LoadDataCo()
     {
         yield return DataManager.Instance.StartCoroutine(DataManager.Instance.LoadDataCo());
-        OnPlayFabLoginSuccessAction();
+        OnPlayFabLoginSuccessAction?.Invoke();
         //yield return AudioManager.Instance.StartCoroutine(AudioManager.Instance.InitializedAudioSettingCo());
         yield return null;
     }

@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 using PlayFab.ClientModels;
 using PlayFab;
 using UnityEngine.Events;
-using static UnityEditor.Progress;
 
 public class DataManager : MonoBehaviour
 {
@@ -335,13 +334,14 @@ public class DataManager : MonoBehaviour
         InitializedGameData();
         InitializedHeroData();
 
-        PlayFabManager.Instance?.OnPlayFabLoginSuccessAction();
+        PlayFabManager.Instance.OnPlayFabLoginSuccessAction?.Invoke();
 
 #if UNITY_EDITOR
         SetupHero();
 #endif
 
-        SaveData();
+        if(Social.localUser.authenticated)
+            SaveData();
     }
 
     public IEnumerator LoadDataCo()
@@ -385,7 +385,19 @@ public class DataManager : MonoBehaviour
         m_GameData.inventoryDic.Clear();
         foreach(var itemData in ItemDataList)
         {
-            //m_GameData.inventoryDic.Add(itemData.Name, itemData);
+            switch (itemData.ItemType)
+            {
+                case EItemType.None:
+                    break;
+
+                case EItemType.Consume:
+                    ConsumeItem item = new ConsumeItem((ConsumeItemData)itemData, 1);
+                    m_GameData.inventoryDic.Add(itemData.Name, item);
+                    break;
+
+                case EItemType.Equipment:
+                    break;
+            }
         }
 
         for (int i = 0; i < m_GameData.facilGold.Length; i++)

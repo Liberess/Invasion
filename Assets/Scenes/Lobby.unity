@@ -8676,7 +8676,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1618352001}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: GetReward
         m_Mode: 1
@@ -9370,7 +9370,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1618352001}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: FacilLvUp
         m_Mode: 1
@@ -17114,7 +17114,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &902583308
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20733,7 +20733,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1557331197}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: GetReward
         m_Mode: 1
@@ -24101,7 +24101,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1557331197}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: FacilLvUp
         m_Mode: 1
@@ -31449,7 +31449,6 @@ GameObject:
   - component: {fileID: 1557331200}
   - component: {fileID: 1557331199}
   - component: {fileID: 1557331198}
-  - component: {fileID: 1557331197}
   m_Layer: 5
   m_Name: HouseTimeTxt
   m_TagString: Untagged
@@ -31457,24 +31456,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1557331197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1557331196}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4538d96d2f4a55945a8cde27491b0879, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  upBtn: {fileID: 1222058113}
-  rewardBtn: {fileID: 1067345372}
-  lvTxt: {fileID: 204163564}
-  ID: 0
-  myTime: 0
-  sliderTime: 0
 --- !u!114 &1557331198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32683,7 +32664,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1589258105
 RectTransform:
   m_ObjectHideFlags: 0
@@ -34170,7 +34151,6 @@ GameObject:
   - component: {fileID: 1618352004}
   - component: {fileID: 1618352003}
   - component: {fileID: 1618352002}
-  - component: {fileID: 1618352001}
   m_Layer: 5
   m_Name: HouseTimeTxt
   m_TagString: Untagged
@@ -34178,24 +34158,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1618352001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618352000}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4538d96d2f4a55945a8cde27491b0879, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  upBtn: {fileID: 498548431}
-  rewardBtn: {fileID: 451466504}
-  lvTxt: {fileID: 1362052869}
-  ID: 0
-  myTime: 0
-  sliderTime: 0
 --- !u!114 &1618352002
 MonoBehaviour:
   m_ObjectHideFlags: 0
