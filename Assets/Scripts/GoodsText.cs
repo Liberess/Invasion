@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class GoodsText : MonoBehaviour
 {
-    [SerializeField] private EGoodsType goodsType;
-    public EGoodsType GoodsType { get => goodsType; }
+    [SerializeField] private ECurrencyType currencyType;
+    public ECurrencyType CurrencyType { get => currencyType; }
 
     private Text text;
 
@@ -25,7 +25,7 @@ public class GoodsText : MonoBehaviour
         try
         {
             text.text = string.Format("{0:n0}",
-                DataManager.Instance.GameData.GoodsList[(int)goodsType].count);
+                DataManager.Instance.GameData.GoodsList[(int)currencyType].count);
         }
         catch
         {

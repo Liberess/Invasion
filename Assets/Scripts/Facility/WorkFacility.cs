@@ -20,8 +20,6 @@ public class WorkFacility : MonoBehaviour
     private float limitTime;
     public float sliderTime;
 
-
-
     private void Awake()
     {
         dataMgr = DataManager.Instance;
@@ -133,8 +131,10 @@ public class WorkFacility : MonoBehaviour
         SetLvTxt();
         SetGoldTxt();
 
-        dataMgr.GameData.GoodsList[(int)EGoodsType.Gold].count -=
-            (FacilityManager.Instance.facilGoldList[Data.ID] * (dataMgr.GameData.facilLevelList[Data.ID] + 1));
+        int amount = FacilityManager.Instance.facilGoldList[Data.ID] * (dataMgr.GameData.facilLevelList[Data.ID] + 1);
+        dataMgr.SubstractCurrency(ECurrencyType.GD.ToString(), amount);
+/*        dataMgr.GameData.GoodsList[(int)ECurrencyType.GD].count -=
+            (FacilityManager.Instance.facilGoldList[Data.ID] * (dataMgr.GameData.facilLevelList[Data.ID] + 1));*/
     }
 
     public void SetLvTxt()
@@ -178,8 +178,10 @@ public class WorkFacility : MonoBehaviour
         rewardBtn.image.enabled = false;
         rewardBtn.transform.Find("Text").gameObject.SetActive(false);
 
-        dataMgr.GameData.GoodsList[(int)EGoodsType.Gold].count +=
-            FacilityManager.Instance.facilGoldList[Data.ID] * (dataMgr.GameData.facilLevelList[Data.ID] + 1);
+        int amount = FacilityManager.Instance.facilGoldList[Data.ID] * (dataMgr.GameData.facilLevelList[Data.ID] + 1);
+        dataMgr.AddCurrency(ECurrencyType.GD.ToString(), amount);
+        /*dataMgr.GameData.GoodsList[(int)EGoodsType.Gold].count +=
+            FacilityManager.Instance.facilGoldList[Data.ID] * (dataMgr.GameData.facilLevelList[Data.ID] + 1);*/
     }
 
     private void OnApplicationPause(bool pause)

@@ -426,7 +426,8 @@ public class BattleManager : MonoBehaviour
                 dataMgr.GameData.goodsSpriteList[(int)rewards[i].type];
             reward.GetComponentInChildren<Text>().text = rewards[i].amount.ToString();
 
-            dataMgr.SetGoodsAmount(rewards[i].type, rewards[i].amount);
+            dataMgr.AddCurrency(rewards[i].type, rewards[i].amount);
+            //dataMgr.SetGoodsAmount(rewards[i].type, rewards[i].amount);
         }
     }
 

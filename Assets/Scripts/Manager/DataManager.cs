@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -294,11 +293,130 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
+    #region Currency
+    public void AddCurrency(string currencyTag, int amount)
+    {
+        if (!Social.localUser.authenticated)
+            return;
+
+        var request = new AddUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag, Amount = amount };
+        PlayFabClientAPI.AddUserVirtualCurrency(
+            request,
+            (result) => Debug.Log(currencyTag + " 통화 얻기 성공! 현재 : " + result.Balance),
+            (error) => Debug.Log(error.ToString())
+        );
+    }
+
+    public void AddCurrency(ECurrencyType currencyTag, int amount)
+    {
+        if (!Social.localUser.authenticated)
+            return;
+
+        var request = new AddUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag.ToString(), Amount = amount };
+        PlayFabClientAPI.AddUserVirtualCurrency(
+            request,
+            (result) => Debug.Log(currencyTag.ToString() + " 통화 얻기 성공! 현재 : " + result.Balance),
+            (error) => Debug.Log(error.ToString())
+        );
+    }
+
+    public void SubstractCurrency(string currencyTag, int amount)
+    {
+        var request = new SubtractUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag, Amount = amount };
+        PlayFabClientAPI.SubtractUserVirtualCurrency(
+            request,
+            (result) => Debug.Log(currencyTag + " 통화 빼기 성공! 현재 : " + result.Balance),
+            (error) => Debug.Log(error.ToString())
+        );
+    }
+
+    public void SubstractCurrency(ECurrencyType currencyTag, int amount)
+    {
+        var request = new SubtractUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag.ToString(), Amount = amount };
+        PlayFabClientAPI.SubtractUserVirtualCurrency(
+            request,
+            (result) => Debug.Log(currencyTag.ToString() + " 통화 빼기 성공! 현재 : " + result.Balance),
+            (error) => Debug.Log(error.ToString())
+        );
+    }
+    #endregion
+
+    #region Inventory
+    public void GetInventory()
+    {
+        if (!Social.localUser.authenticated)
+            return;
+
+        var request = new GetUserInventoryRequest();
+        PlayFabClientAPI.GetUserInventory(
+            request,
+            OnGetInventorySuccess,
+            OnGetInventoryFailure
+        );
+    }
+
+    private void OnGetInventorySuccess(GetUserInventoryResult result)
+    {
+        for (int i = 0; i < Tags.CurrencyTags.Length; i++)
+            Debug.Log("현재 통화 : " + result.VirtualCurrency[Tags.CurrencyTags[i]]);
+
+        for (int i = 0; i < result.Inventory.Count; i++)
+        {
+            var inven = result.Inventory[i];
+            Debug.Log(inven.DisplayName + " / " + inven.UnitCurrency + " / " + inven.UnitPrice + " / " + inven.ItemInstanceId + " / " + inven.RemainingUses);
+        }
+    }
+
+    private void OnGetInventoryFailure(PlayFabError error)
+    {
+        Debug.Log(error.ToString());
+    }
+
+    public void PurchaseItem(EItemCatalog catalog, string itemId, string tag, int price)
+    {
+        if (!Social.localUser.authenticated)
+            return;
+
+        var request = new PurchaseItemRequest()
+        {
+            CatalogVersion = catalog.ToString(),
+            ItemId = itemId,
+            VirtualCurrency = tag,
+            Price = price
+        };
+
+        PlayFabClientAPI.PurchaseItem(
+            request,
+            (result) => Debug.Log("아이템 구입 성공"),
+            (error) => Debug.Log(error.ToString())
+        );
+    }
+
+    public void ConsumeItem(int consumeCount, string itemId)
+    {
+        if (!Social.localUser.authenticated)
+            return;
+
+        var request = new ConsumeItemRequest()
+        {
+            ConsumeCount = consumeCount,
+            ItemInstanceId = itemId
+        };
+
+        PlayFabClientAPI.ConsumeItem(
+            request,
+            (result) => Debug.Log("아이템 사용 성공"),
+            (error) => Debug.Log("아이템 사용 실패")
+        );
+    }
+    #endregion
+
     public void GetGold()
     {
         try
         {
-            SetGoodsAmount(EGoodsType.Gold, 1000);
+            AddCurrency(ECurrencyType.GD, 100);
+            //SetGoodsAmount(ECurrencyType.GD, 1000);
             //GameData.goodsList[(int)EGoodsType.Gold].count += 1000;
         }
         catch(Exception exp)
@@ -307,7 +425,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void SetGoodsAmount(EGoodsType EGoodsType, int num)
+/*    public void SetGoodsAmount(ECurrencyType EGoodsType, int num)
     {
         if (m_GameData.GoodsList.Count <= 0)
             throw new Exception("goodsList is empty");
@@ -326,7 +444,7 @@ public class DataManager : MonoBehaviour
         else
             m_GameData.AddElementInGoodsList((int)EGoodsType, num);
             //m_GameData.GoodsList[(int)EGoodsType].count += num;
-    }
+    }*/
 
     #region Load & Save
     public void InitializedData()
@@ -339,9 +457,7 @@ public class DataManager : MonoBehaviour
 #if UNITY_EDITOR
         SetupHero();
 #endif
-
-        if(Social.localUser.authenticated)
-            SaveData();
+        SaveData();
     }
 
     public IEnumerator LoadDataCo()
@@ -531,6 +647,9 @@ public class DataManager : MonoBehaviour
 
     public void SaveData()
     {
+        if (!Social.localUser.authenticated)
+            return;
+
         Dictionary<string, string> dataDic = new Dictionary<string, string>();
         dataDic.Add("GameData", JsonUtility.ToJson(m_GameData));
         dataDic.Add("HeroData", JsonUtility.ToJson(m_HeroData));

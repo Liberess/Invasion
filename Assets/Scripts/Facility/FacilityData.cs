@@ -12,8 +12,8 @@ public class FacilityData : ScriptableObject
     [SerializeField] private string m_name;
     public string Name => m_name;
 
-    [SerializeField] private EGoodsType m_makingType;
-    public EGoodsType MakingGoodsType => m_makingType;
+    [SerializeField] private ECurrencyType m_makingType;
+    public ECurrencyType MakingGoodsType => m_makingType;
 
     [SerializeField] private int m_makingProgressTime;
     public int MakingProgressTime => m_makingProgressTime;

@@ -1,11 +1,11 @@
-public enum EGoodsType
+public enum ECurrencyType
 {
-    Stamina = 0,
-    Gold,
-    Dia,
-    AwakeJewel      //각성석
-    //EvolutionJewel  //진화석
+    ST, //Stamina
+    GD, //Gold
+    DA  //Dia
 }
+
+public enum EItemCatalog { Item }
 
 public enum EBuyingType
 {
@@ -52,7 +52,7 @@ public enum EItemType { None = 0, Consume, Equipment }
 public enum EGrade { Normal = 0, Rare, Epic, Legend }
 
 [System.Serializable]
-public class Enums
+public static class Tags
 {
-
+    public static readonly string[] CurrencyTags = { "ST", "GD", "DA" };
 }

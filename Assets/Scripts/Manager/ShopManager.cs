@@ -133,7 +133,8 @@ public class ShopManager : MonoBehaviour
     {
         if (currentBuyingBtn != null)
         {
-            dataMgr.SetGoodsAmount(currentBuyingBtn.PayGoodsType, -currentBuyingBtn.Price);
+            dataMgr.SubstractCurrency(currentBuyingBtn.PayGoodsType, currentBuyingBtn.Price);
+            //dataMgr.SetGoodsAmount(currentBuyingBtn.PayGoodsType, -currentBuyingBtn.Price);
 
             for (int i = 0; i < currentBuyingBtn.Num; i++)
                 yield return StartCoroutine(BuyItemCo(currentBuyingBtn.BuyingType));
@@ -156,6 +157,16 @@ public class ShopManager : MonoBehaviour
             var itemData = dataMgr.GetItemDataByKey(buyingType.ToString());
             ConsumeItem item = new ConsumeItem((ConsumeItemData)itemData, 1);
             dataMgr.AddInventoryItem(item, 1);
+        }
+
+        yield return null;
+    }
+
+    private IEnumerator PickUpHumal()
+    {
+        if(Utility.GetThisChanceResult_Percentage(97.0f))
+        {
+
         }
 
         yield return null;

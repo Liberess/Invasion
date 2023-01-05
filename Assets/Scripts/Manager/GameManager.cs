@@ -41,7 +41,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         dataMgr = DataManager.Instance;
-
         playFabMgr = PlayFabManager.Instance;
 
         //_soulGem = (int)dataMgr.GameData.soulGem;
@@ -51,11 +50,6 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         CancelBtn();
-    }
-
-    private void LateUpdate()
-    {
-
     }
 
     public void OnApplicationStart()
@@ -160,7 +154,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadSceneAsync("Battle", LoadSceneMode.Single);
     }
 
-    public void ShowMoneyTxt()
+/*    public void ShowMoneyTxt()
     {
         //재화 텍스트 애니메이션 효과
         float dia = Mathf.SmoothStep(_dia,
@@ -176,13 +170,13 @@ public class GameManager : MonoBehaviour
         _drink = (int)drink;
 
         //천 단위로 콤마(,) 삽입
-/*        moneyTxt[0].text = string.Format("{0:n0}",
+*//*        moneyTxt[0].text = string.Format("{0:n0}",
             dataMgr.GameData.goodsList[(int)EGoodsType.Stamina].count);
         moneyTxt[1].text = string.Format("{0:n0}",
             dataMgr.GameData.goodsList[(int)EGoodsType.Gold].count);
         moneyTxt[2].text = string.Format("{0:n0}",
-            dataMgr.GameData.goodsList[(int)EGoodsType.Dia].count);*/
-    }
+            dataMgr.GameData.goodsList[(int)EGoodsType.Dia].count);*//*
+    }*/
 
     private void CancelBtn() //인 게임 Cancel 동작
     {

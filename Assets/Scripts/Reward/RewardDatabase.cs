@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public struct Reward
 {
-    public EGoodsType type;
+    public ECurrencyType type;
     public int amount;
 }
 

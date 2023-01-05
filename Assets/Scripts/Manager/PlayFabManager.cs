@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using PlayFab;
+using PlayFab.Json;
 using PlayFab.ClientModels;
 using GooglePlayGames;
 
@@ -112,18 +113,18 @@ public class PlayFabManager : MonoBehaviour
             Username = Social.localUser.userName
         };
 
-        PlayFabClientAPI.RegisterPlayFabUser(request, RegisterSuccess, RegisterFailure);
+        PlayFabClientAPI.RegisterPlayFabUser(request, OnRegisterSuccess, OnRegisterFailure);
         yield return null;
     }
 
-    private void RegisterSuccess(RegisterPlayFabUserResult result)
+    private void OnRegisterSuccess(RegisterPlayFabUserResult result)
     {
         popUpMgr.PopUp("플레이팹 회원가입 성공\n" + Social.localUser.userName, EPopUpType.Notice);
         StartCoroutine(PlayFabLogInCo());
         //popUpMgr.PopUp("회원가입 성공!\n", EPopUpType.NOTICE);
     }
 
-    private void RegisterFailure(PlayFabError error)
+    private void OnRegisterFailure(PlayFabError error)
     {
         popUpMgr.PopUp("플레이팹 회원가입 실패!", EPopUpType.Caution);
         //popUpMgr.PopUp("회원가입 실패!\n" + error.GenerateErrorReport(), EPopUpType.CAUTION);
