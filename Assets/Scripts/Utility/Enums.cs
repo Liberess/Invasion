@@ -1,8 +1,8 @@
 public enum ECurrencyType
 {
-    ST, //Stamina
-    GD, //Gold
-    DA  //Dia
+    ST = 0, //Stamina
+    GD,     //Gold
+    DA      //Dia
 }
 
 public enum EItemCatalog { Item }

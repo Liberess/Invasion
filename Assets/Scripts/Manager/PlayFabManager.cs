@@ -99,6 +99,8 @@ public class PlayFabManager : MonoBehaviour
     private IEnumerator LoadDataCo()
     {
         yield return DataManager.Instance.StartCoroutine(DataManager.Instance.LoadDataCo());
+        yield return new WaitForEndOfFrame();
+        Debug.Log("LoadDataCo : " + Time.time);
         OnPlayFabLoginSuccessAction?.Invoke();
         //yield return AudioManager.Instance.StartCoroutine(AudioManager.Instance.InitializedAudioSettingCo());
         yield return null;
@@ -128,5 +130,11 @@ public class PlayFabManager : MonoBehaviour
     {
         popUpMgr.PopUp("플레이팹 회원가입 실패!", EPopUpType.Caution);
         //popUpMgr.PopUp("회원가입 실패!\n" + error.GenerateErrorReport(), EPopUpType.CAUTION);
+    }
+
+    public void PlayFabErrorDebugLog(PlayFabError error)
+    {
+        Debug.LogError(error.ToString());
+        popUpMgr.PopUp(error.ToString(), EPopUpType.Caution);
     }
 }

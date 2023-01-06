@@ -87,11 +87,6 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    private void SetupBuyingButton()
-    {
-
-    }
-
     public void OnClickBuy(BuyingButton buyingBtn)
     {
         currentBuyingBtn = buyingBtn;
@@ -133,7 +128,8 @@ public class ShopManager : MonoBehaviour
     {
         if (currentBuyingBtn != null)
         {
-            dataMgr.SubstractCurrency(currentBuyingBtn.PayGoodsType, currentBuyingBtn.Price);
+            //if(dataMgr.GetCurrency(currentBuyingBtn.PayGoodsType) )
+            dataMgr.SetCurrencyAmount(currentBuyingBtn.PayGoodsType, currentBuyingBtn.Price);
             //dataMgr.SetGoodsAmount(currentBuyingBtn.PayGoodsType, -currentBuyingBtn.Price);
 
             for (int i = 0; i < currentBuyingBtn.Num; i++)

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,20 +18,11 @@ public class GoodsText : MonoBehaviour
 
     private void Start()
     {
-        UIManager.Instance.UpdateGoodsUIAction += UpdateGoodsText;
+        UIManager.Instance.UpdateCurrencyUIActionList[(int)currencyType] += (v) => UpdateGoodsText(v);
     }
 
-    public void UpdateGoodsText()
+    public void UpdateGoodsText(int value)
     {
-        try
-        {
-            text.text = string.Format("{0:n0}",
-                DataManager.Instance.GameData.GoodsList[(int)currencyType].count);
-        }
-        catch
-        {
-            
-        }
-
+        text.text = string.Format("{0:n0}", value);
     }
 }

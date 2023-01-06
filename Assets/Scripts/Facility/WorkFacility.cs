@@ -132,7 +132,7 @@ public class WorkFacility : MonoBehaviour
         SetGoldTxt();
 
         int amount = FacilityManager.Instance.facilGoldList[Data.ID] * (dataMgr.GameData.facilLevelList[Data.ID] + 1);
-        dataMgr.SubstractCurrency(ECurrencyType.GD.ToString(), amount);
+        dataMgr.SetCurrencyAmount(ECurrencyType.GD, amount);
 /*        dataMgr.GameData.GoodsList[(int)ECurrencyType.GD].count -=
             (FacilityManager.Instance.facilGoldList[Data.ID] * (dataMgr.GameData.facilLevelList[Data.ID] + 1));*/
     }
@@ -179,7 +179,7 @@ public class WorkFacility : MonoBehaviour
         rewardBtn.transform.Find("Text").gameObject.SetActive(false);
 
         int amount = FacilityManager.Instance.facilGoldList[Data.ID] * (dataMgr.GameData.facilLevelList[Data.ID] + 1);
-        dataMgr.AddCurrency(ECurrencyType.GD.ToString(), amount);
+        dataMgr.SetCurrencyAmount(ECurrencyType.GD, amount);
         /*dataMgr.GameData.GoodsList[(int)EGoodsType.Gold].count +=
             FacilityManager.Instance.facilGoldList[Data.ID] * (dataMgr.GameData.facilLevelList[Data.ID] + 1);*/
     }

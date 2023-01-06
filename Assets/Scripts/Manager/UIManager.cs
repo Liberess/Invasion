@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using static UnityEngine.Networking.UnityWebRequest;
 
 public class UIManager : MonoBehaviour
 {
@@ -63,8 +64,8 @@ public class UIManager : MonoBehaviour
 
     public UnityAction HidePanelAction;
     public UnityAction HideHeroInfoPanelAction;
-
-    public UnityAction UpdateGoodsUIAction;
+    //public Action<int> UpdateCurrencyUIAction;
+    public List<Action<int>> UpdateCurrencyUIActionList = new List<Action<int>>();
 
     private void Awake()
     {
@@ -72,6 +73,10 @@ public class UIManager : MonoBehaviour
             Instance = this;
         else if (Instance != this)
             Destroy(gameObject);
+
+        UpdateCurrencyUIActionList.Clear();
+        for (int i = 0; i < Enum.GetValues(typeof(ECurrencyType)).Length; i++)
+            UpdateCurrencyUIActionList.Add(null);
     }
 
     private void Start()
@@ -95,13 +100,22 @@ public class UIManager : MonoBehaviour
         //StartCoroutine(UpdateGoodsUICo(0.1f));
 
         PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => StartCoroutine(InitHeroPanelCoru());
-        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => StartCoroutine(UpdateGoodsUICo(0.0f));
+        //PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => StartCoroutine(UpdateCurrencyUICo());
     }
 
-    private IEnumerator UpdateGoodsUICo(float delay)
+    private IEnumerator UpdateCurrencyUICo()
     {
-        yield return new WaitForSeconds(delay);
-        UpdateGoodsUIAction();
+        yield return new WaitForSeconds(1.0f);
+
+        Debug.Log("UpdateCurrencyUICo : " + Time.time);
+
+        foreach (ECurrencyType type in Enum.GetValues(typeof(ECurrencyType)))
+            InvokeCurrencyUI(type, dataMgr.GetCurrency(type));
+    }
+
+    public void InvokeCurrencyUI(ECurrencyType type, int amount)
+    {
+        UpdateCurrencyUIActionList[(int)type]?.Invoke(amount);
     }
 
     public void SetActivePauseUI()

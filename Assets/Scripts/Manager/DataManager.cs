@@ -7,9 +7,15 @@ using UnityEngine.SceneManagement;
 using PlayFab.ClientModels;
 using PlayFab;
 using UnityEngine.Events;
+using static UnityEngine.Networking.UnityWebRequest;
+using static UnityEngine.UI.Image;
+using System.Linq;
 
 public class DataManager : MonoBehaviour
 {
+    private UIManager uiMgr;
+    private PopUpManager popUpMgr;
+
     [Header("==== Hero Object Prefab ====")]
     [SerializeField] private GameObject heroPrefab;
     [SerializeField] private GameObject lobbyHeroPrefab;
@@ -32,9 +38,13 @@ public class DataManager : MonoBehaviour
     public List<UnitData> EnemyDataList { get => mEnemyDataList; }
 
     [Header("==== Item Data Information ===="), Space(10)]
-    [SerializeField] private List<ItemData> mItemDataList= new List<ItemData>();
+    [SerializeField] private List<ItemData> mItemDataList = new List<ItemData>();
     public List<ItemData> ItemDataList => mItemDataList;
     #endregion
+
+    private Dictionary<string, int> VirtualCurrencyDic = new Dictionary<string, int>();
+
+    public List<Sprite> goodsSpriteList = new List<Sprite>();
 
     public UnityAction OnDataLoadSuccessAction;
 
@@ -55,6 +65,9 @@ public class DataManager : MonoBehaviour
 
     private void Start()
     {
+        uiMgr = UIManager.Instance;
+        popUpMgr = PopUpManager.Instance;
+
         GameManager.Instance.OnApplicationStart();
 
         OnDataLoadSuccessAction = null;
@@ -79,14 +92,14 @@ public class DataManager : MonoBehaviour
 
     private void UpdateGoodsSprite()
     {
-        GameData.goodsSpriteList.Clear();
+        goodsSpriteList.Clear();
 
         Sprite[] temp = Resources.LoadAll<Sprite>("Goods");
 
         for (int i = 0; i < temp.Length; i++)
         {
             if (temp[i] != null)
-                GameData.goodsSpriteList.Add(temp[i]);
+                goodsSpriteList.Add(temp[i]);
         }
     }
 
@@ -197,7 +210,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public bool IsContainsInParty(int id)
     {
-        foreach(var HeroData in m_HeroData.partyList)
+        foreach (var HeroData in m_HeroData.partyList)
         {
             if (HeroData.ID == id)
                 return true;
@@ -233,7 +246,7 @@ public class DataManager : MonoBehaviour
 
     public UnitData GetDataByHero(int id)
     {
-        foreach(var hero in m_HeroData.heroList)
+        foreach (var hero in m_HeroData.heroList)
         {
             if (hero.ID == id)
                 return hero;
@@ -247,15 +260,15 @@ public class DataManager : MonoBehaviour
         if (!IsValidInHeroListByIndex(index))
             throw new Exception("유효하지 않은 Index 값입니다.");
 
-        if(key == "Next")
+        if (key == "Next")
         {
-            if(!IsValidInHeroListByIndex(index + 1))
+            if (!IsValidInHeroListByIndex(index + 1))
                 throw new Exception("유효하지 않은 Index 값입니다.");
 
             UIManager.Instance.SetHeroIndex(index + 1);
             return m_HeroData.heroList[index + 1];
         }
-        else if(key == "Previous")
+        else if (key == "Previous")
         {
             if (!IsValidInHeroListByIndex(index - 1))
                 throw new Exception("유효하지 않은 Index 값입니다.");
@@ -267,7 +280,7 @@ public class DataManager : MonoBehaviour
         {
             throw new Exception("유효하지 않은 Key 값입니다.");
         }
-    }    
+    }
 
     public void SwapPartyData(int from, int to)
     {
@@ -294,20 +307,41 @@ public class DataManager : MonoBehaviour
     #endregion
 
     #region Currency
-    public void AddCurrency(string currencyTag, int amount)
+    private void InitializedVirtualCurrencyDic()
     {
-        if (!Social.localUser.authenticated)
-            return;
-
-        var request = new AddUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag, Amount = amount };
-        PlayFabClientAPI.AddUserVirtualCurrency(
+        var request = new GetUserInventoryRequest();
+        PlayFabClientAPI.GetUserInventory(
             request,
-            (result) => Debug.Log(currencyTag + " 통화 얻기 성공! 현재 : " + result.Balance),
-            (error) => Debug.Log(error.ToString())
+            OnInitializedVirtualCurrencyDicSuccess,
+            //(result) => amount = result.VirtualCurrency[type.ToString()],
+            PlayFabManager.Instance.PlayFabErrorDebugLog
         );
     }
 
-    public void AddCurrency(ECurrencyType currencyTag, int amount)
+    private void OnInitializedVirtualCurrencyDicSuccess(GetUserInventoryResult result)
+    {
+        VirtualCurrencyDic = result.VirtualCurrency;
+
+        foreach (ECurrencyType type in Enum.GetValues(typeof(ECurrencyType)))
+        {
+            if(VirtualCurrencyDic.ContainsKey(type.ToString()))
+                uiMgr.InvokeCurrencyUI(type, VirtualCurrencyDic[type.ToString()]);
+        }
+    }
+
+    public int GetCurrency(ECurrencyType type)
+    {
+        if (!Social.localUser.authenticated)
+            return -1;
+
+        if (VirtualCurrencyDic.ContainsKey(type.ToString()))
+            return VirtualCurrencyDic[type.ToString()];
+
+        Debug.LogError("do not exist " + type.ToString());
+        return -1;
+    }
+
+    private void AddCurrency(ECurrencyType currencyTag, int amount)
     {
         if (!Social.localUser.authenticated)
             return;
@@ -315,29 +349,63 @@ public class DataManager : MonoBehaviour
         var request = new AddUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag.ToString(), Amount = amount };
         PlayFabClientAPI.AddUserVirtualCurrency(
             request,
-            (result) => Debug.Log(currencyTag.ToString() + " 통화 얻기 성공! 현재 : " + result.Balance),
-            (error) => Debug.Log(error.ToString())
+            (result) => uiMgr.InvokeCurrencyUI(currencyTag, result.Balance),
+            PlayFabManager.Instance.PlayFabErrorDebugLog
         );
     }
 
-    public void SubstractCurrency(string currencyTag, int amount)
-    {
-        var request = new SubtractUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag, Amount = amount };
-        PlayFabClientAPI.SubtractUserVirtualCurrency(
-            request,
-            (result) => Debug.Log(currencyTag + " 통화 빼기 성공! 현재 : " + result.Balance),
-            (error) => Debug.Log(error.ToString())
-        );
-    }
-
-    public void SubstractCurrency(ECurrencyType currencyTag, int amount)
+    private void SubstractCurrency(ECurrencyType currencyTag, int amount)
     {
         var request = new SubtractUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag.ToString(), Amount = amount };
         PlayFabClientAPI.SubtractUserVirtualCurrency(
             request,
-            (result) => Debug.Log(currencyTag.ToString() + " 통화 빼기 성공! 현재 : " + result.Balance),
-            (error) => Debug.Log(error.ToString())
+            (result) => uiMgr.InvokeCurrencyUI(currencyTag, result.Balance),
+            PlayFabManager.Instance.PlayFabErrorDebugLog
         );
+    }
+
+    public void GetGold()
+    {
+        try
+        {
+            SetCurrencyAmount(ECurrencyType.GD, 1000);
+            //GameData.currencyList[(int)EGoodsType.Gold].count += 1000;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex.Message);
+            //PopUpManager.Instance.PopUp(ex.ToString(), EPopUpType.Caution);
+        }
+    }
+
+    public void SetCurrencyAmount(ECurrencyType currencyType, int num)
+    {
+        if (!Social.localUser.authenticated)
+            return;
+
+        if (GetCurrency(currencyType) < 0)
+            throw new Exception(currencyType.ToString() + " is empty");
+
+        var amount = GetCurrency(currencyType) + num;
+        if (amount > int.MaxValue)
+        {
+            PopUpManager.Instance.PopUp(currencyType.ToString() + " 재화가 한계치입니다!", EPopUpType.Caution);
+            throw new Exception("Overflow Max Goods Value");
+        }
+        else if (amount < 0)
+        {
+            PopUpManager.Instance.PopUp(currencyType.ToString() + " 재화가 부족합니다!", EPopUpType.Caution);
+            throw new Exception("Insufficient Goods Value");
+        }
+        else
+        {
+            if (num > 0)
+                AddCurrency(currencyType, num);
+            else
+                SubstractCurrency(currencyType, num);
+        }
+        // AddElementInCurrencyList((int)currencyType, num);
+        //m_GameData.CurrencyList[(int)EGoodsType].count += num;
     }
     #endregion
 
@@ -351,25 +419,20 @@ public class DataManager : MonoBehaviour
         PlayFabClientAPI.GetUserInventory(
             request,
             OnGetInventorySuccess,
-            OnGetInventoryFailure
+            PlayFabManager.Instance.PlayFabErrorDebugLog
         );
     }
 
     private void OnGetInventorySuccess(GetUserInventoryResult result)
     {
         for (int i = 0; i < Tags.CurrencyTags.Length; i++)
-            Debug.Log("현재 통화 : " + result.VirtualCurrency[Tags.CurrencyTags[i]]);
+            Debug.Log("현재 통화 " + Tags.CurrencyTags[i] + " : " + result.VirtualCurrency[Tags.CurrencyTags[i]]);
 
         for (int i = 0; i < result.Inventory.Count; i++)
         {
             var inven = result.Inventory[i];
             Debug.Log(inven.DisplayName + " / " + inven.UnitCurrency + " / " + inven.UnitPrice + " / " + inven.ItemInstanceId + " / " + inven.RemainingUses);
         }
-    }
-
-    private void OnGetInventoryFailure(PlayFabError error)
-    {
-        Debug.Log(error.ToString());
     }
 
     public void PurchaseItem(EItemCatalog catalog, string itemId, string tag, int price)
@@ -388,7 +451,7 @@ public class DataManager : MonoBehaviour
         PlayFabClientAPI.PurchaseItem(
             request,
             (result) => Debug.Log("아이템 구입 성공"),
-            (error) => Debug.Log(error.ToString())
+            PlayFabManager.Instance.PlayFabErrorDebugLog
         );
     }
 
@@ -411,41 +474,6 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
-    public void GetGold()
-    {
-        try
-        {
-            AddCurrency(ECurrencyType.GD, 100);
-            //SetGoodsAmount(ECurrencyType.GD, 1000);
-            //GameData.goodsList[(int)EGoodsType.Gold].count += 1000;
-        }
-        catch(Exception exp)
-        {
-            Debug.Log(exp);
-        }
-    }
-
-/*    public void SetGoodsAmount(ECurrencyType EGoodsType, int num)
-    {
-        if (m_GameData.GoodsList.Count <= 0)
-            throw new Exception("goodsList is empty");
-
-        var count = m_GameData.GoodsList[(int)EGoodsType].count;
-        if (count + num > int.MaxValue)
-        {
-            PopUpManager.Instance.PopUp(EGoodsType.ToString() + " 재화가 한계치입니다!", EPopUpType.Caution);
-            throw new Exception("Overflow Max Goods Value");
-        }
-        else if (count + num < 0)
-        {
-            PopUpManager.Instance.PopUp(EGoodsType.ToString() + " 재화가 부족합니다!", EPopUpType.Caution);
-            throw new Exception("Insufficient Goods Value");
-        }
-        else
-            m_GameData.AddElementInGoodsList((int)EGoodsType, num);
-            //m_GameData.GoodsList[(int)EGoodsType].count += num;
-    }*/
-
     #region Load & Save
     public void InitializedData()
     {
@@ -462,8 +490,8 @@ public class DataManager : MonoBehaviour
 
     public IEnumerator LoadDataCo()
     {
-        yield return LoadHeroDataCo();
-        yield return LoadGameDataCo();
+        yield return StartCoroutine(LoadGameDataCo());
+        yield return StartCoroutine(LoadHeroDataCo());
     }
 
     private void InitializedHeroData()
@@ -486,20 +514,8 @@ public class DataManager : MonoBehaviour
 
     private void InitializedGameData()
     {
-        string[] names = { "Stamina", "Gold", "Dia", "Awake Jewel" };
-        m_GameData.goodsNames.Initialize();
-        m_GameData.goodsNames = names;
-
-        m_GameData.GoodsList.Clear();
-        m_GameData.GoodsList = new List<Goods>();
-        for (int i = 0; i < GameData.goodsNames.Length; i++)
-        {
-            m_GameData.GoodsList.Add(new Goods(GameData.goodsNames[i], 0));
-            m_GameData.SetElementInGoodsList(i, 0);
-        }
-
         m_GameData.inventoryDic.Clear();
-        foreach(var itemData in ItemDataList)
+        foreach (var itemData in ItemDataList)
         {
             switch (itemData.ItemType)
             {
@@ -539,13 +555,13 @@ public class DataManager : MonoBehaviour
         TimeSpan timeStamp = dateTime - exitTime;
 
         int timeCalDay = timeStamp.Days;
-        if(timeCalDay > 0 )
+        if (timeCalDay > 0)
             InitializedTodayBuyingLimit();
     }
 
     private void InitializedTodayBuyingLimit()
     {
-        foreach(var item in m_GameData.inventoryDic.Values)
+        foreach (var item in m_GameData.inventoryDic.Values)
         {
             if (item as CountableItem != null)
                 ((CountableItem)item).SetTodayBuyingAmount(0);
@@ -618,16 +634,17 @@ public class DataManager : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
     }
-    
+
     public IEnumerator LoadGameDataCo()
     {
         var request = new GetUserDataRequest() { PlayFabId = PlayFabManager.Instance.PlayFabId };
         PlayFabClientAPI.GetUserData(request, (result) =>
         {
+            InitializedVirtualCurrencyDic();
+
             foreach (var eachData in result.Data)
             {
                 string key = eachData.Key;
-
                 if (eachData.Key.Contains("GameData"))
                 {
                     m_GameData = JsonUtility.FromJson<GameData>(eachData.Value.Value);
@@ -687,7 +704,7 @@ public class DataManager : MonoBehaviour
 
     public void AddInventoryItem(Item item, int amount)
     {
-        if(m_GameData.inventoryDic.TryGetValue(item.Data.Name, out Item currentItem))
+        if (m_GameData.inventoryDic.TryGetValue(item.Data.Name, out Item currentItem))
         {
             if (currentItem as ConsumeItem != null)
             {
@@ -708,9 +725,9 @@ public class DataManager : MonoBehaviour
 
     public bool GetItemByKey(string key, out Item outItem)
     {
-        foreach(var item in m_GameData.inventoryDic.Values)
+        foreach (var item in m_GameData.inventoryDic.Values)
         {
-            if(item.Data.Name == key)
+            if (item.Data.Name == key)
             {
                 outItem = item;
                 return true;
@@ -728,10 +745,10 @@ public class DataManager : MonoBehaviour
 
     public int GetTodayBuyingAmountOfItemByKey(string key)
     {
-        if(m_GameData.inventoryDic.TryGetValue(key, out Item item))
+        if (m_GameData.inventoryDic.TryGetValue(key, out Item item))
         {
-            if(item as CountableItem != null)
-              return ((CountableItem)item).TodayBuyingAmount;
+            if (item as CountableItem != null)
+                return ((CountableItem)item).TodayBuyingAmount;
         }
 
         throw new Exception("does not exist Key");
@@ -739,7 +756,7 @@ public class DataManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        if(Social.localUser.authenticated)
+        if (Social.localUser.authenticated)
         {
             SaveTime();
             SaveData();
