@@ -2,14 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using PlayFab.ClientModels;
 using PlayFab;
 using UnityEngine.Events;
-using static UnityEngine.Networking.UnityWebRequest;
-using static UnityEngine.UI.Image;
-using System.Linq;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.UI;
 
 public class DataManager : MonoBehaviour
 {
@@ -36,6 +35,8 @@ public class DataManager : MonoBehaviour
     [Header("==== Enemy Data Information ===="), Space(10)]
     [SerializeField] private List<UnitData> mEnemyDataList = new List<UnitData>();
     public List<UnitData> EnemyDataList { get => mEnemyDataList; }
+    [SerializeField] private List<Sprite> mEnemySpriteList = new List<Sprite>();
+    public List<Sprite> EnemySpriteList => mEnemySpriteList;
 
     [Header("==== Item Data Information ===="), Space(10)]
     [SerializeField] private List<ItemData> mItemDataList = new List<ItemData>();
@@ -47,6 +48,12 @@ public class DataManager : MonoBehaviour
     public List<Sprite> goodsSpriteList = new List<Sprite>();
 
     public UnityAction OnDataLoadSuccessAction;
+
+    private bool isDownStart = false;
+    [SerializeField] private Text isDownTxt;
+    [SerializeField] private Text isProgressTxt;
+
+    private AsyncOperationHandle updateBundleHandle;
 
     private void Awake()
     {
@@ -164,12 +171,80 @@ public class DataManager : MonoBehaviour
     {
         mEnemyDataList.Clear();
 
-        UnitData[] temp = Resources.LoadAll<UnitData>("Scriptable/EnemyData");
+        updateBundleHandle = Addressables.LoadAssetsAsync<UnitData>(
+            Tags.EnemyDataLabel,
+            (result) =>
+            {
+                if (!isDownStart)
+                {
+                    isDownStart = true;
+                    isDownTxt.text = "몬스터 데이터 다운로드 시작";
+                    StartCoroutine(UpdateBundleProgressTxtCo());
+                }
+                Debug.Log("Update Enemy Data : " + result.Name);
+                mEnemyDataList.Add(result);
+            }
+        );
 
-        for (int i = 0; i < temp.Length; i++)
+        updateBundleHandle = Addressables.LoadAssetsAsync<Sprite>(
+          Tags.EnemyDataLabel,
+          (result) =>
+          {
+              if (!isDownStart)
+              {
+                  isDownStart = true;
+                  isDownTxt.text = "몬스터 스프라이트 다운로드 시작";
+                  StartCoroutine(UpdateBundleProgressTxtCo());
+              }
+
+              EnemySpriteList.Add(result);
+              Debug.Log("Update Enemy Sprite : " + result.name);
+
+              //mEnemyDataList.Find(x => x.Name == result.name).mySprite = ;
+          }
+      );
+
+        if (updateBundleHandle.IsValid())
         {
-            if (temp[i] != null)
-                mEnemyDataList.Add(temp[i]);
+            updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
+            {
+                updateBundleHandle = handle;
+                isDownTxt.text = "다운로드 완료";
+            };
+        }
+        else
+        {
+            Debug.LogWarning("updateBundleHandle is not valid!!");
+        }
+
+        /*        Addressables.DownloadDependenciesAsync(Tags.EnemyDataLabel).Completed +=
+                    (AsyncOperationHandle handle) =>
+                    {
+                        Debug.Log("Update Enemy Data Complete!");
+                        Addressables.Release(handle);
+                    };*/
+
+        /*        UnitData[] temp = Resources.LoadAll<UnitData>("Scriptable/EnemyData");
+
+                for (int i = 0; i < temp.Length; i++)
+                {
+                    if (temp[i] != null)
+                        mEnemyDataList.Add(temp[i]);
+                }*/
+    }
+
+    private IEnumerator UpdateBundleProgressTxtCo()
+    {
+        yield return null;
+
+        while (true)
+        {
+            if (updateBundleHandle.PercentComplete >= 1.0f)
+                break;
+
+            isProgressTxt.text = string.Concat(
+                (updateBundleHandle.PercentComplete * 100.0f).ToString(), "%");
+            yield return null;
         }
     }
 
@@ -503,11 +578,13 @@ public class DataManager : MonoBehaviour
         m_HeroData.heroList.Clear();
         m_HeroData.partyList.Clear();
 
-        if (m_HeroData.originHeroDataList.Count <= 0)
+        if (m_HeroData.originHeroDataList.Count == 0)
             UpdateOriginHeroData();
 
         m_HeroData.heroUnlockList[0] = true;
-        m_HeroData.heroList.Add(m_HeroData.originHeroDataList[0]);
+
+        if(m_HeroData.originHeroDataList.Count != 0)
+            m_HeroData.heroList.Add(m_HeroData.originHeroDataList[0]);
 
         m_HeroData.isLoadComplete = true;
     }
@@ -570,42 +647,59 @@ public class DataManager : MonoBehaviour
 
     private void SetupHero()
     {
-        for (int i = 0; i < m_HeroData.heroList.Count; i++)
+        try
         {
-            m_HeroData.heroList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.heroList[i].ID];
-            m_HeroData.heroList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.heroList[i].ID];
-        }
-
-        for (int i = 0; i < m_HeroData.partyList.Count; i++)
-        {
-            m_HeroData.partyList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.partyList[i].ID];
-            m_HeroData.partyList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.partyList[i].ID];
-        }
-
-        ConstructHeroDic();
-
-        for (int i = 0; i < m_HeroData.heroList.Count; i++)
-        {
-            //만약 heroDic에 해당 heroList의 "Jelly0"가 있다면
-            var targetName = m_HeroData.heroList[i].name;
-
-            if (!m_HeroData.heroDic.ContainsKey(targetName))
-                m_HeroData.heroDic.Add(targetName, m_HeroData.heroList[i]);
-        }
-
-        if (SceneManager.GetActiveScene().name == "Lobby")
-        {
-            for (int i = 0; i < m_HeroData.heroList.Count; i++)
+            if(m_HeroData.heroList.Count != 0)
             {
-                var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
-                    Quaternion.identity).GetComponent<LobbyHero>();
+                for (int i = 0; i < m_HeroData.heroList.Count; i++)
+                {
+                    m_HeroData.heroList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.heroList[i].ID];
+                    m_HeroData.heroList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.heroList[i].ID];
+                }
 
-                var heroStat = m_HeroData.heroList[i];
-                //heroStat.mySprite = HeroData.heroSpriteList[heroStat.Data.ID];
-                //heroStat.animCtrl = HeroData.heroAnimCtrlList[heroStat.Data.ID];
+                for (int i = 0; i < m_HeroData.partyList.Count; i++)
+                {
+                    m_HeroData.partyList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.partyList[i].ID];
+                    m_HeroData.partyList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.partyList[i].ID];
+                }
 
-                hero.UnitSetup(heroStat);
+                ConstructHeroDic();
+
+                for (int i = 0; i < m_HeroData.heroList.Count; i++)
+                {
+                    //만약 heroDic에 해당 heroList의 "Jelly0"가 있다면
+                    var targetName = m_HeroData.heroList[i].name;
+
+                    if (!m_HeroData.heroDic.ContainsKey(targetName))
+                        m_HeroData.heroDic.Add(targetName, m_HeroData.heroList[i]);
+                }
+
+                if (SceneManager.GetActiveScene().name == "Lobby")
+                {
+                    for (int i = 0; i < m_HeroData.heroList.Count; i++)
+                    {
+                        var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
+                            Quaternion.identity).GetComponent<LobbyHero>();
+
+                        var heroStat = m_HeroData.heroList[i];
+                        //heroStat.mySprite = HeroData.heroSpriteList[heroStat.Data.ID];
+                        //heroStat.animCtrl = HeroData.heroAnimCtrlList[heroStat.Data.ID];
+
+                        hero.UnitSetup(heroStat);
+                    }
+
+                    uiMgr.InitHeroPanel();
+                }
             }
+            else
+            {
+                throw new Exception("m_HeroData.heroList is empty!");
+            }
+        }
+        catch(Exception ex)
+        {
+            Debug.LogError(ex.Message);
+            popUpMgr.PopUp(ex.Message, EPopUpType.Warning);
         }
     }
 

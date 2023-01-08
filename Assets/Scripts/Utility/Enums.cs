@@ -55,4 +55,6 @@ public enum EGrade { Normal = 0, Rare, Epic, Legend }
 public static class Tags
 {
     public static readonly string[] CurrencyTags = { "ST", "GD", "DA" };
+
+    public static readonly string EnemyDataLabel = "EnemyData";
 }

@@ -170,6 +170,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void InitHeroPanel()
+    {
+        StartCoroutine(InitHeroPanelCoru());
+    }
+
     private IEnumerator InitHeroPanelCoru()
     {
         yield return StartCoroutine(DataManager.Instance.UpdateResources());

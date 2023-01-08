@@ -50,7 +50,6 @@ public abstract class Unit : MonoBehaviour
     public void UnitSetup(UnitData unitData)
     {
         mMyData = unitData;
-        sprite.color = Color.white;
         //ChangeAc();
 
         hp = unitData.HP;
@@ -59,8 +58,14 @@ public abstract class Unit : MonoBehaviour
         moveSpeed = unitData.MoveSpeed;
         distance = unitData.Distance;
 
+        if (unitData.mySprite == null)
+            PopUpManager.Instance.PopUp("sprite is empty!", EPopUpType.Caution);
+        else if(unitData.animCtrl == null)
+            PopUpManager.Instance.PopUp("animCtrl is empty!", EPopUpType.Caution);
+
         mMyData.mySprite = unitData.mySprite;
         sprite.sprite = mMyData.mySprite;
+        sprite.color = Color.white;
 
         mMyData.animCtrl = unitData.animCtrl;
         anim.runtimeAnimatorController = mMyData.animCtrl;

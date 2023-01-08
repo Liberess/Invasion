@@ -9,21 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e6517b5c3475724fa7ad933d063bca0, type: 3}
-  m_Name: 09_Hose
+  m_Script: {fileID: 11500000, guid: 5834b5087d578d24c926ce20cd31e6d6, type: 3}
+  m_Name: EnemyDataAssets_ContentUpdateGroupSchema
   m_EditorClassIdentifier: 
-  id: 0
-  m_name: 
-  level: 0
-  cost: 0
-  hp: 0
-  ap: 0
-  dp: 0
-  moveSpeed: 0
-  critical: 0
-  dodge: 0
-  distance: 0
-  attackDelay: 0
-  isLeader: 0
-  mySprite: {fileID: 0}
-  animCtrl: {fileID: 0}
+  m_Group: {fileID: 11400000, guid: f6176217498720d4196cf297365b090b, type: 2}
+  m_StaticContent: 0
