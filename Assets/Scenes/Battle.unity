@@ -5831,6 +5831,16 @@ PrefabInstance:
       objectReference: {fileID: 1688885512}
     - target: {fileID: 7792586601105605533, guid: 02381664a1421b24194a78b6371b32f0,
         type: 3}
+      propertyPath: heroReference.m_AssetGUID
+      value: 608ca1624c4bbba46a630bef5eaf7985
+      objectReference: {fileID: 0}
+    - target: {fileID: 7792586601105605533, guid: 02381664a1421b24194a78b6371b32f0,
+        type: 3}
+      propertyPath: enemyReference.m_AssetGUID
+      value: 36004223f7608974aa18384d3b9f4b05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7792586601105605533, guid: 02381664a1421b24194a78b6371b32f0,
+        type: 3}
       propertyPath: startSprites.Array.data[0]
       value: 
       objectReference: {fileID: 8903608049025104197, guid: b5873077fa7b87647b28f8693d83b49b,

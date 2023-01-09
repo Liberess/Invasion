@@ -201,14 +201,14 @@ public class UIManager : MonoBehaviour
     {
         heroSlotList.Clear();
 
-        List<int> IDList = new List<int>();
+        List<int> PartyIDList = new List<int>();
 
         foreach (var hero in dataMgr.HeroData.partyList)
-            IDList.Add(hero.ID);
+            PartyIDList.Add(hero.ID);
 
         for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
         {
-            if (IDList.Contains(dataMgr.HeroData.heroList[i].ID))
+            if (PartyIDList.Contains(dataMgr.HeroData.heroList[i].ID))
                 continue;
 
             HeroSlot heroSlot = GetObj();

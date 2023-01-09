@@ -46313,10 +46313,20 @@ PrefabInstance:
       objectReference: {fileID: 898461944}
     - target: {fileID: 5366426050918915826, guid: 61820d1122036014195ea0895f08846e,
         type: 3}
+      propertyPath: heroReference.m_AssetGUID
+      value: 608ca1624c4bbba46a630bef5eaf7985
+      objectReference: {fileID: 0}
+    - target: {fileID: 5366426050918915826, guid: 61820d1122036014195ea0895f08846e,
+        type: 3}
       propertyPath: mEnemyDataList.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: 3dce953c683053548b68a9d44a8ec54d,
         type: 2}
+    - target: {fileID: 5366426050918915826, guid: 61820d1122036014195ea0895f08846e,
+        type: 3}
+      propertyPath: lobbyHeroReference.m_AssetGUID
+      value: cfd3ca33311f6d04c88aee436f89a0ae
+      objectReference: {fileID: 0}
     - target: {fileID: 5366426050918915826, guid: 61820d1122036014195ea0895f08846e,
         type: 3}
       propertyPath: m_HeroData.heroList.Array.size

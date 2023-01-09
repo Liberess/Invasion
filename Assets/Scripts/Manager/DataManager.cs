@@ -16,8 +16,10 @@ public class DataManager : MonoBehaviour
     private PopUpManager popUpMgr;
 
     [Header("==== Hero Object Prefab ====")]
-    [SerializeField] private GameObject heroPrefab;
-    [SerializeField] private GameObject lobbyHeroPrefab;
+    [SerializeField] private AssetReference heroReference;
+    [SerializeField] private AssetReference lobbyHeroReference;
+    //[SerializeField] private GameObject heroPrefab;
+    //[SerializeField] private GameObject lobbyHeroPrefab;
 
     public UnitData LeaderHero { get; private set; }
 
@@ -181,8 +183,9 @@ public class DataManager : MonoBehaviour
                     isDownTxt.text = "몬스터 데이터 다운로드 시작";
                     StartCoroutine(UpdateBundleProgressTxtCo());
                 }
-                Debug.Log("Update Enemy Data : " + result.Name);
-                mEnemyDataList.Add(result);
+
+                if(!mEnemyDataList.Contains(result)) 
+                    mEnemyDataList.Add(result);
             }
         );
 
@@ -197,10 +200,8 @@ public class DataManager : MonoBehaviour
                   StartCoroutine(UpdateBundleProgressTxtCo());
               }
 
-              EnemySpriteList.Add(result);
-              Debug.Log("Update Enemy Sprite : " + result.name);
-
-              //mEnemyDataList.Find(x => x.Name == result.name).mySprite = ;
+              if(!mEnemySpriteList.Contains(result))
+                  EnemySpriteList.Add(result);
           }
       );
 
@@ -678,14 +679,26 @@ public class DataManager : MonoBehaviour
                 {
                     for (int i = 0; i < m_HeroData.heroList.Count; i++)
                     {
-                        var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
-                            Quaternion.identity).GetComponent<LobbyHero>();
+                        int index = i;
+           
+                        Addressables.InstantiateAsync(
+                            lobbyHeroReference,
+                            Vector3.zero,
+                            Quaternion.identity
+                        ).Completed += (handle) =>
+                        {
+                            if (handle.Result.TryGetComponent(out LobbyHero hero))
+                            {
+                                var heroStat = m_HeroData.heroList[index];
+                                hero.UnitSetup(heroStat);
+                            }
+                        };
 
-                        var heroStat = m_HeroData.heroList[i];
+                        /*var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
+                            Quaternion.identity).GetComponent<LobbyHero>();*/
+
                         //heroStat.mySprite = HeroData.heroSpriteList[heroStat.Data.ID];
                         //heroStat.animCtrl = HeroData.heroAnimCtrlList[heroStat.Data.ID];
-
-                        hero.UnitSetup(heroStat);
                     }
 
                     uiMgr.InitHeroPanel();

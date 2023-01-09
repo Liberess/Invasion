@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
 
 public class BattleManager : MonoBehaviour
 {
@@ -40,14 +41,14 @@ public class BattleManager : MonoBehaviour
     public bool IsPlay { get; private set; }
 
     [Header("== Setting Object Pooling =="), Space(10)]
+    [SerializeField] private AssetReference heroReference;
+    [SerializeField] private AssetReference enemyReference;
     [SerializeField] private int defaultHeroCount = 20;
     [SerializeField] private int defaultEnemyCount = 20;
     private Dictionary<EUnitQueueType, Queue<GameObject>> queDic =
         new Dictionary<EUnitQueueType, Queue<GameObject>>();
     private Dictionary<EUnitQueueType, GameObject> quePrefabDic =
         new Dictionary<EUnitQueueType, GameObject>();
-    //private Queue<Hero> heroQueue = new Queue<Hero>();
-    //private Queue<Enemy> enemyQueue = new Queue<Enemy>();
 
     [Header("== Setting Base =="), Space(10)]
     [SerializeField] private Base redBase;
@@ -69,6 +70,7 @@ public class BattleManager : MonoBehaviour
 
     private Action UpdateCardAction;
     public Action GameOverAction;
+
     #endregion
 
     private void Awake()
@@ -100,12 +102,23 @@ public class BattleManager : MonoBehaviour
         //redBase.UnitSetup(new UnitStatus("RedBase", 1000));
         //blueBase.UnitSetup(new UnitStatus("BlueBase", 1000));
 
-        quePrefabDic.Add(EUnitQueueType.Hero, Resources.Load("Unit/Hero") as GameObject);
-        quePrefabDic.Add(EUnitQueueType.Enemy, Resources.Load("Unit/Enemy") as GameObject);
-
         queDic.Clear();
-        Initialize(EUnitQueueType.Hero, defaultHeroCount);
-        Initialize(EUnitQueueType.Enemy, defaultEnemyCount);
+        Addressables.LoadAssetAsync<GameObject>(heroReference).Completed +=
+            handle =>
+            {
+                quePrefabDic.Add(EUnitQueueType.Hero, handle.Result);
+                Initialize(EUnitQueueType.Hero, defaultHeroCount);
+            };
+
+        Addressables.LoadAssetAsync<GameObject>(enemyReference).Completed +=
+            handle =>
+            {
+                quePrefabDic.Add(EUnitQueueType.Enemy, handle.Result);
+                Initialize(EUnitQueueType.Enemy, defaultEnemyCount);
+            };
+           
+        //quePrefabDic.Add(EUnitQueueType.Hero, Resources.Load("Unit/Hero") as GameObject);
+        //quePrefabDic.Add(EUnitQueueType.Enemy, Resources.Load("Unit/Enemy") as GameObject);
 
         SetHeroCard();
         SetCostSlider();
