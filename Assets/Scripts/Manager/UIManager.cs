@@ -192,7 +192,7 @@ public class UIManager : MonoBehaviour
             HeroSlot heroSlot = GetObj();
             heroSlot.transform.SetParent(heroPartyGrid.transform);
             heroSlot.transform.localScale = new Vector3(1f, 1f, 1f);
-            heroSlot.UnitSetup(dataMgr.HeroData.partyList[i]);
+            heroSlot.HeroStatusSetup(dataMgr.HeroData.partyList[i]);
             partySlotList.Add(heroSlot);
         }
     }
@@ -202,17 +202,55 @@ public class UIManager : MonoBehaviour
         heroSlotList.Clear();
 
         List<int> PartyIDList = new List<int>();
-
         foreach (var hero in dataMgr.HeroData.partyList)
             PartyIDList.Add(hero.ID);
 
         for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
         {
-            if (PartyIDList.Contains(dataMgr.HeroData.heroList[i].ID))
+            int id = dataMgr.HeroData.heroList[i].ID;
+            if (PartyIDList.Contains(id))
+                continue;
+            else if (heroSlotList.Find(x => x.HeroStatus.ID == id) != null)
                 continue;
 
             HeroSlot heroSlot = GetObj();
-            heroSlot.UnitSetup(dataMgr.HeroData.heroList[i]);
+            heroSlot.HeroStatusSetup(dataMgr.HeroData.heroList[i]);
+
+            heroSlotList.Add(heroSlot);
+        }
+    }
+
+    public void UpdateHeroPanel()
+    {
+        for (int i = 0; i < dataMgr.HeroData.partyList.Count; i++)
+        {
+            if(partySlotList.Find(x => x.HeroStatus.ID == dataMgr.HeroData.partyList[i].ID) != null)
+            {
+                Debug.Log("이미 있음");
+                continue;
+            }
+
+            HeroSlot heroSlot = GetObj();
+            heroSlot.transform.SetParent(heroPartyGrid.transform);
+            heroSlot.transform.localScale = new Vector3(1f, 1f, 1f);
+            heroSlot.HeroStatusSetup(dataMgr.HeroData.partyList[i]);
+            partySlotList.Add(heroSlot);
+        }
+
+        List<int> PartyIDList = new List<int>();
+        foreach (var hero in partySlotList)
+            PartyIDList.Add(hero.HeroStatus.ID);
+
+        for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
+        {
+            int id = dataMgr.HeroData.heroList[i].ID;
+            if (PartyIDList.Contains(id))
+                continue;
+            else if (heroSlotList.Find(x => x.HeroStatus.ID == id) != null)
+                continue;
+
+            HeroSlot heroSlot = GetObj();
+            heroSlot.HeroStatusSetup(dataMgr.HeroData.heroList[i]);
 
             heroSlotList.Add(heroSlot);
         }
@@ -228,7 +266,7 @@ public class UIManager : MonoBehaviour
 
         for (index = 0; index < heroSlotList.Count; index++)
         {
-            if (heroSlotList[index].MyStatus.ID == id)
+            if (heroSlotList[index].HeroStatus.ID == id)
                 break;
         }
 
@@ -246,7 +284,7 @@ public class UIManager : MonoBehaviour
 
         for (index = 0; index < partySlotList.Count; index++)
         {
-            if (partySlotList[index].MyStatus.ID == id)
+            if (partySlotList[index].HeroStatus.ID == id)
                 break;
         }
 
@@ -267,9 +305,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.Level:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.Level).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.HeroStatus.Level).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.Level).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.HeroStatus.Level).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -280,9 +318,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.Grade:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.Level).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.HeroStatus.Level).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.Level).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.HeroStatus.Level).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -293,9 +331,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.DPS:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.DPS).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.HeroStatus.DPS).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.DPS).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.HeroStatus.DPS).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -473,11 +511,11 @@ public class UIManager : MonoBehaviour
         if (heroDetailInfoPanel == null)
             return;
 
-        currentHeroIndex = dataMgr.GetIndexOfHeroInList(dataMgr.GetDataByHero(ID));
+        currentHeroIndex = dataMgr.GetIndexOfHeroInList(dataMgr.GetHumalDataByIndex(ID));
         UpdateHeroOrderBtn();
 
         dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-            dataMgr.GetDataByHero(ID)));
+            dataMgr.GetHumalDataByIndex(ID).UnitData));
     }
 
     private void UpdateHeroOrderBtn()
@@ -496,13 +534,13 @@ public class UIManager : MonoBehaviour
     public void OnClickNextHero()
     {
         dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-            dataMgr.GetDataByOrder("Next", currentHeroIndex)));
+            dataMgr.GetDataByOrder("Next", currentHeroIndex).UnitData));
     }
 
     public void OnClickPreviousHero()
     {
         dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-            dataMgr.GetDataByOrder("Previous", currentHeroIndex)));
+            dataMgr.GetDataByOrder("Previous", currentHeroIndex).UnitData));
     }
     #endregion
 }

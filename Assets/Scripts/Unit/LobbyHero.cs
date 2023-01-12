@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class LobbyHero : Unit
 {
+    [SerializeField] private HumalData humalData;
+    public HumalData HumalData => humalData;
+
     [SerializeField] private float speedX;
     [SerializeField] private float speedY;
 
@@ -25,6 +28,16 @@ public class LobbyHero : Unit
     private void Update()
     {
         Movement();
+    }
+
+    public override void UnitSetup(UnitData unitData)
+    {
+        base.UnitSetup(unitData);
+    }
+
+    public void UnitSetup(HumalData humalData)
+    {
+        this.humalData = humalData;
     }
 
     #region 이동 세팅

@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class Hero : Unit
 {
+    [SerializeField] private HumalData humalData;
+    public HumalData HumalData => humalData;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -35,4 +38,17 @@ public class Hero : Unit
     private void Update() => Move();
 
     private void FixedUpdate() => Scan();
+
+    public override void UnitSetup(UnitData unitData)
+    {
+        base.UnitSetup(unitData);
+
+        mData = unitData;
+        humalData.SetHumalData(unitData);
+    }
+
+    public void UnitSetup(HumalData humalData)
+    {
+        this.humalData = humalData;
+    }
 }

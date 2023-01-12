@@ -10,8 +10,8 @@ public abstract class Unit : MonoBehaviour
 
     public event Action DeathAction;
 
-    [SerializeField] protected UnitData mMyData;
-    public UnitData MyData { get => mMyData; }
+    [SerializeField] protected UnitData mData;
+    public UnitData Data { get => mData; }
 
     [SerializeField] protected int hp;
     public int Hp { get => hp; }
@@ -47,9 +47,9 @@ public abstract class Unit : MonoBehaviour
     protected Rigidbody2D rigid;
     protected SpriteRenderer sprite;
 
-    public void UnitSetup(UnitData unitData)
+    public virtual void UnitSetup(UnitData unitData)
     {
-        mMyData = unitData;
+        mData = unitData;
         //ChangeAc();
 
         hp = unitData.HP;
@@ -63,18 +63,18 @@ public abstract class Unit : MonoBehaviour
         else if(unitData.animCtrl == null)
             PopUpManager.Instance.PopUp("animCtrl is empty!", EPopUpType.Caution);
 
-        mMyData.mySprite = unitData.mySprite;
-        sprite.sprite = mMyData.mySprite;
+        mData.mySprite = unitData.mySprite;
+        sprite.sprite = mData.mySprite;
         sprite.color = Color.white;
 
-        mMyData.animCtrl = unitData.animCtrl;
-        anim.runtimeAnimatorController = mMyData.animCtrl;
+        mData.animCtrl = unitData.animCtrl;
+        anim.runtimeAnimatorController = mData.animCtrl;
     }
 
     public virtual void ChangeAc()
     {
         anim.runtimeAnimatorController =
-            DataManager.Instance.HeroData.heroAnimCtrlList[mMyData.ID];
+            DataManager.Instance.HeroData.heroAnimCtrlList[mData.ID];
     }
 
     protected void TeamValueSet()

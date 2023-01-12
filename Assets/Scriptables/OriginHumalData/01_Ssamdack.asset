@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e6517b5c3475724fa7ad933d063bca0, type: 3}
+  m_Name: 01_Ssamdack
+  m_EditorClassIdentifier: 
+  id: 1
+  m_name: "\uC308\uB2ED"
+  level: 1
+  cost: 2
+  hp: 210
+  ap: 110
+  dp: 5
+  moveSpeed: 1
+  critical: 20
+  dodge: 10
+  distance: 1
+  attackDelay: 1
+  mySprite: {fileID: 2368519291515267928, guid: 402ef05d02e48754490fbaae171fe004,
+    type: 3}
+  animCtrl: {fileID: 9100000, guid: 933dee70b14c7ab439771c969ea95579, type: 2}

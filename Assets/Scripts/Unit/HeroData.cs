@@ -11,12 +11,14 @@ public class HeroData
     public bool[] heroUnlockList = new bool[HeroMaxSize];
 
     //임시 히어로 데이터 저장
-    public Dictionary<string, UnitData> heroDic = new Dictionary<string, UnitData>();
+    public Dictionary<string, HumalData> heroDic = new Dictionary<string, HumalData>();
+    public Dictionary<string, int> humalPieceAmountDic = new Dictionary<string, int>();
 
     //Json 히어로 데이터 저장
-    public List<UnitData> heroList = new List<UnitData>();
-    public List<UnitData> partyList = new List<UnitData>();
+    public List<HumalData> heroList = new List<HumalData>();
+    public List<HumalData> partyList = new List<HumalData>();
     public List<UnitData> originHeroDataList = new List<UnitData>();
+    public List<HumalPiece> humalPieceAmountList = new List<HumalPiece>();
 
     //[HideInInspector] 
     public List<Sprite> heroSpriteList = new List<Sprite>();

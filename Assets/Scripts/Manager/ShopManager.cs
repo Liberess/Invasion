@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static UnityEngine.Networking.UnityWebRequest;
 
 public class ShopManager : MonoBehaviour
 {
@@ -21,6 +25,8 @@ public class ShopManager : MonoBehaviour
 
     private List<BuyingButton> buyingBtnList = new List<BuyingButton>();
     private BuyingButton currentBuyingBtn;
+
+    [SerializeField] private List<HumalPickDBEntity> humalPickDBList = new List<HumalPickDBEntity>();
 
     public UnityAction OnShopInitAction;
 
@@ -65,9 +71,29 @@ public class ShopManager : MonoBehaviour
             }
         }
 
+#if UNITY_EDITOR
+        UpdateHumalPickDB();
+#endif
+
         PlayFabManager.Instance.OnPlayFabLoginSuccessAction += OnShopInitAction;
+        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += UpdateHumalPickDB;
 
         OnClickShopMenu(EShopMenu.Humal);
+    }
+
+    private void UpdateHumalPickDB()
+    {
+        Addressables.LoadAssetAsync<HumalPickDB>(Tags.HumalDBLabel).Completed +=
+        handle =>
+        {
+            foreach(var db in handle.Result.Entities)
+            {
+                if (!humalPickDBList.Contains(db))
+                    humalPickDBList.Add(db);
+            }
+
+            humalPickDBList = humalPickDBList.OrderBy(x => x.index).ToList();
+        };
     }
 
     public void OnClickShopMenu(EShopMenu shopMenu)
@@ -146,7 +172,7 @@ public class ShopManager : MonoBehaviour
     {
         if(buyingType == EBuyingType.Humal)
         {
-
+            yield return StartCoroutine(PickUpHumal());
         }
         else
         {
@@ -160,9 +186,34 @@ public class ShopManager : MonoBehaviour
 
     private IEnumerator PickUpHumal()
     {
-        if(Utility.GetThisChanceResult_Percentage(97.0f))
-        {
+        var index = UnityEngine.Random.Range(0, humalPickDBList.Count);
+        var entity = humalPickDBList[index];
+        Debug.Log("index : " + index);
 
+        var picker = new Rito.WeightedRandomPicker<string>();
+        picker.Add(entity.piece_10.ToString(), entity.piece_10);
+        picker.Add(entity.piece_20.ToString(), entity.piece_20);
+        picker.Add(entity.piece_50.ToString(), entity.piece_50);
+        picker.Add(entity.humal.ToString(), entity.humal);
+
+        var pick = picker.GetRandomPick();
+
+        try
+        {
+            if (pick.Contains("humal"))
+            {
+                dataMgr.AddNewHumal(index);
+            }
+            else
+            {
+                int amount = int.Parse(pick.Substring(pick.IndexOf('_')));
+                dataMgr.AddHumalPiece(entity.name_ko, amount);
+            }
+        }
+        catch(Exception ex)
+        {
+            Debug.LogWarning(ex.Message);
+            popUpMgr.PopUp(ex.Message, EPopUpType.Caution);
         }
 
         yield return null;

@@ -13,8 +13,8 @@ public class HeroSlot : MonoBehaviour
     [SerializeField] private GameObject menuPanel;
     [SerializeField] private Text partyMenuTxt;
 
-    [SerializeField] private UnitData myStatus;
-    public UnitData MyStatus { get => myStatus; }
+    [SerializeField] private HumalData heroStatus;
+    public HumalData HeroStatus { get => heroStatus; }
 
     [SerializeField] private bool isParty = false;
 
@@ -48,10 +48,10 @@ public class HeroSlot : MonoBehaviour
         //menuPanel.GetComponent<Button>().onClick.AddListener(OnClickOther);
     }
 
-    public void UnitSetup(UnitData status)
+    public void HeroStatusSetup(HumalData humalData)
     {
-        myStatus = status;
-        heroImg.sprite = status.mySprite;
+        heroStatus = humalData;
+        heroImg.sprite = humalData.mySprite;
     }
 
     public void SlotDragEvent()
@@ -61,7 +61,7 @@ public class HeroSlot : MonoBehaviour
 
     public void UpdateSlotImage()
     {
-        if (MyStatus.IsLeader)
+        if (heroStatus.IsLeader)
             GetComponent<Image>().color = new Color(250, 250, 130);
         else
             GetComponent<Image>().color = Color.white;
@@ -88,7 +88,7 @@ public class HeroSlot : MonoBehaviour
         menuPanel.transform.Find("MenuPanel").position = newPos;
         menuPanel.SetActive(true);
 
-        UIManager.Instance.UpdateHeroDetailInfo(myStatus.ID);
+        UIManager.Instance.UpdateHeroDetailInfo(heroStatus.ID);
 
         if (isParty)
         {

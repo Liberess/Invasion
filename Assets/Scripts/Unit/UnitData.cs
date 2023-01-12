@@ -43,10 +43,6 @@ public class UnitData : ScriptableObject
     public float DPS =>           // 초당 공격력. Damage per Second
         (1f / attackDelay) * ap;
 
-    [SerializeField] private bool isLeader;          // 영웅 파티의 리더인가?
-    public bool IsLeader { get => isLeader;}
-    public void SetLeader(bool _isLeader) => isLeader = _isLeader;
-
     public Sprite mySprite;
     public RuntimeAnimatorController animCtrl;
 }

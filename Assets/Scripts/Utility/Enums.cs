@@ -57,4 +57,6 @@ public static class Tags
     public static readonly string[] CurrencyTags = { "ST", "GD", "DA" };
 
     public static readonly string EnemyDataLabel = "EnemyData";
+    public static readonly string HumalDataLabel = "HumalData";
+    public static readonly string HumalDBLabel = "HumalDB";
 }
