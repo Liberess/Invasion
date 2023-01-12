@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f839c693d85f0704aa89be94696845a9, type: 3}
-  m_Name: HumalOriginDB
+  m_Name: UnitOriginDB
   m_EditorClassIdentifier: 
-  Entities:
+  HumalDBList:
   - id: 0
-    m_name: "\uB098\uB098"
+    koName: "\uB098\uB098"
+    enName: Nana
     level: 1
     cost: 2
     hp: 300
@@ -26,7 +27,8 @@ MonoBehaviour:
     distance: 1
     attackDelay: 1
   - id: 1
-    m_name: "\uC0D8\uB2ED\uC774"
+    koName: "\uC0D8\uB2ED\uC774"
+    enName: Ssamdak
     level: 1
     cost: 2
     hp: 210
@@ -38,7 +40,8 @@ MonoBehaviour:
     distance: 1
     attackDelay: 1
   - id: 2
-    m_name: "\uBF1D\uC54C\uC774"
+    koName: "\uBF1D\uC54C\uC774"
+    enName: BbeongAI
     level: 1
     cost: 1
     hp: 125
@@ -50,7 +53,8 @@ MonoBehaviour:
     distance: 1
     attackDelay: 1
   - id: 3
-    m_name: "\uD478\uB529"
+    koName: "\uD478\uB529"
+    enName: Pudding
     level: 1
     cost: 2
     hp: 300
@@ -62,7 +66,8 @@ MonoBehaviour:
     distance: 1
     attackDelay: 1
   - id: 4
-    m_name: "\uD384"
+    koName: "\uD384"
+    enName: Pearl
     level: 1
     cost: 2
     hp: 250
@@ -74,7 +79,8 @@ MonoBehaviour:
     distance: 1
     attackDelay: 1
   - id: 5
-    m_name: "\uC815\uAE00"
+    koName: "\uC815\uAE00"
+    enName: Jungle
     level: 1
     cost: 3
     hp: 500
@@ -86,7 +92,8 @@ MonoBehaviour:
     distance: 1
     attackDelay: 1
   - id: 6
-    m_name: "\uB610\uCE58"
+    koName: "\uB610\uCE58"
+    enName: Ddochi
     level: 1
     cost: 3
     hp: 300
@@ -98,7 +105,8 @@ MonoBehaviour:
     distance: 1
     attackDelay: 1
   - id: 7
-    m_name: "\uC601\uBBF8"
+    koName: "\uC601\uBBF8"
+    enName: YoungMi
     level: 1
     cost: 3
     hp: 220
@@ -110,7 +118,8 @@ MonoBehaviour:
     distance: 1
     attackDelay: 1
   - id: 8
-    m_name: "\uC7AD"
+    koName: "\uC7AD"
+    enName: Jack
     level: 1
     cost: 4
     hp: 200
@@ -122,7 +131,8 @@ MonoBehaviour:
     distance: 1
     attackDelay: 1
   - id: 9
-    m_name: "\uD638\uC138"
+    koName: "\uD638\uC138"
+    enName: Hose
     level: 1
     cost: 5
     hp: 750
@@ -134,7 +144,8 @@ MonoBehaviour:
     distance: 1
     attackDelay: 1
   - id: 10
-    m_name: "\uBCA8\uB77C"
+    koName: "\uBCA8\uB77C"
+    enName: Bella
     level: 1
     cost: 5
     hp: 400
@@ -143,5 +154,32 @@ MonoBehaviour:
     moveSpeed: 1
     critical: 30
     dodge: 20
+    distance: 1
+    attackDelay: 1
+  EnemyDBList:
+  - id: 0
+    koName: "\uB0A8\uC790"
+    enName: Man
+    level: 1
+    cost: 2
+    hp: 250
+    ap: 10
+    dp: 0
+    moveSpeed: 1
+    critical: 10
+    dodge: 0
+    distance: 1
+    attackDelay: 1
+  - id: 1
+    koName: "\uC5EC\uC790"
+    enName: Woman
+    level: 1
+    cost: 2
+    hp: 250
+    ap: 10
+    dp: 0
+    moveSpeed: 1
+    critical: 10
+    dodge: 0
     distance: 1
     attackDelay: 1

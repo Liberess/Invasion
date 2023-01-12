@@ -51,7 +51,7 @@ public class HeroSlot : MonoBehaviour
     public void HeroStatusSetup(HumalData humalData)
     {
         heroStatus = humalData;
-        heroImg.sprite = humalData.mySprite;
+        heroImg.sprite = humalData.sprite;
     }
 
     public void SlotDragEvent()
@@ -88,7 +88,7 @@ public class HeroSlot : MonoBehaviour
         menuPanel.transform.Find("MenuPanel").position = newPos;
         menuPanel.SetActive(true);
 
-        UIManager.Instance.UpdateHeroDetailInfo(heroStatus.ID);
+        UIManager.Instance.UpdateHeroDetailInfo(heroStatus.Data.ID);
 
         if (isParty)
         {

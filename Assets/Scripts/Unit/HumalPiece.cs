@@ -10,3 +10,6 @@ public struct HumalPiece
         amount = _amount;
     }
 }
+
+[System.Serializable]
+public class HumalPieceDictionary : SerializableDictionary<string, int> { }

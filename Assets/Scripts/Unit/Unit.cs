@@ -47,9 +47,9 @@ public abstract class Unit : MonoBehaviour
     protected Rigidbody2D rigid;
     protected SpriteRenderer sprite;
 
-    public virtual void UnitSetup(UnitData unitData)
+    public virtual void UnitSetup(UnitDataSO unitData)
     {
-        mData = unitData;
+        mData.SetDataSo(unitData);
         //ChangeAc();
 
         hp = unitData.HP;
@@ -58,13 +58,27 @@ public abstract class Unit : MonoBehaviour
         moveSpeed = unitData.MoveSpeed;
         distance = unitData.Distance;
 
-        if (unitData.mySprite == null)
+        sprite.color = Color.white;
+    }
+
+    public virtual void UnitSetup(UnitData unitData)
+    {
+        mData = unitData;
+        //ChangeAc();
+
+        hp = unitData.Data.HP;
+        ap = unitData.Data.Ap;
+
+        moveSpeed = unitData.Data.MoveSpeed;
+        distance = unitData.Data.Distance;
+
+        if (unitData.sprite == null)
             PopUpManager.Instance.PopUp("sprite is empty!", EPopUpType.Caution);
         else if(unitData.animCtrl == null)
             PopUpManager.Instance.PopUp("animCtrl is empty!", EPopUpType.Caution);
 
-        mData.mySprite = unitData.mySprite;
-        sprite.sprite = mData.mySprite;
+        mData.sprite = unitData.sprite;
+        sprite.sprite = mData.sprite;
         sprite.color = Color.white;
 
         mData.animCtrl = unitData.animCtrl;
@@ -74,7 +88,7 @@ public abstract class Unit : MonoBehaviour
     public virtual void ChangeAc()
     {
         anim.runtimeAnimatorController =
-            DataManager.Instance.HeroData.heroAnimCtrlList[mData.ID];
+            DataManager.Instance.HeroData.heroAnimCtrlList[mData.Data.ID];
     }
 
     protected void TeamValueSet()

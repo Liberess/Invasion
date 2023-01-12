@@ -37,9 +37,9 @@ public class Arranger : MonoBehaviour
                     continue;
                 
                 // 슬롯에서 파티로 추가했을 경우
-                if(!DataManager.Instance.IsContainsInParty(heroSlot.HeroStatus.ID))
+                if(!DataManager.Instance.IsContainsInParty(heroSlot.HeroStatus.Data.ID))
                 {
-                    UIManager.Instance.SwapSlotToParty(heroSlot.HeroStatus.ID);
+                    UIManager.Instance.SwapSlotToParty(heroSlot.HeroStatus.Data.ID);
 
                     if (i == 0)
                         DataManager.Instance.HeroData.partyList.Insert(0, heroSlot.HeroStatus);
@@ -67,12 +67,12 @@ public class Arranger : MonoBehaviour
                     continue;
 
                 // 만약 파티에 같은 정보의 영웅 슬롯이 존재한다면
-                if (DataManager.Instance.IsContainsInParty(heroSlot.HeroStatus.ID))
+                if (DataManager.Instance.IsContainsInParty(heroSlot.HeroStatus.Data.ID))
                 {
                     heroSlot.HeroStatus.SetLeader(false);
                     int partyIndex = DataManager.Instance.GetIndexOfHeroInParty(heroSlot.HeroStatus);
 
-                    UIManager.Instance.SwapPartyToSlot(heroSlot.HeroStatus.ID);
+                    UIManager.Instance.SwapPartyToSlot(heroSlot.HeroStatus.Data.ID);
                     DataManager.Instance.HeroData.partyList.RemoveAt(partyIndex);
                 }
 

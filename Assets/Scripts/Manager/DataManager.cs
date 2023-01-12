@@ -9,7 +9,7 @@ using UnityEngine.Events;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
-using static UnityEngine.Networking.UnityWebRequest;
+using System.Linq;
 
 public class DataManager : MonoBehaviour
 {
@@ -19,6 +19,7 @@ public class DataManager : MonoBehaviour
     [Header("==== Hero Object Prefab ====")]
     [SerializeField] private AssetReference heroReference;
     [SerializeField] private AssetReference lobbyHeroReference;
+    [SerializeField] private List<HumalData> lobbyHeroList = new List<HumalData>();
     //[SerializeField] private GameObject heroPrefab;
     //[SerializeField] private GameObject lobbyHeroPrefab;
 
@@ -36,10 +37,10 @@ public class DataManager : MonoBehaviour
     public HeroData HeroData { get => m_HeroData; }
 
     [Header("==== Enemy Data Information ===="), Space(10)]
-    [SerializeField] private List<UnitData> mEnemyDataList = new List<UnitData>();
-    public List<UnitData> EnemyDataList { get => mEnemyDataList; }
-    [SerializeField] private List<Sprite> mEnemySpriteList = new List<Sprite>();
-    public List<Sprite> EnemySpriteList => mEnemySpriteList;
+    [SerializeField] private List<UnitDataSO> m_EnemyDataList = new List<UnitDataSO>();
+    public List<UnitDataSO> EnemyDataList { get => m_EnemyDataList; }
+    [SerializeField] private List<Sprite> m_EnemySpriteList = new List<Sprite>();
+    public List<Sprite> EnemySpriteList => m_EnemySpriteList;
 
     [Header("==== Item Data Information ===="), Space(10)]
     [SerializeField] private List<ItemData> mItemDataList = new List<ItemData>();
@@ -91,10 +92,9 @@ public class DataManager : MonoBehaviour
     {
         UpdateGoodsSprite();
         UpdateHeroSprite();
-        UpdateOriginHeroData();
+        UpdateOriginDB();
         UpdateHeroAnimCtrl();
         UpdateHeroCardSprite();
-        UpdateEnemyData();
         UpdateItemData();
 
         yield return null;
@@ -113,7 +113,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    private void UpdateOriginHeroData()
+    private void UpdateOriginDB()
     {
         HeroData.originHeroDataList.Clear();
         /*
@@ -133,15 +133,61 @@ public class DataManager : MonoBehaviour
                     }
                 );*/
 
-        Addressables.LoadAssetAsync<HumalOriginDB>(
-    Tags.HumalDataLabel).Completed += (handle) =>
-        {
-            foreach(var va in handle.Result.Entities)
+
+        updateBundleHandle = Addressables.LoadAssetsAsync<UnitOriginDB>(
+            Tags.UnitOriginDBLabel,
+            (result) =>
             {
-               /* if (!m_HeroData.originHeroDataList.Contains(va))
-                    m_HeroData.originHeroDataList.Add(result);*/
+                if (!isDownStart)
+                {
+                    isDownStart = true;
+                    isDownTxt.text = "유닛 DB 다운로드 시작";
+                    StartCoroutine(UpdateBundleProgressTxtCo());
+                }
+
+                foreach(var unitDB in result.HumalDBList)
+                {
+                    if (!m_HeroData.originHeroDataList.Contains(unitDB))
+                        m_HeroData.originHeroDataList.Add(unitDB);
+                }
+
+                foreach(var unitDB in result.EnemyDBList)
+                {
+                    if(!m_EnemyDataList.Contains(unitDB))
+                        m_EnemyDataList.Add(unitDB);
+                }
             }
-        };
+        );
+
+        updateBundleHandle = Addressables.LoadAssetsAsync<Sprite>(
+            Tags.EnemyLabel,
+            (result) =>
+            {
+                if (!isDownStart)
+                {
+                    isDownStart = true;
+                    isDownTxt.text = "몬스터 스프라이트 다운로드 시작";
+                    StartCoroutine(UpdateBundleProgressTxtCo());
+                }
+
+                if (!m_EnemySpriteList.Contains(result))
+                    m_EnemySpriteList.Add(result);
+            }
+        );
+
+        if (updateBundleHandle.IsValid())
+        {
+            updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
+            {
+                updateBundleHandle = handle;
+                isDownTxt.text = "다운로드 완료";
+            };
+        }
+        else
+        {
+            Debug.LogWarning("updateBundleHandle is not valid!!");
+        }
+
     }
 
     //[ContextMenu("Update Hero Sprite")]
@@ -187,72 +233,6 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    //[ContextMenu("Update Enemy Data")]
-    private void UpdateEnemyData()
-    {
-        mEnemyDataList.Clear();
-
-        updateBundleHandle = Addressables.LoadAssetsAsync<UnitData>(
-            Tags.EnemyDataLabel,
-            (result) =>
-            {
-                if (!isDownStart)
-                {
-                    isDownStart = true;
-                    isDownTxt.text = "몬스터 데이터 다운로드 시작";
-                    StartCoroutine(UpdateBundleProgressTxtCo());
-                }
-
-                if (!mEnemyDataList.Contains(result))
-                    mEnemyDataList.Add(result);
-            }
-        );
-
-        updateBundleHandle = Addressables.LoadAssetsAsync<Sprite>(
-          Tags.EnemyDataLabel,
-          (result) =>
-          {
-              if (!isDownStart)
-              {
-                  isDownStart = true;
-                  isDownTxt.text = "몬스터 스프라이트 다운로드 시작";
-                  StartCoroutine(UpdateBundleProgressTxtCo());
-              }
-
-              if (!mEnemySpriteList.Contains(result))
-                  EnemySpriteList.Add(result);
-          }
-      );
-
-        if (updateBundleHandle.IsValid())
-        {
-            updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
-            {
-                updateBundleHandle = handle;
-                isDownTxt.text = "다운로드 완료";
-            };
-        }
-        else
-        {
-            Debug.LogWarning("updateBundleHandle is not valid!!");
-        }
-
-        /*        Addressables.DownloadDependenciesAsync(Tags.EnemyDataLabel).Completed +=
-                    (AsyncOperationHandle handle) =>
-                    {
-                        Debug.Log("Update Enemy Data Complete!");
-                        Addressables.Release(handle);
-                    };*/
-
-        /*        UnitData[] temp = Resources.LoadAll<UnitData>("Scriptable/EnemyData");
-
-                for (int i = 0; i < temp.Length; i++)
-                {
-                    if (temp[i] != null)
-                        mEnemyDataList.Add(temp[i]);
-                }*/
-    }
-
     private IEnumerator UpdateBundleProgressTxtCo()
     {
         yield return null;
@@ -285,11 +265,12 @@ public class DataManager : MonoBehaviour
     #region Hero List - Dic
     private void ConstructHeroDic()
     {
-        m_HeroData.heroDic = new Dictionary<string, HumalData>();
+        m_HeroData.heroDic = new Dictionary<int, HumalData>();
+        m_HeroData.heroDic.Clear();
 
         //Json에 저장된 heroList안의 내용들을 heroDic에 저장
         for (int i = 0; i < m_HeroData.heroList.Count; i++)
-            m_HeroData.heroDic.Add(m_HeroData.heroList[i].Name, m_HeroData.heroList[i]);
+            m_HeroData.heroDic.Add(m_HeroData.heroList[i].Data.ID, m_HeroData.heroList[i]);
     }
 
     private void ResettingHeroList()
@@ -300,7 +281,8 @@ public class DataManager : MonoBehaviour
 
     private void ConstructHumalPieceAmountDic()
     {
-        m_HeroData.humalPieceAmountDic.Clear();
+        //m_HeroData.humalPieceAmountDic = new Dictionary<string, int>();
+        m_HeroData.humalPieceAmountDic = new HumalPieceDictionary();
 
         for (int i = 0; i < m_HeroData.humalPieceAmountList.Count; i++)
         {
@@ -323,13 +305,27 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
+    /// HumalList에 id가 존재하는지 확인한다.
+    /// </summary>
+    public bool IsContainsInHumalList(int id)
+    {
+        foreach (var heroData in m_HeroData.heroList)
+        {
+            if (heroData.Data.ID == id)
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// PartyList에 id가 존재하는지 확인한다.
     /// </summary>
     public bool IsContainsInParty(int id)
     {
         foreach (var HeroData in m_HeroData.partyList)
         {
-            if (HeroData.ID == id)
+            if (HeroData.Data.ID == id)
                 return true;
         }
 
@@ -365,7 +361,7 @@ public class DataManager : MonoBehaviour
     {
         foreach (var hero in m_HeroData.heroList)
         {
-            if (hero.ID == id)
+            if (hero.Data.ID == id)
                 return hero;
         }
 
@@ -422,11 +418,6 @@ public class DataManager : MonoBehaviour
         }
     }
     #endregion
-
-    public int GetHumalPieceAmount(string key)
-    {
-        return m_HeroData.humalPieceAmountDic[key];
-    }
 
     #region Currency
     private void InitializedVirtualCurrencyDic()
@@ -622,19 +613,10 @@ public class DataManager : MonoBehaviour
         m_HeroData.heroList.Clear();
         m_HeroData.partyList.Clear();
 
-        if (m_HeroData.originHeroDataList.Count == 0)
-            UpdateOriginHeroData();
-
         m_HeroData.heroUnlockList[0] = true;
 
         if (m_HeroData.originHeroDataList.Count != 0)
-        {
             AddNewHumal(0);
-/*            var unitData = m_HeroData.originHeroDataList[0];
-            m_HeroData.heroList.Add(new HumalData(unitData));*/
-        }
-
-        SetupHero();
 
         m_HeroData.isLoadComplete = true;
     }
@@ -703,22 +685,19 @@ public class DataManager : MonoBehaviour
             {
                 for (int i = 0; i < m_HeroData.heroList.Count; i++)
                 {
-                    m_HeroData.heroList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.heroList[i].ID];
-                    m_HeroData.heroList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.heroList[i].ID];
+                    m_HeroData.heroList[i].sprite = m_HeroData.heroSpriteList[m_HeroData.heroList[i].Data.ID];
+                    m_HeroData.heroList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.heroList[i].Data.ID];
                 }
 
                 for (int i = 0; i < m_HeroData.partyList.Count; i++)
                 {
-                    m_HeroData.partyList[i].mySprite = m_HeroData.heroSpriteList[m_HeroData.partyList[i].ID];
-                    m_HeroData.partyList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.partyList[i].ID];
+                    m_HeroData.partyList[i].sprite = m_HeroData.heroSpriteList[m_HeroData.partyList[i].Data.ID];
+                    m_HeroData.partyList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.partyList[i].Data.ID];
                 }
-
-                ConstructHeroDic();
-                ConstructHumalPieceAmountDic();
 
                 for (int i = 0; i < m_HeroData.heroList.Count; i++)
                 {
-                    var targetName = m_HeroData.heroList[i].Name;
+                    var targetName = m_HeroData.heroList[i].Data.ID;
                     if (!m_HeroData.heroDic.ContainsKey(targetName))
                         m_HeroData.heroDic.Add(targetName, m_HeroData.heroList[i]);
                 }
@@ -728,6 +707,8 @@ public class DataManager : MonoBehaviour
                     for (int i = 0; i < m_HeroData.heroList.Count; i++)
                     {
                         int index = i;
+                        if (lobbyHeroList.Contains(m_HeroData.heroList[index]))
+                            continue;
 
                         Addressables.InstantiateAsync(
                             lobbyHeroReference,
@@ -739,6 +720,7 @@ public class DataManager : MonoBehaviour
                             {
                                 var heroStat = m_HeroData.heroList[index];
                                 hero.UnitSetup(heroStat);
+                                lobbyHeroList.Add(m_HeroData.heroList[index]);
                             }
                         };
 
@@ -777,6 +759,9 @@ public class DataManager : MonoBehaviour
                     m_HeroData.isLoadComplete = true;
 
                     SetupHero();
+
+                    ConstructHeroDic();
+                    ConstructHumalPieceAmountDic();
                 }
                 else
                 {
@@ -820,6 +805,9 @@ public class DataManager : MonoBehaviour
         if (!Social.localUser.authenticated)
             return;
 
+        ResettingHeroList();
+        ResettingHumalPieceAmountList();
+
         Dictionary<string, string> dataDic = new Dictionary<string, string>();
         dataDic.Add("GameData", JsonUtility.ToJson(m_GameData));
         dataDic.Add("HeroData", JsonUtility.ToJson(m_HeroData));
@@ -850,28 +838,32 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
-    public void AddNewHumal(int index)
+    public int GetHumalPieceAmount(string key)
     {
-        var unitData = m_HeroData.originHeroDataList[index];
+        return m_HeroData.humalPieceAmountDic[key];
+    }
+
+    public void AddNewHumal(int id)
+    {
+        var unitData = m_HeroData.originHeroDataList[id];
         
         if (unitData == null)
             throw new Exception("해당 index의 unitData가 없습니다.");
 
-        Debug.Log("AddNewHumal : " + unitData.Name);
-        popUpMgr.PopUp("휴멀 - " + unitData.Name + " 뽑기 성공!", EPopUpType.Notice);
+        popUpMgr.PopUp("휴멀 - " + unitData.KoName + " 뽑기 성공!", EPopUpType.Notice);
 
         m_HeroData.heroList.Add(new HumalData(unitData));
-        m_HeroData.heroUnlockList[index] = true;
+        m_HeroData.heroUnlockList[id] = true;
 
-        m_HeroData.humalPieceAmountList.Add(new HumalPiece(unitData.Name, 0));
-        AddHumalPiece(unitData.Name, 0);
+        AddHumalPiece(unitData.KoName, 0);
 
+        SetupHero();
         uiMgr.UpdateHeroPanel();
     }
 
     public void AddHumalPiece(string key, int amount)
     {
-        Debug.Log("AddHumalPiece : " + key + ", " + amount);
+        popUpMgr.PopUp("휴멀 [" + key + "] 파편 " + amount +"개 획득!", EPopUpType.Notice);
         if (m_HeroData.humalPieceAmountDic.ContainsKey(key))
             m_HeroData.humalPieceAmountDic[key] += amount;
         else

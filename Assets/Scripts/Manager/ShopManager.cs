@@ -83,7 +83,7 @@ public class ShopManager : MonoBehaviour
 
     private void UpdateHumalPickDB()
     {
-        Addressables.LoadAssetAsync<HumalPickDB>(Tags.HumalDBLabel).Completed +=
+        Addressables.LoadAssetAsync<HumalPickDB>(Tags.HumalPickDBLabel).Completed +=
         handle =>
         {
             foreach(var db in handle.Result.Entities)
@@ -92,7 +92,7 @@ public class ShopManager : MonoBehaviour
                     humalPickDBList.Add(db);
             }
 
-            humalPickDBList = humalPickDBList.OrderBy(x => x.index).ToList();
+            humalPickDBList = humalPickDBList.OrderBy(x => x.id).ToList();
         };
     }
 
@@ -188,27 +188,32 @@ public class ShopManager : MonoBehaviour
     {
         var index = UnityEngine.Random.Range(0, humalPickDBList.Count);
         var entity = humalPickDBList[index];
-        Debug.Log("index : " + index);
 
         var picker = new Rito.WeightedRandomPicker<string>();
-        picker.Add(entity.piece_10.ToString(), entity.piece_10);
-        picker.Add(entity.piece_20.ToString(), entity.piece_20);
-        picker.Add(entity.piece_50.ToString(), entity.piece_50);
-        picker.Add(entity.humal.ToString(), entity.humal);
+        picker.Add(
+            (nameof(entity.piece_10), entity.piece_10),
+            (nameof(entity.piece_20), entity.piece_20),
+            (nameof(entity.piece_50), entity.piece_50),
+            (nameof(entity.humal), entity.humal)
+        );
 
         var pick = picker.GetRandomPick();
+        if (pick.Contains("humal"))
+        {
+            if (dataMgr.IsContainsInHumalList(index))
+                dataMgr.AddHumalPiece(entity.name_ko, 50);
+            else
+                dataMgr.AddNewHumal(index);
+        }
+        else
+        {
+            int amount = int.Parse(pick.Substring(pick.IndexOf('_') + 1));
+            dataMgr.AddHumalPiece(entity.name_ko, amount);
+        }
 
         try
         {
-            if (pick.Contains("humal"))
-            {
-                dataMgr.AddNewHumal(index);
-            }
-            else
-            {
-                int amount = int.Parse(pick.Substring(pick.IndexOf('_')));
-                dataMgr.AddHumalPiece(entity.name_ko, amount);
-            }
+
         }
         catch(Exception ex)
         {

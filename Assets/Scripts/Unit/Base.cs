@@ -36,9 +36,9 @@ public class Base : Unit
         rayPos = new Vector3(transform.position.x,
             transform.position.y + sprite.size.y / 3f, 0f);
 
-        hp = mData.HP;
+        hp = mData.Data.HP;
 
-        hpTxt.text = hp + "/" + mData.HP;
+        hpTxt.text = hp + "/" + mData.Data.HP;
     }
 
     private void FixedUpdate()
@@ -71,7 +71,7 @@ public class Base : Unit
     {
         base.Hit(_atk);
 
-        hpTxt.text = hp + "/" + mData.HP;
+        hpTxt.text = hp + "/" + mData.Data.HP;
     }
 
     protected override void Die()

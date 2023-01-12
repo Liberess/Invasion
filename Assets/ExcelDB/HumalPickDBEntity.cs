@@ -1,7 +1,7 @@
 [System.Serializable]
 public class HumalPickDBEntity
 {
-    public int index;
+    public int id;
     public string name_ko;
     public string name_en;
     public float piece_probability;

@@ -43,11 +43,10 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: d405f9f5cda1d344d987fcf2930fae97, type: 2}
   - {fileID: 11400000, guid: cbbd4e393fa902b4da2f9f526b0b557e, type: 2}
-  - {fileID: 11400000, guid: f6176217498720d4196cf297365b090b, type: 2}
   - {fileID: 11400000, guid: b5cf9b3064261314db6abe54c4fc7f5d, type: 2}
   - {fileID: 11400000, guid: 51f53a7d22830f745b275393e49e764c, type: 2}
   - {fileID: 11400000, guid: 1a89b1e733443c74aa61a18a0664be42, type: 2}
-  - {fileID: 11400000, guid: feaec46fef2076948ac9c72b3a67a612, type: 2}
+  - {fileID: 11400000, guid: 89a5306950142a847a12273d974d08cf, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -117,11 +116,10 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
-    - EnemyData
     - Humal
     - Enemy
-    - HumalData
-    - HumalDB
+    - HumalPickDB
+    - UnitOriginDB
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 2950fb30cbc9c43419db844bb0beda9a, type: 2}

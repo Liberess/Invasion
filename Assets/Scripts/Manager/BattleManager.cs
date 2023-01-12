@@ -287,7 +287,7 @@ public class BattleManager : MonoBehaviour
         if (index < 0 || index >= dataMgr.HeroData.partyList.Count)
             throw new Exception("UpdateCardEvent - 잘못된 index값입니다.");
 
-        var targetCost = dataMgr.HeroData.partyList[index].Cost;
+        var targetCost = dataMgr.HeroData.partyList[index].Data.Cost;
 
         var button = target.GetComponent<Button>();
         var lockImg = target.transform.GetChild(2).gameObject;
@@ -314,7 +314,7 @@ public class BattleManager : MonoBehaviour
             heroCard.transform.SetParent(heroCardGrid.transform);
             heroCard.transform.localScale = Vector3.one;
 
-            var heroID = dataMgr.HeroData.partyList[i].ID;
+            var heroID = dataMgr.HeroData.partyList[i].Data.ID;
 
             // Set Hero Card Sprite
             heroCard.transform.GetChild(0).GetComponent<Image>().sprite =
@@ -322,7 +322,7 @@ public class BattleManager : MonoBehaviour
 
             // Set Hero Cost Text
             heroCard.transform.GetChild(1).GetComponent<Text>().text =
-                dataMgr.HeroData.partyList[i].Cost.ToString();
+                dataMgr.HeroData.partyList[i].Data.Cost.ToString();
 
             // Set Hero Card OnClick Event
             int index = i;
@@ -482,7 +482,7 @@ public class BattleManager : MonoBehaviour
 
     private void OnClickHeroCard(int index)
     {
-        var targetCost = dataMgr.HeroData.partyList[index].Cost;
+        var targetCost = dataMgr.HeroData.partyList[index].Data.Cost;
 
         if (cost >= targetCost)
         {

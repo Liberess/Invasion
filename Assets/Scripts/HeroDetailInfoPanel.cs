@@ -6,21 +6,21 @@ public class HeroDetailInfoPanel : MonoBehaviour
 {
     [SerializeField] private HeroDetailInfo heroInfo;
 
-    public void UpdateHeroInfo(UnitData HeroData)
+    public void UpdateHeroInfo(HumalData HeroData)
     {
-        heroInfo.nameTxt.text = HeroData.name;
-        heroInfo.levelTxt.text = string.Concat("Lv.", HeroData.Level);
-        heroInfo.heroImg.sprite = HeroData.mySprite;
+        heroInfo.nameTxt.text = HeroData.Data.KoName;
+        heroInfo.levelTxt.text = string.Concat("Lv.", HeroData.Data.Level);
+        heroInfo.heroImg.sprite = HeroData.sprite;
         //heroInfo.gradeImg.sprite = 
 
         heroInfo.dpsTxt.text = string.Concat("전투력 : ", HeroData.DPS);
-        heroInfo.hpTxt.text = HeroData.HP.ToString();
-        heroInfo.criticalTxt.text = string.Concat(HeroData.Critical, "%");
-        heroInfo.apTxt.text = HeroData.Ap.ToString();
-        heroInfo.dodgeTxt.text = string.Concat(HeroData.Dodge, "%");
-        heroInfo.dpTxt.text = HeroData.Dp.ToString();
-        heroInfo.costTxt.text = HeroData.Cost.ToString();
+        heroInfo.hpTxt.text = HeroData.Data.HP.ToString();
+        heroInfo.criticalTxt.text = string.Concat(HeroData.Data.Critical, "%");
+        heroInfo.apTxt.text = HeroData.Data.Ap.ToString();
+        heroInfo.dodgeTxt.text = string.Concat(HeroData.Data.Dodge, "%");
+        heroInfo.dpTxt.text = HeroData.Data.Dp.ToString();
+        heroInfo.costTxt.text = HeroData.Data.Cost.ToString();
 
-        heroInfo.pieceTxt.text = DataManager.Instance.GetHumalPieceAmount(HeroData.Name).ToString();
+        heroInfo.pieceTxt.text = DataManager.Instance.GetHumalPieceAmount(HeroData.Data.KoName).ToString();
     }
 }
