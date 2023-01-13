@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
-using static UnityEngine.Networking.UnityWebRequest;
 
 public class UIManager : MonoBehaviour
 {
@@ -52,7 +51,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject heroSlotPrefab;
     private int heroSlotIndex = 0;
     [SerializeField] private int heroSlotMaxCount = 20;
-    private List<HeroSlot> heroSlotList = new List<HeroSlot>();
+    [SerializeField] private List<HeroSlot> heroSlotList = new List<HeroSlot>();
     private List<HeroSlot> partySlotList = new List<HeroSlot>();
     private List<HeroSlot> tempHeroSlotList = new List<HeroSlot>();
 
@@ -201,27 +200,35 @@ public class UIManager : MonoBehaviour
     {
         heroSlotList.Clear();
 
+        Debug.Log("InitHeroSlot");
+
         List<int> PartyIDList = new List<int>();
         foreach (var hero in dataMgr.HeroData.partyList)
             PartyIDList.Add(hero.Data.ID);
 
+        Debug.Log("count : " + dataMgr.HeroData.heroList.Count);
         for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
         {
             int id = dataMgr.HeroData.heroList[i].Data.ID;
+            Debug.Log("id : " + id);
             if (PartyIDList.Contains(id))
                 continue;
-            else if (heroSlotList.Find(x => x.HeroStatus.Data.ID == id) != null)
+            else if (IsContainsHeroSlotList(id))
+            {
+                Debug.Log(3);
                 continue;
+            }
 
             HeroSlot heroSlot = GetObj();
             heroSlot.HeroStatusSetup(dataMgr.HeroData.heroList[i]);
-
             heroSlotList.Add(heroSlot);
+                Debug.Log(4);
         }
     }
 
     public void UpdateHeroPanel()
     {
+        Debug.Log("UpdateHeroPanel");
         for (int i = 0; i < dataMgr.HeroData.partyList.Count; i++)
         {
             int id = dataMgr.HeroData.partyList[i].Data.ID;
@@ -239,19 +246,36 @@ public class UIManager : MonoBehaviour
         foreach (var hero in partySlotList)
             PartyIDList.Add(hero.HeroStatus.Data.ID);
 
+        Debug.Log("count2 : " + dataMgr.HeroData.heroList.Count);
         for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
         {
             int id = dataMgr.HeroData.heroList[i].Data.ID;
+            Debug.Log("id2 : " + id);
             if (PartyIDList.Contains(id))
                 continue;
-            else if (heroSlotList.Find(x => x.HeroStatus.Data.ID == id) != null)
+            else if (IsContainsHeroSlotList(id))
+            {
+
+            Debug.Log(33);
                 continue;
+            }
 
             HeroSlot heroSlot = GetObj();
             heroSlot.HeroStatusSetup(dataMgr.HeroData.heroList[i]);
-
             heroSlotList.Add(heroSlot);
+            Debug.Log(44);
         }
+    }
+
+    private bool IsContainsHeroSlotList(int id)
+    {
+        foreach(var heroSlot in heroSlotList)
+        {
+            if(heroSlot.HeroStatus.Data.ID == id) 
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>

@@ -593,15 +593,13 @@ public class DataManager : MonoBehaviour
         InitializedGameData();
         InitializedHeroData();
 
-        PlayFabManager.Instance.OnPlayFabLoginSuccessAction?.Invoke();
-
         SaveData();
     }
 
     public IEnumerator LoadDataCo()
     {
-        yield return StartCoroutine(LoadGameDataCo());
         yield return StartCoroutine(LoadHeroDataCo());
+        yield return StartCoroutine(LoadGameDataCo());
     }
 
     private void InitializedHeroData()
@@ -749,25 +747,28 @@ public class DataManager : MonoBehaviour
         var request = new GetUserDataRequest() { PlayFabId = PlayFabManager.Instance.PlayFabId };
         PlayFabClientAPI.GetUserData(request, (result) =>
         {
+            bool isContainsData = false;
+
             foreach (var eachData in result.Data)
             {
-                string key = eachData.Key;
-
                 if (eachData.Key.Contains("HeroData"))
                 {
+                    isContainsData = true;
                     m_HeroData = JsonUtility.FromJson<HeroData>(eachData.Value.Value);
-                    m_HeroData.isLoadComplete = true;
 
                     SetupHero();
 
                     ConstructHeroDic();
                     ConstructHumalPieceAmountDic();
-                }
-                else
-                {
-                    InitializedHeroData();
+
+                    m_HeroData.isLoadComplete = true;
+                    Debug.LogWarning("Load Hero Data");
                 }
             }
+
+            if(!isContainsData)
+                InitializedHeroData();
+
         }, DisplayPlayfabError);
 
         yield return new WaitForEndOfFrame();
@@ -780,21 +781,24 @@ public class DataManager : MonoBehaviour
         {
             InitializedVirtualCurrencyDic();
 
+            bool isContainsData = false;
+
             foreach (var eachData in result.Data)
             {
-                string key = eachData.Key;
                 if (eachData.Key.Contains("GameData"))
                 {
+                    isContainsData = true;
                     m_GameData = JsonUtility.FromJson<GameData>(eachData.Value.Value);
-                    m_GameData.isLoadComplete = true;
 
                     CalculateSaveTime();
-                }
-                else
-                {
-                    InitializedGameData();
+
+                    m_GameData.isLoadComplete = true;
                 }
             }
+
+            if (!isContainsData)
+                InitializedGameData();
+
         }, DisplayPlayfabError);
 
         yield return new WaitForEndOfFrame();
@@ -807,6 +811,9 @@ public class DataManager : MonoBehaviour
 
         ResettingHeroList();
         ResettingHumalPieceAmountList();
+
+        m_GameData.isLoadComplete = false;
+        m_HeroData.isLoadComplete = false;
 
         Dictionary<string, string> dataDic = new Dictionary<string, string>();
         dataDic.Add("GameData", JsonUtility.ToJson(m_GameData));
@@ -840,7 +847,10 @@ public class DataManager : MonoBehaviour
 
     public int GetHumalPieceAmount(string key)
     {
-        return m_HeroData.humalPieceAmountDic[key];
+        if (m_HeroData.humalPieceAmountDic.ContainsKey(key))
+            return m_HeroData.humalPieceAmountDic[key];
+        else
+            return -1;
     }
 
     public void AddNewHumal(int id)
@@ -850,15 +860,23 @@ public class DataManager : MonoBehaviour
         if (unitData == null)
             throw new Exception("해당 index의 unitData가 없습니다.");
 
-        popUpMgr.PopUp("휴멀 - " + unitData.KoName + " 뽑기 성공!", EPopUpType.Notice);
+        if(IsContainsInHumalList(id))
+        {
+            Debug.Log("이미 영웅이 있어서 파편으로 변환!");
+            AddHumalPiece(unitData.KoName, 100);
+        }
+        else
+        {
+            popUpMgr.PopUp("휴멀 - " + unitData.KoName + " 뽑기 성공!", EPopUpType.Notice);
 
-        m_HeroData.heroList.Add(new HumalData(unitData));
-        m_HeroData.heroUnlockList[id] = true;
+            m_HeroData.heroList.Add(new HumalData(unitData));
+            m_HeroData.heroUnlockList[id] = true;
 
-        AddHumalPiece(unitData.KoName, 0);
+            AddHumalPiece(unitData.KoName, 0);
 
-        SetupHero();
-        uiMgr.UpdateHeroPanel();
+            SetupHero();
+            uiMgr.UpdateHeroPanel();
+        }
     }
 
     public void AddHumalPiece(string key, int amount)

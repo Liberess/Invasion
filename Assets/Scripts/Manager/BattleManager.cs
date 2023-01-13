@@ -358,9 +358,9 @@ public class BattleManager : MonoBehaviour
 
         resultPanel.SetActive(true);
 
-        if (redBase.Hp <= 0)
+        if (redBase.HP <= 0)
             GameVictory();
-        else if (blueBase.Hp <= 0)
+        else if (blueBase.HP <= 0)
             GameDefeat();
     }
 
@@ -393,7 +393,7 @@ public class BattleManager : MonoBehaviour
     {
         starNum = 0;
 
-        if (blueBase.Hp >= 10)
+        if (blueBase.HP >= 10)
         {
             ++starNum;
             conditions[0].GetComponentInChildren<Image>().sprite = starOn;
@@ -403,7 +403,7 @@ public class BattleManager : MonoBehaviour
             conditions[0].GetComponentInChildren<Image>().sprite = starOff;
         }
 
-        if (blueBase.Hp >= 50)
+        if (blueBase.HP >= 50)
         {
             ++starNum;
             conditions[1].GetComponentInChildren<Image>().sprite = starOn;
@@ -492,7 +492,7 @@ public class BattleManager : MonoBehaviour
             var hero = InstantiateObj(EUnitQueueType.Hero).GetComponent<Hero>();
             hero.transform.position = blueBase.transform.position;
             hero.UnitSetup(dataMgr.HeroData.partyList[index]);
-            hero.DeathAction += () => ReturnObj(EUnitQueueType.Hero, hero.gameObject);
+            hero.OnDeathAction += () => ReturnObj(EUnitQueueType.Hero, hero.gameObject);
         }
     }
     #endregion

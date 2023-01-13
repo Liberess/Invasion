@@ -2,21 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-public abstract class Unit : MonoBehaviour
+public abstract class Unit : LivingEntity
 {
     protected BattleManager battleMgr;
-
-    public event Action DeathAction;
 
     [SerializeField] protected UnitData mData;
     public UnitData Data { get => mData; }
 
-    [SerializeField] protected int hp;
-    public int Hp { get => hp; }
     [SerializeField] protected int ap;
     public int Ap { get => ap; }
+
     [SerializeField] protected float moveSpeed;
     public float MoveSpeed { get => moveSpeed; }
 
@@ -41,7 +37,7 @@ public abstract class Unit : MonoBehaviour
 
     protected float attackTime = 0;
 
-    private bool IsAlive => hp > 0;
+    private bool IsAlive => HP > 0;
 
     protected Animator anim;
     protected Rigidbody2D rigid;
@@ -52,7 +48,8 @@ public abstract class Unit : MonoBehaviour
         mData.SetDataSo(unitData);
         //ChangeAc();
 
-        hp = unitData.HP;
+        originHealth = unitData.HP;
+        HP = unitData.HP;
         ap = unitData.Ap;
 
         moveSpeed = unitData.MoveSpeed;
@@ -66,7 +63,8 @@ public abstract class Unit : MonoBehaviour
         mData = unitData;
         //ChangeAc();
 
-        hp = unitData.Data.HP;
+        originHealth = unitData.Data.HP;
+        HP = unitData.Data.HP;
         ap = unitData.Data.Ap;
 
         moveSpeed = unitData.Data.MoveSpeed;
@@ -144,12 +142,20 @@ public abstract class Unit : MonoBehaviour
 
             switch (Job)
             {
-                case EUnitJob.ShortRange: target.GetComponent<Unit>().Hit(ap); break;
-                case EUnitJob.LongRange: Shot(); break;
+                case EUnitJob.ShortRange:
+                    if(target.TryGetComponent(out LivingEntity livingEntity))
+                    {
+                        DamageMessage dmgMsg = new DamageMessage(
+                            this.gameObject, ap, transform.position);
+                        livingEntity.ApplyDamage(dmgMsg);
+                    }
+                    break;
+                
+                case EUnitJob.LongRange:
+                    Shot();
+                    break;
                     //case EUnitJob.Wizard: Spell(target.transform.position); break;
             }
-
-            target.GetComponent<Unit>().Hit(ap);
         }
         else
         {
@@ -209,26 +215,12 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
-    protected virtual void Hit(int _atk)
-    {
-        if (!IsAlive)
-            return;
-
-        hp -= _atk;
-        //anim.SetTrigger("doHit");
-
-        if (hp <= 0)
-        {
-            hp = 0;
-            Die();
-        }
-    }
-
-    protected virtual void Die()
+    public override void Die()
     {
         anim.SetTrigger("doDie");
         StartCoroutine(DeathAnim());
     }
+
 
     private IEnumerator DeathAnim()
     {
@@ -245,8 +237,8 @@ public abstract class Unit : MonoBehaviour
             yield return null;
         }
 
-        if (DeathAction != null)
-            DeathAction();
+        Dead = true;
+        OnDeathAction?.Invoke();
 
         yield return null;
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,12 +11,12 @@ using GooglePlayGames;
 public class PlayFabManager : MonoBehaviour
 {
     public static PlayFabManager Instance { get; private set; }
-
+    private DataManager dataMgr;
     private PopUpManager popUpMgr;
 
     public string PlayFabId { get; private set; }
 
-    public UnityAction OnPlayFabLoginSuccessAction;
+    public event Action OnPlayFabLoginSuccessAction;
 
     private void Awake()
     {
@@ -40,6 +41,7 @@ public class PlayFabManager : MonoBehaviour
 
     private void Start()
     {
+        dataMgr = DataManager.Instance;
         popUpMgr = PopUpManager.Instance;
         StartCoroutine(GoogleLogInCo());
     }
@@ -98,9 +100,19 @@ public class PlayFabManager : MonoBehaviour
 
     private IEnumerator LoadDataCo()
     {
-        yield return DataManager.Instance.StartCoroutine(DataManager.Instance.LoadDataCo());
-        yield return new WaitForEndOfFrame();
-        Debug.Log("LoadDataCo : " + Time.time);
+        WaitForEndOfFrame delay = new WaitForEndOfFrame();
+
+        yield return dataMgr.StartCoroutine(dataMgr.LoadDataCo());
+        yield return delay;
+
+        while(true)
+        {
+            if (dataMgr.HeroData.isLoadComplete && dataMgr.GameData.isLoadComplete)
+                break;
+
+            yield return delay;
+        }
+
         OnPlayFabLoginSuccessAction?.Invoke();
         //yield return AudioManager.Instance.StartCoroutine(AudioManager.Instance.InitializedAudioSettingCo());
         yield return null;

@@ -1,31 +1,13 @@
 {
-    "m_SelectedDeviceId": "RFCT70LFGSY",
+    "m_SelectedDeviceId": "R3CM40HSFGZ",
     "m_SelectedPackage": {
-        "deviceId": "",
-        "name": "",
-        "processId": 0,
+        "deviceId": "R3CM40HSFGZ",
+        "name": "com.copiasoft.invasion",
+        "processId": 31953,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "RFCT70LFGSY",
-            "name": "com.android.settings",
-            "processId": 7237,
-            "exited": true
-        },
-        {
-            "deviceId": "RFCT70LFGSY",
-            "name": "com.copiasoft.invasion",
-            "processId": 9619,
-            "exited": true
-        },
-        {
-            "deviceId": "RFCT70LFGSY",
-            "name": "com.copiasoft.invasion",
-            "processId": 11372,
-            "exited": true
-        },
         {
             "deviceId": "RFCT70LFGSY",
             "name": "com.sec.android.app.launcher",
@@ -37,6 +19,72 @@
             "name": "com.copiasoft.invasion",
             "processId": 16471,
             "exited": true
+        },
+        {
+            "deviceId": "RFCT70LFGSY",
+            "name": "com.copiasoft.invasion",
+            "processId": 848,
+            "exited": true
+        },
+        {
+            "deviceId": "RFCT70LFGSY",
+            "name": "com.copiasoft.invasion",
+            "processId": 5388,
+            "exited": true
+        },
+        {
+            "deviceId": "RFCT70LFGSY",
+            "name": "com.copiasoft.invasion",
+            "processId": 9187,
+            "exited": true
+        },
+        {
+            "deviceId": "RFCT70LFGSY",
+            "name": "com.google.android.documentsui",
+            "processId": 22562,
+            "exited": false
+        },
+        {
+            "deviceId": "RFCT70LFGSY",
+            "name": "com.copiasoft.invasion",
+            "processId": 25035,
+            "exited": false
+        },
+        {
+            "deviceId": "R3CM40HSFGZ",
+            "name": "com.sec.android.app.launcher",
+            "processId": 4405,
+            "exited": false
+        },
+        {
+            "deviceId": "R3CM40HSFGZ",
+            "name": "com.copiasoft.invasion",
+            "processId": 15490,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CM40HSFGZ",
+            "name": "com.copiasoft.invasion",
+            "processId": 20862,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CM40HSFGZ",
+            "name": "com.copiasoft.invasion",
+            "processId": 26066,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CM40HSFGZ",
+            "name": "com.copiasoft.invasion",
+            "processId": 28967,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CM40HSFGZ",
+            "name": "com.copiasoft.invasion",
+            "processId": 31953,
+            "exited": false
         }
     ],
     "m_Tags": {

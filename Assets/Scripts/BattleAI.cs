@@ -83,12 +83,12 @@ public class BattleAI : MonoBehaviour
 
     private IEnumerator EnrageStateCo()
     {
-        var enrageTemp = battleMgr.RedBase.Hp * 30.0f / 100.0f;
+        var enrageTemp = battleMgr.RedBase.HP * 30.0f / 100.0f;
 
         while (battleMgr.IsPlay)
         {
-            if (battleMgr.RedBase.Hp <= enrageTemp)
-                EnrageAction.Invoke();
+            if (battleMgr.RedBase.HP <= enrageTemp)
+                EnrageAction?.Invoke();
 
             yield return null;
         }
@@ -125,10 +125,10 @@ public class BattleAI : MonoBehaviour
 
         enemy.UnitSetup(dataMgr.EnemyDataList[rand]);
         EnrageAction += enemy.Enrage;
-        enemy.DeathAction += () => --spawnCount;
-        enemy.DeathAction += () => EnrageAction -= enemy.Enrage;
-        enemy.DeathAction += () => spawnedEnemyList.Remove(enemy);
-        enemy.DeathAction += () => BattleManager.ReturnObj(EUnitQueueType.Enemy, enemy.gameObject);
+        enemy.OnDeathAction += () => --spawnCount;
+        enemy.OnDeathAction += () => EnrageAction -= enemy.Enrage;
+        enemy.OnDeathAction += () => spawnedEnemyList.Remove(enemy);
+        enemy.OnDeathAction += () => BattleManager.ReturnObj(EUnitQueueType.Enemy, enemy.gameObject);
     }
 
     /// <summary>

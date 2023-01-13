@@ -2,12 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Events;
 using UnityEngine.UI;
-using static UnityEngine.Networking.UnityWebRequest;
 
 public class ShopManager : MonoBehaviour
 {
@@ -23,12 +20,12 @@ public class ShopManager : MonoBehaviour
 
     public List<GameObject> shopPanelList = new List<GameObject>();
 
-    private List<BuyingButton> buyingBtnList = new List<BuyingButton>();
+    [SerializeField] private List<BuyingButton> buyingBtnList = new List<BuyingButton>();
     private BuyingButton currentBuyingBtn;
 
     [SerializeField] private List<HumalPickDBEntity> humalPickDBList = new List<HumalPickDBEntity>();
 
-    public UnityAction OnShopInitAction;
+    public event Action OnShopInitAction;
 
     private void Awake()
     {

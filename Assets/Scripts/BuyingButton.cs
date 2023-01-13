@@ -68,6 +68,7 @@ public class BuyingButton : MonoBehaviour
         }
         catch(Exception ex)
         {
+            Debug.Log(ex.Message);
             PopUpManager.Instance.PopUp(ex.Message, EPopUpType.Caution);
         }
     }

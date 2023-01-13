@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Base : Unit
+public class Base : LivingEntity
 {
+    private BattleManager battleMgr;
+
     private BattleAI battleAI;
     private Text hpTxt;
 
@@ -16,14 +18,12 @@ public class Base : Unit
 
     private Vector3 rayPos;
 
+    protected Animator anim;
+    protected SpriteRenderer sprite;
+
     private void Awake()
     {
-        isDust = true;
-        isMove = true;
-        isRush = false;
-
         anim = GetComponent<Animator>();
-        rigid = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         hpTxt = GetComponentInChildren<Text>();
     }
@@ -36,9 +36,12 @@ public class Base : Unit
         rayPos = new Vector3(transform.position.x,
             transform.position.y + sprite.size.y / 3f, 0f);
 
-        hp = mData.Data.HP;
+        //hp = mData.Data.HP;
 
-        hpTxt.text = hp + "/" + mData.Data.HP;
+        hpTxt.text = HP + "/" + originHealth;
+
+        OnDeathAction += () => battleMgr.GameOverAction();
+        OnDeathAction += () => gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -67,16 +70,12 @@ public class Base : Unit
         }*/
     }
 
-    protected override void Hit(int _atk)
+    public override bool ApplyDamage(DamageMessage dmgMsg)
     {
-        base.Hit(_atk);
+        bool result = base.ApplyDamage(dmgMsg);
+        if (result)
+            hpTxt.text = HP + "/" + originHealth;
 
-        hpTxt.text = hp + "/" + mData.Data.HP;
-    }
-
-    protected override void Die()
-    {
-        battleMgr.GameOverAction();
-        gameObject.SetActive(false);
+        return result;
     }
 }
