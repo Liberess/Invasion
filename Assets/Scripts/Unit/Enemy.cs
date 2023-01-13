@@ -10,7 +10,7 @@ public class Enemy : Unit
     {
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
-        sprite = GetComponent<SpriteRenderer>();
+        spriteRen = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -20,25 +20,13 @@ public class Enemy : Unit
         TeamValueSet();
     }
 
-    private void OnEnable()
-    {
-        isDust = true;
-        isMove = true;
-    }
-
-    private void OnDisable()
-    {
-        isDust = false;
-        isMove = false;
-    }
-
     private void Update() => Move();
 
     private void FixedUpdate() => Scan();
 
     public void Enrage()
     {
-        ap = Mathf.FloorToInt(mData.Ap * 1.5f);
+        ap = Mathf.FloorToInt(Ap * 1.5f);
         moveSpeed *= 1.5f;
     }
 }

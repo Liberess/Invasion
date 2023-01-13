@@ -1,40 +1,74 @@
-ï»¿using UnityEngine;
+using UnityEngine;
 
 [System.Serializable]
 public class UnitData
 {
-    [SerializeField] private UnitDataSO dataSO;
-    public UnitDataSO Data => dataSO;
+    [SerializeField] private int id;                      // °íÀ¯ ÆÇº° ID.
+    public int ID => id;
 
-    public void SetDataSo(UnitDataSO dataSO) => this.dataSO = dataSO;
+    [SerializeField] private string koName;            // °íÀ¯ ´Ð³×ÀÓ.
+    public string KoName => koName;
 
-    [SerializeField] protected int hp;                      // Health Point
+    [SerializeField] private string enName;            // °íÀ¯ ´Ð³×ÀÓ.
+    public string EnName => enName;
+
+    [SerializeField] private int level;                  // À¯´Ö ·¹º§.
+    public int Level => level;
+
+    [SerializeField] private int cost;                   // À¯´Ö »ý¼º ºñ¿ë.
+    public int Cost => cost;
+
+    [SerializeField] private int hp;                      // Ã¼·Â. Health Point
     public int HP => hp;
 
-    [SerializeField] protected int ap;                      // Attack Power
+    [SerializeField] private int ap;                      // °ø°Ý·Â. Attack Power
     public int Ap => ap;
 
-    [SerializeField] protected int dp;                      // Defense Power
+    [SerializeField] private int dp;                      // ¹æ¾î·Â. Defense Power
     public int Dp => dp;
 
-    [SerializeField] protected float moveSpeed;
+    [SerializeField] private float moveSpeed;    // ÀÌµ¿¼Óµµ.
     public float MoveSpeed => moveSpeed;
 
-    [SerializeField] protected float critical;            // Ä¡ï¿½ï¿½Å¸ï¿½ï¿½. Critical Chance
+    [SerializeField] private float critical;            // Ä¡¸íÅ¸À². Critical Chance
     public float Critical => critical;
 
-    [SerializeField] protected float dodge;             // È¸ï¿½ï¿½ï¿½ï¿½.
+    [SerializeField] private float dodge;             // È¸ÇÇÀ².
     public float Dodge => dodge;
 
-    [SerializeField] protected float distance;         // ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½. Attack Distance
+    [SerializeField] private float distance;         // °ø°Ý °Å¸®. Attack Distance
     public float Distance => distance;
 
-    [SerializeField] protected float attackDelay;   // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. Attack Delay Time
+    [SerializeField] private float attackDelay;   // °ø°Ý µô·¹ÀÌ. Attack Delay Time
     public float AttackDelay => attackDelay;
 
-    public float DPS =>           // ì´ˆë‹¹ ê³µê²©ë ¥. Damage per Second
+    public float DPS =>           // ÃÊ´ç °ø°Ý·Â. Damage per Second
         (1f / attackDelay) * ap;
+
+    [SerializeField] private bool isLeader;          // ¿µ¿õ ÆÄÆ¼ÀÇ ¸®´õÀÎ°¡?
+    public bool IsLeader => isLeader;
+    public void SetLeader(bool _isLeader) => isLeader = _isLeader;
 
     public Sprite sprite;
     public RuntimeAnimatorController animCtrl;
+
+    public UnitData(UnitData unitData)
+    {
+        id = unitData.id;
+        koName = unitData.koName;
+        enName = unitData.enName;
+        level = unitData.level;
+        cost = unitData.cost;
+        hp = unitData.HP;
+        ap = unitData.Ap;
+        dp = unitData.Dp;
+        moveSpeed = unitData.MoveSpeed;
+        critical = unitData.Critical;
+        dodge = unitData.Dodge;
+        distance = unitData.Distance;
+        attackDelay = unitData.AttackDelay;
+
+        sprite = unitData.sprite;
+        animCtrl = unitData.animCtrl;
+    }
 }

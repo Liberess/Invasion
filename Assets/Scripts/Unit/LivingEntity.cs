@@ -4,8 +4,11 @@ using UnityEngine.Events;
 
 public class LivingEntity : MonoBehaviour, IDamageable
 {
+    [Space(5), Header("==== Living Entity ====")]
     public float originHealth = 100f;
-    public float HP { get; protected set; }
+
+    [SerializeField] protected float hp;
+    public float HP => hp;
     public bool Dead { get; protected set; }
 
     public UnityAction OnDeathAction;
@@ -26,7 +29,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
     protected virtual void OnEnable()
     {
         Dead = false;
-        HP = originHealth;
+        hp = originHealth;
     }
 
     public virtual bool ApplyDamage(DamageMessage dmgMsg)
@@ -35,7 +38,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
             return false;
 
         lastDamagedTime = Time.time;
-        HP -= dmgMsg.amount;
+        hp -= dmgMsg.amount;
 
         if (HP <= 0)
             Die();
@@ -48,10 +51,10 @@ public class LivingEntity : MonoBehaviour, IDamageable
         if (Dead)
             return;
 
-        HP += newHealth;
+        hp += newHealth;
 
         if (HP >= originHealth)
-            HP = originHealth;
+            hp = originHealth;
     }
 
     public virtual void Die()

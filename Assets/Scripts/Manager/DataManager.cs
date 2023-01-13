@@ -19,11 +19,11 @@ public class DataManager : MonoBehaviour
     [Header("==== Hero Object Prefab ====")]
     [SerializeField] private AssetReference heroReference;
     [SerializeField] private AssetReference lobbyHeroReference;
-    [SerializeField] private List<HumalData> lobbyHeroList = new List<HumalData>();
+    [SerializeField] private List<UnitData> lobbyHeroList = new List<UnitData>();
     //[SerializeField] private GameObject heroPrefab;
     //[SerializeField] private GameObject lobbyHeroPrefab;
 
-    public HumalData LeaderHero { get; private set; }
+    public UnitData LeaderHero { get; private set; }
 
     #region 인스턴스화
     public static DataManager Instance { get; private set; }
@@ -37,8 +37,8 @@ public class DataManager : MonoBehaviour
     public HeroData HeroData { get => m_HeroData; }
 
     [Header("==== Enemy Data Information ===="), Space(10)]
-    [SerializeField] private List<UnitDataSO> m_EnemyDataList = new List<UnitDataSO>();
-    public List<UnitDataSO> EnemyDataList { get => m_EnemyDataList; }
+    [SerializeField] private List<UnitData> m_EnemyDataList = new List<UnitData>();
+    public List<UnitData> EnemyDataList { get => m_EnemyDataList; }
     [SerializeField] private List<Sprite> m_EnemySpriteList = new List<Sprite>();
     public List<Sprite> EnemySpriteList => m_EnemySpriteList;
 
@@ -265,18 +265,18 @@ public class DataManager : MonoBehaviour
     #region Hero List - Dic
     private void ConstructHeroDic()
     {
-        m_HeroData.heroDic = new Dictionary<int, HumalData>();
+        m_HeroData.heroDic = new Dictionary<int, UnitData>();
         m_HeroData.heroDic.Clear();
 
         //Json에 저장된 heroList안의 내용들을 heroDic에 저장
         for (int i = 0; i < m_HeroData.heroList.Count; i++)
-            m_HeroData.heroDic.Add(m_HeroData.heroList[i].Data.ID, m_HeroData.heroList[i]);
+            m_HeroData.heroDic.Add(m_HeroData.heroList[i].ID, m_HeroData.heroList[i]);
     }
 
     private void ResettingHeroList()
     {
         m_HeroData.heroList.Clear();
-        m_HeroData.heroList = new List<HumalData>(m_HeroData.heroDic.Values);
+        m_HeroData.heroList = new List<UnitData>(m_HeroData.heroDic.Values);
     }
 
     private void ConstructHumalPieceAmountDic()
@@ -311,7 +311,7 @@ public class DataManager : MonoBehaviour
     {
         foreach (var heroData in m_HeroData.heroList)
         {
-            if (heroData.Data.ID == id)
+            if (heroData.ID == id)
                 return true;
         }
 
@@ -325,7 +325,7 @@ public class DataManager : MonoBehaviour
     {
         foreach (var HeroData in m_HeroData.partyList)
         {
-            if (HeroData.Data.ID == id)
+            if (HeroData.ID == id)
                 return true;
         }
 
@@ -347,28 +347,28 @@ public class DataManager : MonoBehaviour
     /// <summary>
     /// PartyList에서 hero가 몇 번째에 존재하는지 확인한다.
     /// </summary>
-    public int GetIndexOfHeroInParty(HumalData data)
+    public int GetIndexOfHeroInParty(UnitData data)
     {
         return Utility.FindIndexOf(m_HeroData.partyList, data);
     }
 
-    public int GetIndexOfHeroInList(HumalData data)
+    public int GetIndexOfHeroInList(UnitData data)
     {
         return Utility.FindIndexOf(m_HeroData.heroList, data);
     }
 
-    public HumalData GetHumalDataByIndex(int id)
+    public UnitData GetHumalDataByIndex(int id)
     {
         foreach (var hero in m_HeroData.heroList)
         {
-            if (hero.Data.ID == id)
+            if (hero.ID == id)
                 return hero;
         }
 
         throw new Exception("ID : " + id + "는(은) 존재하지 않는 ID입니다.");
     }
 
-    public HumalData GetDataByOrder(string key, int index)
+    public UnitData GetDataByOrder(string key, int index)
     {
         if (!IsValidInHeroListByIndex(index))
             throw new Exception("유효하지 않은 Index 값입니다.");
@@ -683,19 +683,19 @@ public class DataManager : MonoBehaviour
             {
                 for (int i = 0; i < m_HeroData.heroList.Count; i++)
                 {
-                    m_HeroData.heroList[i].sprite = m_HeroData.heroSpriteList[m_HeroData.heroList[i].Data.ID];
-                    m_HeroData.heroList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.heroList[i].Data.ID];
+                    m_HeroData.heroList[i].sprite = m_HeroData.heroSpriteList[m_HeroData.heroList[i].ID];
+                    m_HeroData.heroList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.heroList[i].ID];
                 }
 
                 for (int i = 0; i < m_HeroData.partyList.Count; i++)
                 {
-                    m_HeroData.partyList[i].sprite = m_HeroData.heroSpriteList[m_HeroData.partyList[i].Data.ID];
-                    m_HeroData.partyList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.partyList[i].Data.ID];
+                    m_HeroData.partyList[i].sprite = m_HeroData.heroSpriteList[m_HeroData.partyList[i].ID];
+                    m_HeroData.partyList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.partyList[i].ID];
                 }
 
                 for (int i = 0; i < m_HeroData.heroList.Count; i++)
                 {
-                    var targetName = m_HeroData.heroList[i].Data.ID;
+                    var targetName = m_HeroData.heroList[i].ID;
                     if (!m_HeroData.heroDic.ContainsKey(targetName))
                         m_HeroData.heroDic.Add(targetName, m_HeroData.heroList[i]);
                 }
@@ -869,7 +869,7 @@ public class DataManager : MonoBehaviour
         {
             popUpMgr.PopUp("휴멀 - " + unitData.KoName + " 뽑기 성공!", EPopUpType.Notice);
 
-            m_HeroData.heroList.Add(new HumalData(unitData));
+            m_HeroData.heroList.Add(new UnitData(unitData));
             m_HeroData.heroUnlockList[id] = true;
 
             AddHumalPiece(unitData.KoName, 0);

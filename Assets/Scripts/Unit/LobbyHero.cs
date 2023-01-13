@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class LobbyHero : Unit
 {
-    [SerializeField] private HumalData humalData;
-    public HumalData HumalData => humalData;
-
     [SerializeField] private float speedX;
     [SerializeField] private float speedY;
 
@@ -17,7 +14,7 @@ public class LobbyHero : Unit
 
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
-        sprite = GetComponent<SpriteRenderer>();
+        spriteRen = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -28,16 +25,6 @@ public class LobbyHero : Unit
     private void Update()
     {
         Movement();
-    }
-
-    public override void UnitSetup(UnitData unitData)
-    {
-        base.UnitSetup(unitData);
-    }
-
-    public void UnitSetup(HumalData humalData)
-    {
-        this.humalData = humalData;
     }
 
     #region 이동 세팅
@@ -72,9 +59,9 @@ public class LobbyHero : Unit
         if (isMove)
         {
             if (speedX > 0)
-                sprite.flipX = false;
+                spriteRen.flipX = false;
             else if (speedX < 0)
-                sprite.flipX = true;
+                spriteRen.flipX = true;
         }
     }
     #endregion

@@ -5,9 +5,7 @@
     <type fullname="HumalPickDB" preserve="all" />
     <type fullname="LobbyHero" preserve="all" />
     <type fullname="UnitOriginDB" preserve="all" />
-    <type fullname="HumalData" preserve="nothing" serialized="true" />
     <type fullname="UnitData" preserve="nothing" serialized="true" />
-    <type fullname="UnitDataSO" preserve="nothing" serialized="true" />
     <type fullname="HumalPickDBEntity" preserve="nothing" serialized="true" />
   </assembly>
   <assembly fullname="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">

@@ -10,7 +10,7 @@ public class HeroShadow : MonoBehaviour
     {
         float y = 0;
 
-        switch(hero.HumalData.Data.ID)
+        switch(hero.UnitData.ID)
         {
             default: y = -0.05f; break;
             case 0: y = -0.05f; break;

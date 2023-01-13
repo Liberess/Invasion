@@ -50,7 +50,7 @@ public class BattleAI : MonoBehaviour
     /// </summary>
     private int FindHighCost()
     {
-        List<UnitDataSO> enemyDataList = new List<UnitDataSO>();
+        List<UnitData> enemyDataList = new List<UnitData>();
 
         for (int i = dataMgr.GameData.stageInfo.minEnemyID; i <= dataMgr.GameData.stageInfo.maxEnemyID; i++)
             enemyDataList.Add(dataMgr.EnemyDataList[i]);

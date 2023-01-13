@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
+using Cysharp.Threading.Tasks;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class BattleManager : MonoBehaviour
 {
@@ -71,6 +73,8 @@ public class BattleManager : MonoBehaviour
     private Action UpdateCardAction;
     public Action GameOverAction;
 
+    private AsyncOperationHandle updateBundleHandle;
+
     #endregion
 
     private void Awake()
@@ -83,48 +87,12 @@ public class BattleManager : MonoBehaviour
 
     private void Start()
     {
-        cost = 0;
-        leaderGauge = 0f;
-        costSlider.maxValue = maxCost;
-
         dataMgr = DataManager.Instance;
 
         if (UnityMainThreadDispatcher.Exists())
             dispatcher = UnityMainThreadDispatcher.Instance();
 
-        GameOverAction += GameOver;
-        GameOverAction += InactiveAllHeroCard;
-
-        SetStageInfo();
-
-        InitializeResultUI();
-
-        //redBase.UnitSetup(new UnitStatus("RedBase", 1000));
-        //blueBase.UnitSetup(new UnitStatus("BlueBase", 1000));
-
-        queDic.Clear();
-        Addressables.LoadAssetAsync<GameObject>(heroReference).Completed +=
-            handle =>
-            {
-                quePrefabDic.Add(EUnitQueueType.Hero, handle.Result);
-                Initialize(EUnitQueueType.Hero, defaultHeroCount);
-            };
-
-        Addressables.LoadAssetAsync<GameObject>(enemyReference).Completed +=
-            handle =>
-            {
-                quePrefabDic.Add(EUnitQueueType.Enemy, handle.Result);
-                Initialize(EUnitQueueType.Enemy, defaultEnemyCount);
-            };
-           
-        //quePrefabDic.Add(EUnitQueueType.Hero, Resources.Load("Unit/Hero") as GameObject);
-        //quePrefabDic.Add(EUnitQueueType.Enemy, Resources.Load("Unit/Enemy") as GameObject);
-
-        SetHeroCard();
-        SetCostSlider();
-        SetLeaderGaugeImg();
-
-        StartCoroutine(StartCoru());
+        InitializeAsync().Forget();
     }
 
     private void Update()
@@ -135,6 +103,80 @@ public class BattleManager : MonoBehaviour
         // Set PlayTime
         playTime += Time.deltaTime;
         SetPlayTimeText();
+    }
+
+    private async UniTaskVoid InitializeAsync()
+    {
+        cost = 0;
+        leaderGauge = 0f;
+        costSlider.maxValue = maxCost;
+
+        GameOverAction += GameOver;
+        GameOverAction += InactiveAllHeroCard;
+
+        SetStageInfo();
+        InitializeResultUI();
+
+        queDic.Clear();
+
+        Debug.Log(Time.time + " : 1");
+
+        bool isLoadComplete = false;
+        await UniTask.WaitUntil(() =>
+        {
+            Addressables.LoadAssetAsync<GameObject>(heroReference).Completed +=
+                handle =>
+                {
+                    isLoadComplete = true;
+                    if(!quePrefabDic.ContainsKey(EUnitQueueType.Hero))
+                    {
+                        if(handle.Result)
+                        {
+                            quePrefabDic.Add(EUnitQueueType.Hero, handle.Result);
+                            Initialize(EUnitQueueType.Hero, defaultHeroCount);
+                        }
+                        else
+                        {
+                            Debug.Log("hero null");
+                        }
+                    }
+                };
+
+            if (isLoadComplete)
+                return true;
+            else
+                return false;
+        });
+
+        Debug.Log(Time.time + " : 2");
+
+        isLoadComplete = false;
+        await UniTask.WaitUntil(() =>
+        {
+            Addressables.LoadAssetAsync<GameObject>(enemyReference).Completed +=
+                handle =>
+                {
+                    isLoadComplete = true;
+                    if (!quePrefabDic.ContainsKey(EUnitQueueType.Enemy))
+                    {
+                        quePrefabDic.Add(EUnitQueueType.Enemy, handle.Result);
+                        Initialize(EUnitQueueType.Enemy, defaultEnemyCount);
+                    }
+                };
+
+            if (isLoadComplete)
+                return true;
+            else
+                return false;
+        });
+
+        Debug.Log(Time.time + " : 3");
+
+        SetHeroCard();
+        SetCostSlider();
+        SetLeaderGaugeImg();
+
+        StartCoroutine(StartCoru());
     }
 
     #region Object Pooling
@@ -160,11 +202,16 @@ public class BattleManager : MonoBehaviour
             return null;
         }
 
-        var newObj = Instantiate(quePrefabDic[type].gameObject, transform.position, Quaternion.identity);
-        newObj.name = type.ToString() + index;
-        newObj.gameObject.SetActive(false);
-        newObj.transform.SetParent(transform);
-        return newObj;
+        if(quePrefabDic[type])
+        {
+            var newObj = Instantiate(quePrefabDic[type].gameObject, transform.position, Quaternion.identity);
+            newObj.name = type.ToString() + index;
+            newObj.gameObject.SetActive(false);
+            newObj.transform.SetParent(transform);
+            return newObj;
+        }
+
+        return null;
     }
 
     public static GameObject GetObj(EUnitQueueType type)
@@ -287,7 +334,7 @@ public class BattleManager : MonoBehaviour
         if (index < 0 || index >= dataMgr.HeroData.partyList.Count)
             throw new Exception("UpdateCardEvent - 잘못된 index값입니다.");
 
-        var targetCost = dataMgr.HeroData.partyList[index].Data.Cost;
+        var targetCost = dataMgr.HeroData.partyList[index].Cost;
 
         var button = target.GetComponent<Button>();
         var lockImg = target.transform.GetChild(2).gameObject;
@@ -314,7 +361,7 @@ public class BattleManager : MonoBehaviour
             heroCard.transform.SetParent(heroCardGrid.transform);
             heroCard.transform.localScale = Vector3.one;
 
-            var heroID = dataMgr.HeroData.partyList[i].Data.ID;
+            var heroID = dataMgr.HeroData.partyList[i].ID;
 
             // Set Hero Card Sprite
             heroCard.transform.GetChild(0).GetComponent<Image>().sprite =
@@ -322,7 +369,7 @@ public class BattleManager : MonoBehaviour
 
             // Set Hero Cost Text
             heroCard.transform.GetChild(1).GetComponent<Text>().text =
-                dataMgr.HeroData.partyList[i].Data.Cost.ToString();
+                dataMgr.HeroData.partyList[i].Cost.ToString();
 
             // Set Hero Card OnClick Event
             int index = i;
@@ -482,7 +529,7 @@ public class BattleManager : MonoBehaviour
 
     private void OnClickHeroCard(int index)
     {
-        var targetCost = dataMgr.HeroData.partyList[index].Data.Cost;
+        var targetCost = dataMgr.HeroData.partyList[index].Cost;
 
         if (cost >= targetCost)
         {

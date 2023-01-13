@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "R3CM40HSFGZ",
         "name": "com.copiasoft.invasion",
-        "processId": 31953,
+        "processId": 22790,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -59,12 +59,6 @@
         {
             "deviceId": "R3CM40HSFGZ",
             "name": "com.copiasoft.invasion",
-            "processId": 15490,
-            "exited": true
-        },
-        {
-            "deviceId": "R3CM40HSFGZ",
-            "name": "com.copiasoft.invasion",
             "processId": 20862,
             "exited": true
         },
@@ -84,6 +78,12 @@
             "deviceId": "R3CM40HSFGZ",
             "name": "com.copiasoft.invasion",
             "processId": 31953,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CM40HSFGZ",
+            "name": "com.copiasoft.invasion",
+            "processId": 22790,
             "exited": false
         }
     ],

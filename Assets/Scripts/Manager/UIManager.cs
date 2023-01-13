@@ -191,7 +191,7 @@ public class UIManager : MonoBehaviour
             HeroSlot heroSlot = GetObj();
             heroSlot.transform.SetParent(heroPartyGrid.transform);
             heroSlot.transform.localScale = new Vector3(1f, 1f, 1f);
-            heroSlot.HeroStatusSetup(dataMgr.HeroData.partyList[i]);
+            heroSlot.HeroDataSetup(dataMgr.HeroData.partyList[i]);
             partySlotList.Add(heroSlot);
         }
     }
@@ -204,12 +204,12 @@ public class UIManager : MonoBehaviour
 
         List<int> PartyIDList = new List<int>();
         foreach (var hero in dataMgr.HeroData.partyList)
-            PartyIDList.Add(hero.Data.ID);
+            PartyIDList.Add(hero.ID);
 
         Debug.Log("count : " + dataMgr.HeroData.heroList.Count);
         for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
         {
-            int id = dataMgr.HeroData.heroList[i].Data.ID;
+            int id = dataMgr.HeroData.heroList[i].ID;
             Debug.Log("id : " + id);
             if (PartyIDList.Contains(id))
                 continue;
@@ -220,7 +220,7 @@ public class UIManager : MonoBehaviour
             }
 
             HeroSlot heroSlot = GetObj();
-            heroSlot.HeroStatusSetup(dataMgr.HeroData.heroList[i]);
+            heroSlot.HeroDataSetup(dataMgr.HeroData.heroList[i]);
             heroSlotList.Add(heroSlot);
                 Debug.Log(4);
         }
@@ -231,25 +231,25 @@ public class UIManager : MonoBehaviour
         Debug.Log("UpdateHeroPanel");
         for (int i = 0; i < dataMgr.HeroData.partyList.Count; i++)
         {
-            int id = dataMgr.HeroData.partyList[i].Data.ID;
-            if (partySlotList.Find(x => x.HeroStatus.Data.ID == id) != null)
+            int id = dataMgr.HeroData.partyList[i].ID;
+            if (partySlotList.Find(x => x.HeroData.ID == id) != null)
                 continue;
 
             HeroSlot heroSlot = GetObj();
             heroSlot.transform.SetParent(heroPartyGrid.transform);
             heroSlot.transform.localScale = new Vector3(1f, 1f, 1f);
-            heroSlot.HeroStatusSetup(dataMgr.HeroData.partyList[i]);
+            heroSlot.HeroDataSetup(dataMgr.HeroData.partyList[i]);
             partySlotList.Add(heroSlot);
         }
 
         List<int> PartyIDList = new List<int>();
         foreach (var hero in partySlotList)
-            PartyIDList.Add(hero.HeroStatus.Data.ID);
+            PartyIDList.Add(hero.HeroData.ID);
 
         Debug.Log("count2 : " + dataMgr.HeroData.heroList.Count);
         for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
         {
-            int id = dataMgr.HeroData.heroList[i].Data.ID;
+            int id = dataMgr.HeroData.heroList[i].ID;
             Debug.Log("id2 : " + id);
             if (PartyIDList.Contains(id))
                 continue;
@@ -261,7 +261,7 @@ public class UIManager : MonoBehaviour
             }
 
             HeroSlot heroSlot = GetObj();
-            heroSlot.HeroStatusSetup(dataMgr.HeroData.heroList[i]);
+            heroSlot.HeroDataSetup(dataMgr.HeroData.heroList[i]);
             heroSlotList.Add(heroSlot);
             Debug.Log(44);
         }
@@ -271,7 +271,7 @@ public class UIManager : MonoBehaviour
     {
         foreach(var heroSlot in heroSlotList)
         {
-            if(heroSlot.HeroStatus.Data.ID == id) 
+            if(heroSlot.HeroData.ID == id) 
                 return true;
         }
 
@@ -288,7 +288,7 @@ public class UIManager : MonoBehaviour
 
         for (index = 0; index < heroSlotList.Count; index++)
         {
-            if (heroSlotList[index].HeroStatus.Data.ID == id)
+            if (heroSlotList[index].HeroData.ID == id)
                 break;
         }
 
@@ -306,7 +306,7 @@ public class UIManager : MonoBehaviour
 
         for (index = 0; index < partySlotList.Count; index++)
         {
-            if (partySlotList[index].HeroStatus.Data.ID == id)
+            if (partySlotList[index].HeroData.ID == id)
                 break;
         }
 
@@ -327,9 +327,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.Level:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.HeroStatus.Data.Level).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.HeroData.Level).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.HeroStatus.Data.Level).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.HeroData.Level).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -340,9 +340,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.Grade:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.HeroStatus.Data.Level).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.HeroData.Level).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.HeroStatus.Data.Level).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.HeroData.Level).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -353,9 +353,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.DPS:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.HeroStatus.DPS).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.HeroData.DPS).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.HeroStatus.DPS).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.HeroData.DPS).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -536,8 +536,13 @@ public class UIManager : MonoBehaviour
         currentHeroIndex = dataMgr.GetIndexOfHeroInList(dataMgr.GetHumalDataByIndex(ID));
         UpdateHeroOrderBtn();
 
-        dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-            dataMgr.GetHumalDataByIndex(ID)));
+        dispatcher.Enqueue(() =>
+        {
+            Debug.Log("UpdateHeroDetailInfo :: id = " + ID);
+            Debug.Log("UpdateHeroDetailInfo :: data name = " + dataMgr.GetHumalDataByIndex(ID).KoName);
+            heroDetailInfoPanel.UpdateHeroInfo(
+                dataMgr.GetHumalDataByIndex(ID));
+        });
     }
 
     private void UpdateHeroOrderBtn()

@@ -7,8 +7,14 @@ public abstract class Unit : LivingEntity
 {
     protected BattleManager battleMgr;
 
-    [SerializeField] protected UnitData mData;
-    public UnitData Data { get => mData; }
+    [Space(5), Header("==== Unit Data ====")]
+    [SerializeField] protected UnitData unitData;
+    public UnitData UnitData => unitData;
+
+    [Space(5), Header("==== Current Status ====")]
+    [SerializeField] private EUnitJob mJob;
+    public EUnitJob Job { get => mJob; }
+    protected EUnitQueueType myObjType;
 
     [SerializeField] protected int ap;
     public int Ap { get => ap; }
@@ -16,15 +22,11 @@ public abstract class Unit : LivingEntity
     [SerializeField] protected float moveSpeed;
     public float MoveSpeed { get => moveSpeed; }
 
+    [Space(5), Header("==== Particle ====")]
     [SerializeField] private GameObject dust;
     [SerializeField] private GameObject shadow;
 
-    [SerializeField] private GameObject target;
-
-    [SerializeField] private EUnitJob mJob;
-    public EUnitJob Job { get => mJob; }
-
-    protected EUnitQueueType myObjType;
+    private GameObject target;
 
     protected int direction;
 
@@ -41,24 +43,38 @@ public abstract class Unit : LivingEntity
 
     protected Animator anim;
     protected Rigidbody2D rigid;
-    protected SpriteRenderer sprite;
+    protected SpriteRenderer spriteRen;
 
-    public virtual void UnitSetup(UnitDataSO unitData)
+    protected override void OnEnable()
     {
-        mData.SetDataSo(unitData);
-        //ChangeAc();
+        base.OnEnable();
 
-        originHealth = unitData.HP;
-        HP = unitData.HP;
-        ap = unitData.Ap;
-
-        moveSpeed = unitData.MoveSpeed;
-        distance = unitData.Distance;
-
-        sprite.color = Color.white;
+        isDust = true;
+        isMove = true;
     }
 
-    public virtual void UnitSetup(UnitData unitData)
+    private void OnDisable()
+    {
+        isDust = false;
+        isMove = false;
+    }
+
+    public virtual void UnitSetup(UnitData _unitData)
+    {
+        //ChangeAc();
+        unitData = _unitData;
+
+        originHealth = _unitData.HP;
+        hp = _unitData.HP;
+        ap = _unitData.Ap;
+
+        moveSpeed = _unitData.MoveSpeed;
+        distance = _unitData.Distance;
+
+        spriteRen.color = Color.white;
+    }
+
+/*    public virtual void UnitSetup(UnitData unitData)
     {
         mData = unitData;
         //ChangeAc();
@@ -76,17 +92,17 @@ public abstract class Unit : LivingEntity
             PopUpManager.Instance.PopUp("animCtrl is empty!", EPopUpType.Caution);
 
         mData.sprite = unitData.sprite;
-        sprite.sprite = mData.sprite;
-        sprite.color = Color.white;
+        spriteRen.sprite = mData.sprite;
+        spriteRen.color = Color.white;
 
         mData.animCtrl = unitData.animCtrl;
         anim.runtimeAnimatorController = mData.animCtrl;
-    }
+    }*/
 
     public virtual void ChangeAc()
     {
         anim.runtimeAnimatorController =
-            DataManager.Instance.HeroData.heroAnimCtrlList[mData.Data.ID];
+            DataManager.Instance.HeroData.heroAnimCtrlList[unitData.ID];
     }
 
     protected void TeamValueSet()
@@ -224,8 +240,8 @@ public abstract class Unit : LivingEntity
 
     private IEnumerator DeathAnim()
     {
-        sprite.color = Color.gray;
-        Color alpha = sprite.color;
+        spriteRen.color = Color.gray;
+        Color alpha = spriteRen.color;
 
         float time = 0f;
 
@@ -233,7 +249,7 @@ public abstract class Unit : LivingEntity
         {
             time += Time.deltaTime / 1f;
             alpha.a = Mathf.Lerp(1, 0, time);
-            sprite.color = alpha;
+            spriteRen.color = alpha;
             yield return null;
         }
 
