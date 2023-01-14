@@ -107,7 +107,7 @@ public class PlayFabManager : MonoBehaviour
 
         while(true)
         {
-            if (dataMgr.HeroData.isLoadComplete && dataMgr.GameData.isLoadComplete)
+            if (dataMgr.HumalData.isLoadComplete && dataMgr.GameData.isLoadComplete)
                 break;
 
             yield return delay;

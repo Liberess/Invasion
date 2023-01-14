@@ -18,12 +18,12 @@ MonoBehaviour:
   m_GUID: b91c9267352052c48b62772783d3dc77
   m_SerializeEntries:
   - m_GUID: cfd3ca33311f6d04c88aee436f89a0ae
-    m_Address: LobbyHero
+    m_Address: LobbyHumal
     m_ReadOnly: 0
     m_SerializedLabels:
     - Humal
   - m_GUID: 608ca1624c4bbba46a630bef5eaf7985
-    m_Address: Hero
+    m_Address: Humal
     m_ReadOnly: 0
     m_SerializedLabels:
     - Humal

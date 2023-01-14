@@ -50,7 +50,7 @@ public class Base : LivingEntity
             return;
 
         RaycastHit2D rayHit = Physics2D.Raycast(rayPos, Vector2.left, 1.5f, LayerMask.GetMask("Hero"));
-        if (rayHit.collider != null && rayHit.collider.GetComponent<Hero>() != null)
+        if (rayHit.collider != null && rayHit.collider.GetComponent<Humal>() != null)
         {
             if (!isRush)
             {

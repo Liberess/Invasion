@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using Cysharp.Threading.Tasks;
@@ -119,58 +118,33 @@ public class BattleManager : MonoBehaviour
 
         queDic.Clear();
 
-        Debug.Log(Time.time + " : 1");
-
         bool isLoadComplete = false;
-        await UniTask.WaitUntil(() =>
-        {
-            Addressables.LoadAssetAsync<GameObject>(heroReference).Completed +=
-                handle =>
+        Addressables.LoadAssetAsync<GameObject>(heroReference).Completed +=
+            handle =>
+            {
+                isLoadComplete = true;
+                if (!quePrefabDic.ContainsKey(EUnitQueueType.Hero))
                 {
-                    isLoadComplete = true;
-                    if(!quePrefabDic.ContainsKey(EUnitQueueType.Hero))
-                    {
-                        if(handle.Result)
-                        {
-                            quePrefabDic.Add(EUnitQueueType.Hero, handle.Result);
-                            Initialize(EUnitQueueType.Hero, defaultHeroCount);
-                        }
-                        else
-                        {
-                            Debug.Log("hero null");
-                        }
-                    }
-                };
+                    quePrefabDic.Add(EUnitQueueType.Hero, handle.Result);
+                    Initialize(EUnitQueueType.Hero, defaultHeroCount);
+                }
+            };
 
-            if (isLoadComplete)
-                return true;
-            else
-                return false;
-        });
-
-        Debug.Log(Time.time + " : 2");
+        await UniTask.WaitUntil(() => isLoadComplete == true);
 
         isLoadComplete = false;
-        await UniTask.WaitUntil(() =>
-        {
-            Addressables.LoadAssetAsync<GameObject>(enemyReference).Completed +=
-                handle =>
+        Addressables.LoadAssetAsync<GameObject>(enemyReference).Completed +=
+            handle =>
+            {
+                isLoadComplete = true;
+                if (!quePrefabDic.ContainsKey(EUnitQueueType.Enemy))
                 {
-                    isLoadComplete = true;
-                    if (!quePrefabDic.ContainsKey(EUnitQueueType.Enemy))
-                    {
-                        quePrefabDic.Add(EUnitQueueType.Enemy, handle.Result);
-                        Initialize(EUnitQueueType.Enemy, defaultEnemyCount);
-                    }
-                };
+                    quePrefabDic.Add(EUnitQueueType.Enemy, handle.Result);
+                    Initialize(EUnitQueueType.Enemy, defaultEnemyCount);
+                }
+            };
 
-            if (isLoadComplete)
-                return true;
-            else
-                return false;
-        });
-
-        Debug.Log(Time.time + " : 3");
+        await UniTask.WaitUntil(() => isLoadComplete == true);
 
         SetHeroCard();
         SetCostSlider();
@@ -183,6 +157,7 @@ public class BattleManager : MonoBehaviour
     private void Initialize(EUnitQueueType type, int initCount)
     {
         queDic.Add(type, new Queue<GameObject>());
+        Debug.Log("Initialize : " + type.ToString());
 
         for (int i = 0; i < initCount; i++)
             queDic[type].Enqueue(CreateNewObj(type, i));
@@ -331,10 +306,10 @@ public class BattleManager : MonoBehaviour
 
     private void UpdateCardEvent(GameObject target, int index)
     {
-        if (index < 0 || index >= dataMgr.HeroData.partyList.Count)
+        if (index < 0 || index >= dataMgr.HumalData.partyList.Count)
             throw new Exception("UpdateCardEvent - 잘못된 index값입니다.");
 
-        var targetCost = dataMgr.HeroData.partyList[index].Cost;
+        var targetCost = dataMgr.HumalData.partyList[index].Cost;
 
         var button = target.GetComponent<Button>();
         var lockImg = target.transform.GetChild(2).gameObject;
@@ -355,21 +330,21 @@ public class BattleManager : MonoBehaviour
     {
         heroCardList.Clear();
 
-        for (int i = 0; i < dataMgr.HeroData.partyList.Count; i++)
+        for (int i = 0; i < dataMgr.HumalData.partyList.Count; i++)
         {
             var heroCard = Instantiate(heroCardPrefab, Vector3.zero, Quaternion.identity);
             heroCard.transform.SetParent(heroCardGrid.transform);
             heroCard.transform.localScale = Vector3.one;
 
-            var heroID = dataMgr.HeroData.partyList[i].ID;
+            var heroID = dataMgr.HumalData.partyList[i].ID;
 
             // Set Hero Card Sprite
             heroCard.transform.GetChild(0).GetComponent<Image>().sprite =
-                dataMgr.HeroData.heroCardSpriteList[heroID];
+                dataMgr.HumalData.humalCardIconList[heroID];
 
             // Set Hero Cost Text
             heroCard.transform.GetChild(1).GetComponent<Text>().text =
-                dataMgr.HeroData.partyList[i].Cost.ToString();
+                dataMgr.HumalData.partyList[i].Cost.ToString();
 
             // Set Hero Card OnClick Event
             int index = i;
@@ -529,16 +504,16 @@ public class BattleManager : MonoBehaviour
 
     private void OnClickHeroCard(int index)
     {
-        var targetCost = dataMgr.HeroData.partyList[index].Cost;
+        var targetCost = dataMgr.HumalData.partyList[index].Cost;
 
         if (cost >= targetCost)
         {
             cost -= targetCost;
             SetCostSlider();
 
-            var hero = InstantiateObj(EUnitQueueType.Hero).GetComponent<Hero>();
+            var hero = InstantiateObj(EUnitQueueType.Hero).GetComponent<Humal>();
             hero.transform.position = blueBase.transform.position;
-            hero.UnitSetup(dataMgr.HeroData.partyList[index]);
+            hero.UnitSetup(dataMgr.HumalData.partyList[index]);
             hero.OnDeathAction += () => ReturnObj(EUnitQueueType.Hero, hero.gameObject);
         }
     }

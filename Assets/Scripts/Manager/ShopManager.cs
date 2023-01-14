@@ -20,7 +20,7 @@ public class ShopManager : MonoBehaviour
 
     public List<GameObject> shopPanelList = new List<GameObject>();
 
-    [SerializeField] private List<BuyingButton> buyingBtnList = new List<BuyingButton>();
+    private List<BuyingButton> buyingBtnList = new List<BuyingButton>();
     private BuyingButton currentBuyingBtn;
 
     [SerializeField] private List<HumalPickDBEntity> humalPickDBList = new List<HumalPickDBEntity>();
@@ -114,36 +114,23 @@ public class ShopManager : MonoBehaviour
     {
         currentBuyingBtn = buyingBtn;
 
-        try
+        if (dataMgr.GetItemByKey(buyingBtn.BuyingType.ToString(), out Item item))
         {
-            if(dataMgr.GetItemByKey(buyingBtn.BuyingType.ToString(), out Item item))
+            if (Utility.DownCastingItem(item, out CountableItem cItem))
             {
-                if(Utility.DownCastingItem(item, out CountableItem cItem))
-                {
-                    if (cItem.TodayBuyingAmount < cItem.MaxBuyingAmount)
-                        StartCoroutine(BuyCo());
-                    else
-                        popUpMgr.PopUp("하루 구매 횟수를 모두 소모했습니다!", EPopUpType.Caution);
-                }
-                else
-                {
+                if (cItem.TodayBuyingAmount < cItem.MaxBuyingAmount)
                     StartCoroutine(BuyCo());
-                }
+                else
+                    popUpMgr.PopUp("하루 구매 횟수를 모두 소모했습니다!", EPopUpType.Caution);
             }
             else
             {
                 StartCoroutine(BuyCo());
             }
         }
-        catch (Exception exp)
+        else
         {
-            if (exp.Message.Contains("Insufficient"))
-            {
-                string msg = string.Concat(buyingBtn.PayGoodsType.ToString(), " 재화가 부족합니다.");
-                popUpMgr.PopUp(msg, EPopUpType.Caution);
-            }
-
-            return;
+            StartCoroutine(BuyCo());
         }
     }
 
@@ -151,15 +138,14 @@ public class ShopManager : MonoBehaviour
     {
         if (currentBuyingBtn != null)
         {
-            //if(dataMgr.GetCurrency(currentBuyingBtn.PayGoodsType) )
-            dataMgr.SetCurrencyAmount(currentBuyingBtn.PayGoodsType, currentBuyingBtn.Price);
-            //dataMgr.SetGoodsAmount(currentBuyingBtn.PayGoodsType, -currentBuyingBtn.Price);
+            if(dataMgr.SetCurrencyAmount(currentBuyingBtn.PayGoodsType, -currentBuyingBtn.Price))
+            {
+                for (int i = 0; i < currentBuyingBtn.Num; i++)
+                    yield return StartCoroutine(BuyItemCo(currentBuyingBtn.BuyingType));
 
-            for (int i = 0; i < currentBuyingBtn.Num; i++)
-                yield return StartCoroutine(BuyItemCo(currentBuyingBtn.BuyingType));
-
-            currentBuyingBtn.UpdateInfoUI();
-            currentBuyingBtn = null;
+                currentBuyingBtn.UpdateInfoUI();
+                currentBuyingBtn = null;
+            }
         }
 
         yield return null;

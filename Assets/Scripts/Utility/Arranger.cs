@@ -37,20 +37,20 @@ public class Arranger : MonoBehaviour
                     continue;
                 
                 // 슬롯에서 파티로 추가했을 경우
-                if(!DataManager.Instance.IsContainsInParty(heroSlot.HeroData.ID))
+                if(!DataManager.Instance.IsContainsInParty(heroSlot.HumalData.ID))
                 {
-                    UIManager.Instance.SwapSlotToParty(heroSlot.HeroData.ID);
+                    UIManager.Instance.SwapSlotToParty(heroSlot.HumalData.ID);
 
                     if (i == 0)
-                        DataManager.Instance.HeroData.partyList.Insert(0, heroSlot.HeroData);
+                        DataManager.Instance.HumalData.partyList.Insert(0, heroSlot.HumalData);
                     else
-                        DataManager.Instance.HeroData.partyList.Add(heroSlot.HeroData);
+                        DataManager.Instance.HumalData.partyList.Add(heroSlot.HumalData);
                 }
 
                 if(i == 0)
-                    heroSlot.HeroData.SetLeader(true);
+                    heroSlot.HumalData.SetLeader(true);
                 else
-                    heroSlot.HeroData.SetLeader(false);
+                    heroSlot.HumalData.SetLeader(false);
 
                 heroSlot.UpdateSlotImage();
             }
@@ -67,13 +67,13 @@ public class Arranger : MonoBehaviour
                     continue;
 
                 // 만약 파티에 같은 정보의 영웅 슬롯이 존재한다면
-                if (DataManager.Instance.IsContainsInParty(heroSlot.HeroData.ID))
+                if (DataManager.Instance.IsContainsInParty(heroSlot.HumalData.ID))
                 {
-                    heroSlot.HeroData.SetLeader(false);
-                    int partyIndex = DataManager.Instance.GetIndexOfHeroInParty(heroSlot.HeroData);
+                    heroSlot.HumalData.SetLeader(false);
+                    int partyIndex = DataManager.Instance.GetIndexOfHeroInParty(heroSlot.HumalData);
 
-                    UIManager.Instance.SwapPartyToSlot(heroSlot.HeroData.ID);
-                    DataManager.Instance.HeroData.partyList.RemoveAt(partyIndex);
+                    UIManager.Instance.SwapPartyToSlot(heroSlot.HumalData.ID);
+                    DataManager.Instance.HumalData.partyList.RemoveAt(partyIndex);
                 }
 
                 heroSlot.UpdateSlotImage();

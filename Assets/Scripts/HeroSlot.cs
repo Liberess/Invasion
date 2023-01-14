@@ -14,7 +14,7 @@ public class HeroSlot : MonoBehaviour
     [SerializeField] private Text partyMenuTxt;
 
     [SerializeField] private UnitData heroData;
-    public UnitData HeroData { get => heroData; }
+    public UnitData HumalData { get => heroData; }
 
     [SerializeField] private bool isParty = false;
 
@@ -48,7 +48,7 @@ public class HeroSlot : MonoBehaviour
         //menuPanel.GetComponent<Button>().onClick.AddListener(OnClickOther);
     }
 
-    public void HeroDataSetup(UnitData unitData)
+    public void HumalDataSetup(UnitData unitData)
     {
         heroData = unitData;
         heroImg.sprite = unitData.sprite;

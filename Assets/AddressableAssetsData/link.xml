@@ -1,7 +1,7 @@
 <linker>
   <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="Enemy" preserve="all" />
-    <type fullname="Hero" preserve="all" />
+    <type fullname="Humal" preserve="all" />
     <type fullname="HumalPickDB" preserve="all" />
     <type fullname="LobbyHero" preserve="all" />
     <type fullname="UnitOriginDB" preserve="all" />

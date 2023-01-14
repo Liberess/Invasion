@@ -6,6 +6,7 @@ using System.Reflection;
 using System;
 
 [CustomPropertyDrawer(typeof(HumalPieceDictionary))]
+[CustomPropertyDrawer(typeof(SpriteDictionary))]
 public class SerializableDictionaryPropertyDrawer : PropertyDrawer
 {
 	const string KeysFieldName = "m_keys";

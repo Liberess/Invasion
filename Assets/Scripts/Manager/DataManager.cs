@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using PlayFab.ClientModels;
 using PlayFab;
-using UnityEngine.Events;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
@@ -19,7 +18,7 @@ public class DataManager : MonoBehaviour
     [Header("==== Hero Object Prefab ====")]
     [SerializeField] private AssetReference heroReference;
     [SerializeField] private AssetReference lobbyHeroReference;
-    [SerializeField] private List<UnitData> lobbyHeroList = new List<UnitData>();
+    private List<UnitData> lobbyHeroList = new List<UnitData>();
     //[SerializeField] private GameObject heroPrefab;
     //[SerializeField] private GameObject lobbyHeroPrefab;
 
@@ -33,8 +32,8 @@ public class DataManager : MonoBehaviour
     public GameData GameData { get => m_GameData; }
 
     [Header("==== Hero Data Information ===="), Space(10)]
-    [SerializeField] private HeroData m_HeroData;
-    public HeroData HeroData { get => m_HeroData; }
+    [SerializeField] private HumalData m_HumalData;
+    public HumalData HumalData { get => m_HumalData; }
 
     [Header("==== Enemy Data Information ===="), Space(10)]
     [SerializeField] private List<UnitData> m_EnemyDataList = new List<UnitData>();
@@ -51,11 +50,9 @@ public class DataManager : MonoBehaviour
 
     public List<Sprite> goodsSpriteList = new List<Sprite>();
 
-    public UnityAction OnDataLoadSuccessAction;
-
-    private bool isDownStart = false;
     [SerializeField] private Text isDownTxt;
     [SerializeField] private Text isProgressTxt;
+    private bool isDownStart = false;
 
     private AsyncOperationHandle updateBundleHandle;
 
@@ -70,8 +67,6 @@ public class DataManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        StartCoroutine(UpdateResources());
     }
 
     private void Start()
@@ -81,20 +76,21 @@ public class DataManager : MonoBehaviour
 
         GameManager.Instance.OnApplicationStart();
 
-        OnDataLoadSuccessAction = null;
+#if UNITY_EDITOR
+        StartCoroutine(UpdateResources());
+#endif
     }
 
     public void SetStageInfo(StageInfo info) => GameData.stageInfo = info;
 
     #region Update Resources
-    [ContextMenu("Update Resources")]
     public IEnumerator UpdateResources()
     {
         UpdateGoodsSprite();
         UpdateHeroSprite();
         UpdateOriginDB();
         UpdateHeroAnimCtrl();
-        UpdateHeroCardSprite();
+        UpdateHeroCardIcon();
         UpdateItemData();
 
         yield return null;
@@ -115,25 +111,6 @@ public class DataManager : MonoBehaviour
 
     private void UpdateOriginDB()
     {
-        HeroData.originHeroDataList.Clear();
-        /*
-                updateBundleHandle = Addressables.LoadAssetsAsync<UnitData>(
-                    Tags.HumalDataLabel,
-                    (result) =>
-                    {
-                        if (!isDownStart)
-                        {
-                            isDownStart = true;
-                            isDownTxt.text = "기본 휴멀 데이터 다운로드 시작";
-                            StartCoroutine(UpdateBundleProgressTxtCo());
-                        }
-
-                        if (!m_HeroData.originHeroDataList.Contains(result))
-                            m_HeroData.originHeroDataList.Add(result);
-                    }
-                );*/
-
-
         updateBundleHandle = Addressables.LoadAssetsAsync<UnitOriginDB>(
             Tags.UnitOriginDBLabel,
             (result) =>
@@ -142,13 +119,15 @@ public class DataManager : MonoBehaviour
                 {
                     isDownStart = true;
                     isDownTxt.text = "유닛 DB 다운로드 시작";
+                    Debug.Log("유닛 DB 다운로드 시작");
+                    HumalData.originHumalDataList.Clear();
                     StartCoroutine(UpdateBundleProgressTxtCo());
                 }
 
                 foreach(var unitDB in result.HumalDBList)
                 {
-                    if (!m_HeroData.originHeroDataList.Contains(unitDB))
-                        m_HeroData.originHeroDataList.Add(unitDB);
+                    if (!m_HumalData.originHumalDataList.Contains(unitDB))
+                        m_HumalData.originHumalDataList.Add(unitDB);
                 }
 
                 foreach(var unitDB in result.EnemyDBList)
@@ -167,6 +146,8 @@ public class DataManager : MonoBehaviour
                 {
                     isDownStart = true;
                     isDownTxt.text = "몬스터 스프라이트 다운로드 시작";
+                    Debug.Log("몬스터 스프라이트 다운로드 시작");
+                    m_EnemySpriteList.Clear();
                     StartCoroutine(UpdateBundleProgressTxtCo());
                 }
 
@@ -175,62 +156,107 @@ public class DataManager : MonoBehaviour
             }
         );
 
-        if (updateBundleHandle.IsValid())
+        updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
         {
-            updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
-            {
-                updateBundleHandle = handle;
-                isDownTxt.text = "다운로드 완료";
-            };
-        }
-        else
-        {
-            Debug.LogWarning("updateBundleHandle is not valid!!");
-        }
-
+            updateBundleHandle = handle;
+            isDownTxt.text = "다운로드 완료";
+            isProgressTxt.text = "100%";
+        };
     }
 
-    //[ContextMenu("Update Hero Sprite")]
     private void UpdateHeroSprite()
     {
-        HeroData.heroSpriteList.Clear();
+        updateBundleHandle = Addressables.LoadAssetsAsync<Sprite>(
+            Tags.HumalSpriteLabel,
+            (result) =>
+            {
+                if (!isDownStart)
+                {
+                    isDownStart = true;
+                    isDownTxt.text = "휴멀 스프라이트 다운로드 시작";
+                    Debug.Log("휴멀 스프라이트 다운로드 시작");
+                    m_HumalData.humalSpriteDic.Clear();
+                    StartCoroutine(UpdateBundleProgressTxtCo());
+                }
 
-        Sprite[] temp = Resources.LoadAll<Sprite>("HeroSprite");
+                if(int.TryParse(result.name[..result.name.IndexOf('_')], out int spriteID))
+                {
+                    if (!m_HumalData.humalSpriteDic.ContainsKey(spriteID))
+                        m_HumalData.humalSpriteDic.Add(spriteID, result);
+                }
+            }
+        );
 
-        for (int i = 0; i < temp.Length; i++)
+        updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
         {
-            if (temp[i] != null)
-                HeroData.heroSpriteList.Add(temp[i]);
-        }
+            updateBundleHandle = handle;
+            isDownTxt.text = "다운로드 완료";
+            isProgressTxt.text = "100%";
+
+            m_HumalData.humalSpriteList.Clear();
+            foreach (var sprite in m_HumalData.humalSpriteDic.Values)
+            {
+                if(!m_HumalData.humalSpriteList.Contains(sprite))
+                    m_HumalData.humalSpriteList.Add(sprite);
+            }
+        };
     }
 
-    //[ContextMenu("Update Hero Card Sprite")]
-    private void UpdateHeroCardSprite()
+    private void UpdateHeroCardIcon()
     {
-        HeroData.heroCardSpriteList.Clear();
+        updateBundleHandle = Addressables.LoadAssetsAsync<Sprite>(
+            Tags.HumalIconLabel,
+            (result) =>
+            {
+                if (!isDownStart)
+                {
+                    isDownStart = true;
+                    isDownTxt.text = "휴멀 아이콘 다운로드 시작";
+                    Debug.Log("휴멀 아이콘 다운로드 시작");
+                    m_HumalData.humalCardIconList.Clear();
+                    StartCoroutine(UpdateBundleProgressTxtCo());
+                }
 
-        Sprite[] temp = Resources.LoadAll<Sprite>("HeroCardSprite");
+                if (!m_HumalData.humalCardIconList.Contains(result))
+                    m_HumalData.humalCardIconList.Add(result);
+            }
+        );
 
-        for (int i = 0; i < temp.Length; i++)
+        updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
         {
-            if (temp[i] != null)
-                HeroData.heroCardSpriteList.Add(temp[i]);
-        }
+            updateBundleHandle = handle;
+            isDownTxt.text = "다운로드 완료";
+            isProgressTxt.text = "100%";
+        };
     }
 
     //[ContextMenu("Update Hero Anim Controller")]
     private void UpdateHeroAnimCtrl()
     {
-        HeroData.heroAnimCtrlList.Clear();
+        updateBundleHandle = Addressables.LoadAssetsAsync<RuntimeAnimatorController>(
+            Tags.HumalAnimCtrlLabel,
+            (result) =>
+            {
+                if (!isDownStart)
+                {
+                    isDownStart = true;
+                    isDownTxt.text = "휴멀 AnimCtrl 다운로드 시작";
+                    Debug.Log("휴멀 AnimCtrl 다운로드 시작");
+                    m_HumalData.humalAnimCtrlList.Clear();
+                    StartCoroutine(UpdateBundleProgressTxtCo());
+                }
 
-        RuntimeAnimatorController[] temp =
-            Resources.LoadAll<RuntimeAnimatorController>("HeroAnimCtrl");
+                if (!m_HumalData.humalAnimCtrlList.Contains(result))
+                    m_HumalData.humalAnimCtrlList.Add(result);
+            }
+        );
 
-        for (int i = 0; i < temp.Length; i++)
+        updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
         {
-            if (temp[i] != null)
-                HeroData.heroAnimCtrlList.Add(temp[i]);
-        }
+            updateBundleHandle = handle;
+            isDownTxt.text = "다운로드 완료";
+            isProgressTxt.text = "100%";
+        };
     }
 
     private IEnumerator UpdateBundleProgressTxtCo()
@@ -265,43 +291,43 @@ public class DataManager : MonoBehaviour
     #region Hero List - Dic
     private void ConstructHeroDic()
     {
-        m_HeroData.heroDic = new Dictionary<int, UnitData>();
-        m_HeroData.heroDic.Clear();
+        m_HumalData.humalDic = new Dictionary<int, UnitData>();
+        m_HumalData.humalDic.Clear();
 
-        //Json에 저장된 heroList안의 내용들을 heroDic에 저장
-        for (int i = 0; i < m_HeroData.heroList.Count; i++)
-            m_HeroData.heroDic.Add(m_HeroData.heroList[i].ID, m_HeroData.heroList[i]);
+        //Json에 저장된 humalList안의 내용들을 humalDic에 저장
+        for (int i = 0; i < m_HumalData.humalList.Count; i++)
+            m_HumalData.humalDic.Add(m_HumalData.humalList[i].ID, m_HumalData.humalList[i]);
     }
 
     private void ResettingHeroList()
     {
-        m_HeroData.heroList.Clear();
-        m_HeroData.heroList = new List<UnitData>(m_HeroData.heroDic.Values);
+        m_HumalData.humalList.Clear();
+        m_HumalData.humalList = new List<UnitData>(m_HumalData.humalDic.Values);
     }
 
     private void ConstructHumalPieceAmountDic()
     {
-        //m_HeroData.humalPieceAmountDic = new Dictionary<string, int>();
-        m_HeroData.humalPieceAmountDic = new HumalPieceDictionary();
+        //m_HumalData.humalPieceAmountDic = new Dictionary<string, int>();
+        m_HumalData.humalPieceAmountDic = new HumalPieceDictionary();
 
-        for (int i = 0; i < m_HeroData.humalPieceAmountList.Count; i++)
+        for (int i = 0; i < m_HumalData.humalPieceAmountList.Count; i++)
         {
-            m_HeroData.humalPieceAmountDic.Add(
-                m_HeroData.humalPieceAmountList[i].name,
-                m_HeroData.humalPieceAmountList[i].amount
+            m_HumalData.humalPieceAmountDic.Add(
+                m_HumalData.humalPieceAmountList[i].name,
+                m_HumalData.humalPieceAmountList[i].amount
             );
         }
     }
 
     private void ResettingHumalPieceAmountList()
     {
-        m_HeroData.humalPieceAmountList.Clear();
+        m_HumalData.humalPieceAmountList.Clear();
 
         List<HumalPiece> temList = new List<HumalPiece>();
-        foreach(var data in m_HeroData.humalPieceAmountDic)
+        foreach(var data in m_HumalData.humalPieceAmountDic)
             temList.Add(new HumalPiece(data.Key, data.Value));
 
-        m_HeroData.humalPieceAmountList = temList;
+        m_HumalData.humalPieceAmountList = temList;
     }
 
     /// <summary>
@@ -309,7 +335,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public bool IsContainsInHumalList(int id)
     {
-        foreach (var heroData in m_HeroData.heroList)
+        foreach (var heroData in m_HumalData.humalList)
         {
             if (heroData.ID == id)
                 return true;
@@ -323,9 +349,9 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public bool IsContainsInParty(int id)
     {
-        foreach (var HeroData in m_HeroData.partyList)
+        foreach (var HumalData in m_HumalData.partyList)
         {
-            if (HeroData.ID == id)
+            if (HumalData.ID == id)
                 return true;
         }
 
@@ -338,7 +364,7 @@ public class DataManager : MonoBehaviour
     /// <returns></returns>
     public bool IsValidInHeroListByIndex(int index)
     {
-        if (index < 0 || index >= m_HeroData.heroList.Count)
+        if (index < 0 || index >= m_HumalData.humalList.Count)
             return false;
 
         return true;
@@ -349,17 +375,17 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public int GetIndexOfHeroInParty(UnitData data)
     {
-        return Utility.FindIndexOf(m_HeroData.partyList, data);
+        return Utility.FindIndexOf(m_HumalData.partyList, data);
     }
 
     public int GetIndexOfHeroInList(UnitData data)
     {
-        return Utility.FindIndexOf(m_HeroData.heroList, data);
+        return Utility.FindIndexOf(m_HumalData.humalList, data);
     }
 
     public UnitData GetHumalDataByIndex(int id)
     {
-        foreach (var hero in m_HeroData.heroList)
+        foreach (var hero in m_HumalData.humalList)
         {
             if (hero.ID == id)
                 return hero;
@@ -379,7 +405,7 @@ public class DataManager : MonoBehaviour
                 throw new Exception("유효하지 않은 Index 값입니다.");
 
             UIManager.Instance.SetHeroIndex(index + 1);
-            return m_HeroData.heroList[index + 1];
+            return m_HumalData.humalList[index + 1];
         }
         else if (key == "Previous")
         {
@@ -387,7 +413,7 @@ public class DataManager : MonoBehaviour
                 throw new Exception("유효하지 않은 Index 값입니다.");
 
             UIManager.Instance.SetHeroIndex(index - 1);
-            return m_HeroData.heroList[index - 1];
+            return m_HumalData.humalList[index - 1];
         }
         else
         {
@@ -397,23 +423,23 @@ public class DataManager : MonoBehaviour
 
     public void SwapPartyData(int from, int to)
     {
-        Utility.SwapListElement(m_HeroData.partyList, from, to);
+        Utility.SwapListElement(m_HumalData.partyList, from, to);
     }
 
     public void UpdatePartyLeader()
     {
-        for (int i = 0; i < m_HeroData.partyList.Count; i++)
+        for (int i = 0; i < m_HumalData.partyList.Count; i++)
         {
             if (i == 0)
             {
-                m_HeroData.partyList[i].SetLeader(true);
-                //m_HeroData.partyList[i].IsLeader = true;
-                LeaderHero = m_HeroData.partyList[i];
+                m_HumalData.partyList[i].SetLeader(true);
+                //m_HumalData.partyList[i].IsLeader = true;
+                LeaderHero = m_HumalData.partyList[i];
             }
             else
             {
-                m_HeroData.partyList[i].SetLeader(false);
-                //m_HeroData.partyList[i].IsLeader = false;
+                m_HumalData.partyList[i].SetLeader(false);
+                //m_HumalData.partyList[i].IsLeader = false;
             }
         }
     }
@@ -491,24 +517,29 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void SetCurrencyAmount(ECurrencyType currencyType, int num)
+    public bool SetCurrencyAmount(ECurrencyType currencyType, int num)
     {
         if (!Social.localUser.authenticated)
-            return;
+            return false;
 
         if (GetCurrency(currencyType) < 0)
-            throw new Exception(currencyType.ToString() + " is empty");
+        {
+            popUpMgr.PopUp(currencyType.ToString() + " is empty", EPopUpType.Caution);
+            return false;
+        }
 
         var amount = GetCurrency(currencyType) + num;
         if (amount > int.MaxValue)
         {
-            PopUpManager.Instance.PopUp(currencyType.ToString() + " 재화가 한계치입니다!", EPopUpType.Caution);
-            throw new Exception("Overflow Max Goods Value");
+            popUpMgr.PopUp(currencyType.ToString() + " 재화가 한계치입니다!", EPopUpType.Caution);
+            //throw new Exception("Overflow Max Goods Value");
+            return false;
         }
         else if (amount < 0)
         {
-            PopUpManager.Instance.PopUp(currencyType.ToString() + " 재화가 부족합니다!", EPopUpType.Caution);
-            throw new Exception("Insufficient Goods Value");
+            popUpMgr.PopUp(currencyType.ToString() + " 재화가 부족합니다!", EPopUpType.Caution);
+            //throw new Exception("Insufficient Goods Value");
+            return false;
         }
         else
         {
@@ -516,6 +547,8 @@ public class DataManager : MonoBehaviour
                 AddCurrency(currencyType, num);
             else
                 SubstractCurrency(currencyType, num);
+
+            return true;
         }
         // AddElementInCurrencyList((int)currencyType, num);
         //m_GameData.CurrencyList[(int)EGoodsType].count += num;
@@ -591,32 +624,32 @@ public class DataManager : MonoBehaviour
     public void InitializedData()
     {
         InitializedGameData();
-        InitializedHeroData();
+        InitializedHumalData();
 
         SaveData();
     }
 
     public IEnumerator LoadDataCo()
     {
-        yield return StartCoroutine(LoadHeroDataCo());
+        yield return StartCoroutine(LoadHumalDataCo());
         yield return StartCoroutine(LoadGameDataCo());
     }
 
-    private void InitializedHeroData()
+    private void InitializedHumalData()
     {
-        for (int i = 0; i < HeroData.HeroMaxSize; i++)
-            m_HeroData.heroUnlockList[i] = false;
+        for (int i = 0; i < HumalData.HumalMaxSize; i++)
+            m_HumalData.humalUnlockList[i] = false;
 
-        m_HeroData.heroDic.Clear();
-        m_HeroData.heroList.Clear();
-        m_HeroData.partyList.Clear();
+        m_HumalData.humalDic.Clear();
+        m_HumalData.humalList.Clear();
+        m_HumalData.partyList.Clear();
 
-        m_HeroData.heroUnlockList[0] = true;
+        m_HumalData.humalUnlockList[0] = true;
 
-        if (m_HeroData.originHeroDataList.Count != 0)
+        if (m_HumalData.originHumalDataList.Count != 0)
             AddNewHumal(0);
 
-        m_HeroData.isLoadComplete = true;
+        m_HumalData.isLoadComplete = true;
     }
 
     private void InitializedGameData()
@@ -679,33 +712,33 @@ public class DataManager : MonoBehaviour
     {
         try
         {
-            if (m_HeroData.heroList.Count != 0)
+            if (m_HumalData.humalList.Count != 0)
             {
-                for (int i = 0; i < m_HeroData.heroList.Count; i++)
+                for (int i = 0; i < m_HumalData.humalList.Count; i++)
                 {
-                    m_HeroData.heroList[i].sprite = m_HeroData.heroSpriteList[m_HeroData.heroList[i].ID];
-                    m_HeroData.heroList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.heroList[i].ID];
+                    m_HumalData.humalList[i].sprite = m_HumalData.humalSpriteList[m_HumalData.humalList[i].ID];
+                    m_HumalData.humalList[i].animCtrl = m_HumalData.humalAnimCtrlList[m_HumalData.humalList[i].ID];
                 }
 
-                for (int i = 0; i < m_HeroData.partyList.Count; i++)
+                for (int i = 0; i < m_HumalData.partyList.Count; i++)
                 {
-                    m_HeroData.partyList[i].sprite = m_HeroData.heroSpriteList[m_HeroData.partyList[i].ID];
-                    m_HeroData.partyList[i].animCtrl = m_HeroData.heroAnimCtrlList[m_HeroData.partyList[i].ID];
+                    m_HumalData.partyList[i].sprite = m_HumalData.humalSpriteList[m_HumalData.partyList[i].ID];
+                    m_HumalData.partyList[i].animCtrl = m_HumalData.humalAnimCtrlList[m_HumalData.partyList[i].ID];
                 }
 
-                for (int i = 0; i < m_HeroData.heroList.Count; i++)
+                for (int i = 0; i < m_HumalData.humalList.Count; i++)
                 {
-                    var targetName = m_HeroData.heroList[i].ID;
-                    if (!m_HeroData.heroDic.ContainsKey(targetName))
-                        m_HeroData.heroDic.Add(targetName, m_HeroData.heroList[i]);
+                    var targetName = m_HumalData.humalList[i].ID;
+                    if (!m_HumalData.humalDic.ContainsKey(targetName))
+                        m_HumalData.humalDic.Add(targetName, m_HumalData.humalList[i]);
                 }
 
                 if (SceneManager.GetActiveScene().name == "Lobby")
                 {
-                    for (int i = 0; i < m_HeroData.heroList.Count; i++)
+                    for (int i = 0; i < m_HumalData.humalList.Count; i++)
                     {
                         int index = i;
-                        if (lobbyHeroList.Contains(m_HeroData.heroList[index]))
+                        if (lobbyHeroList.Contains(m_HumalData.humalList[index]))
                             continue;
 
                         Addressables.InstantiateAsync(
@@ -716,23 +749,23 @@ public class DataManager : MonoBehaviour
                         {
                             if (handle.Result.TryGetComponent(out LobbyHero hero))
                             {
-                                var heroStat = m_HeroData.heroList[index];
+                                var heroStat = m_HumalData.humalList[index];
                                 hero.UnitSetup(heroStat);
-                                lobbyHeroList.Add(m_HeroData.heroList[index]);
+                                lobbyHeroList.Add(m_HumalData.humalList[index]);
                             }
                         };
 
                         /*var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
                             Quaternion.identity).GetComponent<LobbyHero>();*/
 
-                        //heroStat.mySprite = HeroData.heroSpriteList[heroStat.Data.ID];
-                        //heroStat.animCtrl = HeroData.heroAnimCtrlList[heroStat.Data.ID];
+                        //heroStat.mySprite = HumalData.humalSpriteList[heroStat.Data.ID];
+                        //heroStat.animCtrl = HumalData.humalAnimCtrlList[heroStat.Data.ID];
                     }
                 }
             }
             else
             {
-                throw new Exception("m_HeroData.heroList is empty!");
+                throw new Exception("m_HumalData.humalList is empty!");
             }
         }
         catch (Exception ex)
@@ -742,7 +775,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public IEnumerator LoadHeroDataCo()
+    public IEnumerator LoadHumalDataCo()
     {
         var request = new GetUserDataRequest() { PlayFabId = PlayFabManager.Instance.PlayFabId };
         PlayFabClientAPI.GetUserData(request, (result) =>
@@ -751,23 +784,22 @@ public class DataManager : MonoBehaviour
 
             foreach (var eachData in result.Data)
             {
-                if (eachData.Key.Contains("HeroData"))
+                if (eachData.Key.Contains("HumalData"))
                 {
                     isContainsData = true;
-                    m_HeroData = JsonUtility.FromJson<HeroData>(eachData.Value.Value);
+                    m_HumalData = JsonUtility.FromJson<HumalData>(eachData.Value.Value);
 
                     SetupHero();
 
                     ConstructHeroDic();
                     ConstructHumalPieceAmountDic();
 
-                    m_HeroData.isLoadComplete = true;
-                    Debug.LogWarning("Load Hero Data");
+                    m_HumalData.isLoadComplete = true;
                 }
             }
 
             if(!isContainsData)
-                InitializedHeroData();
+                InitializedHumalData();
 
         }, DisplayPlayfabError);
 
@@ -813,11 +845,11 @@ public class DataManager : MonoBehaviour
         ResettingHumalPieceAmountList();
 
         m_GameData.isLoadComplete = false;
-        m_HeroData.isLoadComplete = false;
+        m_HumalData.isLoadComplete = false;
 
         Dictionary<string, string> dataDic = new Dictionary<string, string>();
         dataDic.Add("GameData", JsonUtility.ToJson(m_GameData));
-        dataDic.Add("HeroData", JsonUtility.ToJson(m_HeroData));
+        dataDic.Add("HumalData", JsonUtility.ToJson(m_HumalData));
         SetData(dataDic);
     }
 
@@ -847,15 +879,15 @@ public class DataManager : MonoBehaviour
 
     public int GetHumalPieceAmount(string key)
     {
-        if (m_HeroData.humalPieceAmountDic.ContainsKey(key))
-            return m_HeroData.humalPieceAmountDic[key];
+        if (m_HumalData.humalPieceAmountDic.ContainsKey(key))
+            return m_HumalData.humalPieceAmountDic[key];
         else
             return -1;
     }
 
     public void AddNewHumal(int id)
     {
-        var unitData = m_HeroData.originHeroDataList[id];
+        var unitData = m_HumalData.originHumalDataList[id];
         
         if (unitData == null)
             throw new Exception("해당 index의 unitData가 없습니다.");
@@ -869,8 +901,10 @@ public class DataManager : MonoBehaviour
         {
             popUpMgr.PopUp("휴멀 - " + unitData.KoName + " 뽑기 성공!", EPopUpType.Notice);
 
-            m_HeroData.heroList.Add(new UnitData(unitData));
-            m_HeroData.heroUnlockList[id] = true;
+            m_HumalData.humalList.Add(new UnitData(unitData));
+            unitData.sprite = m_HumalData.humalSpriteList[id];
+            unitData.animCtrl = m_HumalData.humalAnimCtrlList[id];
+            m_HumalData.humalUnlockList[id] = true;
 
             AddHumalPiece(unitData.KoName, 0);
 
@@ -882,16 +916,16 @@ public class DataManager : MonoBehaviour
     public void AddHumalPiece(string key, int amount)
     {
         popUpMgr.PopUp("휴멀 [" + key + "] 파편 " + amount +"개 획득!", EPopUpType.Notice);
-        if (m_HeroData.humalPieceAmountDic.ContainsKey(key))
-            m_HeroData.humalPieceAmountDic[key] += amount;
+        if (m_HumalData.humalPieceAmountDic.ContainsKey(key))
+            m_HumalData.humalPieceAmountDic[key] += amount;
         else
-            m_HeroData.humalPieceAmountDic.Add(key, amount);
+            m_HumalData.humalPieceAmountDic.Add(key, amount);
     }
 
     public void SubtractHumalPiece(string key, int amount)
     {
-        if (m_HeroData.humalPieceAmountDic.ContainsKey(key))
-            m_HeroData.humalPieceAmountDic[key] -= amount;
+        if (m_HumalData.humalPieceAmountDic.ContainsKey(key))
+            m_HumalData.humalPieceAmountDic[key] -= amount;
     }
 
     private void DisplayPlayfabError(PlayFabError error)

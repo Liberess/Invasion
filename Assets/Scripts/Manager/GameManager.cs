@@ -114,10 +114,10 @@ public class GameManager : MonoBehaviour
 
         if(_minute >= 10)
         {
-            for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
+            for (int i = 0; i < dataMgr.HumalData.humalList.Count; i++)
             {
-                reward = (((dataMgr.HeroData.heroList[i].ID + 1)
-                    * dataMgr.HeroData.heroList[i].Level * stopWatch)) / rewardLimit;
+                reward = (((dataMgr.HumalData.humalList[i].ID + 1)
+                    * dataMgr.HumalData.humalList[i].Level * stopWatch)) / rewardLimit;
             }
 
             infoTxt = "자동 파밍 시간 : " + _hour.ToString() + "시간 "
@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour
 
     public void OnClickGameStartBtn(StageInfo info)
     {
-        if(dataMgr.HeroData.partyList.Count <= 0)
+        if(dataMgr.HumalData.partyList.Count <= 0)
         {
             PopUpManager.Instance.PopUp("파티 정보가 없습니다!", EPopUpType.Caution);
             return;

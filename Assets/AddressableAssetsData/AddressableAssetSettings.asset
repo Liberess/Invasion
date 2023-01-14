@@ -47,6 +47,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 51f53a7d22830f745b275393e49e764c, type: 2}
   - {fileID: 11400000, guid: 1a89b1e733443c74aa61a18a0664be42, type: 2}
   - {fileID: 11400000, guid: 89a5306950142a847a12273d974d08cf, type: 2}
+  - {fileID: 11400000, guid: d155cd681e924674c8b821da238b0637, type: 2}
+  - {fileID: 11400000, guid: ac0ede074063ff44b922725ed25e1630, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -120,6 +122,9 @@ MonoBehaviour:
     - Enemy
     - HumalPickDB
     - UnitOriginDB
+    - HumalIcon
+    - HumalSprite
+    - Anim
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 2950fb30cbc9c43419db844bb0beda9a, type: 2}

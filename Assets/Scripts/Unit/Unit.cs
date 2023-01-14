@@ -102,15 +102,15 @@ public abstract class Unit : LivingEntity
     public virtual void ChangeAc()
     {
         anim.runtimeAnimatorController =
-            DataManager.Instance.HeroData.heroAnimCtrlList[unitData.ID];
+            DataManager.Instance.HumalData.humalAnimCtrlList[unitData.ID];
     }
 
     protected void TeamValueSet()
     {
         direction = (this.gameObject.layer == 9) ? 1 : -1; //Team Value
 
-        allyValue = (direction == 1) ? "Hero" : "Enemy"; //Layer Mask - Check Ally
-        targetValue = (direction == 1) ? "Enemy" : "Hero"; //Layer Mask - Check Enemy
+        allyValue = (direction == 1) ? "Humal" : "Enemy"; //Layer Mask - Check Ally
+        targetValue = (direction == 1) ? "Enemy" : "Humal"; //Layer Mask - Check Enemy
     }
 
     protected virtual void Move()

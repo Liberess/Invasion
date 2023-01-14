@@ -176,7 +176,7 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator InitHeroPanelCoru()
     {
-        yield return StartCoroutine(DataManager.Instance.UpdateResources());
+        yield return DataManager.Instance.StartCoroutine(DataManager.Instance.UpdateResources());
 
         InitPartySlot();
         InitHeroSlot();
@@ -184,32 +184,28 @@ public class UIManager : MonoBehaviour
 
     private void InitPartySlot()
     {
-        partySlotList.Clear();
-
-        for (int i = 0; i < dataMgr.HeroData.partyList.Count; i++)
+        for (int i = 0; i < dataMgr.HumalData.partyList.Count; i++)
         {
             HeroSlot heroSlot = GetObj();
             heroSlot.transform.SetParent(heroPartyGrid.transform);
             heroSlot.transform.localScale = new Vector3(1f, 1f, 1f);
-            heroSlot.HeroDataSetup(dataMgr.HeroData.partyList[i]);
+            heroSlot.HumalDataSetup(dataMgr.HumalData.partyList[i]);
             partySlotList.Add(heroSlot);
         }
     }
 
     private void InitHeroSlot()
     {
-        heroSlotList.Clear();
-
         Debug.Log("InitHeroSlot");
 
         List<int> PartyIDList = new List<int>();
-        foreach (var hero in dataMgr.HeroData.partyList)
+        foreach (var hero in dataMgr.HumalData.partyList)
             PartyIDList.Add(hero.ID);
 
-        Debug.Log("count : " + dataMgr.HeroData.heroList.Count);
-        for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
+        Debug.Log("count : " + dataMgr.HumalData.humalList.Count);
+        for (int i = 0; i < dataMgr.HumalData.humalList.Count; i++)
         {
-            int id = dataMgr.HeroData.heroList[i].ID;
+            int id = dataMgr.HumalData.humalList[i].ID;
             Debug.Log("id : " + id);
             if (PartyIDList.Contains(id))
                 continue;
@@ -220,7 +216,7 @@ public class UIManager : MonoBehaviour
             }
 
             HeroSlot heroSlot = GetObj();
-            heroSlot.HeroDataSetup(dataMgr.HeroData.heroList[i]);
+            heroSlot.HumalDataSetup(dataMgr.HumalData.humalList[i]);
             heroSlotList.Add(heroSlot);
                 Debug.Log(4);
         }
@@ -229,27 +225,27 @@ public class UIManager : MonoBehaviour
     public void UpdateHeroPanel()
     {
         Debug.Log("UpdateHeroPanel");
-        for (int i = 0; i < dataMgr.HeroData.partyList.Count; i++)
+        for (int i = 0; i < dataMgr.HumalData.partyList.Count; i++)
         {
-            int id = dataMgr.HeroData.partyList[i].ID;
-            if (partySlotList.Find(x => x.HeroData.ID == id) != null)
+            int id = dataMgr.HumalData.partyList[i].ID;
+            if (partySlotList.Find(x => x.HumalData.ID == id) != null)
                 continue;
 
             HeroSlot heroSlot = GetObj();
             heroSlot.transform.SetParent(heroPartyGrid.transform);
             heroSlot.transform.localScale = new Vector3(1f, 1f, 1f);
-            heroSlot.HeroDataSetup(dataMgr.HeroData.partyList[i]);
+            heroSlot.HumalDataSetup(dataMgr.HumalData.partyList[i]);
             partySlotList.Add(heroSlot);
         }
 
         List<int> PartyIDList = new List<int>();
         foreach (var hero in partySlotList)
-            PartyIDList.Add(hero.HeroData.ID);
+            PartyIDList.Add(hero.HumalData.ID);
 
-        Debug.Log("count2 : " + dataMgr.HeroData.heroList.Count);
-        for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
+        Debug.Log("count2 : " + dataMgr.HumalData.humalList.Count);
+        for (int i = 0; i < dataMgr.HumalData.humalList.Count; i++)
         {
-            int id = dataMgr.HeroData.heroList[i].ID;
+            int id = dataMgr.HumalData.humalList[i].ID;
             Debug.Log("id2 : " + id);
             if (PartyIDList.Contains(id))
                 continue;
@@ -261,7 +257,7 @@ public class UIManager : MonoBehaviour
             }
 
             HeroSlot heroSlot = GetObj();
-            heroSlot.HeroDataSetup(dataMgr.HeroData.heroList[i]);
+            heroSlot.HumalDataSetup(dataMgr.HumalData.humalList[i]);
             heroSlotList.Add(heroSlot);
             Debug.Log(44);
         }
@@ -271,7 +267,7 @@ public class UIManager : MonoBehaviour
     {
         foreach(var heroSlot in heroSlotList)
         {
-            if(heroSlot.HeroData.ID == id) 
+            if(heroSlot.HumalData.ID == id) 
                 return true;
         }
 
@@ -288,7 +284,7 @@ public class UIManager : MonoBehaviour
 
         for (index = 0; index < heroSlotList.Count; index++)
         {
-            if (heroSlotList[index].HeroData.ID == id)
+            if (heroSlotList[index].HumalData.ID == id)
                 break;
         }
 
@@ -306,7 +302,7 @@ public class UIManager : MonoBehaviour
 
         for (index = 0; index < partySlotList.Count; index++)
         {
-            if (partySlotList[index].HeroData.ID == id)
+            if (partySlotList[index].HumalData.ID == id)
                 break;
         }
 
@@ -327,9 +323,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.Level:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.HeroData.Level).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.HumalData.Level).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.HeroData.Level).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.HumalData.Level).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -340,9 +336,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.Grade:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.HeroData.Level).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.HumalData.Level).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.HeroData.Level).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.HumalData.Level).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -353,9 +349,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.DPS:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.HeroData.DPS).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.HumalData.DPS).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.HeroData.DPS).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.HumalData.DPS).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -517,7 +513,7 @@ public class UIManager : MonoBehaviour
     #region Hero Detail Info Panel
     public void SetHeroIndex(int value)
     {
-        if (value < 0 || value >= dataMgr.HeroData.heroList.Count)
+        if (value < 0 || value >= dataMgr.HumalData.humalList.Count)
             return;
 
         currentHeroIndex = value;
