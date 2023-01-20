@@ -57,9 +57,11 @@ public static class Tags
     public static readonly string[] CurrencyTags = { "ST", "GD", "DA" };
 
     public static readonly string UnitOriginDBLabel = "UnitOriginDB";
+
     public static readonly string HumalPickDBLabel = "HumalPickDB";
     public static readonly string HumalIconLabel = "HumalIcon";
     public static readonly string HumalSpriteLabel = "HumalSprite";
     public static readonly string HumalAnimCtrlLabel = "HumalAnimCtrl";
+
     public static readonly string EnemyLabel = "Enemy";
 }

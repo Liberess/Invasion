@@ -476,7 +476,6 @@ public class DataManager : MonoBehaviour
         if (VirtualCurrencyDic.ContainsKey(type.ToString()))
             return VirtualCurrencyDic[type.ToString()];
 
-        Debug.LogError("do not exist " + type.ToString());
         return -1;
     }
 
@@ -495,6 +494,10 @@ public class DataManager : MonoBehaviour
 
     private void SubstractCurrency(ECurrencyType currencyTag, int amount)
     {
+        if (!Social.localUser.authenticated)
+            return;
+
+        Debug.Log("SubstractCurrency : " + currencyTag.ToString() + "/" + amount);
         var request = new SubtractUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag.ToString(), Amount = amount };
         PlayFabClientAPI.SubtractUserVirtualCurrency(
             request,
@@ -544,9 +547,9 @@ public class DataManager : MonoBehaviour
         else
         {
             if (num > 0)
-                AddCurrency(currencyType, num);
+                AddCurrency(currencyType, Mathf.Abs(num));
             else
-                SubstractCurrency(currencyType, num);
+                SubstractCurrency(currencyType, Mathf.Abs(num));
 
             return true;
         }

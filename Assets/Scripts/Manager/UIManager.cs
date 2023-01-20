@@ -8,16 +8,9 @@ using UnityEngine.Events;
 
 public class UIManager : MonoBehaviour
 {
-    private enum HeroSortType
-    {
-        Menu = -1,
-        Level,
-        Grade,
-        DPS
-    }
-    //오름차                내림차
-    private enum SortingType { Ascending = 0, Descending }
-    private enum StatusType { HP = 0, Critical, AP, Dodge, DP, Cost }
+    private enum HeroSortType { Menu = -1, Level, Grade, DPS }
+    private enum SortingType { Ascending, Descending }
+    private enum StatusType { HP, Critical, AP, Dodge, DP, Cost }
 
     public static UIManager Instance { get; private set; }
 
@@ -196,24 +189,17 @@ public class UIManager : MonoBehaviour
 
     private void InitHeroSlot()
     {
-        Debug.Log("InitHeroSlot");
-
         List<int> PartyIDList = new List<int>();
         foreach (var hero in dataMgr.HumalData.partyList)
             PartyIDList.Add(hero.ID);
 
-        Debug.Log("count : " + dataMgr.HumalData.humalList.Count);
         for (int i = 0; i < dataMgr.HumalData.humalList.Count; i++)
         {
             int id = dataMgr.HumalData.humalList[i].ID;
-            Debug.Log("id : " + id);
             if (PartyIDList.Contains(id))
                 continue;
             else if (IsContainsHeroSlotList(id))
-            {
-                Debug.Log(3);
                 continue;
-            }
 
             HeroSlot heroSlot = GetObj();
             heroSlot.HumalDataSetup(dataMgr.HumalData.humalList[i]);

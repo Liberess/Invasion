@@ -26437,7 +26437,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 647f24c4ff78d8f4780b03603a5b1fe9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3310a70bde0a9a94bb0c3c615d339aa2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -36503,71 +36503,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1690616516}
   m_CullTransparentMesh: 0
---- !u!1 &1692471563
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1692471565}
-  - component: {fileID: 1692471564}
-  m_Layer: 0
-  m_Name: UIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1692471564
+--- !u!114 &1692471564 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+    type: 3}
+  m_PrefabInstance: {fileID: 5926650404318950883}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1692471563}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8687b3adbb926ad48b03c53b187f9f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  optionPanel: {fileID: 0}
-  offNotice: {fileID: 0}
-  heroPartyGrid: {fileID: 1617015552}
-  heroSlotGrid: {fileID: 1991328077}
-  heroMenuPanel: {fileID: 505991253}
-  heroDetailInfoPanel: {fileID: 1668799487}
-  nextHeroBtn: {fileID: 1859750669}
-  previousHeroBtn: {fileID: 1718346955}
-  sortBtn: {fileID: 1471172151}
-  asSortBtn: {fileID: 710943135}
-  desSortBtn: {fileID: 1690616518}
-  sortPanel: {fileID: 1466871833}
-  sortBtnList:
-  - {fileID: 908495864}
-  - {fileID: 1065529549}
-  - {fileID: 195778484}
-  heroSlotPrefab: {fileID: 6648332722068345979, guid: 7111731d02ab4dd459721ab731e25636,
-    type: 3}
-  heroSlotMaxCount: 20
-  heroSlotList: []
-  stageReadyPanel: {fileID: 592312060}
---- !u!4 &1692471565
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1692471563}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1704603588
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47085,6 +47032,145 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 077c4655dd3f02c44951796efd1cc467, type: 3}
+--- !u!1001 &5926650404318950883
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5926650403855410408, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: m_Name
+      value: UIManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926650403855410414, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926650403855410414, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926650403855410414, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926650403855410414, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926650403855410414, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926650403855410414, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926650403855410414, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926650403855410414, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926650403855410414, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926650403855410414, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926650403855410414, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: sortBtn
+      value: 
+      objectReference: {fileID: 1471172151}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: asSortBtn
+      value: 
+      objectReference: {fileID: 710943135}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: sortPanel
+      value: 
+      objectReference: {fileID: 1466871833}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: desSortBtn
+      value: 
+      objectReference: {fileID: 1690616518}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: nextHeroBtn
+      value: 
+      objectReference: {fileID: 1859750669}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: heroSlotGrid
+      value: 
+      objectReference: {fileID: 1991328077}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: heroMenuPanel
+      value: 
+      objectReference: {fileID: 505991253}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: heroPartyGrid
+      value: 
+      objectReference: {fileID: 1617015552}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: previousHeroBtn
+      value: 
+      objectReference: {fileID: 1718346955}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: stageReadyPanel
+      value: 
+      objectReference: {fileID: 592312060}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: heroDetailInfoPanel
+      value: 
+      objectReference: {fileID: 1668799487}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: sortBtnList.Array.data[0]
+      value: 
+      objectReference: {fileID: 908495864}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: sortBtnList.Array.data[1]
+      value: 
+      objectReference: {fileID: 1065529549}
+    - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
+        type: 3}
+      propertyPath: sortBtnList.Array.data[2]
+      value: 
+      objectReference: {fileID: 195778484}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b8b76b012f5c52c4ca07f30021236241, type: 3}
 --- !u!1001 &6226769115668031127
 PrefabInstance:
   m_ObjectHideFlags: 0

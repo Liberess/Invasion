@@ -21,22 +21,22 @@ MonoBehaviour:
     m_Address: 00_Nana_Walk
     m_ReadOnly: 0
     m_SerializedLabels:
-    - HumalAnimCtrl
+    - HumalAnim
   - m_GUID: cf9dee25a0d99924a83ef43bd92dd857
     m_Address: 00_Nana_Attack
     m_ReadOnly: 0
     m_SerializedLabels:
-    - HumalAnimCtrl
+    - HumalAnim
   - m_GUID: e5b411ee33302f74182d615bd6b69ea0
     m_Address: 00_Nana_Die
     m_ReadOnly: 0
     m_SerializedLabels:
-    - HumalAnimCtrl
+    - HumalAnim
   - m_GUID: 0cc563f7431e1734ea7069ca4e520ad8
     m_Address: 00_Nana_Idle
     m_ReadOnly: 0
     m_SerializedLabels:
-    - HumalAnimCtrl
+    - HumalAnim
   - m_GUID: 933dee70b14c7ab439771c969ea95579
     m_Address: 00_Nana_AnimCtrl
     m_ReadOnly: 0
