@@ -14,7 +14,7 @@ public class LobbyHero : Unit
 
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
-        sprite = GetComponent<SpriteRenderer>();
+        spriteRen = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -27,26 +27,17 @@ public class LobbyHero : Unit
         Movement();
     }
 
-    protected override void CustomUnitSetup(UnitStatus status)
-    {
-        mMyStat = status;
-        myStat.mySprite = DataManager.Instance.HeroData.heroSpriteList[status.ID];
-        sprite.sprite = myStat.mySprite;
-        myStat.animCtrl = DataManager.Instance.HeroData.heroAnimCtrlList[status.ID];
-        anim.runtimeAnimatorController = myStat.animCtrl;
-    }
-
     #region 이동 세팅
     private void Movement()
     {
         if (isMove)
         {
-            anim.SetBool("isWalk", true);
+            //anim.SetBool("isWalk", true);
             rigid.velocity = new Vector3(speedX, speedY, speedY);
         }
         else
         {
-            anim.SetBool("isWalk", false);
+            //anim.SetBool("isWalk", false);
             rigid.velocity = Vector3.zero;
         }
     }
@@ -68,9 +59,9 @@ public class LobbyHero : Unit
         if (isMove)
         {
             if (speedX > 0)
-                sprite.flipX = false;
+                spriteRen.flipX = false;
             else if (speedX < 0)
-                sprite.flipX = true;
+                spriteRen.flipX = true;
         }
     }
     #endregion

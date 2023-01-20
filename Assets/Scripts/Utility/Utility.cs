@@ -48,4 +48,18 @@ public static class Utility
     {
         return list.IndexOf(element);
     }
+
+    public static bool DownCastingItem<T> (Item item, out T childItem) where T : Item
+    {
+        if(item is T)
+        {
+            childItem = (T)item;
+            return true;
+        }
+        else
+        {
+            childItem = default;
+            return false;
+        }
+    }
 }

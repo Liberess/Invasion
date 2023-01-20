@@ -8,23 +8,21 @@ using UnityEngine.Events;
 
 public class UIManager : MonoBehaviour
 {
-    private enum HeroSortType
-    {
-        Menu = -1,
-        Level,
-        Grade,
-        DPS
-    }
-    //오름차                내림차
-    private enum SortingType { Ascending = 0, Descending }
-    private enum StatusType { HP = 0, Critical, AP, Dodge, DP, Cost }
+    private enum HeroSortType { Menu = -1, Level, Grade, DPS }
+    private enum SortingType { Ascending, Descending }
+    private enum StatusType { HP, Critical, AP, Dodge, DP, Cost }
 
     public static UIManager Instance { get; private set; }
 
     private DataManager dataMgr;
     private UnityMainThreadDispatcher dispatcher;
 
-    [Header("==== Hero UI ====")]
+    [Header("==== Game UI ====")]
+    [SerializeField] private GameObject optionPanel;
+    [SerializeField] private GameObject offNotice;
+    public bool IsPanel { get; private set; }
+
+    [Header("==== Hero UI ===="), Space(10)]
     [SerializeField] private GameObject heroPartyGrid;
     [SerializeField] private GameObject heroSlotGrid;
     [SerializeField] private GameObject heroMenuPanel;
@@ -46,7 +44,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject heroSlotPrefab;
     private int heroSlotIndex = 0;
     [SerializeField] private int heroSlotMaxCount = 20;
-    private List<HeroSlot> heroSlotList = new List<HeroSlot>();
+    [SerializeField] private List<HeroSlot> heroSlotList = new List<HeroSlot>();
     private List<HeroSlot> partySlotList = new List<HeroSlot>();
     private List<HeroSlot> tempHeroSlotList = new List<HeroSlot>();
 
@@ -58,6 +56,8 @@ public class UIManager : MonoBehaviour
 
     public UnityAction HidePanelAction;
     public UnityAction HideHeroInfoPanelAction;
+    //public Action<int> UpdateCurrencyUIAction;
+    public List<Action<int>> UpdateCurrencyUIActionList = new List<Action<int>>();
 
     private void Awake()
     {
@@ -65,6 +65,10 @@ public class UIManager : MonoBehaviour
             Instance = this;
         else if (Instance != this)
             Destroy(gameObject);
+
+        UpdateCurrencyUIActionList.Clear();
+        for (int i = 0; i < Enum.GetValues(typeof(ECurrencyType)).Length; i++)
+            UpdateCurrencyUIActionList.Add(null);
     }
 
     private void Start()
@@ -84,8 +88,60 @@ public class UIManager : MonoBehaviour
         InitHeroSlotObjectPool();
         InitSortButton();
 
-        StartCoroutine(InitHeroPanelCoru());
+        //StartCoroutine(InitHeroPanelCoru());
+        //StartCoroutine(UpdateGoodsUICo(0.1f));
+
+        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => StartCoroutine(InitHeroPanelCoru());
+        //PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => StartCoroutine(UpdateCurrencyUICo());
     }
+
+    private IEnumerator UpdateCurrencyUICo()
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        Debug.Log("UpdateCurrencyUICo : " + Time.time);
+
+        foreach (ECurrencyType type in Enum.GetValues(typeof(ECurrencyType)))
+            InvokeCurrencyUI(type, dataMgr.GetCurrency(type));
+    }
+
+    public void InvokeCurrencyUI(ECurrencyType type, int amount)
+    {
+        UpdateCurrencyUIActionList[(int)type]?.Invoke(amount);
+    }
+
+    public void SetActivePauseUI()
+    {
+        if (!optionPanel.activeSelf)
+        {
+            optionPanel.SetActive(true);
+            SoundManager.Instance.PlaySFX("Pause In");
+
+            if (IsPanel)
+                HidePanelAction();
+        }
+        else
+        {
+            optionPanel.SetActive(false);
+            SoundManager.Instance.PlaySFX("Pause Out");
+        }
+    }
+
+    #region Offline Reward
+    public void SetActiveOfflineRewardNotice(bool active)
+    {
+        if(active)
+            offNotice.gameObject.GetComponent<Animator>().SetTrigger("doShow");
+        else
+            offNotice.gameObject.GetComponent<Animator>().SetTrigger("doHide");
+    }
+
+    public void SetOfflineRewardUI(string infoTxt, string numTxt)
+    {
+        offNotice.transform.Find("OffTxt").gameObject.GetComponent<Text>().text = infoTxt;
+        offNotice.transform.Find("JelatinNumTxt").gameObject.GetComponent<Text>().text = numTxt;
+    }
+    #endregion
 
     #region Hero Panel
     private void InitSortButton()
@@ -106,9 +162,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void InitHeroPanel()
+    {
+        StartCoroutine(InitHeroPanelCoru());
+    }
+
     private IEnumerator InitHeroPanelCoru()
     {
-        yield return StartCoroutine(DataManager.Instance.UpdateResources());
+        yield return DataManager.Instance.StartCoroutine(DataManager.Instance.UpdateResources());
 
         InitPartySlot();
         InitHeroSlot();
@@ -116,50 +177,100 @@ public class UIManager : MonoBehaviour
 
     private void InitPartySlot()
     {
-        partySlotList.Clear();
-
-        for (int i = 0; i < dataMgr.HeroData.partyList.Count; i++)
+        for (int i = 0; i < dataMgr.HumalData.partyList.Count; i++)
         {
             HeroSlot heroSlot = GetObj();
             heroSlot.transform.SetParent(heroPartyGrid.transform);
             heroSlot.transform.localScale = new Vector3(1f, 1f, 1f);
-            heroSlot.UnitSetup(dataMgr.HeroData.partyList[i]);
+            heroSlot.HumalDataSetup(dataMgr.HumalData.partyList[i]);
             partySlotList.Add(heroSlot);
         }
     }
 
     private void InitHeroSlot()
     {
-        heroSlotList.Clear();
+        List<int> PartyIDList = new List<int>();
+        foreach (var hero in dataMgr.HumalData.partyList)
+            PartyIDList.Add(hero.ID);
 
-        List<int> IDList = new List<int>();
-
-        foreach (var hero in dataMgr.HeroData.partyList)
-            IDList.Add(hero.ID);
-
-        for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
+        for (int i = 0; i < dataMgr.HumalData.humalList.Count; i++)
         {
-            if (IDList.Contains(dataMgr.HeroData.heroList[i].ID))
+            int id = dataMgr.HumalData.humalList[i].ID;
+            if (PartyIDList.Contains(id))
+                continue;
+            else if (IsContainsHeroSlotList(id))
                 continue;
 
             HeroSlot heroSlot = GetObj();
-            heroSlot.UnitSetup(dataMgr.HeroData.heroList[i]);
-
+            heroSlot.HumalDataSetup(dataMgr.HumalData.humalList[i]);
             heroSlotList.Add(heroSlot);
+                Debug.Log(4);
         }
+    }
+
+    public void UpdateHeroPanel()
+    {
+        Debug.Log("UpdateHeroPanel");
+        for (int i = 0; i < dataMgr.HumalData.partyList.Count; i++)
+        {
+            int id = dataMgr.HumalData.partyList[i].ID;
+            if (partySlotList.Find(x => x.HumalData.ID == id) != null)
+                continue;
+
+            HeroSlot heroSlot = GetObj();
+            heroSlot.transform.SetParent(heroPartyGrid.transform);
+            heroSlot.transform.localScale = new Vector3(1f, 1f, 1f);
+            heroSlot.HumalDataSetup(dataMgr.HumalData.partyList[i]);
+            partySlotList.Add(heroSlot);
+        }
+
+        List<int> PartyIDList = new List<int>();
+        foreach (var hero in partySlotList)
+            PartyIDList.Add(hero.HumalData.ID);
+
+        Debug.Log("count2 : " + dataMgr.HumalData.humalList.Count);
+        for (int i = 0; i < dataMgr.HumalData.humalList.Count; i++)
+        {
+            int id = dataMgr.HumalData.humalList[i].ID;
+            Debug.Log("id2 : " + id);
+            if (PartyIDList.Contains(id))
+                continue;
+            else if (IsContainsHeroSlotList(id))
+            {
+
+            Debug.Log(33);
+                continue;
+            }
+
+            HeroSlot heroSlot = GetObj();
+            heroSlot.HumalDataSetup(dataMgr.HumalData.humalList[i]);
+            heroSlotList.Add(heroSlot);
+            Debug.Log(44);
+        }
+    }
+
+    private bool IsContainsHeroSlotList(int id)
+    {
+        foreach(var heroSlot in heroSlotList)
+        {
+            if(heroSlot.HumalData.ID == id) 
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>
     /// 영웅 슬롯에서 파티 슬롯으로 스왑했을 때 사용한다.
     /// </summary>
-    /// <param name="id"> Hero의 ID </param>
+    /// <param name="id"> Hero의 Data.ID </param>
     public void SwapSlotToParty(int id)
     {
         int index = 0;
 
         for (index = 0; index < heroSlotList.Count; index++)
         {
-            if (heroSlotList[index].MyStatus.ID == id)
+            if (heroSlotList[index].HumalData.ID == id)
                 break;
         }
 
@@ -177,7 +288,7 @@ public class UIManager : MonoBehaviour
 
         for (index = 0; index < partySlotList.Count; index++)
         {
-            if (partySlotList[index].MyStatus.ID == id)
+            if (partySlotList[index].HumalData.ID == id)
                 break;
         }
 
@@ -198,9 +309,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.Level:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.level).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.HumalData.Level).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.level).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.HumalData.Level).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -211,9 +322,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.Grade:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.level).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.HumalData.Level).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.level).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.HumalData.Level).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -224,9 +335,9 @@ public class UIManager : MonoBehaviour
 
             case HeroSortType.DPS:
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.MyStatus.DPS).ToList();
+                    heroSlotList = heroSlotList.OrderBy(x => x.HumalData.DPS).ToList();
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.MyStatus.DPS).ToList();
+                    heroSlotList = heroSlotList.OrderByDescending(x => x.HumalData.DPS).ToList();
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -304,7 +415,7 @@ public class UIManager : MonoBehaviour
 
                     btn.onClick.AddListener(() => stageReadyPanel.gameObject.SetActive(true));
                     btn.onClick.AddListener(() => stageReadyPanel.SetupStageInfo(
-                        new StageInfo("테헤12란로", text, StageLevel.Easy, 0, 1)));
+                        new StageInfo("테헤12란로", text, EStageLevel.Easy, 0, 1)));
                     detailStageBtnDic[i].Add(btn);
                 }
             }
@@ -388,7 +499,7 @@ public class UIManager : MonoBehaviour
     #region Hero Detail Info Panel
     public void SetHeroIndex(int value)
     {
-        if (value < 0 || value >= dataMgr.HeroData.heroList.Count)
+        if (value < 0 || value >= dataMgr.HumalData.humalList.Count)
             return;
 
         currentHeroIndex = value;
@@ -398,17 +509,22 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// HeroDetailInfoPanel의 내용을 Update한다.
     /// </summary>
-    /// <param name="heroID"> 세부 정보 패널에 표시할 영웅의 번호 </param>
-    public void UpdateHeroDetailInfo(int heroID)
+    /// <param name="ID"> 세부 정보 패널에 표시할 영웅의 번호 </param>
+    public void UpdateHeroDetailInfo(int ID)
     {
         if (heroDetailInfoPanel == null)
             return;
 
-        currentHeroIndex = dataMgr.GetIndexOfHeroInList(dataMgr.GetDataByHeroID(heroID));
+        currentHeroIndex = dataMgr.GetIndexOfHeroInList(dataMgr.GetHumalDataByIndex(ID));
         UpdateHeroOrderBtn();
 
-        dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-            dataMgr.GetDataByHeroID(heroID)));
+        dispatcher.Enqueue(() =>
+        {
+            Debug.Log("UpdateHeroDetailInfo :: id = " + ID);
+            Debug.Log("UpdateHeroDetailInfo :: data name = " + dataMgr.GetHumalDataByIndex(ID).KoName);
+            heroDetailInfoPanel.UpdateHeroInfo(
+                dataMgr.GetHumalDataByIndex(ID));
+        });
     }
 
     private void UpdateHeroOrderBtn()

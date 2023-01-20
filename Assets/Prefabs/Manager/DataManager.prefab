@@ -76,20 +76,37 @@ MonoBehaviour:
     - 0
     - 0
     - 0
-    dia: 0
-    gold: 0
+    goodsList: []
+    goodsSpriteList: []
+    goodsNames:
+    - Stamina
+    - Gold
+    - Dia
     soulGem: 0
-    drink: 0
     bgm: 0
     sfx: 0
     isNew: 0
     isClear: 0
   mHeroData:
     heroUnlockList: 000000000000000000000000
-    heroGoldList: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-    heroSoulGemList: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-    heroList: []
-    heroCostList: 010000000200000003000000040000000500000006000000070000000800000009000000080000000700000006000000
+    heroList:
+    - ID: 0
+      name: 
+      level: 0
+      cost: 0
+      hp: 0
+      ap: 0
+      dp: 0
+      moveSpeed: 0
+      critical: 0
+      dodge: 0
+      distance: 0
+      attackDelay: 0
+      isLeader: 0
+      mySprite: {fileID: 0}
+      animCtrl: {fileID: 0}
+    partyList: []
+    originHeroDataList: []
     heroSpriteList:
     - {fileID: 4723107735738678597, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
     - {fileID: -7385789195546760866, guid: 1618eae39a61bd345ab4d414bdeec9ea, type: 3}
@@ -130,12 +147,10 @@ MonoBehaviour:
     heroCardSpriteList:
     - {fileID: 21300000, guid: 7ff859aa4cc12a542957b994714105c4, type: 3}
     heroAnimCtrlList:
-    - {fileID: 9100000, guid: 44315a883bd971443b35e10ee37bea29, type: 2}
+    - {fileID: 0}
     - {fileID: 9100000, guid: 55fcc50f522793a479736bf982f35ecb, type: 2}
     - {fileID: 9100000, guid: ca65ed5850760434e828b0a22e4cfd7a, type: 2}
     - {fileID: 9100000, guid: dc76f3dbb80571045a39cd0ec0ebbb00, type: 2}
-    heroIndex: 0
-    partyList: []
   mEnemyDataList:
   - {fileID: 11400000, guid: 7a7a6438a325ca54793c345090a15658, type: 2}
   - {fileID: 11400000, guid: 0edebe60e3e26604dae6d4594d8eba1f, type: 2}

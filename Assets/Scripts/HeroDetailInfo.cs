@@ -16,4 +16,6 @@ public class HeroDetailInfo
     public Text dodgeTxt;
     public Text dpTxt;
     public Text costTxt;
+
+    public Text pieceTxt;
 }

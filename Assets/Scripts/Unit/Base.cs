@@ -1,26 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Base : Unit
+public class Base : LivingEntity
 {
+    private BattleManager battleMgr;
+
     private BattleAI battleAI;
+    private Text hpTxt;
+
     private enum BaseType { Red, Blue }
 
     [SerializeField] private BaseType baseType;
+
     private bool isRush = false;
 
     private Vector3 rayPos;
 
+    protected Animator anim;
+    protected SpriteRenderer sprite;
+
     private void Awake()
     {
-        isDust = true;
-        isMove = true;
-        isRush = false;
-
         anim = GetComponent<Animator>();
-        rigid = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
+        hpTxt = GetComponentInChildren<Text>();
     }
 
     private void Start()
@@ -30,6 +35,13 @@ public class Base : Unit
 
         rayPos = new Vector3(transform.position.x,
             transform.position.y + sprite.size.y / 3f, 0f);
+
+        //hp = mData.Data.HP;
+
+        hpTxt.text = HP + "/" + originHealth;
+
+        OnDeathAction += () => battleMgr.GameOverAction();
+        OnDeathAction += () => gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -38,7 +50,7 @@ public class Base : Unit
             return;
 
         RaycastHit2D rayHit = Physics2D.Raycast(rayPos, Vector2.left, 1.5f, LayerMask.GetMask("Hero"));
-        if (rayHit.collider != null && rayHit.collider.GetComponent<Hero>() != null)
+        if (rayHit.collider != null && rayHit.collider.GetComponent<Humal>() != null)
         {
             if (!isRush)
             {
@@ -58,13 +70,12 @@ public class Base : Unit
         }*/
     }
 
-    protected override void CustomUnitSetup(UnitStatus status)
+    public override bool ApplyDamage(DamageMessage dmgMsg)
     {
-        mMyStat = status;
-    }
+        bool result = base.ApplyDamage(dmgMsg);
+        if (result)
+            hpTxt.text = HP + "/" + originHealth;
 
-    protected override void Die()
-    {
-        gameObject.SetActive(false);
+        return result;
     }
 }

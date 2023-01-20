@@ -1,0 +1,185 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f839c693d85f0704aa89be94696845a9, type: 3}
+  m_Name: UnitOriginDB
+  m_EditorClassIdentifier: 
+  HumalDBList:
+  - id: 0
+    koName: "\uB098\uB098"
+    enName: Nana
+    level: 1
+    cost: 2
+    hp: 300
+    ap: 100
+    dp: 5
+    moveSpeed: 1
+    critical: 15
+    dodge: 10
+    distance: 1
+    attackDelay: 1
+  - id: 1
+    koName: "\uC0D8\uB2ED\uC774"
+    enName: Ssamdak
+    level: 1
+    cost: 2
+    hp: 210
+    ap: 110
+    dp: 5
+    moveSpeed: 1
+    critical: 20
+    dodge: 10
+    distance: 1
+    attackDelay: 1
+  - id: 2
+    koName: "\uBF1D\uC54C\uC774"
+    enName: BbeongAI
+    level: 1
+    cost: 1
+    hp: 125
+    ap: 65
+    dp: 2
+    moveSpeed: 1
+    critical: 10
+    dodge: 8
+    distance: 1
+    attackDelay: 1
+  - id: 3
+    koName: "\uD478\uB529"
+    enName: Pudding
+    level: 1
+    cost: 2
+    hp: 300
+    ap: 95
+    dp: 5
+    moveSpeed: 1
+    critical: 15
+    dodge: 10
+    distance: 1
+    attackDelay: 1
+  - id: 4
+    koName: "\uD384"
+    enName: Pearl
+    level: 1
+    cost: 2
+    hp: 250
+    ap: 120
+    dp: 4
+    moveSpeed: 1
+    critical: 17
+    dodge: 9
+    distance: 1
+    attackDelay: 1
+  - id: 5
+    koName: "\uC815\uAE00"
+    enName: Jungle
+    level: 1
+    cost: 3
+    hp: 500
+    ap: 50
+    dp: 8
+    moveSpeed: 1
+    critical: 10
+    dodge: 15
+    distance: 1
+    attackDelay: 1
+  - id: 6
+    koName: "\uB610\uCE58"
+    enName: Ddochi
+    level: 1
+    cost: 3
+    hp: 300
+    ap: 130
+    dp: 12
+    moveSpeed: 1
+    critical: 20
+    dodge: 13
+    distance: 1
+    attackDelay: 1
+  - id: 7
+    koName: "\uC601\uBBF8"
+    enName: YoungMi
+    level: 1
+    cost: 3
+    hp: 220
+    ap: 80
+    dp: 15
+    moveSpeed: 1
+    critical: 25
+    dodge: 15
+    distance: 1
+    attackDelay: 1
+  - id: 8
+    koName: "\uC7AD"
+    enName: Jack
+    level: 1
+    cost: 4
+    hp: 200
+    ap: 75
+    dp: 10
+    moveSpeed: 1
+    critical: 15
+    dodge: 3
+    distance: 1
+    attackDelay: 1
+  - id: 9
+    koName: "\uD638\uC138"
+    enName: Hose
+    level: 1
+    cost: 5
+    hp: 750
+    ap: 120
+    dp: 26
+    moveSpeed: 1
+    critical: 20
+    dodge: 25
+    distance: 1
+    attackDelay: 1
+  - id: 10
+    koName: "\uBCA8\uB77C"
+    enName: Bella
+    level: 1
+    cost: 5
+    hp: 400
+    ap: 200
+    dp: 20
+    moveSpeed: 1
+    critical: 30
+    dodge: 20
+    distance: 1
+    attackDelay: 1
+  EnemyDBList:
+  - id: 0
+    koName: "\uB0A8\uC790"
+    enName: Man
+    level: 1
+    cost: 2
+    hp: 250
+    ap: 10
+    dp: 0
+    moveSpeed: 1
+    critical: 10
+    dodge: 0
+    distance: 1
+    attackDelay: 1
+  - id: 1
+    koName: "\uC5EC\uC790"
+    enName: Woman
+    level: 1
+    cost: 2
+    hp: 250
+    ap: 10
+    dp: 0
+    moveSpeed: 1
+    critical: 10
+    dodge: 0
+    distance: 1
+    attackDelay: 1

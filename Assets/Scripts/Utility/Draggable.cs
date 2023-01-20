@@ -6,18 +6,17 @@ using UnityEngine.EventSystems;
 public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler,
     IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
 {
-    private Transform root;
-
-    [SerializeField] private bool canDrag = false;
+    [SerializeField, Range(0.5f, 3.0f)] private float maxPressTime = 1.5f;
+    private float pressTime = 0f;
+    private bool isPressed = false;
+    private bool canDrag = false;
     public bool CanDrag { get => canDrag; }
-    [SerializeField] private bool isPressed = false;
-    [SerializeField] private float pressTime = 0f;
-    private float maxPressTime = 1.5f;
+
+    private Transform root;
 
     private void Start()
     {
         root = transform.root;
-        maxPressTime = 1.5f;
     }
 
     private void Update()

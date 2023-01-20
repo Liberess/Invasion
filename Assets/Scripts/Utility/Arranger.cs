@@ -3,14 +3,7 @@ using UnityEngine;
 
 public class Arranger : MonoBehaviour
 {
-    private enum ArrangerType
-    {
-        Party = 0,
-        Hero,
-        Item
-    }
-
-    [SerializeField] private ArrangerType myType;
+    [SerializeField] private EArrangerType myType;
     [SerializeField] private List<Transform> slotList = new List<Transform>();
 
     private void Start()
@@ -34,7 +27,7 @@ public class Arranger : MonoBehaviour
 
         slotList.RemoveRange(transform.childCount, slotList.Count - transform.childCount);
 
-        if (myType == ArrangerType.Party)
+        if (myType == EArrangerType.Party)
         {
             for (int i = 0; i < slotList.Count; i++)
             {
@@ -44,27 +37,27 @@ public class Arranger : MonoBehaviour
                     continue;
                 
                 // 슬롯에서 파티로 추가했을 경우
-                if(!DataManager.Instance.IsContainsInParty(heroSlot.MyStatus.ID))
+                if(!DataManager.Instance.IsContainsInParty(heroSlot.HumalData.ID))
                 {
-                    UIManager.Instance.SwapSlotToParty(heroSlot.MyStatus.ID);
+                    UIManager.Instance.SwapSlotToParty(heroSlot.HumalData.ID);
 
                     if (i == 0)
-                        DataManager.Instance.HeroData.partyList.Insert(0, heroSlot.MyStatus);
+                        DataManager.Instance.HumalData.partyList.Insert(0, heroSlot.HumalData);
                     else
-                        DataManager.Instance.HeroData.partyList.Add(heroSlot.MyStatus);
+                        DataManager.Instance.HumalData.partyList.Add(heroSlot.HumalData);
                 }
 
                 if(i == 0)
-                    heroSlot.MyStatus.isLeader = true;
+                    heroSlot.HumalData.SetLeader(true);
                 else
-                    heroSlot.MyStatus.isLeader = false;
+                    heroSlot.HumalData.SetLeader(false);
 
                 heroSlot.UpdateSlotImage();
             }
 
             DataManager.Instance.UpdatePartyLeader();
         }
-        else if(myType == ArrangerType.Hero)
+        else if(myType == EArrangerType.Hero)
         {
             for (int i = 0; i < slotList.Count; i++)
             {
@@ -74,13 +67,13 @@ public class Arranger : MonoBehaviour
                     continue;
 
                 // 만약 파티에 같은 정보의 영웅 슬롯이 존재한다면
-                if (DataManager.Instance.IsContainsInParty(heroSlot.MyStatus.ID))
+                if (DataManager.Instance.IsContainsInParty(heroSlot.HumalData.ID))
                 {
-                    heroSlot.MyStatus.isLeader = false;
-                    int partyIndex = DataManager.Instance.GetIndexOfHeroInParty(heroSlot.MyStatus);
+                    heroSlot.HumalData.SetLeader(false);
+                    int partyIndex = DataManager.Instance.GetIndexOfHeroInParty(heroSlot.HumalData);
 
-                    UIManager.Instance.SwapPartyToSlot(heroSlot.MyStatus.ID);
-                    DataManager.Instance.HeroData.partyList.RemoveAt(partyIndex);
+                    UIManager.Instance.SwapPartyToSlot(heroSlot.HumalData.ID);
+                    DataManager.Instance.HumalData.partyList.RemoveAt(partyIndex);
                 }
 
                 heroSlot.UpdateSlotImage();

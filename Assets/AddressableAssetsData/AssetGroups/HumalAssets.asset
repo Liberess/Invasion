@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: HumalAssets
+  m_EditorClassIdentifier: 
+  m_GroupName: HumalAssets
+  m_Data:
+    m_SerializedData: []
+  m_GUID: b91c9267352052c48b62772783d3dc77
+  m_SerializeEntries:
+  - m_GUID: cfd3ca33311f6d04c88aee436f89a0ae
+    m_Address: LobbyHumal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Humal
+  - m_GUID: 608ca1624c4bbba46a630bef5eaf7985
+    m_Address: Humal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Humal
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 14a12ce42ca59a341979f49e59c63df8, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: eaf178e0d334e3042bc3f5c333d4b0b7, type: 2}
+    - {fileID: 11400000, guid: 3611b32203fe96a49b7bddd55377a866, type: 2}

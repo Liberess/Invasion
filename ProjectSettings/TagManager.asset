@@ -6,8 +6,9 @@ TagManager:
   tags:
   - BorderLine
   - Enemy
-  - Hero
   - Monster
+  - SellBtn
+  - Humal
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - 
   - 
   - BorderLine
-  - Hero
+  - Humal
   - Enemy
   - 
   - 

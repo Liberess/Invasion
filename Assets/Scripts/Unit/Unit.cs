@@ -2,34 +2,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-public enum UnitJob
-{
-    ShortRange = 0,
-    LongRange,
-    Bullet
-}
-
-public abstract class Unit : MonoBehaviour
+public abstract class Unit : LivingEntity
 {
     protected BattleManager battleMgr;
 
-    public event Action DeathAction;
+    [Space(5), Header("==== Unit Data ====")]
+    [SerializeField] protected UnitData unitData;
+    public UnitData UnitData => unitData;
 
-    //public UnitStatus myStat { get; protected set; }
-    [SerializeField] protected UnitStatus mMyStat;
-    public UnitStatus myStat { get => mMyStat; }
+    [Space(5), Header("==== Current Status ====")]
+    [SerializeField] private EUnitJob mJob;
+    public EUnitJob Job { get => mJob; }
+    protected EUnitQueueType myObjType;
 
+    [SerializeField] protected int ap;
+    public int Ap { get => ap; }
+
+    [SerializeField] protected float moveSpeed;
+    public float MoveSpeed { get => moveSpeed; }
+
+    [Space(5), Header("==== Particle ====")]
     [SerializeField] private GameObject dust;
     [SerializeField] private GameObject shadow;
 
-    [SerializeField] private GameObject target;
-
-    [SerializeField] private UnitJob mJob;
-    public UnitJob job { get => mJob; }
-
-    protected QueueType myObjType;
+    private GameObject target;
 
     protected int direction;
 
@@ -42,40 +39,78 @@ public abstract class Unit : MonoBehaviour
 
     protected float attackTime = 0;
 
-    private bool IsAlive => myStat.hp > 0;
+    private bool IsAlive => HP > 0;
 
     protected Animator anim;
     protected Rigidbody2D rigid;
-    protected SpriteRenderer sprite;
+    protected SpriteRenderer spriteRen;
 
-    protected abstract void CustomUnitSetup(UnitStatus status);
-
-    public void UnitSetup(UnitStatus status)
+    protected override void OnEnable()
     {
-        sprite.color = Color.white;
-        CustomUnitSetup(status);
-        //ChangeAc();
+        base.OnEnable();
+
+        isDust = true;
+        isMove = true;
     }
+
+    private void OnDisable()
+    {
+        isDust = false;
+        isMove = false;
+    }
+
+    public virtual void UnitSetup(UnitData _unitData)
+    {
+        //ChangeAc();
+        unitData = _unitData;
+
+        originHealth = _unitData.HP;
+        hp = _unitData.HP;
+        ap = _unitData.Ap;
+
+        moveSpeed = _unitData.MoveSpeed;
+        distance = _unitData.Distance;
+
+        spriteRen.color = Color.white;
+    }
+
+/*    public virtual void UnitSetup(UnitData unitData)
+    {
+        mData = unitData;
+        //ChangeAc();
+
+        originHealth = unitData.Data.HP;
+        HP = unitData.Data.HP;
+        ap = unitData.Data.Ap;
+
+        moveSpeed = unitData.Data.MoveSpeed;
+        distance = unitData.Data.Distance;
+
+        if (unitData.sprite == null)
+            PopUpManager.Instance.PopUp("sprite is empty!", EPopUpType.Caution);
+        else if(unitData.animCtrl == null)
+            PopUpManager.Instance.PopUp("animCtrl is empty!", EPopUpType.Caution);
+
+        mData.sprite = unitData.sprite;
+        spriteRen.sprite = mData.sprite;
+        spriteRen.color = Color.white;
+
+        mData.animCtrl = unitData.animCtrl;
+        anim.runtimeAnimatorController = mData.animCtrl;
+    }*/
 
     public virtual void ChangeAc()
     {
         anim.runtimeAnimatorController =
-            DataManager.Instance.HeroData.heroAnimCtrlList[myStat.ID];
+            DataManager.Instance.HumalData.humalAnimCtrlList[unitData.ID];
     }
 
     protected void TeamValueSet()
     {
         direction = (this.gameObject.layer == 9) ? 1 : -1; //Team Value
 
-        allyValue = (direction == 1) ? "Hero" : "Enemy"; //Layer Mask - Check Ally
-        targetValue = (direction == 1) ? "Enemy" : "Hero"; //Layer Mask - Check Enemy
-
-        switch (mJob) //Set Distance
-        {
-            case UnitJob.ShortRange: distance = 0.7f; myStat.ap = 2; myStat.hp = 10; break;
-            case UnitJob.LongRange: distance = 2.5f; myStat.ap = 1; myStat.hp = 5; break;
-            case UnitJob.Bullet: distance = 0.4f; break;
-        }
+        allyValue = (direction == 1) ? "Humal" : "Enemy"; //Layer Mask - Check Ally
+        targetValue = (direction == 1) ? "Enemy" : "Humal"; //Layer Mask - Check Enemy
     }
 
     protected virtual void Move()
@@ -121,14 +156,22 @@ public abstract class Unit : MonoBehaviour
             attackTime = 0;
             anim.SetTrigger("doAttack");
 
-            switch (job)
+            switch (Job)
             {
-                case UnitJob.ShortRange: target.GetComponent<Unit>().Hit(myStat.ap); break;
-                case UnitJob.LongRange: Shot(); break;
-                //case UnitJob.Wizard: Spell(target.transform.position); break;
+                case EUnitJob.ShortRange:
+                    if(target.TryGetComponent(out LivingEntity livingEntity))
+                    {
+                        DamageMessage dmgMsg = new DamageMessage(
+                            this.gameObject, ap, transform.position);
+                        livingEntity.ApplyDamage(dmgMsg);
+                    }
+                    break;
+                
+                case EUnitJob.LongRange:
+                    Shot();
+                    break;
+                    //case EUnitJob.Wizard: Spell(target.transform.position); break;
             }
-
-            target.GetComponent<Unit>().Hit(myStat.ap);
         }
         else
         {
@@ -188,29 +231,17 @@ public abstract class Unit : MonoBehaviour
         }
     }
 
-    public virtual void Hit(int _atk)
-    {
-        if(IsAlive)
-        {
-            myStat.hp -= _atk;
-            //anim.SetTrigger("doHit");
-        }
-        else
-        {
-            Die();
-        }
-    }
-
-    protected virtual void Die()
+    public override void Die()
     {
         anim.SetTrigger("doDie");
         StartCoroutine(DeathAnim());
     }
 
+
     private IEnumerator DeathAnim()
     {
-        sprite.color = Color.gray;
-        Color alpha = sprite.color;
+        spriteRen.color = Color.gray;
+        Color alpha = spriteRen.color;
 
         float time = 0f;
 
@@ -218,12 +249,12 @@ public abstract class Unit : MonoBehaviour
         {
             time += Time.deltaTime / 1f;
             alpha.a = Mathf.Lerp(1, 0, time);
-            sprite.color = alpha;
+            spriteRen.color = alpha;
             yield return null;
         }
 
-        if (DeathAction != null)
-            DeathAction();
+        Dead = true;
+        OnDeathAction?.Invoke();
 
         yield return null;
     }

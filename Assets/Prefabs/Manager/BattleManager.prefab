@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7792586601105605532}
   - component: {fileID: 7792586601105605533}
+  - component: {fileID: 7792586601101855676}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -57,9 +58,22 @@ MonoBehaviour:
   getCostDelay: 2.5
   maxCost: 10
   maxLeaderGauge: 10
-  enemySpawnDelay: 3
-  isPlay: 0
   defaultHeroCount: 20
   defaultEnemyCount: 20
   redBase: {fileID: 0}
   blueBase: {fileID: 0}
+--- !u!114 &7792586601101855676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7792586601105605535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b03295d3d50a11c4e82de2f17c687944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnTime: 0
+  spawnDelayTime: 1
+  spawnSpeed: 1

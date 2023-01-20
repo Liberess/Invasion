@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: HumalAnimAssets
+  m_EditorClassIdentifier: 
+  m_GroupName: HumalAnimAssets
+  m_Data:
+    m_SerializedData: []
+  m_GUID: d51dbe27ce5e5354db5be4dc434b3586
+  m_SerializeEntries:
+  - m_GUID: e0398b250c1496746aa53151c5051128
+    m_Address: 00_Nana_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: cf9dee25a0d99924a83ef43bd92dd857
+    m_Address: 00_Nana_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: e5b411ee33302f74182d615bd6b69ea0
+    m_Address: 00_Nana_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 0cc563f7431e1734ea7069ca4e520ad8
+    m_Address: 00_Nana_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 933dee70b14c7ab439771c969ea95579
+    m_Address: 00_Nana_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 14a12ce42ca59a341979f49e59c63df8, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b91d4150fe7dca545ba038d206682ad9, type: 2}
+    - {fileID: 11400000, guid: 9416726d2799d9f49bee9c0169e475db, type: 2}

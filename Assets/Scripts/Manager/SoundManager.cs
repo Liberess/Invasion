@@ -60,8 +60,8 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
-        bgmSlider.value = DataManager.Instance.gameData.bgm;
-        sfxSlider.value = DataManager.Instance.gameData.sfx;
+        bgmSlider.value = DataManager.Instance.GameData.bgm;
+        sfxSlider.value = DataManager.Instance.GameData.sfx;
 
         masterMixer.SetFloat("BGM", bgmSlider.value);
     }
@@ -75,7 +75,7 @@ public class SoundManager : MonoBehaviour
     public void BGMSave()
     {
         bgmPlayer.volume = bgmSlider.value;
-        DataManager.Instance.gameData.bgm = bgmSlider.value;
+        DataManager.Instance.GameData.bgm = bgmSlider.value;
     }
 
     public void SFXSave()
@@ -85,7 +85,7 @@ public class SoundManager : MonoBehaviour
             sfxPlayer[i].volume = sfxSlider.value;
         }
         
-        DataManager.Instance.gameData.sfx = sfxSlider.value;
+        DataManager.Instance.GameData.sfx = sfxSlider.value;
     }
 
     public void PlayBGM(string p_bgmName)

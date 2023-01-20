@@ -59,8 +59,8 @@ public class OldHero : MonoBehaviour
 
     private void LateUpdate()
     {
-        dataManager.HeroData.heroDic[name].ID = mID;
-        dataManager.HeroData.heroDic[name].level = mLevel;
+        //dataManager.HumalData.humalDic[name].ID = mID;
+        //dataManager.HumalData.humalDic[name].level = mLevel;
     }
 
     private void FixedUpdate()
@@ -112,7 +112,7 @@ public class OldHero : MonoBehaviour
     #region 재화 습득(Karma, Gold)
     IEnumerator SetSoulGem()
     {
-        DataManager.Instance.gameData.soulGem += mID + 1 * mLevel;
+        //DataManager.Instance.GameData.soulGem += mID + 1 * mLevel;
 
         yield return new WaitForSeconds(3f);
 

@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: HumalSpriteAssets
+  m_EditorClassIdentifier: 
+  m_GroupName: HumalSpriteAssets
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 055d1b05dc204c14faa9801a3cf2b1f6
+  m_SerializeEntries:
+  - m_GUID: 6d3198acd80964c4dae2356876411e61
+    m_Address: Assets/Images/HumalCardIcon/10_Bella.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalIcon
+  - m_GUID: e310bf7fda2305a44b77822c4150db97
+    m_Address: Assets/Images/HumalCardIcon/03_Pudding.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalIcon
+  - m_GUID: c7d6d3f22b81b2443bb32bfe10dbfc4a
+    m_Address: Assets/Images/HumalCardIcon/02_BbeongAl.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalIcon
+  - m_GUID: 7b22e9ba6f667ba43a44066cfce32a2f
+    m_Address: Assets/Images/HumalCardIcon/05_Jungle.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalIcon
+  - m_GUID: 63e8c6d7beef8114a9884d21ee4213b5
+    m_Address: Assets/Images/HumalCardIcon/06_Ddochi.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalIcon
+  - m_GUID: 9c197086a17b98a41940fc9945f38b82
+    m_Address: Assets/Images/HumalCardIcon/04_Pearl.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalIcon
+  - m_GUID: eb9a8268f30f2a4499bf0449a4b393f7
+    m_Address: Assets/Images/HumalCardIcon/01_Ssamdak(White).png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalIcon
+  - m_GUID: 16eab5b208123fb4eb7a3a3624254b16
+    m_Address: Assets/Images/HumalCardIcon/00_Nana.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalIcon
+  - m_GUID: c53b981905ee7964ea18c24118ffb81c
+    m_Address: Assets/Images/Humal/06_Ddochi.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: e92d25e79a59440409e460e4e7989026
+    m_Address: Assets/Images/Humal/09_Hose.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: f4b4c39d60701d44b809a5b22342cefe
+    m_Address: Assets/Images/Humal/04_Pearl.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: c3894a18ee79103448c54cb5e1b93dfd
+    m_Address: Assets/Images/Humal/05_Jungle.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: db33c6e8a3401a8408a2efa06245f68d
+    m_Address: Assets/Images/Humal/07_YoungMi.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: b8bd45494e9a1f74a8137229d8f9b65a
+    m_Address: Assets/Images/Humal/03_Pudding.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 2559df0d58f9e09449f19026e6959ab7
+    m_Address: Assets/Images/Humal/02_BbeongAl.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: eaf11c66665f7c94e9615dd8b8e17cc5
+    m_Address: Assets/Images/Humal/01_Ssamdak.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: deaf409d06017f8498c312187b27d096
+    m_Address: Assets/Images/Humal/08_Jack.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: e7c81f637c55297458d7366c6f3335b4
+    m_Address: Assets/Images/Humal/10_Bella.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 23016e1f77a024b40afdab43f83a4184
+    m_Address: Assets/Images/Humal/00_Nana.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 14a12ce42ca59a341979f49e59c63df8, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 68a8857c6cf13784f8f63435bfb5f149, type: 2}
+    - {fileID: 11400000, guid: 481599ccc24283a41b50f0842f70ce25, type: 2}

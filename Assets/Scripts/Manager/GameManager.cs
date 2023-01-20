@@ -11,28 +11,21 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    private PlayFabManager playFabMgr;
     private DataManager dataMgr;
-
-    public GameObject OptionPanel;
-    public GameObject clearImg;
-    public GameObject offNotice;
-    public Text[] moneyTxt;
-
-    public string[] monsNameList;
 
     private string url = "www.naver.com";
 
     private int stopWatch;
 
-    private int _dia;
-    private int _gold;
-    private int _drink;
+    private int _dia, _gold, _drink;
 
     private int reward;
     private int rewardLimit = 60;
 
-    public bool isPlay; //몬스터 이동 제어 등
-    public bool isPanel; //Panel이 켜져 있는가
+    [HideInInspector] public bool isPlay; //몬스터 이동 제어 등
+
+    private List<Text> moneyTxtList = new List<Text>();
 
     private void Awake()
     {
@@ -48,9 +41,10 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         dataMgr = DataManager.Instance;
+        playFabMgr = PlayFabManager.Instance;
 
-        //_soulGem = (int)DataManager.Instance.gameData.soulGem;
-        //_gold = DataManager.Instance.gameData.gold;
+        //_soulGem = (int)dataMgr.GameData.soulGem;
+        //_gold = dataMgr.GameData.gold;
     }
 
     private void Update()
@@ -58,24 +52,25 @@ public class GameManager : MonoBehaviour
         CancelBtn();
     }
 
-    private void LateUpdate()
-    {
-        ShowMoneyTxt();
-    }
-
     public void OnApplicationStart()
     {
-        GameClear();
+        if (dataMgr == null)
+            return;
 
-        if (DataManager.Instance.gameData.isNew == false)
+        if (dataMgr.GameData.isNew == false)
         {
             StartCoroutine(WebChk());
-            offNotice.gameObject.GetComponent<Animator>().SetTrigger("doShow");
+            UIManager.Instance.SetActiveOfflineRewardNotice(true);
         }
         else
         {
-            DataManager.Instance.gameData.isNew = false;
+            dataMgr.GameData.isNew = false;
         }
+    }
+
+    public void OnClickGetGold()
+    {
+        DataManager.Instance.GetGold();
     }
 
     #region 오프라인 시간
@@ -93,8 +88,8 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                string date = request.GetResponseHeader("date");
-                string offTime = DataManager.Instance.gameData.saveTimeStr;
+                //string date = request.GetResponseHeader("date");
+                string offTime = dataMgr.GameData.lastLogInTimeStr;
                 DateTime exitTime = Convert.ToDateTime(offTime);
 
                 //DateTime dateTime = DateTime.Parse(date).ToUniversalTime();
@@ -115,120 +110,81 @@ public class GameManager : MonoBehaviour
 
     public void ShowOffReward(int _hour, int _minute, int _second)
     {
+        string infoTxt = "";
+
         if(_minute >= 10)
         {
-            for (int i = 0; i < dataMgr.HeroData.heroList.Count; i++)
+            for (int i = 0; i < dataMgr.HumalData.humalList.Count; i++)
             {
-                reward = (((dataMgr.HeroData.heroList[i].ID + 1)
-                    * dataMgr.HeroData.heroList[i].level * stopWatch)) / rewardLimit;
+                reward = (((dataMgr.HumalData.humalList[i].ID + 1)
+                    * dataMgr.HumalData.humalList[i].Level * stopWatch)) / rewardLimit;
             }
 
-            offNotice.transform.Find("OffTxt").gameObject.GetComponent<Text>().text =
-                "자동 파밍 시간 : " + _hour.ToString() + "시간 " + _minute.ToString() + "분 " + _second.ToString() + "초";
+            infoTxt = "자동 파밍 시간 : " + _hour.ToString() + "시간 "
+                + _minute.ToString() + "분 " + _second.ToString() + "초";
         }
         else
         {
-            offNotice.transform.Find("OffTxt").gameObject.GetComponent<Text>().text
-                = "자동 파밍 시간 : 10분도 안 지났다구";
+            infoTxt = "자동 파밍 시간 : 10분도 안 지났다구";
         }
 
-        offNotice.transform.Find("JelatinNumTxt").gameObject.GetComponent<Text>().text = string.Format("{0:n0}", reward);
+        string rewardNumTxt = string.Format("{0:n0}", reward);
+        UIManager.Instance.SetOfflineRewardUI(infoTxt, rewardNumTxt);
     }
 
     public void GetOffReward()
     {
-        dataMgr.gameData.soulGem += reward;
+        //dataMgr.GameData.soulGem += reward;
 
         SoundManager.Instance.PlaySFX("Button");
-        offNotice.gameObject.GetComponent<Animator>().SetTrigger("doHide");
+        UIManager.Instance.SetActiveOfflineRewardNotice(false);
     }
     #endregion
 
     public void OnClickGameStartBtn(StageInfo info)
     {
-        if(dataMgr.HeroData.partyList.Count <= 0)
+        if(dataMgr.HumalData.partyList.Count <= 0)
         {
-            NoticeManager.Instance.Notice(NoticeType.NotParty);
+            PopUpManager.Instance.PopUp("파티 정보가 없습니다!", EPopUpType.Caution);
             return;
         }
 
-        //var _stageName = DataManager.Instance.gameData.stageNameDic[_stageNum];
+        //var _stageName = dataMgr.GameData.stageNameDic[_stageNum];
         dataMgr.SetStageInfo(info);
         SceneManager.LoadSceneAsync("Battle", LoadSceneMode.Single);
     }
 
-    public void GameClear()
-    {
-        if (DataManager.Instance.gameData.isClear)
-        {
-            NoticeManager.Instance.Notice(NoticeType.Clear);
-            clearImg.SetActive(true);
-        }
-        else
-        {
-            NoticeManager.Instance.Notice(NoticeType.Start);
-        }
-    }
-
-    public void ShowMoneyTxt()
+/*    public void ShowMoneyTxt()
     {
         //재화 텍스트 애니메이션 효과
         float dia = Mathf.SmoothStep(_dia,
-            DataManager.Instance.gameData.goods[(int)Goods.Dia].count, 0.5f);
+            dataMgr.GameData.GoodsList[(int)EGoodsType.Dia].count, 0.5f);
         float gold = Mathf.SmoothStep(_gold,
-            DataManager.Instance.gameData.goods[(int)Goods.Gold].count, 0.5f);
+            dataMgr.GameData.GoodsList[(int)EGoodsType.Gold].count, 0.5f);
         float drink = Mathf.SmoothStep(_drink,
-            DataManager.Instance.gameData.goods[(int)Goods.Stamina].count, 0.5f);
-        //float soulGem = Mathf.SmoothStep(_soulGem, DataManager.Instance.gameData.soulGem, 0.5f);
+            dataMgr.GameData.GoodsList[(int)EGoodsType.Stamina].count, 0.5f);
+        //float soulGem = Mathf.SmoothStep(_soulGem, dataMgr.GameData.soulGem, 0.5f);
 
         _dia = (int)dia;
         _gold = (int)gold;
         _drink = (int)drink;
 
         //천 단위로 콤마(,) 삽입
-        moneyTxt[0].text = string.Format("{0:n0}",
-            DataManager.Instance.gameData.goods[(int)Goods.Stamina].count);
+*//*        moneyTxt[0].text = string.Format("{0:n0}",
+            dataMgr.GameData.goodsList[(int)EGoodsType.Stamina].count);
         moneyTxt[1].text = string.Format("{0:n0}",
-            DataManager.Instance.gameData.goods[(int)Goods.Gold].count);
+            dataMgr.GameData.goodsList[(int)EGoodsType.Gold].count);
         moneyTxt[2].text = string.Format("{0:n0}",
-            DataManager.Instance.gameData.goods[(int)Goods.Dia].count);
-
-        /*        string str = string.Format("{0:n0}", DataManager.Instance.gameData.soulGem);
-                DataManager.Instance.gameData.soulUnit = str.Split(',');
-                moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strSoulGem);
-                moneyTxt[0].text = DataManager.Instance.SoulGemUnitChange(DataManager.Instance.gameData.strDrink);*/
-    }
+            dataMgr.GameData.goodsList[(int)EGoodsType.Dia].count);*//*
+    }*/
 
     private void CancelBtn() //인 게임 Cancel 동작
     {
-        if (isPanel)
-        {
+        if (UIManager.Instance.IsPanel)
             isPlay = false;
-        }
 
         if (Input.GetButtonDown("Cancel"))
-        {
-            Pause();
-        }
-    }
-
-    public void Pause()
-    {
-        if (!OptionPanel.activeSelf)
-        {
-            OptionPanel.SetActive(true);
-            SoundManager.Instance.PlaySFX("Pause In");
-
-            if (isPanel)
-            {
-                UIManager.Instance.HidePanelAction();
-            }
-        }
-        else
-        {
-            OptionPanel.SetActive(false);
-            SoundManager.Instance.PlaySFX("Pause Out");
-        }
+            UIManager.Instance.SetActivePauseUI();
     }
 
     public void GameQuit()

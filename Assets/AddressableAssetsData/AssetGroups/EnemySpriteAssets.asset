@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: EnemySpriteAssets
+  m_EditorClassIdentifier: 
+  m_GroupName: EnemySpriteAssets
+  m_Data:
+    m_SerializedData: []
+  m_GUID: f9768eaa0ea12c24b8d2927626fec943
+  m_SerializeEntries:
+  - m_GUID: aecb4008359fcfe43ad86e1399943690
+    m_Address: EnemySprite00
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnemyData
+    - Enemy
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 14a12ce42ca59a341979f49e59c63df8, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 46aa3c5c5e31abe419411d076b006518, type: 2}
+    - {fileID: 11400000, guid: b26bfa7e342856840b281968efc02c10, type: 2}

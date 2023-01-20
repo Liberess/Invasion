@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public enum MenuBtnTypes
+public enum EMenuBtnTypes
 {
     Hero = 0,
     Facility,
@@ -17,7 +17,7 @@ public enum MenuBtnTypes
 public class MenuBtn : MonoBehaviour
 {
     // UIManager
-    [SerializeField] private MenuBtnTypes btnType;
+    [SerializeField] private EMenuBtnTypes btnType;
 
     [SerializeField] private GameObject myPanel;
 
@@ -33,7 +33,7 @@ public class MenuBtn : MonoBehaviour
         isClick = false;
         isShow = false;
 
-        if(btnType != MenuBtnTypes.Dungeon && btnType != MenuBtnTypes.Adventure)
+        if(btnType != EMenuBtnTypes.Dungeon && btnType != EMenuBtnTypes.Adventure)
             UIManager.Instance.HidePanelAction += () => MyPanelHide();
     }
 
@@ -62,7 +62,7 @@ public class MenuBtn : MonoBehaviour
     {
         isClick = active;
 
-        if (btnType != MenuBtnTypes.Dungeon && btnType != MenuBtnTypes.Adventure)
+        if (btnType != EMenuBtnTypes.Dungeon && btnType != EMenuBtnTypes.Adventure)
         {
             if(active)
                 MyPanelShow();
