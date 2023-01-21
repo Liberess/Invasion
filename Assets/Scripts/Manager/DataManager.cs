@@ -86,12 +86,12 @@ public class DataManager : MonoBehaviour
     #region Update Resources
     public IEnumerator UpdateResources()
     {
-        UpdateGoodsSprite();
         UpdateHeroSprite();
-        UpdateOriginDB();
+        UpdateGoodsSprite();
         UpdateHeroAnimCtrl();
         UpdateHeroCardIcon();
         UpdateItemData();
+        UpdateOriginDB();
 
         yield return null;
     }
@@ -120,7 +120,7 @@ public class DataManager : MonoBehaviour
                     isDownStart = true;
                     isDownTxt.text = "유닛 DB 다운로드 시작";
                     Debug.Log("유닛 DB 다운로드 시작");
-                    HumalData.originHumalDataList.Clear();
+                    m_HumalData.originHumalDataList.Clear();
                     StartCoroutine(UpdateBundleProgressTxtCo());
                 }
 
@@ -303,31 +303,6 @@ public class DataManager : MonoBehaviour
     {
         m_HumalData.humalList.Clear();
         m_HumalData.humalList = new List<UnitData>(m_HumalData.humalDic.Values);
-    }
-
-    private void ConstructHumalPieceAmountDic()
-    {
-        //m_HumalData.humalPieceAmountDic = new Dictionary<string, int>();
-        m_HumalData.humalPieceAmountDic = new HumalPieceDictionary();
-
-        for (int i = 0; i < m_HumalData.humalPieceAmountList.Count; i++)
-        {
-            m_HumalData.humalPieceAmountDic.Add(
-                m_HumalData.humalPieceAmountList[i].name,
-                m_HumalData.humalPieceAmountList[i].amount
-            );
-        }
-    }
-
-    private void ResettingHumalPieceAmountList()
-    {
-        m_HumalData.humalPieceAmountList.Clear();
-
-        List<HumalPiece> temList = new List<HumalPiece>();
-        foreach(var data in m_HumalData.humalPieceAmountDic)
-            temList.Add(new HumalPiece(data.Key, data.Value));
-
-        m_HumalData.humalPieceAmountList = temList;
     }
 
     /// <summary>
@@ -649,10 +624,20 @@ public class DataManager : MonoBehaviour
 
         m_HumalData.humalUnlockList[0] = true;
 
+        m_HumalData.humalPieceAmountList.Clear();
         if (m_HumalData.originHumalDataList.Count != 0)
+        {
             AddNewHumal(0);
+            m_HumalData.humalPieceAmountList = new List<HumalPiece>();
+            foreach(var data in m_HumalData.originHumalDataList)
+                m_HumalData.humalPieceAmountList.Add(new HumalPiece(data.ID, data.KoName, 0));
+        }
 
         m_HumalData.isLoadComplete = true;
+
+#if UNITY_EDITOR
+        uiMgr.InitHeroPanel();
+#endif
     }
 
     private void InitializedGameData()
@@ -795,7 +780,6 @@ public class DataManager : MonoBehaviour
                     SetupHero();
 
                     ConstructHeroDic();
-                    ConstructHumalPieceAmountDic();
 
                     m_HumalData.isLoadComplete = true;
                 }
@@ -845,7 +829,6 @@ public class DataManager : MonoBehaviour
             return;
 
         ResettingHeroList();
-        ResettingHumalPieceAmountList();
 
         m_GameData.isLoadComplete = false;
         m_HumalData.isLoadComplete = false;
@@ -880,14 +863,6 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
-    public int GetHumalPieceAmount(string key)
-    {
-        if (m_HumalData.humalPieceAmountDic.ContainsKey(key))
-            return m_HumalData.humalPieceAmountDic[key];
-        else
-            return -1;
-    }
-
     public void AddNewHumal(int id)
     {
         var unitData = m_HumalData.originHumalDataList[id];
@@ -898,37 +873,79 @@ public class DataManager : MonoBehaviour
         if(IsContainsInHumalList(id))
         {
             Debug.Log("이미 영웅이 있어서 파편으로 변환!");
-            AddHumalPiece(unitData.KoName, 100);
+            AddHumalPiece(id, 100);
         }
         else
         {
             popUpMgr.PopUp("휴멀 - " + unitData.KoName + " 뽑기 성공!", EPopUpType.Notice);
 
+            unitData.sprite = m_HumalData.humalSpriteDic[id];
+            //unitData.animCtrl = m_HumalData.humalAnimCtrlList[id];
             m_HumalData.humalList.Add(new UnitData(unitData));
             unitData.sprite = m_HumalData.humalSpriteList[id];
             unitData.animCtrl = m_HumalData.humalAnimCtrlList[id];
             m_HumalData.humalUnlockList[id] = true;
 
-            AddHumalPiece(unitData.KoName, 0);
+            AddHumalPiece(id, 0);
 
             SetupHero();
+
+#if !UNITY_EDITOR
             uiMgr.UpdateHeroPanel();
+#endif
         }
     }
 
-    public void AddHumalPiece(string key, int amount)
+    public bool TryGetHumalPieceAmount(int id, out int amount)
     {
-        popUpMgr.PopUp("휴멀 [" + key + "] 파편 " + amount +"개 획득!", EPopUpType.Notice);
-        if (m_HumalData.humalPieceAmountDic.ContainsKey(key))
-            m_HumalData.humalPieceAmountDic[key] += amount;
-        else
-            m_HumalData.humalPieceAmountDic.Add(key, amount);
+        try
+        {
+            HumalPiece humalPiece = m_HumalData.humalPieceAmountList.Find(x => x.id == id);
+            if(humalPiece != null)
+            {
+                amount = humalPiece.amount;
+                return true;
+            }
+            else
+            {
+                amount = -1;
+                return false;
+            }
+        }
+        catch(Exception ex) 
+        {
+            Debug.LogError(ex.ToString());
+            amount = -1;
+            return false;
+        }
     }
 
-    public void SubtractHumalPiece(string key, int amount)
+    private bool TryGetHumalPiece(int id, out HumalPiece humalPiece)
     {
-        if (m_HumalData.humalPieceAmountDic.ContainsKey(key))
-            m_HumalData.humalPieceAmountDic[key] -= amount;
+        humalPiece = m_HumalData.humalPieceAmountList.Find(x => x.id == id);
+        if (humalPiece != null)
+            return true;
+        else
+            return false;
+    }
+
+    public void AddHumalPiece(int id, int amount)
+    {
+        popUpMgr.PopUp("휴멀 [" + id + "] 파편 " + amount +"개 획득!", EPopUpType.Notice);
+        if(TryGetHumalPiece(id, out HumalPiece humalPiece))
+        {
+            humalPiece.amount += amount;
+            uiMgr.UpdateHumalSlotByID(id);
+        }
+    }
+
+    public void SubtractHumalPiece(int id, int amount)
+    {
+        if (TryGetHumalPiece(id, out HumalPiece humalPiece))
+        {
+            humalPiece.amount -= amount;
+            uiMgr.UpdateHumalSlotByID(id);
+        }
     }
 
     private void DisplayPlayfabError(PlayFabError error)

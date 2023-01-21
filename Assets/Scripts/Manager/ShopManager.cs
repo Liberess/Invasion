@@ -184,14 +184,14 @@ public class ShopManager : MonoBehaviour
         if (pick.Contains("humal"))
         {
             if (dataMgr.IsContainsInHumalList(index))
-                dataMgr.AddHumalPiece(entity.name_ko, 50);
+                dataMgr.AddHumalPiece(entity.id, 50);
             else
                 dataMgr.AddNewHumal(index);
         }
         else
         {
             int amount = int.Parse(pick.Substring(pick.IndexOf('_') + 1));
-            dataMgr.AddHumalPiece(entity.name_ko, amount);
+            dataMgr.AddHumalPiece(entity.id, amount);
         }
 
         try

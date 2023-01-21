@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class HeroSlot : MonoBehaviour
 {
+    [Header("==== Unlock Group ====")]
     [SerializeField] private Text lvTxt;
     [SerializeField] private Image heroImg;
 
@@ -16,7 +17,13 @@ public class HeroSlot : MonoBehaviour
     [SerializeField] private UnitData heroData;
     public UnitData HumalData { get => heroData; }
 
-    [SerializeField] private bool isParty = false;
+    [Space(5), Header("==== Lock Group ====")]
+    [SerializeField] private GameObject lockGroup;
+    [SerializeField] private Image pieceImg;
+    [SerializeField] private Image piecefillImg;
+    [SerializeField] private Text pieceAmountTxt;
+
+    private bool isParty = false;
 
     private Vector3 menuPos;
     private RectTransform rt;
@@ -51,7 +58,47 @@ public class HeroSlot : MonoBehaviour
     public void HumalDataSetup(UnitData unitData)
     {
         heroData = unitData;
-        heroImg.sprite = unitData.sprite;
+
+        if (DataManager.Instance.HumalData.humalSpriteDic.ContainsKey(unitData.ID))
+            heroImg.sprite = DataManager.Instance.HumalData.humalSpriteDic[unitData.ID];
+
+        UpdateSlot();
+    }
+
+    public void UpdateSlot()
+    {
+        if(lockGroup.activeSelf)
+        {
+            if (DataManager.Instance.TryGetHumalPieceAmount(heroData.ID, out int amount))
+            {
+                pieceAmountTxt.text = string.Concat(amount, "/", 100);
+                piecefillImg.fillAmount = amount / 100.0f;
+            }
+        }
+        else
+        {
+            lvTxt.text = heroData.Level.ToString();
+        }
+    }
+
+    public void SetEnabledHumalSlot(bool enabled)
+    {
+        if(enabled)
+        {
+            btn.interactable = true;
+            heroImg.color = Color.white;
+            lvTxt.gameObject.SetActive(true);
+            lockGroup.SetActive(false);
+            UpdateSlot();
+        }
+        else
+        {
+            btn.interactable = false;
+            heroImg.color = Color.black;
+            lvTxt.gameObject.SetActive(false);
+            lockGroup.SetActive(true);
+            UpdateSlot();
+        }
     }
 
     public void SlotDragEvent()
@@ -80,11 +127,7 @@ public class HeroSlot : MonoBehaviour
         if (drag != null && drag.CanDrag)
             return;
 
-        //UIManager.Instance.HideHeroInfoPanelAction();
-
-        //Vector3 newPos = transform.position + new Vector3(rt.rect.x, rt.rect.y, 0f);
         Vector3 newPos = transform.position + menuPos;
-        //menuPanel.GetComponent<RectTransform>().transform.position = newPos;
         menuPanel.transform.Find("MenuPanel").position = newPos;
         menuPanel.SetActive(true);
 

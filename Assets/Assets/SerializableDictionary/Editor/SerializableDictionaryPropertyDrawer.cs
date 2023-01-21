@@ -5,7 +5,6 @@ using UnityEditor;
 using System.Reflection;
 using System;
 
-[CustomPropertyDrawer(typeof(HumalPieceDictionary))]
 [CustomPropertyDrawer(typeof(SpriteDictionary))]
 public class SerializableDictionaryPropertyDrawer : PropertyDrawer
 {

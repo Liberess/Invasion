@@ -20,6 +20,7 @@ public class HeroDetailInfoPanel : MonoBehaviour
         heroInfo.dpTxt.text = HumalData.Dp.ToString();
         heroInfo.costTxt.text = HumalData.Cost.ToString();
 
-        heroInfo.pieceTxt.text = DataManager.Instance.GetHumalPieceAmount(HumalData.KoName).ToString();
+        if(DataManager.Instance.TryGetHumalPieceAmount(HumalData.ID, out int amount))
+            heroInfo.pieceTxt.text = amount.ToString();
     }
 }

@@ -13,13 +13,13 @@ public class HumalData
     //임시 히어로 데이터 저장
     public Dictionary<int, UnitData> humalDic = new Dictionary<int, UnitData>();
     //public Dictionary<string, int> humalPieceAmountDic = new Dictionary<string, int>();
-    public HumalPieceDictionary humalPieceAmountDic = new HumalPieceDictionary();
+    //public HumalPieceDictionary humalPieceAmountDic = new HumalPieceDictionary();
 
     //Json 히어로 데이터 저장
     public List<UnitData> humalList = new List<UnitData>();
     public List<UnitData> partyList = new List<UnitData>();
     public List<UnitData> originHumalDataList = new List<UnitData>();
-    [HideInInspector] public List<HumalPiece> humalPieceAmountList = new List<HumalPiece>();
+    public List<HumalPiece> humalPieceAmountList = new List<HumalPiece>();
 
     //[HideInInspector] 
     public List<Sprite> humalSpriteList = new List<Sprite>();

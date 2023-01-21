@@ -189,10 +189,13 @@ public class UIManager : MonoBehaviour
 
     private void InitHeroSlot()
     {
+        Debug.Log("InitHeroSlot");
+
         List<int> PartyIDList = new List<int>();
         foreach (var hero in dataMgr.HumalData.partyList)
             PartyIDList.Add(hero.ID);
 
+        heroSlotList.Clear();
         for (int i = 0; i < dataMgr.HumalData.humalList.Count; i++)
         {
             int id = dataMgr.HumalData.humalList[i].ID;
@@ -203,9 +206,31 @@ public class UIManager : MonoBehaviour
 
             HeroSlot heroSlot = GetObj();
             heroSlot.HumalDataSetup(dataMgr.HumalData.humalList[i]);
+            heroSlot.SetEnabledHumalSlot(true);
             heroSlotList.Add(heroSlot);
-                Debug.Log(4);
         }
+
+        for (int i = 0; i < dataMgr.HumalData.originHumalDataList.Count; i++)
+        {
+            int id = dataMgr.HumalData.originHumalDataList[i].ID;
+            if (PartyIDList.Contains(id))
+                continue;
+            else if (IsContainsHeroSlotList(id))
+                continue;
+
+            HeroSlot heroSlot = GetObj();
+            heroSlot.HumalDataSetup(dataMgr.HumalData.originHumalDataList[i]);
+            heroSlot.SetEnabledHumalSlot(false);
+            heroSlotList.Add(heroSlot);
+        }
+    }
+
+
+    public void UpdateHumalSlotByID(int id)
+    {
+        HeroSlot heroSlot = heroSlotList.Find(x => x.HumalData.ID == id);
+        if (heroSlot != null)
+            heroSlot.UpdateSlot();
     }
 
     public void UpdateHeroPanel()
@@ -518,13 +543,7 @@ public class UIManager : MonoBehaviour
         currentHeroIndex = dataMgr.GetIndexOfHeroInList(dataMgr.GetHumalDataByIndex(ID));
         UpdateHeroOrderBtn();
 
-        dispatcher.Enqueue(() =>
-        {
-            Debug.Log("UpdateHeroDetailInfo :: id = " + ID);
-            Debug.Log("UpdateHeroDetailInfo :: data name = " + dataMgr.GetHumalDataByIndex(ID).KoName);
-            heroDetailInfoPanel.UpdateHeroInfo(
-                dataMgr.GetHumalDataByIndex(ID));
-        });
+        dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(dataMgr.GetHumalDataByIndex(ID)));
     }
 
     private void UpdateHeroOrderBtn()

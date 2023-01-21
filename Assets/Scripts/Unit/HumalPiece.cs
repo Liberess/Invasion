@@ -1,15 +1,14 @@
 [System.Serializable]
-public struct HumalPiece
+public class HumalPiece
 {
+    public int id;
     public string name;
     public int amount;
 
-    public HumalPiece(string _name, int _amount)
+    public HumalPiece(int _id, string _name, int _amount)
     {
+        id = _id;
         name = _name;
         amount = _amount;
     }
 }
-
-[System.Serializable]
-public class HumalPieceDictionary : SerializableDictionary<string, int> { }
