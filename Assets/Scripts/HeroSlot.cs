@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,8 +14,8 @@ public class HeroSlot : MonoBehaviour
     [SerializeField] private GameObject menuPanel;
     [SerializeField] private Text partyMenuTxt;
 
-    [SerializeField] private UnitData heroData;
-    public UnitData HumalData { get => heroData; }
+    [SerializeField] private UnitData humalData;
+    public UnitData HumalData { get => humalData; }
 
     [Space(5), Header("==== Lock Group ====")]
     [SerializeField] private GameObject lockGroup;
@@ -57,7 +57,7 @@ public class HeroSlot : MonoBehaviour
 
     public void HumalDataSetup(UnitData unitData)
     {
-        heroData = unitData;
+        humalData = unitData;
 
         if (DataManager.Instance.HumalData.humalSpriteDic.ContainsKey(unitData.ID))
             heroImg.sprite = DataManager.Instance.HumalData.humalSpriteDic[unitData.ID];
@@ -69,7 +69,7 @@ public class HeroSlot : MonoBehaviour
     {
         if(lockGroup.activeSelf)
         {
-            if (DataManager.Instance.TryGetHumalPieceAmount(heroData.ID, out int amount))
+            if (DataManager.Instance.TryGetHumalPieceAmount(humalData.ID, out int amount))
             {
                 pieceAmountTxt.text = string.Concat(amount, "/", 100);
                 piecefillImg.fillAmount = amount / 100.0f;
@@ -77,7 +77,7 @@ public class HeroSlot : MonoBehaviour
         }
         else
         {
-            lvTxt.text = heroData.Level.ToString();
+            lvTxt.text = humalData.Level.ToString();
         }
     }
 
@@ -108,7 +108,7 @@ public class HeroSlot : MonoBehaviour
 
     public void UpdateSlotImage()
     {
-        if (heroData.IsLeader)
+        if (humalData.IsLeader)
             GetComponent<Image>().color = new Color(250, 250, 130);
         else
             GetComponent<Image>().color = Color.white;
@@ -131,9 +131,9 @@ public class HeroSlot : MonoBehaviour
         menuPanel.transform.Find("MenuPanel").position = newPos;
         menuPanel.SetActive(true);
 
-        UIManager.Instance.UpdateHeroDetailInfo(heroData.ID);
+        UIManager.Instance.UpdateHeroDetailInfo(humalData.ID, humalData.IsParty);
 
-        if (isParty)
+        if (humalData.IsParty)
         {
             partyMenuTxt.text = "파티 해제";
             menuPanel.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);

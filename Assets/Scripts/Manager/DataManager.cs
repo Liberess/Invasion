@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +9,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEditor;
 
 public class DataManager : MonoBehaviour
 {
@@ -76,9 +77,7 @@ public class DataManager : MonoBehaviour
 
         GameManager.Instance.OnApplicationStart();
 
-#if UNITY_EDITOR
         StartCoroutine(UpdateResources());
-#endif
     }
 
     public void SetStageInfo(StageInfo info) => GameData.stageInfo = info;
@@ -111,6 +110,7 @@ public class DataManager : MonoBehaviour
 
     private void UpdateOriginDB()
     {
+        Debug.Log("UpdateOriginDB");
         updateBundleHandle = Addressables.LoadAssetsAsync<UnitOriginDB>(
             Tags.UnitOriginDBLabel,
             (result) =>
@@ -289,21 +289,44 @@ public class DataManager : MonoBehaviour
     #endregion
 
     #region Hero List - Dic
-    private void ConstructHeroDic()
+    private void ConstructHumalDic()
     {
         m_HumalData.humalDic = new Dictionary<int, UnitData>();
         m_HumalData.humalDic.Clear();
 
         //Json에 저장된 humalList안의 내용들을 humalDic에 저장
         for (int i = 0; i < m_HumalData.humalList.Count; i++)
-            m_HumalData.humalDic.Add(m_HumalData.humalList[i].ID, m_HumalData.humalList[i]);
+        {
+            int id = m_HumalData.humalList[i].ID;
+            if (!m_HumalData.humalDic.ContainsKey(id))
+                m_HumalData.humalDic.Add(id, m_HumalData.humalList[i]);
+        }
+
+        for (int i = 0; i < m_HumalData.partyList.Count; i++)
+        {
+            int id = m_HumalData.partyList[i].ID;
+            if (!m_HumalData.humalDic.ContainsKey(id))
+                m_HumalData.humalDic.Add(id, m_HumalData.partyList[i]);
+        }
+
+        SetupHero();
     }
 
-    private void ResettingHeroList()
+/*    private void ResettingHeroList()
     {
         m_HumalData.humalList.Clear();
-        m_HumalData.humalList = new List<UnitData>(m_HumalData.humalDic.Values);
-    }
+        m_HumalData.partyList.Clear();
+        m_HumalData.humalList = new List<UnitData>();
+        m_HumalData.partyList = new List<UnitData>();
+        //m_HumalData.humalList = new List<UnitData>(m_HumalData.humalDic.Values);
+        foreach (var data in m_HumalData.humalDic.Values)
+        {
+            if (data.IsParty)
+                m_HumalData.partyList.Add(data);
+            else
+                m_HumalData.humalList.Add(data);
+        }
+    }*/
 
     /// <summary>
     /// HumalList에 id가 존재하는지 확인한다.
@@ -337,6 +360,18 @@ public class DataManager : MonoBehaviour
     /// index가 유효한 값인지 판별한다.
     /// </summary>
     /// <returns></returns>
+    public bool IsValidInPartyListByIndex(int index)
+    {
+        if (index < 0 || index >= m_HumalData.partyList.Count)
+            return false;
+
+        return true;
+    }
+
+    /// <summary>
+    /// index가 유효한 값인지 판별한다.
+    /// </summary>
+    /// <returns></returns>
     public bool IsValidInHeroListByIndex(int index)
     {
         if (index < 0 || index >= m_HumalData.humalList.Count)
@@ -348,19 +383,19 @@ public class DataManager : MonoBehaviour
     /// <summary>
     /// PartyList에서 hero가 몇 번째에 존재하는지 확인한다.
     /// </summary>
-    public int GetIndexOfHeroInParty(UnitData data)
+    public int GetIndexOfHumalInParty(UnitData data)
     {
         return Utility.FindIndexOf(m_HumalData.partyList, data);
     }
 
-    public int GetIndexOfHeroInList(UnitData data)
+    public int GetIndexOfHumalInList(UnitData data)
     {
         return Utility.FindIndexOf(m_HumalData.humalList, data);
     }
 
-    public UnitData GetHumalDataByIndex(int id)
+    public UnitData GetHumalDataByID(int id)
     {
-        foreach (var hero in m_HumalData.humalList)
+        foreach (var hero in m_HumalData.humalDic.Values)
         {
             if (hero.ID == id)
                 return hero;
@@ -462,7 +497,11 @@ public class DataManager : MonoBehaviour
         var request = new AddUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag.ToString(), Amount = amount };
         PlayFabClientAPI.AddUserVirtualCurrency(
             request,
-            (result) => uiMgr.InvokeCurrencyUI(currencyTag, result.Balance),
+            (result) =>
+            {
+                VirtualCurrencyDic[currencyTag.ToString()] = result.Balance;
+                uiMgr.InvokeCurrencyUI(currencyTag, result.Balance);
+            },
             PlayFabManager.Instance.PlayFabErrorDebugLog
         );
     }
@@ -476,7 +515,11 @@ public class DataManager : MonoBehaviour
         var request = new SubtractUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag.ToString(), Amount = amount };
         PlayFabClientAPI.SubtractUserVirtualCurrency(
             request,
-            (result) => uiMgr.InvokeCurrencyUI(currencyTag, result.Balance),
+            (result) =>
+            {
+                VirtualCurrencyDic[currencyTag.ToString()] = result.Balance;
+                uiMgr.InvokeCurrencyUI(currencyTag, result.Balance);
+            },
             PlayFabManager.Instance.PlayFabErrorDebugLog
         );
     }
@@ -611,6 +654,8 @@ public class DataManager : MonoBehaviour
     {
         yield return StartCoroutine(LoadHumalDataCo());
         yield return StartCoroutine(LoadGameDataCo());
+
+        SaveData();
     }
 
     private void InitializedHumalData()
@@ -618,8 +663,13 @@ public class DataManager : MonoBehaviour
         for (int i = 0; i < HumalData.HumalMaxSize; i++)
             m_HumalData.humalUnlockList[i] = false;
 
+        m_HumalData.humalDic = new Dictionary<int, UnitData>();
         m_HumalData.humalDic.Clear();
+
+        m_HumalData.humalList = new List<UnitData>();
         m_HumalData.humalList.Clear();
+
+        m_HumalData.partyList = new List<UnitData>();
         m_HumalData.partyList.Clear();
 
         m_HumalData.humalUnlockList[0] = true;
@@ -633,11 +683,7 @@ public class DataManager : MonoBehaviour
                 m_HumalData.humalPieceAmountList.Add(new HumalPiece(data.ID, data.KoName, 0));
         }
 
-        m_HumalData.isLoadComplete = true;
-
-#if UNITY_EDITOR
-        uiMgr.InitHeroPanel();
-#endif
+        SaveData();
     }
 
     private void InitializedGameData()
@@ -700,25 +746,17 @@ public class DataManager : MonoBehaviour
     {
         try
         {
-            if (m_HumalData.humalList.Count != 0)
+/*            if (m_HumalData.humalList.Count > 0)
             {
                 for (int i = 0; i < m_HumalData.humalList.Count; i++)
                 {
-                    m_HumalData.humalList[i].sprite = m_HumalData.humalSpriteList[m_HumalData.humalList[i].ID];
-                    m_HumalData.humalList[i].animCtrl = m_HumalData.humalAnimCtrlList[m_HumalData.humalList[i].ID];
-                }
+                    int targetID = m_HumalData.humalList[i].ID;
 
-                for (int i = 0; i < m_HumalData.partyList.Count; i++)
-                {
-                    m_HumalData.partyList[i].sprite = m_HumalData.humalSpriteList[m_HumalData.partyList[i].ID];
-                    m_HumalData.partyList[i].animCtrl = m_HumalData.humalAnimCtrlList[m_HumalData.partyList[i].ID];
-                }
+                    m_HumalData.humalList[i].sprite = m_HumalData.humalSpriteList[targetID];
+                    m_HumalData.humalList[i].animCtrl = m_HumalData.humalAnimCtrlList[targetID];
 
-                for (int i = 0; i < m_HumalData.humalList.Count; i++)
-                {
-                    var targetName = m_HumalData.humalList[i].ID;
-                    if (!m_HumalData.humalDic.ContainsKey(targetName))
-                        m_HumalData.humalDic.Add(targetName, m_HumalData.humalList[i]);
+                    if (!m_HumalData.humalDic.ContainsKey(targetID))
+                        m_HumalData.humalDic.Add(targetID, m_HumalData.humalList[i]);
                 }
 
                 if (SceneManager.GetActiveScene().name == "Lobby")
@@ -742,18 +780,88 @@ public class DataManager : MonoBehaviour
                                 lobbyHeroList.Add(m_HumalData.humalList[index]);
                             }
                         };
+                    }
+                }
+            }
+            else if(m_HumalData.partyList.Count > 0)
+            {
+                for (int i = 0; i < m_HumalData.partyList.Count; i++)
+                {
+                    int targetID = m_HumalData.partyList[i].ID;
 
-                        /*var hero = Instantiate(lobbyHeroPrefab, Vector3.zero,
-                            Quaternion.identity).GetComponent<LobbyHero>();*/
+                    m_HumalData.partyList[i].sprite = m_HumalData.humalSpriteList[targetID];
+                    m_HumalData.partyList[i].animCtrl = m_HumalData.humalAnimCtrlList[targetID];
 
-                        //heroStat.mySprite = HumalData.humalSpriteList[heroStat.Data.ID];
-                        //heroStat.animCtrl = HumalData.humalAnimCtrlList[heroStat.Data.ID];
+                    if (!m_HumalData.humalDic.ContainsKey(targetID))
+                        m_HumalData.humalDic.Add(targetID, m_HumalData.partyList[i]);
+                }
+
+                if (SceneManager.GetActiveScene().name == "Lobby")
+                {
+                    for (int i = 0; i < m_HumalData.partyList.Count; i++)
+                    {
+                        int index = i;
+                        if (lobbyHeroList.Contains(m_HumalData.partyList[index]))
+                            continue;
+
+                        Addressables.InstantiateAsync(
+                            lobbyHeroReference,
+                            Vector3.zero,
+                            Quaternion.identity
+                        ).Completed += (handle) =>
+                        {
+                            if (handle.Result.TryGetComponent(out LobbyHero hero))
+                            {
+                                var heroStat = m_HumalData.partyList[index];
+                                hero.UnitSetup(heroStat);
+                                lobbyHeroList.Add(m_HumalData.partyList[index]);
+                            }
+                        };
                     }
                 }
             }
             else
             {
-                throw new Exception("m_HumalData.humalList is empty!");
+                throw new Exception("humalList or partyList empty!");
+            }*/
+            if(m_HumalData.humalDic.Count > 0)
+            {
+                bool isLobby = SceneManager.GetActiveScene().name == "Lobby";
+
+                foreach (var data in m_HumalData.humalDic.Values)
+                {
+                    int targetID = data.ID;
+
+                    data.sprite = m_HumalData.humalSpriteList[targetID];
+                    data.animCtrl = m_HumalData.humalAnimCtrlList[targetID];
+
+                    if (!m_HumalData.humalDic.ContainsKey(targetID))
+                        m_HumalData.humalDic.Add(targetID, data);
+
+                    if(isLobby)
+                    {
+                        if (lobbyHeroList.Contains(data))
+                            continue;
+
+                        Addressables.InstantiateAsync(
+                            lobbyHeroReference,
+                            Vector3.zero,
+                            Quaternion.identity
+                        ).Completed += (handle) =>
+                        {
+                            if (handle.Result.TryGetComponent(out LobbyHero hero))
+                            {
+                                var heroStat = data;
+                                hero.UnitSetup(heroStat);
+                                lobbyHeroList.Add(data);
+                            }
+                        };
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("humalDic is empty!");
             }
         }
         catch (Exception ex)
@@ -777,9 +885,11 @@ public class DataManager : MonoBehaviour
                     isContainsData = true;
                     m_HumalData = JsonUtility.FromJson<HumalData>(eachData.Value.Value);
 
-                    SetupHero();
+                    ConstructHumalDic();
 
-                    ConstructHeroDic();
+                    //SetupHero();
+
+                    uiMgr.InitHeroPanel();
 
                     m_HumalData.isLoadComplete = true;
                 }
@@ -828,10 +938,10 @@ public class DataManager : MonoBehaviour
         if (!Social.localUser.authenticated)
             return;
 
-        ResettingHeroList();
+        //ResettingHeroList();
+        //ConstructHumalDic();
 
-        m_GameData.isLoadComplete = false;
-        m_HumalData.isLoadComplete = false;
+        SaveTime();
 
         Dictionary<string, string> dataDic = new Dictionary<string, string>();
         dataDic.Add("GameData", JsonUtility.ToJson(m_GameData));
@@ -847,7 +957,7 @@ public class DataManager : MonoBehaviour
         {
             PlayFabClientAPI.UpdateUserData(request, (result) =>
             {
-                Debug.Log("Update Data!");
+                Debug.Log("Set Data Complete!");
             }, DisplayPlayfabError);
         }
         catch (Exception e)
@@ -866,7 +976,6 @@ public class DataManager : MonoBehaviour
     public void AddNewHumal(int id)
     {
         var unitData = m_HumalData.originHumalDataList[id];
-        
         if (unitData == null)
             throw new Exception("해당 index의 unitData가 없습니다.");
 
@@ -877,23 +986,41 @@ public class DataManager : MonoBehaviour
         }
         else
         {
-            popUpMgr.PopUp("휴멀 - " + unitData.KoName + " 뽑기 성공!", EPopUpType.Notice);
+            UnitData newData = new UnitData(unitData);
 
-            unitData.sprite = m_HumalData.humalSpriteDic[id];
-            //unitData.animCtrl = m_HumalData.humalAnimCtrlList[id];
-            m_HumalData.humalList.Add(new UnitData(unitData));
-            unitData.sprite = m_HumalData.humalSpriteList[id];
-            unitData.animCtrl = m_HumalData.humalAnimCtrlList[id];
+            popUpMgr.PopUp("휴멀 - " + newData.KoName + " 뽑기 성공!", EPopUpType.Notice);
+
+            newData.sprite = m_HumalData.humalSpriteDic[id];
+            newData.animCtrl = m_HumalData.humalAnimCtrlList[id];
+
+            if (m_HumalData.partyList.Count <= 0)
+            {
+                newData.SetParty(true);
+                newData.SetLeader(true);
+                m_HumalData.partyList.Add(newData);
+            }
+            else
+            {
+                newData.SetParty(false);
+                newData.SetLeader(false);
+                m_HumalData.humalList.Add(newData);
+            }
+
+            if (!m_HumalData.humalDic.ContainsKey(newData.ID))
+                m_HumalData.humalDic.Add(newData.ID, newData);
+
             m_HumalData.humalUnlockList[id] = true;
 
             AddHumalPiece(id, 0);
-
             SetupHero();
 
-#if !UNITY_EDITOR
-            uiMgr.UpdateHeroPanel();
-#endif
+            if(m_HumalData.isLoadComplete)
+                uiMgr.UpdateHeroPanel();
+            else
+                uiMgr.InitHeroPanel();
         }
+
+        SaveData();
     }
 
     public bool TryGetHumalPieceAmount(int id, out int amount)

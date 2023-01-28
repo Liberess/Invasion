@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -192,16 +192,6 @@ public class ShopManager : MonoBehaviour
         {
             int amount = int.Parse(pick.Substring(pick.IndexOf('_') + 1));
             dataMgr.AddHumalPiece(entity.id, amount);
-        }
-
-        try
-        {
-
-        }
-        catch(Exception ex)
-        {
-            Debug.LogWarning(ex.Message);
-            popUpMgr.PopUp(ex.Message, EPopUpType.Caution);
         }
 
         yield return null;
