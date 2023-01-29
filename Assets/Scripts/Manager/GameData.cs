@@ -29,6 +29,9 @@ public class GameData
     public StageInfo stageInfo;
     public Dictionary<string, string> stageNameDic = new Dictionary<string, string>();
 
+    public List<UnitData> enemyDataList = new List<UnitData>();
+    public List<Sprite> enemySpriteList = new List<Sprite>();
+
     public int[] facilGold = new int[7];
     public int[] facilLevelList = new int[7];
     public bool[] facilUnlockList = new bool[7];

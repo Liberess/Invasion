@@ -74,6 +74,12 @@ public class HeroSlot : MonoBehaviour
                 pieceAmountTxt.text = string.Concat(amount, "/", 100);
                 piecefillImg.fillAmount = amount / 100.0f;
             }
+            else
+            {
+                Debug.LogWarning("no piece : " + humalData.KoName);
+                pieceAmountTxt.text = "0/0";
+                piecefillImg.fillAmount = 0.0f;
+            }
         }
         else
         {

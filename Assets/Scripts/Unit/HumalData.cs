@@ -8,7 +8,7 @@ public class HumalData
     public bool isLoadComplete = false;
     public const int HumalMaxSize = 11;
 
-    public bool[] humalUnlockList = new bool[HumalMaxSize];
+    public bool[] humalUnlockAry = new bool[HumalMaxSize];
 
     //임시 히어로 데이터 저장
     public Dictionary<int, UnitData> humalDic = new Dictionary<int, UnitData>();

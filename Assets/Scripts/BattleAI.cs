@@ -53,7 +53,7 @@ public class BattleAI : MonoBehaviour
         List<UnitData> enemyDataList = new List<UnitData>();
 
         for (int i = dataMgr.GameData.stageInfo.minEnemyID; i <= dataMgr.GameData.stageInfo.maxEnemyID; i++)
-            enemyDataList.Add(dataMgr.EnemyDataList[i]);
+            enemyDataList.Add(dataMgr.GameData.enemyDataList[i]);
 
         enemyDataList = enemyDataList.OrderByDescending(x => x.Cost).ToList();
         return enemyDataList[0].Cost;
@@ -123,7 +123,7 @@ public class BattleAI : MonoBehaviour
             enemy.gameObject.SetActive(false);
         }
 
-        enemy.UnitSetup(dataMgr.EnemyDataList[rand]);
+        enemy.UnitSetup(dataMgr.GameData.enemyDataList[rand]);
         EnrageAction += enemy.Enrage;
         enemy.OnDeathAction += () => --spawnCount;
         enemy.OnDeathAction += () => EnrageAction -= enemy.Enrage;

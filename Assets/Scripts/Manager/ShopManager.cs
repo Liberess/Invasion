@@ -183,7 +183,7 @@ public class ShopManager : MonoBehaviour
         var pick = picker.GetRandomPick();
         if (pick.Contains("humal"))
         {
-            if (dataMgr.IsContainsInHumalList(index))
+            if (dataMgr.IsContainsInhumalList(index))
                 dataMgr.AddHumalPiece(entity.id, 50);
             else
                 dataMgr.AddNewHumal(index);

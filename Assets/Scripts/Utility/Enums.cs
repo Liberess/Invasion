@@ -64,4 +64,7 @@ public static class Tags
     public static readonly string HumalAnimCtrlLabel = "HumalAnimCtrl";
 
     public static readonly string EnemyLabel = "Enemy";
+
+    public static readonly string GameDataTag = "GameData";
+    public static readonly string HumalDataTag = "HumalData";
 }

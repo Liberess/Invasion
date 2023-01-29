@@ -208,7 +208,6 @@ public class UIManager : MonoBehaviour
             else if (IsContainsHeroSlotList(id))
                 continue;
 
-            Debug.Log("exist humal");
             HeroSlot heroSlot = GetObj();
             heroSlot.HumalDataSetup(dataMgr.HumalData.humalList[i]);
             heroSlot.SetEnabledHumalSlot(true);
@@ -223,7 +222,6 @@ public class UIManager : MonoBehaviour
             else if (IsContainsHeroSlotList(id))
                 continue;
 
-            Debug.Log("lock humal : " + dataMgr.HumalData.originHumalDataList[i].KoName);
             HeroSlot heroSlot = GetObj();
             heroSlot.HumalDataSetup(dataMgr.HumalData.originHumalDataList[i]);
             heroSlot.SetEnabledHumalSlot(false);
@@ -578,12 +576,12 @@ public class UIManager : MonoBehaviour
     {
         if (isPartyDetailInfo)
         {
-            if (dataMgr.IsValidInPartyListByIndex(currentPartyIndex + 1))
+            if (dataMgr.IsValidInpartyListByIndex(currentPartyIndex + 1))
                 nextHeroBtn.interactable = true;
             else
                 nextHeroBtn.interactable = false;
 
-            if (dataMgr.IsValidInPartyListByIndex(currentPartyIndex - 1))
+            if (dataMgr.IsValidInpartyListByIndex(currentPartyIndex - 1))
                 previousHeroBtn.interactable = true;
             else
                 previousHeroBtn.interactable = false;
