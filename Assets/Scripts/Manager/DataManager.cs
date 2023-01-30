@@ -8,6 +8,7 @@ using PlayFab;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
+using System.Linq;
 
 public class DataManager : MonoBehaviour
 {
@@ -83,8 +84,24 @@ public class DataManager : MonoBehaviour
         UpdateHeroCardIcon();
         UpdateItemData();
         UpdateOriginDB();
+        UpdateHumalPickDB();
 
         yield return null;
+    }
+
+    private void UpdateHumalPickDB()
+    {
+        Addressables.LoadAssetAsync<HumalPickDB>(Tags.HumalPickDBLabel).Completed +=
+        handle =>
+        {
+            foreach (var db in handle.Result.Entities)
+            {
+                if (!m_HumalData.humalPickDBList.Contains(db))
+                    m_HumalData.humalPickDBList.Add(db);
+            }
+
+            m_HumalData.humalPickDBList = m_HumalData.humalPickDBList.OrderBy(x => x.id).ToList();
+        };
     }
 
     private void UpdateGoodsSprite()
@@ -283,14 +300,11 @@ public class DataManager : MonoBehaviour
     #region Hero List - Dic
     private void ConstructDataDic()
     {
-        Debug.Log("ConstructDataDic");
-        //m_HumalData.humalDic = new Dictionary<int, UnitData>();
         m_HumalData.humalDic.Clear();
 
         //Json에 저장된 humalList안의 내용들을 humalDic에 저장
         for (int i = 0; i < m_HumalData.humalList.Count; i++)
         {
-            Debug.Log("humalList :: " + i);
             int id = m_HumalData.humalList[i].ID;
             if (!m_HumalData.humalDic.ContainsKey(id))
                 m_HumalData.humalDic.Add(id, m_HumalData.humalList[i]);
@@ -298,19 +312,17 @@ public class DataManager : MonoBehaviour
 
         for (int i = 0; i < m_HumalData.partyList.Count; i++)
         {
-            Debug.Log("partyList :: " + i);
             int id = m_HumalData.partyList[i].ID;
             if (!m_HumalData.humalDic.ContainsKey(id))
-            {
-                Debug.Log("add " + m_HumalData.partyList[i].KoName);
                 m_HumalData.humalDic.Add(id, m_HumalData.partyList[i]);
-            }
         }
 
-        //m_HumalData.humalSpriteDic = new SortedDictionary<int, Sprite>();
         m_HumalData.humalSpriteDic.Clear();
         for (int i = 0; i < m_HumalData.humalSpriteList.Count; i++)
+        {
+            Debug.Log(i + " : " + m_HumalData.humalSpriteList[i].name);
             m_HumalData.humalSpriteDic.Add(i, m_HumalData.humalSpriteList[i]);
+        }
         
         SetupHero();
     }
@@ -363,7 +375,7 @@ public class DataManager : MonoBehaviour
     /// index가 유효한 값인지 판별한다.
     /// </summary>
     /// <returns></returns>
-    public bool IsValidInpartyListByIndex(int index)
+    public bool IsValidInPartyListByIndex(int index)
     {
         if (index < 0 || index >= m_HumalData.partyList.Count)
             return false;
@@ -375,7 +387,7 @@ public class DataManager : MonoBehaviour
     /// index가 유효한 값인지 판별한다.
     /// </summary>
     /// <returns></returns>
-    public bool IsValidInHeroListByIndex(int index)
+    public bool IsValidInHumalListByIndex(int index)
     {
         if (index < 0 || index >= m_HumalData.humalList.Count)
             return false;
@@ -409,12 +421,12 @@ public class DataManager : MonoBehaviour
 
     public UnitData GetDataByOrder(string key, int index)
     {
-        if (!IsValidInHeroListByIndex(index))
+        if (!IsValidInHumalListByIndex(index))
             throw new Exception("유효하지 않은 Index 값입니다.");
 
         if (key == "Next")
         {
-            if (!IsValidInHeroListByIndex(index + 1))
+            if (!IsValidInHumalListByIndex(index + 1))
                 throw new Exception("유효하지 않은 Index 값입니다.");
 
             UIManager.Instance.SetHeroIndex(index + 1);
@@ -422,7 +434,7 @@ public class DataManager : MonoBehaviour
         }
         else if (key == "Previous")
         {
-            if (!IsValidInHeroListByIndex(index - 1))
+            if (!IsValidInHumalListByIndex(index - 1))
                 throw new Exception("유효하지 않은 Index 값입니다.");
 
             UIManager.Instance.SetHeroIndex(index - 1);
@@ -504,6 +516,7 @@ public class DataManager : MonoBehaviour
             {
                 VirtualCurrencyDic[currencyTag.ToString()] = result.Balance;
                 uiMgr.InvokeCurrencyUI(currencyTag, result.Balance);
+                SaveData();
             },
             PlayFabManager.Instance.PlayFabErrorDebugLog
         );
@@ -514,7 +527,6 @@ public class DataManager : MonoBehaviour
         if (!Social.localUser.authenticated)
             return;
 
-        Debug.Log("SubstractCurrency : " + currencyTag.ToString() + "/" + amount);
         var request = new SubtractUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag.ToString(), Amount = amount };
         PlayFabClientAPI.SubtractUserVirtualCurrency(
             request,
@@ -522,6 +534,7 @@ public class DataManager : MonoBehaviour
             {
                 VirtualCurrencyDic[currencyTag.ToString()] = result.Balance;
                 uiMgr.InvokeCurrencyUI(currencyTag, result.Balance);
+                SaveData();
             },
             PlayFabManager.Instance.PlayFabErrorDebugLog
         );
@@ -661,8 +674,6 @@ public class DataManager : MonoBehaviour
 
     private void InitializedHumalData()
     {
-        Debug.Log("!! InitializedHumalData !!");
-
         for (int i = 1; i < HumalData.HumalMaxSize; i++)
             m_HumalData.humalUnlockAry[i] = false;
 
@@ -877,9 +888,6 @@ public class DataManager : MonoBehaviour
                 m_HumalData = new HumalData();
                 m_HumalData = JsonUtility.FromJson<HumalData>(result.Data[Tags.HumalDataTag].Value);
 
-                Debug.Log("humalList count : " + m_HumalData.humalList.Count);
-                Debug.Log("partyList count : " + m_HumalData.partyList.Count);
-
                 ConstructDataDic();
 
                 //SetupHero();
@@ -887,8 +895,6 @@ public class DataManager : MonoBehaviour
                 uiMgr.InitHeroPanel();
 
                 m_HumalData.isLoadComplete = true;
-
-                Debug.Log("LoadHumalData complete");
             }
             else
             {
@@ -915,8 +921,6 @@ public class DataManager : MonoBehaviour
                 CalculateSaveTime();
 
                 m_GameData.isLoadComplete = true;
-
-                Debug.Log("LoadGameData complete");
             }
             else
             {
@@ -932,9 +936,6 @@ public class DataManager : MonoBehaviour
     {
         if (!Social.localUser.authenticated)
             return;
-
-        //ResettingHeroList();
-        //ConstructHumalDic();
 
         SaveTime();
 
@@ -1016,8 +1017,6 @@ public class DataManager : MonoBehaviour
             else
                 uiMgr.InitHeroPanel();
         }
-
-        SaveData();
     }
 
     public bool TryGetHumalPieceAmount(int id, out int amount)
@@ -1061,6 +1060,8 @@ public class DataManager : MonoBehaviour
             humalPiece.amount += amount;
             uiMgr.UpdateHumalSlotByID(id);
         }
+
+        SaveData();
     }
 
     public void SubtractHumalPiece(int id, int amount)
@@ -1070,6 +1071,8 @@ public class DataManager : MonoBehaviour
             humalPiece.amount -= amount;
             uiMgr.UpdateHumalSlotByID(id);
         }
+
+        SaveData();
     }
 
     private void DisplayPlayfabError(PlayFabError error)

@@ -100,8 +100,6 @@ public class UIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
 
-        Debug.Log("UpdateCurrencyUICo : " + Time.time);
-
         foreach (ECurrencyType type in Enum.GetValues(typeof(ECurrencyType)))
             InvokeCurrencyUI(type, dataMgr.GetCurrency(type));
     }
@@ -193,8 +191,6 @@ public class UIManager : MonoBehaviour
 
     private void InitHeroSlot()
     {
-        Debug.Log("InitHeroSlot");
-
         List<int> PartyIDList = new List<int>();
         foreach (var hero in dataMgr.HumalData.partyList)
             PartyIDList.Add(hero.ID);
@@ -535,31 +531,23 @@ public class UIManager : MonoBehaviour
     /// HeroDetailInfoPanel의 내용을 Update한다.
     /// </summary>
     /// <param name="id"> 세부 정보 패널에 표시할 영웅의 번호 </param>
-    public void UpdateHeroDetailInfo(int id, bool isParty = false)
+    public void UpdateHeroDetailInfo(UnitData data)
     {
         try
         {
-            var data = dataMgr.GetHumalDataByID(id);
-
             if (data == null)
-                throw new Exception("해당 id : " + id + "의 데이터가 없습니다.");
+                throw new Exception("해당 데이터가 없습니다.");
 
             int index = -1;
-            if (isParty)
-            {
-                Debug.Log("1");
+            if (data.IsParty)
                 index = dataMgr.GetIndexOfHumalInParty(data);
-            }
             else
-            {
-                Debug.Log("2");
                 index = dataMgr.GetIndexOfHumalInList(data);
-            }
 
             if (index < 0)
                 throw new Exception("유효하지 않은 index 값입니다.");
 
-            isPartyDetailInfo = isParty;
+            isPartyDetailInfo = data.IsParty;
             currentPartyIndex = index;
             currentHeroIndex = index;
 
@@ -576,24 +564,24 @@ public class UIManager : MonoBehaviour
     {
         if (isPartyDetailInfo)
         {
-            if (dataMgr.IsValidInpartyListByIndex(currentPartyIndex + 1))
+            if (dataMgr.IsValidInPartyListByIndex(currentPartyIndex + 1))
                 nextHeroBtn.interactable = true;
             else
                 nextHeroBtn.interactable = false;
 
-            if (dataMgr.IsValidInpartyListByIndex(currentPartyIndex - 1))
+            if (dataMgr.IsValidInPartyListByIndex(currentPartyIndex - 1))
                 previousHeroBtn.interactable = true;
             else
                 previousHeroBtn.interactable = false;
         }
         else
         {
-            if (dataMgr.IsValidInHeroListByIndex(currentHeroIndex + 1))
+            if (dataMgr.IsValidInHumalListByIndex(currentHeroIndex + 1))
                 nextHeroBtn.interactable = true;
             else
                 nextHeroBtn.interactable = false;
 
-            if (dataMgr.IsValidInHeroListByIndex(currentHeroIndex - 1))
+            if (dataMgr.IsValidInHumalListByIndex(currentHeroIndex - 1))
                 previousHeroBtn.interactable = true;
             else
                 previousHeroBtn.interactable = false;

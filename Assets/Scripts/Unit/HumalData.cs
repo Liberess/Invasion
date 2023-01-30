@@ -20,6 +20,7 @@ public class HumalData
     public List<UnitData> partyList = new List<UnitData>();
     public List<UnitData> originHumalDataList = new List<UnitData>();
     public List<HumalPiece> humalPieceAmountList = new List<HumalPiece>();
+    public List<HumalPickDBEntity> humalPickDBList = new List<HumalPickDBEntity>();
 
     //[HideInInspector] 
     public List<Sprite> humalSpriteList = new List<Sprite>();

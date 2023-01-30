@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,13 +24,14 @@ public class HeroSlot : MonoBehaviour
     [SerializeField] private Image piecefillImg;
     [SerializeField] private Text pieceAmountTxt;
 
-    private bool isParty = false;
+    private Draggable drag;
 
     private Vector3 menuPos;
     private RectTransform rt;
 
     private void Awake()
     {
+        drag = GetComponent<Draggable>();
         btn = GetComponent<Button>();
         rt = GetComponent<RectTransform>();
     }
@@ -59,8 +61,8 @@ public class HeroSlot : MonoBehaviour
     {
         humalData = unitData;
 
-        if (DataManager.Instance.HumalData.humalSpriteDic.ContainsKey(unitData.ID))
-            heroImg.sprite = DataManager.Instance.HumalData.humalSpriteDic[unitData.ID];
+        if (DataManager.Instance.HumalData.humalSpriteDic.ContainsKey(humalData.ID))
+            heroImg.sprite = DataManager.Instance.HumalData.humalSpriteDic[humalData.ID];
 
         UpdateSlot();
     }
@@ -76,7 +78,6 @@ public class HeroSlot : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("no piece : " + humalData.KoName);
                 pieceAmountTxt.text = "0/0";
                 piecefillImg.fillAmount = 0.0f;
             }
@@ -128,26 +129,31 @@ public class HeroSlot : MonoBehaviour
 
     private void OnClickEvent()
     {
-        var drag = GetComponent<Draggable>();
-
-        if (drag != null && drag.CanDrag)
-            return;
-
-        Vector3 newPos = transform.position + menuPos;
-        menuPanel.transform.Find("MenuPanel").position = newPos;
-        menuPanel.SetActive(true);
-
-        UIManager.Instance.UpdateHeroDetailInfo(humalData.ID, humalData.IsParty);
-
-        if (humalData.IsParty)
+        try
         {
-            partyMenuTxt.text = "파티 해제";
-            menuPanel.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
+            if (drag != null && drag.CanDrag)
+                return;
+
+            Vector3 newPos = transform.position + menuPos;
+            menuPanel.transform.Find("MenuPanel").position = newPos;
+            menuPanel.SetActive(true);
+
+            UIManager.Instance.UpdateHeroDetailInfo(humalData);
+
+            if (humalData.IsParty)
+            {
+                partyMenuTxt.text = "파티 해제";
+                menuPanel.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
+            }
+            else
+            {
+                partyMenuTxt.text = "파티 추가";
+                menuPanel.transform.localScale = new Vector3(1f, 1f, 1f);
+            }
         }
-        else
+        catch(Exception ex)
         {
-            partyMenuTxt.text = "파티 추가";
-            menuPanel.transform.localScale = new Vector3(1f, 1f, 1f);
+            Debug.LogError(ex);
         }
     }
 }

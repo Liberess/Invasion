@@ -23,8 +23,6 @@ public class ShopManager : MonoBehaviour
     private List<BuyingButton> buyingBtnList = new List<BuyingButton>();
     private BuyingButton currentBuyingBtn;
 
-    [SerializeField] private List<HumalPickDBEntity> humalPickDBList = new List<HumalPickDBEntity>();
-
     public event Action OnShopInitAction;
 
     private void Awake()
@@ -68,29 +66,9 @@ public class ShopManager : MonoBehaviour
             }
         }
 
-#if UNITY_EDITOR
-        UpdateHumalPickDB();
-#endif
-
         PlayFabManager.Instance.OnPlayFabLoginSuccessAction += OnShopInitAction;
-        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += UpdateHumalPickDB;
 
         OnClickShopMenu(EShopMenu.Humal);
-    }
-
-    private void UpdateHumalPickDB()
-    {
-        Addressables.LoadAssetAsync<HumalPickDB>(Tags.HumalPickDBLabel).Completed +=
-        handle =>
-        {
-            foreach(var db in handle.Result.Entities)
-            {
-                if (!humalPickDBList.Contains(db))
-                    humalPickDBList.Add(db);
-            }
-
-            humalPickDBList = humalPickDBList.OrderBy(x => x.id).ToList();
-        };
     }
 
     public void OnClickShopMenu(EShopMenu shopMenu)
@@ -169,8 +147,8 @@ public class ShopManager : MonoBehaviour
 
     private IEnumerator PickUpHumal()
     {
-        var index = UnityEngine.Random.Range(0, humalPickDBList.Count);
-        var entity = humalPickDBList[index];
+        var index = UnityEngine.Random.Range(0, dataMgr.HumalData.humalPickDBList.Count);
+        var entity = dataMgr.HumalData.humalPickDBList[index];
 
         var picker = new Rito.WeightedRandomPicker<string>();
         picker.Add(

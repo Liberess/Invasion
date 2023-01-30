@@ -47123,7 +47123,7 @@ PrefabInstance:
         type: 3}
       propertyPath: nextHeroBtn
       value: 
-      objectReference: {fileID: 1859750669}
+      objectReference: {fileID: 1859750671}
     - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
         type: 3}
       propertyPath: heroSlotGrid
@@ -47143,7 +47143,7 @@ PrefabInstance:
         type: 3}
       propertyPath: previousHeroBtn
       value: 
-      objectReference: {fileID: 1718346955}
+      objectReference: {fileID: 1718346957}
     - target: {fileID: 5926650403855410415, guid: b8b76b012f5c52c4ca07f30021236241,
         type: 3}
       propertyPath: stageReadyPanel
