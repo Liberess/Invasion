@@ -346,7 +346,7 @@ public class DataManager : MonoBehaviour
     /// <summary>
     /// humalList에 id가 존재하는지 확인한다.
     /// </summary>
-    public bool IsContainsInhumalList(int id)
+    public bool IsContainsInHumalList(int id)
     {
         foreach (var heroData in m_HumalData.humalList)
         {
@@ -691,6 +691,8 @@ public class DataManager : MonoBehaviour
 
             AddNewHumal(0);
         }
+
+        uiMgr.InitHeroPanel();
     }
 
     private void InitializedGameData()
@@ -975,7 +977,7 @@ public class DataManager : MonoBehaviour
         if (unitData == null)
             throw new Exception("해당 index의 unitData가 없습니다.");
 
-        if(IsContainsInhumalList(id))
+        if (IsContainsInHumalList(id))
         {
             Debug.Log("이미 영웅이 있어서 파편으로 변환!");
             AddHumalPiece(id, 100);
@@ -988,8 +990,12 @@ public class DataManager : MonoBehaviour
 
             newData.sprite = m_HumalData.humalSpriteDic[id];
             unitData.sprite = m_HumalData.humalSpriteDic[id];
-            newData.animCtrl = m_HumalData.humalAnimCtrlList[id];
-            unitData.animCtrl = m_HumalData.humalAnimCtrlList[id];
+
+            if (id >= 0 && id < m_HumalData.humalAnimCtrlList.Count)
+            {
+                newData.animCtrl = m_HumalData.humalAnimCtrlList[id];
+                unitData.animCtrl = m_HumalData.humalAnimCtrlList[id];
+            }
 
             if (m_HumalData.partyList.Count <= 0)
             {
@@ -1006,16 +1012,12 @@ public class DataManager : MonoBehaviour
 
             if (!m_HumalData.humalDic.ContainsKey(newData.ID))
                 m_HumalData.humalDic.Add(newData.ID, newData);
- 
+
             m_HumalData.humalUnlockAry[id] = true;
 
-            AddHumalPiece(id, 0);
             SetupHero();
 
-            if(m_HumalData.isLoadComplete)
-                uiMgr.UpdateHeroPanel();
-            else
-                uiMgr.InitHeroPanel();
+            uiMgr.SetEnabledHumalSlotByID(id, true);
         }
     }
 
@@ -1060,8 +1062,6 @@ public class DataManager : MonoBehaviour
             humalPiece.amount += amount;
             uiMgr.UpdateHumalSlotByID(id);
         }
-
-        SaveData();
     }
 
     public void SubtractHumalPiece(int id, int amount)
@@ -1071,8 +1071,6 @@ public class DataManager : MonoBehaviour
             humalPiece.amount -= amount;
             uiMgr.UpdateHumalSlotByID(id);
         }
-
-        SaveData();
     }
 
     private void DisplayPlayfabError(PlayFabError error)

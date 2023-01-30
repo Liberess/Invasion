@@ -23,6 +23,7 @@ public class HeroSlot : MonoBehaviour
     [SerializeField] private Image pieceImg;
     [SerializeField] private Image piecefillImg;
     [SerializeField] private Text pieceAmountTxt;
+    [SerializeField] private Button unlockBtn;
 
     private Draggable drag;
 
@@ -53,6 +54,9 @@ public class HeroSlot : MonoBehaviour
         menuPos = transform.Find("MenuPos").transform.localPosition;
 
         btn.onClick.AddListener(OnClickEvent);
+
+        unlockBtn.onClick.AddListener(OnClickUnlock);
+        unlockBtn.gameObject.SetActive(false);
         //btn.onClick.AddListener(OnClickEvent);
         //menuPanel.GetComponent<Button>().onClick.AddListener(OnClickOther);
     }
@@ -73,6 +77,9 @@ public class HeroSlot : MonoBehaviour
         {
             if (DataManager.Instance.TryGetHumalPieceAmount(humalData.ID, out int amount))
             {
+                if(amount >= 100)
+                    unlockBtn.gameObject.SetActive(true);
+
                 pieceAmountTxt.text = string.Concat(amount, "/", 100);
                 piecefillImg.fillAmount = amount / 100.0f;
             }
@@ -155,5 +162,12 @@ public class HeroSlot : MonoBehaviour
         {
             Debug.LogError(ex);
         }
+    }
+
+    private void OnClickUnlock()
+    {
+        DataManager.Instance.SubtractHumalPiece(humalData.ID, 100);
+        DataManager.Instance.AddNewHumal(humalData.ID);
+        unlockBtn.gameObject.SetActive(false);
     }
 }

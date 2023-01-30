@@ -225,6 +225,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void SetEnabledHumalSlotByID(int id, bool enabled)
+    {
+        HeroSlot heroSlot = heroSlotList.Find(x => x.HumalData.ID == id);
+        if (heroSlot != null)
+            heroSlot.SetEnabledHumalSlot(enabled);
+    }
+
     public void UpdateHumalSlotByID(int id)
     {
         HeroSlot heroSlot = heroSlotList.Find(x => x.HumalData.ID == id);
@@ -232,9 +239,10 @@ public class UIManager : MonoBehaviour
             heroSlot.UpdateSlot();
     }
 
-    public void UpdateHeroPanel()
+/*    public void UpdateHeroPanel()
     {
         Debug.Log("UpdateHeroPanel");
+
         for (int i = 0; i < dataMgr.HumalData.partyList.Count; i++)
         {
             int id = dataMgr.HumalData.partyList[i].ID;
@@ -273,7 +281,7 @@ public class UIManager : MonoBehaviour
             Debug.Log(44);
         }
     }
-
+*/
     private bool IsContainsHeroSlotList(int id)
     {
         foreach(var heroSlot in heroSlotList)
