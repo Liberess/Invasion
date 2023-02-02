@@ -9,6 +9,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 
 public class DataManager : MonoBehaviour
 {
@@ -67,6 +68,8 @@ public class DataManager : MonoBehaviour
     {
         uiMgr = UIManager.Instance;
         popUpMgr = PopUpManager.Instance;
+
+        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => AutoSave().Forget();
 
         GameManager.Instance.OnApplicationStart();
 
@@ -319,29 +322,10 @@ public class DataManager : MonoBehaviour
 
         m_HumalData.humalSpriteDic.Clear();
         for (int i = 0; i < m_HumalData.humalSpriteList.Count; i++)
-        {
-            Debug.Log(i + " : " + m_HumalData.humalSpriteList[i].name);
             m_HumalData.humalSpriteDic.Add(i, m_HumalData.humalSpriteList[i]);
-        }
-        
+
         SetupHero();
     }
-
-/*    private void ResettingHeroList()
-    {
-        m_HumalData.humalList.Clear();
-        m_HumalData.partyList.Clear();
-        m_HumalData.humalList = new List<UnitData>();
-        m_HumalData.partyList = new List<UnitData>();
-        //m_HumalData.humalList = new List<UnitData>(m_HumalData.humalDic.Values);
-        foreach (var data in m_HumalData.humalDic.Values)
-        {
-            if (data.IsParty)
-                m_HumalData.partyList.Add(data);
-            else
-                m_HumalData.humalList.Add(data);
-        }
-    }*/
 
     /// <summary>
     /// humalList에 id가 존재하는지 확인한다.
@@ -400,12 +384,14 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public int GetIndexOfHumalInParty(UnitData data)
     {
-        return Utility.FindIndexOf(m_HumalData.partyList, data);
+        return m_HumalData.partyList.FindIndex(e => e.ID == data.ID);
+        //return Utility.FindIndexOf(m_HumalData.partyList, data);
     }
 
     public int GetIndexOfHumalInList(UnitData data)
     {
-        return Utility.FindIndexOf(m_HumalData.humalList, data);
+        return m_HumalData.humalList.FindIndex(e => e.ID == data.ID);
+        //return Utility.FindIndexOf(m_HumalData.humalList, data);
     }
 
     public UnitData GetHumalDataByID(int id)
@@ -674,20 +660,22 @@ public class DataManager : MonoBehaviour
 
     private void InitializedHumalData()
     {
-        for (int i = 1; i < HumalData.HumalMaxSize; i++)
-            m_HumalData.humalUnlockAry[i] = false;
+        m_HumalData.isLoadComplete = false;
 
         m_HumalData.humalDic.Clear();
         m_HumalData.humalList.Clear();
         m_HumalData.partyList.Clear();
 
-        m_HumalData.humalUnlockAry[0] = true;
-
         m_HumalData.humalPieceAmountList.Clear();
         if (m_HumalData.originHumalDataList.Count != 0)
         {
             foreach(var data in m_HumalData.originHumalDataList)
+            {
+                data.SetUnlock(false);
+                data.SetParty(false);
+                data.SetLeader(false);
                 m_HumalData.humalPieceAmountList.Add(new HumalPiece(data.ID, data.KoName, 0));
+            }
 
             AddNewHumal(0);
         }
@@ -842,12 +830,9 @@ public class DataManager : MonoBehaviour
                     int targetID = data.ID;
 
                     data.sprite = m_HumalData.humalSpriteList[targetID];
-                    data.animCtrl = m_HumalData.humalAnimCtrlList[targetID];
+                    data.animCtrl = m_HumalData.GetHumalAnimCtrl(targetID);
 
-                    if (!m_HumalData.humalDic.ContainsKey(targetID))
-                        m_HumalData.humalDic.Add(targetID, data);
-
-                    if(isLobby)
+                    if (isLobby)
                     {
                         if (lobbyHeroList.Contains(data))
                             continue;
@@ -934,6 +919,15 @@ public class DataManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
     }
 
+    private async UniTaskVoid AutoSave()
+    {
+        while(true)
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(30f), DelayType.UnscaledDeltaTime);
+            SaveData();
+        }
+    }
+
     public void SaveData()
     {
         if (!Social.localUser.authenticated)
@@ -973,51 +967,66 @@ public class DataManager : MonoBehaviour
 
     public void AddNewHumal(int id)
     {
-        var unitData = m_HumalData.originHumalDataList[id];
-        if (unitData == null)
-            throw new Exception("해당 index의 unitData가 없습니다.");
-
-        if (IsContainsInHumalList(id))
+        try
         {
-            Debug.Log("이미 영웅이 있어서 파편으로 변환!");
-            AddHumalPiece(id, 100);
-        }
-        else
-        {
-            UnitData newData = new UnitData(unitData);
+            if(id < 0 || id >= m_HumalData.originHumalDataList.Count)
+                throw new Exception("해당 index의 unitData가 없습니다.");
 
-            popUpMgr.PopUp("휴멀 - " + newData.KoName + " 뽑기 성공!", EPopUpType.Notice);
+            var unitData = m_HumalData.originHumalDataList[id];
 
-            newData.sprite = m_HumalData.humalSpriteDic[id];
-            unitData.sprite = m_HumalData.humalSpriteDic[id];
-
-            if (id >= 0 && id < m_HumalData.humalAnimCtrlList.Count)
+            if (IsContainsInHumalList(id))
             {
-                newData.animCtrl = m_HumalData.humalAnimCtrlList[id];
-                unitData.animCtrl = m_HumalData.humalAnimCtrlList[id];
-            }
-
-            if (m_HumalData.partyList.Count <= 0)
-            {
-                newData.SetParty(true);
-                newData.SetLeader(true);
-                m_HumalData.partyList.Add(newData);
+                Debug.Log("이미 영웅이 있어서 파편으로 변환!");
+                AddHumalPiece(id, 100);
             }
             else
             {
-                newData.SetParty(false);
-                newData.SetLeader(false);
-                m_HumalData.humalList.Add(newData);
+                UnitData newData = new UnitData(unitData);
+
+                popUpMgr.PopUp("휴멀 - " + newData.KoName + " 뽑기 성공!", EPopUpType.Notice);
+
+                if (!m_HumalData.humalDic.ContainsKey(newData.ID))
+                    m_HumalData.humalDic.Add(newData.ID, newData);
+
+                if (m_HumalData.humalSpriteDic.ContainsKey(id))
+                {
+                    newData.sprite = m_HumalData.humalSpriteDic[id];
+                    unitData.sprite = newData.sprite;
+                }
+
+                newData.animCtrl = m_HumalData.GetHumalAnimCtrl(id);
+                unitData.animCtrl = newData.animCtrl;
+
+                newData.SetUnlock(true);
+                Debug.Log("data - set : " + newData.IsUnlock);
+
+                if (m_HumalData.partyList.Count <= 0)
+                {
+                    newData.SetParty(true);
+                    newData.SetLeader(true);
+                    m_HumalData.partyList.Add(newData);
+                    //uiMgr.SwapSlotToParty(id);
+                    //uiMgr.SetToPartyList(id);
+                }
+                else
+                {
+                    newData.SetParty(false);
+                    newData.SetLeader(false);
+                    m_HumalData.humalList.Add(newData);
+                }
+
+                Debug.Log(Time.time + " load : " + m_HumalData.isLoadComplete);
+                if(!m_HumalData.isLoadComplete)
+                    uiMgr.SetEnabledHumalSlotByID(id);
+
+                uiMgr.UpdateHumalSlotDataByID(id);
+
+                SetupHero();
             }
-
-            if (!m_HumalData.humalDic.ContainsKey(newData.ID))
-                m_HumalData.humalDic.Add(newData.ID, newData);
-
-            m_HumalData.humalUnlockAry[id] = true;
-
-            SetupHero();
-
-            uiMgr.SetEnabledHumalSlotByID(id, true);
+        }
+        catch(Exception ex)
+        {
+            Debug.LogError(ex.Message);
         }
     }
 
@@ -1056,11 +1065,12 @@ public class DataManager : MonoBehaviour
 
     public void AddHumalPiece(int id, int amount)
     {
-        popUpMgr.PopUp("휴멀 [" + id + "] 파편 " + amount +"개 획득!", EPopUpType.Notice);
         if(TryGetHumalPiece(id, out HumalPiece humalPiece))
         {
             humalPiece.amount += amount;
             uiMgr.UpdateHumalSlotByID(id);
+
+            popUpMgr.PopUp("휴멀 [" + humalPiece.name + "] 파편 " + amount + "개 획득!", EPopUpType.Notice);
         }
     }
 

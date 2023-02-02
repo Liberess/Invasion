@@ -126,6 +126,7 @@ public class ShopManager : MonoBehaviour
             }
         }
 
+        dataMgr.SaveData();
         yield return null;
     }
 

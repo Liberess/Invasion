@@ -71,6 +71,8 @@ public class HeroSlot : MonoBehaviour
         UpdateSlot();
     }
 
+    public void UpdateHumalData(UnitData unitData) => humalData = unitData;
+
     public void UpdateSlot()
     {
         if(lockGroup.activeSelf)

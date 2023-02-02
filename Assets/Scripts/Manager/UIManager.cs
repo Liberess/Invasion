@@ -35,6 +35,7 @@ public class UIManager : MonoBehaviour
 
     [Header("==== Sort UI ===="), Space(10)]
     [SerializeField] private Button sortBtn;
+    [SerializeField] private Text sortTxt;
     [SerializeField] private Button asSortBtn;
     [SerializeField] private Button desSortBtn;
     [SerializeField] private GameObject sortPanel;
@@ -161,15 +162,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void InitHeroPanel()
-    {
-        StartCoroutine(InitHeroPanelCoru());
-    }
+    public void InitHeroPanel() => StartCoroutine(InitHeroPanelCoru());
 
     private IEnumerator InitHeroPanelCoru()
     {
-        //yield return DataManager.Instance.StartCoroutine(DataManager.Instance.UpdateResources());
-
         InitPartySlot();
         InitHeroSlot();
 
@@ -178,6 +174,7 @@ public class UIManager : MonoBehaviour
 
     private void InitPartySlot()
     {
+        Debug.Log(Time.time + " InitPartySlot");
         for (int i = 0; i < dataMgr.HumalData.partyList.Count; i++)
         {
             HeroSlot heroSlot = GetObj();
@@ -191,6 +188,7 @@ public class UIManager : MonoBehaviour
 
     private void InitHeroSlot()
     {
+        Debug.Log(Time.time + " InitHeroSlot");
         List<int> PartyIDList = new List<int>();
         foreach (var hero in dataMgr.HumalData.partyList)
             PartyIDList.Add(hero.ID);
@@ -205,6 +203,7 @@ public class UIManager : MonoBehaviour
                 continue;
 
             HeroSlot heroSlot = GetObj();
+            heroSlot.transform.SetAsLastSibling();
             heroSlot.HumalDataSetup(dataMgr.HumalData.humalList[i]);
             heroSlot.SetEnabledHumalSlot(true);
             heroSlotList.Add(heroSlot);
@@ -219,17 +218,42 @@ public class UIManager : MonoBehaviour
                 continue;
 
             HeroSlot heroSlot = GetObj();
+            heroSlot.transform.SetAsLastSibling();
             heroSlot.HumalDataSetup(dataMgr.HumalData.originHumalDataList[i]);
             heroSlot.SetEnabledHumalSlot(false);
             heroSlotList.Add(heroSlot);
         }
+
+        OnClickSortButton(HeroSortType.Level);
     }
 
-    public void SetEnabledHumalSlotByID(int id, bool enabled)
+    public void SetToPartyList(int id)
     {
         HeroSlot heroSlot = heroSlotList.Find(x => x.HumalData.ID == id);
         if (heroSlot != null)
-            heroSlot.SetEnabledHumalSlot(enabled);
+            heroSlot.transform.root.BroadcastMessage(
+                "EndDrag", transform, SendMessageOptions.DontRequireReceiver);
+    }
+
+    public void SetEnabledHumalSlotByID(int id)
+    {
+        HeroSlot heroSlot = heroSlotList.Find(x => x.HumalData.ID == id);
+        if (heroSlot != null)
+        {
+            Debug.Log("ui - set : " + heroSlot.HumalData.IsUnlock);
+            heroSlot.SetEnabledHumalSlot(true);
+            OnClickSortButton(heroSortingType);
+        }
+    }
+
+    public void UpdateHumalSlotDataByID(int id)
+    {
+        HeroSlot heroSlot = heroSlotList.Find(x => x.HumalData.ID == id);
+        if (heroSlot != null)
+        {
+            if(dataMgr.HumalData.humalDic.TryGetValue(id, out UnitData data))
+                heroSlot.UpdateHumalData(data);
+        }
     }
 
     public void UpdateHumalSlotByID(int id)
@@ -239,49 +263,6 @@ public class UIManager : MonoBehaviour
             heroSlot.UpdateSlot();
     }
 
-/*    public void UpdateHeroPanel()
-    {
-        Debug.Log("UpdateHeroPanel");
-
-        for (int i = 0; i < dataMgr.HumalData.partyList.Count; i++)
-        {
-            int id = dataMgr.HumalData.partyList[i].ID;
-            if (partySlotList.Find(x => x.HumalData.ID == id) != null)
-                continue;
-
-            HeroSlot heroSlot = GetObj();
-            heroSlot.transform.SetParent(heroPartyGrid.transform);
-            heroSlot.transform.localScale = new Vector3(1f, 1f, 1f);
-            heroSlot.HumalDataSetup(dataMgr.HumalData.partyList[i]);
-            partySlotList.Add(heroSlot);
-        }
-
-        List<int> PartyIDList = new List<int>();
-        foreach (var hero in partySlotList)
-            PartyIDList.Add(hero.HumalData.ID);
-
-        Debug.Log("count2 : " + dataMgr.HumalData.humalList.Count);
-        for (int i = 0; i < dataMgr.HumalData.humalList.Count; i++)
-        {
-            int id = dataMgr.HumalData.humalList[i].ID;
-            Debug.Log("id2 : " + id);
-            if (PartyIDList.Contains(id))
-                continue;
-            else if (IsContainsHeroSlotList(id))
-            {
-            Debug.Log("33");
-                continue;
-            }
-
-            Debug.Log("create");
-            HeroSlot heroSlot = GetObj();
-            heroSlot.HumalDataSetup(dataMgr.HumalData.humalList[i]);
-            heroSlot.SetEnabledHumalSlot(false);
-            heroSlotList.Add(heroSlot);
-            Debug.Log(44);
-        }
-    }
-*/
     private bool IsContainsHeroSlotList(int id)
     {
         foreach(var heroSlot in heroSlotList)
@@ -299,13 +280,23 @@ public class UIManager : MonoBehaviour
     /// <param name="id"> Hero의 Data.ID </param>
     public void SwapSlotToParty(int id)
     {
-        foreach(var heroSlot in heroSlotList)
+        try
         {
-            if(heroSlot.HumalData.ID == id)
+            foreach (var heroSlot in heroSlotList)
             {
-                partySlotList.Add(heroSlot);
-                heroSlotList.Remove(heroSlot);
+                if (heroSlot.HumalData.ID == id)
+                {
+                    partySlotList.Add(heroSlot);
+                    heroSlotList.Remove(heroSlot);
+                    break;
+                }
             }
+
+            OnClickSortButton(heroSortingType);
+        }
+        catch(Exception ex) 
+        {
+            Debug.LogWarning(ex.Message);
         }
     }
 
@@ -315,13 +306,23 @@ public class UIManager : MonoBehaviour
     /// <param name="id"> Hero의 ID </param>
     public void SwapPartyToSlot(int id)
     {
-        foreach (var heroSlot in partySlotList)
+        try
         {
-            if (heroSlot.HumalData.ID == id)
+            foreach (var heroSlot in partySlotList)
             {
-                heroSlotList.Add(heroSlot);
-                partySlotList.Remove(heroSlot);
+                if (heroSlot.HumalData.ID == id)
+                {
+                    heroSlotList.Add(heroSlot);
+                    partySlotList.Remove(heroSlot);
+                    break;
+                }
             }
+
+            OnClickSortButton(heroSortingType);
+        }
+        catch(Exception ex)
+        { 
+            Debug.LogWarning(ex.Message);
         }
     }
 
@@ -337,10 +338,19 @@ public class UIManager : MonoBehaviour
                 break;
 
             case HeroSortType.Level:
+                sortTxt.text = "레벨";
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.HumalData.Level).ToList();
+                {
+                    heroSlotList = heroSlotList.
+                        OrderByDescending(x => x.HumalData.IsUnlock == true).
+                        ThenBy(x => x.HumalData.Level).ToList();
+                }
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.HumalData.Level).ToList();
+                {
+                    heroSlotList = heroSlotList.
+                        OrderByDescending(x => x.HumalData.IsUnlock == true).
+                        ThenByDescending(x => x.HumalData.Level).ToList();
+                }
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -350,10 +360,20 @@ public class UIManager : MonoBehaviour
                 break;
 
             case HeroSortType.Grade:
+                sortTxt.text = "등급";
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.HumalData.Level).ToList();
+                {
+                    heroSlotList = heroSlotList.
+                        OrderByDescending(x => x.HumalData.IsUnlock == true).
+                        ThenBy(x => x.HumalData.Level).ToList();
+                }
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.HumalData.Level).ToList();
+                {
+                    heroSlotList = heroSlotList.
+                        OrderByDescending(x => x.HumalData.IsUnlock == true).
+                        ThenByDescending(x => x.HumalData.Level).ToList();
+
+                }
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -363,10 +383,19 @@ public class UIManager : MonoBehaviour
                 break;
 
             case HeroSortType.DPS:
+                sortTxt.text = "전투력";
                 if (sortingType == SortingType.Ascending)
-                    heroSlotList = heroSlotList.OrderBy(x => x.HumalData.DPS).ToList();
+                {
+                    heroSlotList = heroSlotList.
+                        OrderByDescending(x => x.HumalData.IsUnlock == true).
+                        ThenBy(x => x.HumalData.DPS).ToList();
+                }
                 else
-                    heroSlotList = heroSlotList.OrderByDescending(x => x.HumalData.DPS).ToList();
+                {
+                    heroSlotList = heroSlotList.
+                        OrderByDescending(x => x.HumalData.IsUnlock == true).
+                        ThenByDescending(x => x.HumalData.DPS).ToList();
+                }
                 foreach (var slot in heroSlotList)
                 {
                     slot.transform.SetParent(null);
@@ -553,7 +582,7 @@ public class UIManager : MonoBehaviour
                 index = dataMgr.GetIndexOfHumalInList(data);
 
             if (index < 0)
-                throw new Exception("유효하지 않은 index 값입니다.");
+                throw new Exception(Time.time + " 유효하지 않은 index 값입니다.");
 
             isPartyDetailInfo = data.IsParty;
             currentPartyIndex = index;

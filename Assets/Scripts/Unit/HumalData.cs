@@ -6,9 +6,6 @@ using UnityEngine;
 public class HumalData
 {
     public bool isLoadComplete = false;
-    public const int HumalMaxSize = 11;
-
-    public bool[] humalUnlockAry = new bool[HumalMaxSize];
 
     //임시 히어로 데이터 저장
     public Dictionary<int, UnitData> humalDic = new Dictionary<int, UnitData>();
@@ -28,4 +25,10 @@ public class HumalData
     public List<Sprite> humalCardIconList = new List<Sprite>();
     public List<RuntimeAnimatorController> humalAnimCtrlList =
         new List<RuntimeAnimatorController>();
+    public RuntimeAnimatorController GetHumalAnimCtrl(int index)
+    {
+        if (index >= 0 && index < humalAnimCtrlList.Count)
+            return humalAnimCtrlList[index];
+        return null;
+    }
 }

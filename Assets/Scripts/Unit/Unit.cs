@@ -102,7 +102,7 @@ public abstract class Unit : LivingEntity
     public virtual void ChangeAc()
     {
         anim.runtimeAnimatorController =
-            DataManager.Instance.HumalData.humalAnimCtrlList[unitData.ID];
+            DataManager.Instance.HumalData.GetHumalAnimCtrl(unitData.ID);
     }
 
     protected void TeamValueSet()

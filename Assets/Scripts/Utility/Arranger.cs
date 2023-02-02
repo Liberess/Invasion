@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,72 +19,91 @@ public class Arranger : MonoBehaviour
 
     public void UpdateSlot()
     {
-        for (int i = 0; i < transform.childCount; i++)
+        try
         {
-            if (i == slotList.Count)
-                slotList.Add(null);
-
-            var slot = transform.GetChild(i);
-
-            if (slot != slotList[i])
-                slotList[i] = slot;
-        }
-
-        slotList.RemoveRange(transform.childCount, slotList.Count - transform.childCount);
-
-        if (myType == EArrangerType.Party)
-        {
-            for (int i = 0; i < slotList.Count; i++)
+            for (int i = 0; i < transform.childCount; i++)
             {
-                var heroSlot = slotList[i].GetComponent<HeroSlot>();
+                if (i == slotList.Count)
+                    slotList.Add(null);
 
-                if (heroSlot == null)
-                    continue;
-                
-                // 슬롯에서 파티로 추가했을 경우
-                if(!dataMgr.IsContainsInParty(heroSlot.HumalData.ID))
-                {
-                    UIManager.Instance.SwapSlotToParty(heroSlot.HumalData.ID);
+                var slot = transform.GetChild(i);
 
-                    if (i == 0)
-                        dataMgr.HumalData.partyList.Insert(0, heroSlot.HumalData);
-                    else
-                        dataMgr.HumalData.partyList.Add(heroSlot.HumalData);
-                }
-
-                if(i == 0)
-                    heroSlot.HumalData.SetLeader(true);
-                else
-                    heroSlot.HumalData.SetLeader(false);
-
-                heroSlot.UpdateSlotImage();
+                if (slot != slotList[i])
+                    slotList[i] = slot;
             }
 
-            dataMgr.UpdatePartyLeader();
-        }
-        else if(myType == EArrangerType.Hero)
-        {
-            for (int i = 0; i < slotList.Count; i++)
+            slotList.RemoveRange(transform.childCount, slotList.Count - transform.childCount);
+
+            if (myType == EArrangerType.Party)
             {
-                var heroSlot = slotList[i].GetComponent<HeroSlot>();
-
-                if (heroSlot == null)
-                    continue;
-
-                // 만약 파티에 같은 정보의 영웅 슬롯이 존재한다면
-                if (dataMgr.IsContainsInParty(heroSlot.HumalData.ID))
+                for (int i = 0; i < slotList.Count; i++)
                 {
-                    heroSlot.HumalData.SetLeader(false);
-                    int partyIndex = dataMgr.GetIndexOfHumalInParty(heroSlot.HumalData);
+                    var heroSlot = slotList[i].GetComponent<HeroSlot>();
 
-                    UIManager.Instance.SwapPartyToSlot(heroSlot.HumalData.ID);
-                    dataMgr.HumalData.partyList.RemoveAt(partyIndex);
+                    if (heroSlot == null)
+                        continue;
+
+                    // 슬롯에서 파티로 추가했을 경우
+                    if (!dataMgr.IsContainsInParty(heroSlot.HumalData.ID))
+                    {
+                        if (dataMgr.HumalData.humalDic.TryGetValue(heroSlot.HumalData.ID, out UnitData data))
+                        {
+                            data.SetParty(true);
+       
+                            dataMgr.HumalData.humalList.Remove(data);
+
+                            if (i == 0)
+                            {
+                                data.SetLeader(true);
+                                dataMgr.HumalData.partyList.Insert(0, heroSlot.HumalData);
+                            }
+                            else
+                            {
+                                data.SetLeader(false);
+                                dataMgr.HumalData.partyList.Add(heroSlot.HumalData);
+                            }
+                        }
+
+                        UIManager.Instance.SwapSlotToParty(heroSlot.HumalData.ID);
+                    }
+
+                    heroSlot.UpdateSlotImage();
                 }
 
-                heroSlot.UpdateSlotImage();
+                dataMgr.UpdatePartyLeader();
             }
+            else if (myType == EArrangerType.Hero)
+            {
+                for (int i = 0; i < slotList.Count; i++)
+                {
+                    var heroSlot = slotList[i].GetComponent<HeroSlot>();
 
-            dataMgr.UpdatePartyLeader();
+                    if (heroSlot == null)
+                        continue;
+
+                    // 만약 파티에 같은 정보의 영웅 슬롯이 존재한다면
+                    if (dataMgr.IsContainsInParty(heroSlot.HumalData.ID))
+                    {
+                        if (dataMgr.HumalData.humalDic.TryGetValue(heroSlot.HumalData.ID, out UnitData data))
+                        {
+                            data.SetParty(false);
+                            data.SetLeader(false);
+                            dataMgr.HumalData.humalList.Add(data);
+                            dataMgr.HumalData.partyList.Remove(data);
+                        }
+
+                        UIManager.Instance.SwapPartyToSlot(heroSlot.HumalData.ID);
+                    }
+
+                    heroSlot.UpdateSlotImage();
+                }
+
+                dataMgr.UpdatePartyLeader();
+            }
+        }
+        catch(Exception ex)
+        {
+            Debug.LogError(ex.Message);
         }
     }
 

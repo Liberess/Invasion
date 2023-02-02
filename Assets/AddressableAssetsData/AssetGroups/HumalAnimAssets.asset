@@ -42,6 +42,56 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalAnimCtrl
+  - m_GUID: 329a5e377c82b2942b30c399550c1323
+    m_Address: 01_Ssamdak_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: ba23be221ca9eb943a8f61bb7ccfe310
+    m_Address: 02_BbeonAl_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: 84706ec273fd97f47824b5c623a82e2b
+    m_Address: 03_Pudding_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: c518c15011f9dcc4f9e8f8914526cac1
+    m_Address: 04_Pearl_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: 20efc1118df386f4aa35ef99a0080af6
+    m_Address: 05_Jungle_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: baa2cd44e4e1ee84ab01d627e41ab669
+    m_Address: 06_Ddochi_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: 70cde1041df7f8e478e6f849ed2a7f67
+    m_Address: 07_YoungMi_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: 49cfb302019fffb4baf4b288287d8a50
+    m_Address: 08_Jack_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: 7c3e75894d97efc4f81a00adf09ab6f6
+    m_Address: 09_Hose_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: a14321d042670634baec03b26cff7dfd
+    m_Address: 10_Bella_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 14a12ce42ca59a341979f49e59c63df8, type: 2}
   m_SchemaSet:

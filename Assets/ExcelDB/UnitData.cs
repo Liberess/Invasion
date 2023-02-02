@@ -45,11 +45,15 @@ public class UnitData
     public float DPS =>           // 초당 공격력. Damage per Second
         (1f / attackDelay) * ap;
 
-    [SerializeField] private bool isParty;
+    [SerializeField] private bool isUnlock = false;
+    public bool IsUnlock => isUnlock;
+    public void SetUnlock(bool _isUnlock) => isUnlock = _isUnlock;
+
+    [SerializeField] private bool isParty = false;
     public bool IsParty => isParty;
     public void SetParty(bool _isParty) => isParty = _isParty;
 
-    [SerializeField] private bool isLeader;          // 영웅 파티의 리더인가?
+    [SerializeField] private bool isLeader = false;          // 영웅 파티의 리더인가?
     public bool IsLeader => isLeader;
     public void SetLeader(bool _isLeader) => isLeader = _isLeader;
 
