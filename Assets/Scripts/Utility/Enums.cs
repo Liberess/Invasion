@@ -39,7 +39,7 @@ public enum EStageLevel { Easy = 0, Normal, Hard }
 public enum EPopUpType { Notice = 0, Caution, Warning }
 public enum EPopUpResponse { Ok, Yes, No, Error }
 
-public enum EArrangerType { Party = 0, Hero, Item }
+public enum EArrangerType { Party = 0, Item }
 
 public enum EUnitQueueType { Hero = 0, Enemy }
 

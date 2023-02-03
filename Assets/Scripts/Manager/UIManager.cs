@@ -26,12 +26,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject heroPartyGrid;
     [SerializeField] private GameObject heroSlotGrid;
     [SerializeField] private GameObject heroMenuPanel;
+    public GameObject HeroMenuPanel => heroMenuPanel;
+    public Button partyMenuBtn;
+    [HideInInspector] public Text partyMenuTxt;
     [SerializeField] private HeroDetailInfoPanel heroDetailInfoPanel;
     [SerializeField] private Button nextHeroBtn;
     [SerializeField] private Button previousHeroBtn;
     private int currentHeroIndex;
     private int currentPartyIndex;
     private bool isPartyDetailInfo = false;
+    private HeroSlot currentHeroSlot;
 
     [Header("==== Sort UI ===="), Space(10)]
     [SerializeField] private Button sortBtn;
@@ -90,6 +94,9 @@ public class UIManager : MonoBehaviour
 
         InitHeroSlotObjectPool();
         InitSortButton();
+
+        partyMenuTxt = partyMenuBtn.GetComponentInChildren<Text>();
+        partyMenuBtn.onClick.AddListener(SetPartyToHumalSlot);
 
         //StartCoroutine(InitHeroPanelCoru());
         //StartCoroutine(UpdateGoodsUICo(0.1f));
@@ -174,7 +181,6 @@ public class UIManager : MonoBehaviour
 
     private void InitPartySlot()
     {
-        Debug.Log(Time.time + " InitPartySlot");
         for (int i = 0; i < dataMgr.HumalData.partyList.Count; i++)
         {
             HeroSlot heroSlot = GetObj();
@@ -188,7 +194,6 @@ public class UIManager : MonoBehaviour
 
     private void InitHeroSlot()
     {
-        Debug.Log(Time.time + " InitHeroSlot");
         List<int> PartyIDList = new List<int>();
         foreach (var hero in dataMgr.HumalData.partyList)
             PartyIDList.Add(hero.ID);
@@ -206,6 +211,7 @@ public class UIManager : MonoBehaviour
             heroSlot.transform.SetAsLastSibling();
             heroSlot.HumalDataSetup(dataMgr.HumalData.humalList[i]);
             heroSlot.SetEnabledHumalSlot(true);
+            heroSlot.SetEnabledDraggable(false);
             heroSlotList.Add(heroSlot);
         }
 
@@ -221,18 +227,11 @@ public class UIManager : MonoBehaviour
             heroSlot.transform.SetAsLastSibling();
             heroSlot.HumalDataSetup(dataMgr.HumalData.originHumalDataList[i]);
             heroSlot.SetEnabledHumalSlot(false);
+            heroSlot.SetEnabledDraggable(false);
             heroSlotList.Add(heroSlot);
         }
 
         OnClickSortButton(HeroSortType.Level);
-    }
-
-    public void SetToPartyList(int id)
-    {
-        HeroSlot heroSlot = heroSlotList.Find(x => x.HumalData.ID == id);
-        if (heroSlot != null)
-            heroSlot.transform.root.BroadcastMessage(
-                "EndDrag", transform, SendMessageOptions.DontRequireReceiver);
     }
 
     public void SetEnabledHumalSlotByID(int id)
@@ -240,7 +239,6 @@ public class UIManager : MonoBehaviour
         HeroSlot heroSlot = heroSlotList.Find(x => x.HumalData.ID == id);
         if (heroSlot != null)
         {
-            Debug.Log("ui - set : " + heroSlot.HumalData.IsUnlock);
             heroSlot.SetEnabledHumalSlot(true);
             OnClickSortButton(heroSortingType);
         }
@@ -274,58 +272,50 @@ public class UIManager : MonoBehaviour
         return false;
     }
 
-    /// <summary>
-    /// 영웅 슬롯에서 파티 슬롯으로 스왑했을 때 사용한다.
-    /// </summary>
-    /// <param name="id"> Hero의 Data.ID </param>
-    public void SwapSlotToParty(int id)
+    public void SetCurrentHumalSlot(HeroSlot heroSlot) => currentHeroSlot = heroSlot;
+
+    public void SetPartyToHumalSlot()
     {
-        try
+        int id = currentHeroSlot.HumalData.ID;
+        
+        if (currentHeroSlot.HumalData.IsParty)
         {
-            foreach (var heroSlot in heroSlotList)
+            if (dataMgr.HumalData.humalDic.ContainsKey(id))
             {
-                if (heroSlot.HumalData.ID == id)
-                {
-                    partySlotList.Add(heroSlot);
-                    heroSlotList.Remove(heroSlot);
-                    break;
-                }
+                dataMgr.HumalData.humalDic[id].SetParty(false);
+                dataMgr.HumalData.humalDic[id].SetLeader(false);
+                dataMgr.HumalData.humalList.Add(currentHeroSlot.HumalData);
+                dataMgr.HumalData.partyList.Remove(currentHeroSlot.HumalData);
             }
-
-            OnClickSortButton(heroSortingType);
+            
+            currentHeroSlot.SetEnabledDraggable(false);
+            heroSlotList.Add(currentHeroSlot);
+            partySlotList.Remove(currentHeroSlot);
         }
-        catch(Exception ex) 
+        else
         {
-            Debug.LogWarning(ex.Message);
-        }
-    }
-
-    /// <summary>
-    /// 파티 슬롯에서 영웅 슬롯으로 스왑했을 때 사용한다.
-    /// </summary>
-    /// <param name="id"> Hero의 ID </param>
-    public void SwapPartyToSlot(int id)
-    {
-        try
-        {
-            foreach (var heroSlot in partySlotList)
+            if (dataMgr.HumalData.humalDic.ContainsKey(id))
             {
-                if (heroSlot.HumalData.ID == id)
-                {
-                    heroSlotList.Add(heroSlot);
-                    partySlotList.Remove(heroSlot);
-                    break;
-                }
+                if(dataMgr.HumalData.partyList.Count <= 0)
+                    dataMgr.HumalData.humalDic[id].SetLeader(true);
+                    
+                dataMgr.HumalData.humalDic[id].SetParty(true);
+                dataMgr.HumalData.humalList.Remove(currentHeroSlot.HumalData);
+                dataMgr.HumalData.partyList.Add(currentHeroSlot.HumalData);
             }
-
-            OnClickSortButton(heroSortingType);
+            
+            heroSlotList.Remove(currentHeroSlot);
+            partySlotList.Add(currentHeroSlot);
+            
+            currentHeroSlot.SetEnabledDraggable(true);
+            currentHeroSlot.transform.SetParent(null);
+            currentHeroSlot.transform.SetParent(heroPartyGrid.transform);
         }
-        catch(Exception ex)
-        { 
-            Debug.LogWarning(ex.Message);
-        }
+        
+        heroMenuPanel.SetActive(false);
+        OnClickSortButton(heroSortingType);
     }
-
+    
     private void OnClickSortButton(HeroSortType sortType)
     {
         switch (sortType)

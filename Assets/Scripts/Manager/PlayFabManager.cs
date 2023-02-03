@@ -113,7 +113,6 @@ public class PlayFabManager : MonoBehaviour
             yield return delay;
         }
 
-        dataMgr.SaveData();
         OnPlayFabLoginSuccessAction?.Invoke();
         //yield return AudioManager.Instance.StartCoroutine(AudioManager.Instance.InitializedAudioSettingCo());
         yield return null;

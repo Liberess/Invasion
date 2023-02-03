@@ -29,6 +29,9 @@ public class GameData
     public StageInfo stageInfo;
     public Dictionary<string, string> stageNameDic = new Dictionary<string, string>();
 
+    public GameObject[] unitPrefabAry = new GameObject[2];
+    public GameObject lobbyHumalPrefab;
+
     public List<UnitData> enemyDataList = new List<UnitData>();
     public List<Sprite> enemySpriteList = new List<Sprite>();
 

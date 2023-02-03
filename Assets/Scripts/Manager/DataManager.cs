@@ -18,7 +18,9 @@ public class DataManager : MonoBehaviour
 
     [Header("==== Hero Object Prefab ====")]
     [SerializeField] private AssetReference heroReference;
+    [SerializeField] private AssetReference enemyReference;
     [SerializeField] private AssetReference lobbyHeroReference;
+
     private List<UnitData> lobbyHeroList = new List<UnitData>();
     //[SerializeField] private GameObject heroPrefab;
     //[SerializeField] private GameObject lobbyHeroPrefab;
@@ -26,19 +28,30 @@ public class DataManager : MonoBehaviour
     public UnitData LeaderHero { get; private set; }
 
     #region 인스턴스화
+
     public static DataManager Instance { get; private set; }
 
-    [Header("==== Game Data Information ===="), Space(10)]
-    [SerializeField] private GameData m_GameData = new GameData();
-    public GameData GameData { get => m_GameData; }
+    [Header("==== Game Data Information ===="), Space(10)] [SerializeField]
+    private GameData m_GameData = new GameData();
 
-    [Header("==== Hero Data Information ===="), Space(10)]
-    [SerializeField] private HumalData m_HumalData = new HumalData();
-    public HumalData HumalData { get => m_HumalData; }
+    public GameData GameData
+    {
+        get => m_GameData;
+    }
 
-    [Header("==== Item Data Information ===="), Space(10)]
-    [SerializeField] private List<ItemData> mItemDataList = new List<ItemData>();
+    [Header("==== Hero Data Information ===="), Space(10)] [SerializeField]
+    private HumalData m_HumalData = new HumalData();
+
+    public HumalData HumalData
+    {
+        get => m_HumalData;
+    }
+
+    [Header("==== Item Data Information ===="), Space(10)] [SerializeField]
+    private List<ItemData> mItemDataList = new List<ItemData>();
+
     public List<ItemData> ItemDataList => mItemDataList;
+
     #endregion
 
     private Dictionary<string, int> VirtualCurrencyDic = new Dictionary<string, int>();
@@ -49,7 +62,11 @@ public class DataManager : MonoBehaviour
     [SerializeField] private Text isProgressTxt;
     private bool isDownStart = false;
 
+    [SerializeField, Range(5f, 60f)] private readonly float saveDataInterval = 30f;
+    private DateTime lastSaveTime;
     private AsyncOperationHandle updateBundleHandle;
+
+    public Action OnSaveDataAction;
 
     private void Awake()
     {
@@ -71,6 +88,8 @@ public class DataManager : MonoBehaviour
 
         PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => AutoSave().Forget();
 
+        OnSaveDataAction += SaveData;
+
         GameManager.Instance.OnApplicationStart();
 
         StartCoroutine(UpdateResources());
@@ -79,8 +98,10 @@ public class DataManager : MonoBehaviour
     public void SetStageInfo(StageInfo info) => GameData.stageInfo = info;
 
     #region Update Resources
+
     public IEnumerator UpdateResources()
     {
+        UpdateUnitPrefab();
         UpdateHeroSprite();
         UpdateGoodsSprite();
         UpdateHeroAnimCtrl();
@@ -90,6 +111,18 @@ public class DataManager : MonoBehaviour
         UpdateHumalPickDB();
 
         yield return null;
+    }
+
+    private void UpdateUnitPrefab()
+    {
+        Addressables.LoadAssetAsync<GameObject>(heroReference).Completed +=
+            handle => m_GameData.unitPrefabAry[(int)EUnitQueueType.Hero] = handle.Result;
+        
+        Addressables.LoadAssetAsync<GameObject>(enemyReference).Completed +=
+            handle => m_GameData.unitPrefabAry[(int)EUnitQueueType.Enemy] = handle.Result;
+
+        Addressables.LoadAssetAsync<GameObject>(lobbyHeroReference).Completed +=
+            handle => m_GameData.lobbyHumalPrefab = handle.Result;
     }
 
     private void UpdateHumalPickDB()
@@ -837,10 +870,13 @@ public class DataManager : MonoBehaviour
                         if (lobbyHeroList.Contains(data))
                             continue;
 
+                        /*var lobbyHero = Instantiate(m_GameData.lobbyHumalPrefab, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
+                        var heroStat = data;
+                        lobbyHero.UnitSetup(heroStat);
+                        lobbyHeroList.Add(data);*/
+
                         Addressables.InstantiateAsync(
-                            lobbyHeroReference,
-                            Vector3.zero,
-                            Quaternion.identity
+                            lobbyHeroReference, Vector3.zero, Quaternion.identity
                         ).Completed += (handle) =>
                         {
                             if (handle.Result.TryGetComponent(out LobbyHero hero))
@@ -923,7 +959,7 @@ public class DataManager : MonoBehaviour
     {
         while(true)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(30f), DelayType.UnscaledDeltaTime);
+            await UniTask.Delay(TimeSpan.FromSeconds(saveDataInterval), DelayType.UnscaledDeltaTime);
             SaveData();
         }
     }
@@ -933,6 +969,11 @@ public class DataManager : MonoBehaviour
         if (!Social.localUser.authenticated)
             return;
 
+        TimeSpan timeCal = DateTime.Now - lastSaveTime;
+        if(timeCal.Seconds < saveDataInterval)
+            return;
+        
+        lastSaveTime = DateTime.Now;
         SaveTime();
 
         Dictionary<string, string> dataDic = new Dictionary<string, string>
@@ -998,8 +1039,7 @@ public class DataManager : MonoBehaviour
                 unitData.animCtrl = newData.animCtrl;
 
                 newData.SetUnlock(true);
-                Debug.Log("data - set : " + newData.IsUnlock);
-
+                
                 if (m_HumalData.partyList.Count <= 0)
                 {
                     newData.SetParty(true);
@@ -1015,7 +1055,6 @@ public class DataManager : MonoBehaviour
                     m_HumalData.humalList.Add(newData);
                 }
 
-                Debug.Log(Time.time + " load : " + m_HumalData.isLoadComplete);
                 if(!m_HumalData.isLoadComplete)
                     uiMgr.SetEnabledHumalSlotByID(id);
 

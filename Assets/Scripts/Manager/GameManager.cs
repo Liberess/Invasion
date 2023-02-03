@@ -189,6 +189,7 @@ public class GameManager : MonoBehaviour
 
     public void GameQuit()
     {
+        dataMgr.SaveData();
         Application.Quit();
     }
 }

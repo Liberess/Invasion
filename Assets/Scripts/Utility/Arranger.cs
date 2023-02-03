@@ -63,36 +63,6 @@ public class Arranger : MonoBehaviour
                                 dataMgr.HumalData.partyList.Add(heroSlot.HumalData);
                             }
                         }
-
-                        UIManager.Instance.SwapSlotToParty(heroSlot.HumalData.ID);
-                    }
-
-                    heroSlot.UpdateSlotImage();
-                }
-
-                dataMgr.UpdatePartyLeader();
-            }
-            else if (myType == EArrangerType.Hero)
-            {
-                for (int i = 0; i < slotList.Count; i++)
-                {
-                    var heroSlot = slotList[i].GetComponent<HeroSlot>();
-
-                    if (heroSlot == null)
-                        continue;
-
-                    // 만약 파티에 같은 정보의 영웅 슬롯이 존재한다면
-                    if (dataMgr.IsContainsInParty(heroSlot.HumalData.ID))
-                    {
-                        if (dataMgr.HumalData.humalDic.TryGetValue(heroSlot.HumalData.ID, out UnitData data))
-                        {
-                            data.SetParty(false);
-                            data.SetLeader(false);
-                            dataMgr.HumalData.humalList.Add(data);
-                            dataMgr.HumalData.partyList.Remove(data);
-                        }
-
-                        UIManager.Instance.SwapPartyToSlot(heroSlot.HumalData.ID);
                     }
 
                     heroSlot.UpdateSlotImage();
@@ -132,6 +102,12 @@ public class Arranger : MonoBehaviour
 
     public void SwapSlot(int index1, int index2)
     {
+        if (index1 < 0 || index1 >= slotList.Count || index2 < 0 || index2 >= slotList.Count)
+        {
+            Debug.LogWarning("Arranger::SwapSlot - index is not vaild " + index1 + ", " + index2);
+            return;
+        }
+        
         if(slotList[index1].name != "InvisibleSlot" && slotList[index2].name != "InvisibleSlot")
             dataMgr.SwapPartyData(index1, index2);
 

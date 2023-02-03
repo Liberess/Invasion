@@ -71,6 +71,9 @@ public abstract class Unit : LivingEntity
         moveSpeed = _unitData.MoveSpeed;
         distance = _unitData.Distance;
 
+        spriteRen.sprite = unitData.sprite;
+        anim.runtimeAnimatorController = unitData.animCtrl;
+        
         spriteRen.color = Color.white;
     }
 

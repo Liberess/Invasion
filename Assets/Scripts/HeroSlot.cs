@@ -7,13 +7,13 @@ using UnityEngine.UI;
 
 public class HeroSlot : MonoBehaviour
 {
+    private UIManager uiMgr;
+    
     [Header("==== Unlock Group ====")]
     [SerializeField] private Text lvTxt;
     [SerializeField] private Image heroImg;
 
     private Button btn;
-    [SerializeField] private GameObject menuPanel;
-    [SerializeField] private Text partyMenuTxt;
 
     [SerializeField] private UnitData humalData;
     public UnitData HumalData { get => humalData; }
@@ -39,17 +39,13 @@ public class HeroSlot : MonoBehaviour
 
     private void Start()
     {
+        uiMgr = UIManager.Instance;
+        
         if (lvTxt == null)
             lvTxt = transform.Find("LvTxt").GetComponent<Text>();
 
         if (heroImg == null)
             heroImg = transform.Find("HeroImg").GetComponent<Image>();
-
-        if (menuPanel == null)
-            menuPanel = GameObject.Find("UICanvas").transform.Find("HeroPanel").Find("MenuPanel").gameObject;
-
-        if (partyMenuTxt == null)
-            partyMenuTxt = menuPanel.transform.Find("MenuPanel").Find("PartyMenuBtn").Find("Text").GetComponent<Text>();
 
         menuPos = transform.Find("MenuPos").transform.localPosition;
 
@@ -119,7 +115,7 @@ public class HeroSlot : MonoBehaviour
 
     public void SlotDragEvent()
     {
-        UIManager.Instance.HideHeroInfoPanelAction();
+        uiMgr.HideHeroInfoPanelAction();
     }
 
     public void UpdateSlotImage()
@@ -133,8 +129,10 @@ public class HeroSlot : MonoBehaviour
     private void OnClickOther()
     {
         if (EventSystem.current.IsPointerOverGameObject())
-            menuPanel.SetActive(false);
+            uiMgr.HeroMenuPanel.SetActive(false);
     }
+
+    public void SetEnabledDraggable(bool enabled) => drag.enabled = enabled;
 
     private void OnClickEvent()
     {
@@ -143,22 +141,24 @@ public class HeroSlot : MonoBehaviour
             if (drag != null && drag.CanDrag)
                 return;
 
-            Vector3 newPos = transform.position + menuPos;
-            menuPanel.transform.Find("MenuPanel").position = newPos;
-            menuPanel.SetActive(true);
-
-            UIManager.Instance.UpdateHeroDetailInfo(humalData);
-
+            Vector3 newPos = rt.position + menuPos;
+            uiMgr.HeroMenuPanel.transform.GetChild(0).position = newPos;
+            
+            uiMgr.UpdateHeroDetailInfo(humalData);
+            uiMgr.SetCurrentHumalSlot(this);
+            
             if (humalData.IsParty)
             {
-                partyMenuTxt.text = "파티 해제";
-                menuPanel.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
+                uiMgr.partyMenuTxt.text = "파티 해제";
+                uiMgr.HeroMenuPanel.transform.GetChild(0).localScale = new Vector3(1.3f, 1.3f, 1.3f);
             }
             else
             {
-                partyMenuTxt.text = "파티 추가";
-                menuPanel.transform.localScale = new Vector3(1f, 1f, 1f);
+                uiMgr.partyMenuTxt.text = "파티 추가";
+                uiMgr.HeroMenuPanel.transform.GetChild(0).localScale = new Vector3(1f, 1f, 1f);
             }
+            
+            uiMgr.HeroMenuPanel.SetActive(true);
         }
         catch(Exception ex)
         {

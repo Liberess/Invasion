@@ -42,8 +42,6 @@ public class BattleManager : MonoBehaviour
     public bool IsPlay { get; private set; }
 
     [Header("== Setting Object Pooling =="), Space(10)]
-    [SerializeField] private AssetReference heroReference;
-    [SerializeField] private AssetReference enemyReference;
     [SerializeField] private int defaultHeroCount = 20;
     [SerializeField] private int defaultEnemyCount = 20;
     private Dictionary<EUnitQueueType, Queue<GameObject>> queDic =
@@ -117,8 +115,14 @@ public class BattleManager : MonoBehaviour
         InitializeResultUI();
 
         queDic.Clear();
+        quePrefabDic.Clear();
+        
+        quePrefabDic.Add(EUnitQueueType.Hero, dataMgr.GameData.unitPrefabAry[(int)EUnitQueueType.Hero]);
+        quePrefabDic.Add(EUnitQueueType.Enemy, dataMgr.GameData.unitPrefabAry[(int)EUnitQueueType.Enemy]);
+        Initialize(EUnitQueueType.Hero, defaultHeroCount);
+        Initialize(EUnitQueueType.Enemy, defaultEnemyCount);
 
-        bool isLoadComplete = false;
+        /*bool isLoadComplete = false;
         Addressables.LoadAssetAsync<GameObject>(heroReference).Completed +=
             handle =>
             {
@@ -144,7 +148,7 @@ public class BattleManager : MonoBehaviour
                 }
             };
 
-        await UniTask.WaitUntil(() => isLoadComplete == true);
+        await UniTask.WaitUntil(() => isLoadComplete == true);*/
 
         SetHeroCard();
         SetCostSlider();
@@ -157,7 +161,6 @@ public class BattleManager : MonoBehaviour
     private void Initialize(EUnitQueueType type, int initCount)
     {
         queDic.Add(type, new Queue<GameObject>());
-        Debug.Log("Initialize : " + type.ToString());
 
         for (int i = 0; i < initCount; i++)
             queDic[type].Enqueue(CreateNewObj(type, i));
@@ -171,22 +174,17 @@ public class BattleManager : MonoBehaviour
             return null;
         }
 
-        if(quePrefabDic[type] == null)
+        if(!quePrefabDic[type])
         {
             Debug.Log("해당 " + type + " 타입의 Value가 존재하지 않음");
             return null;
         }
-
-        if(quePrefabDic[type])
-        {
-            var newObj = Instantiate(quePrefabDic[type].gameObject, transform.position, Quaternion.identity);
-            newObj.name = type.ToString() + index;
-            newObj.gameObject.SetActive(false);
-            newObj.transform.SetParent(transform);
-            return newObj;
-        }
-
-        return null;
+        
+        var newObj = Instantiate(quePrefabDic[type].gameObject, transform.position, Quaternion.identity);
+        newObj.name = type.ToString() + index;
+        newObj.gameObject.SetActive(false);
+        newObj.transform.SetParent(transform);
+        return newObj;
     }
 
     public static GameObject GetObj(EUnitQueueType type)
