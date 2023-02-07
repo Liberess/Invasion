@@ -18,6 +18,19 @@ public class HeroSlot : MonoBehaviour
     [SerializeField] private UnitData humalData;
     public UnitData HumalData { get => humalData; }
 
+    private int weight = 0;
+    public int Weight
+    {
+        get
+        {
+            if(humalData.IsUnlock) return weight + 20;
+            if (unlockBtn.gameObject.activeSelf) return weight + 10;
+            return weight;
+        }
+        
+        set => weight = value;
+    }
+
     [Space(5), Header("==== Lock Group ====")]
     [SerializeField] private GameObject lockGroup;
     [SerializeField] private Image pieceImg;
@@ -75,9 +88,9 @@ public class HeroSlot : MonoBehaviour
         {
             if (DataManager.Instance.TryGetHumalPieceAmount(humalData.ID, out int amount))
             {
-                if(amount >= 100)
+                if (amount >= 100)
                     unlockBtn.gameObject.SetActive(true);
-
+                
                 pieceAmountTxt.text = string.Concat(amount, "/", 100);
                 piecefillImg.fillAmount = amount / 100.0f;
             }

@@ -44,8 +44,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button desSortBtn;
     [SerializeField] private GameObject sortPanel;
     [SerializeField] private List<Button> sortBtnList = new List<Button>();
-    private SortingType sortingType;
-    private HeroSortType heroSortingType;
+    private SortingType sortingType = SortingType.Ascending;
+    private HeroSortType heroSortingType = HeroSortType.Level;
 
     [Header("==== HeroSlot Object Pooling ===="), Space(10)]
     [SerializeField] private GameObject heroSlotPrefab;
@@ -258,7 +258,10 @@ public class UIManager : MonoBehaviour
     {
         HeroSlot heroSlot = heroSlotList.Find(x => x.HumalData.ID == id);
         if (heroSlot != null)
+        {
             heroSlot.UpdateSlot();
+            OnClickSortButton(heroSortingType);
+        }
     }
 
     private bool IsContainsHeroSlotList(int id)
@@ -277,7 +280,7 @@ public class UIManager : MonoBehaviour
     public void SetPartyToHumalSlot()
     {
         int id = currentHeroSlot.HumalData.ID;
-        
+  
         if (currentHeroSlot.HumalData.IsParty)
         {
             if (dataMgr.HumalData.humalDic.ContainsKey(id))
@@ -332,13 +335,13 @@ public class UIManager : MonoBehaviour
                 if (sortingType == SortingType.Ascending)
                 {
                     heroSlotList = heroSlotList.
-                        OrderByDescending(x => x.HumalData.IsUnlock == true).
+                        OrderByDescending(x => x.Weight).
                         ThenBy(x => x.HumalData.Level).ToList();
                 }
                 else
                 {
                     heroSlotList = heroSlotList.
-                        OrderByDescending(x => x.HumalData.IsUnlock == true).
+                        OrderByDescending(x => x.Weight).
                         ThenByDescending(x => x.HumalData.Level).ToList();
                 }
                 foreach (var slot in heroSlotList)
@@ -354,13 +357,13 @@ public class UIManager : MonoBehaviour
                 if (sortingType == SortingType.Ascending)
                 {
                     heroSlotList = heroSlotList.
-                        OrderByDescending(x => x.HumalData.IsUnlock == true).
+                        OrderByDescending(x => x.Weight).
                         ThenBy(x => x.HumalData.Level).ToList();
                 }
                 else
                 {
                     heroSlotList = heroSlotList.
-                        OrderByDescending(x => x.HumalData.IsUnlock == true).
+                        OrderByDescending(x => x.Weight).
                         ThenByDescending(x => x.HumalData.Level).ToList();
 
                 }
@@ -377,13 +380,13 @@ public class UIManager : MonoBehaviour
                 if (sortingType == SortingType.Ascending)
                 {
                     heroSlotList = heroSlotList.
-                        OrderByDescending(x => x.HumalData.IsUnlock == true).
+                        OrderByDescending(x => x.Weight).
                         ThenBy(x => x.HumalData.DPS).ToList();
                 }
                 else
                 {
                     heroSlotList = heroSlotList.
-                        OrderByDescending(x => x.HumalData.IsUnlock == true).
+                        OrderByDescending(x => x.Weight).
                         ThenByDescending(x => x.HumalData.DPS).ToList();
                 }
                 foreach (var slot in heroSlotList)
@@ -392,9 +395,6 @@ public class UIManager : MonoBehaviour
                     slot.transform.SetParent(heroSlotGrid.transform);
                 }
                 sortPanel.SetActive(false);
-                break;
-
-            default:
                 break;
         }
     }

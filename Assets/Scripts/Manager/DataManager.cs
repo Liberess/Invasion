@@ -1011,7 +1011,7 @@ public class DataManager : MonoBehaviour
         try
         {
             if(id < 0 || id >= m_HumalData.originHumalDataList.Count)
-                throw new Exception("해당 index의 unitData가 없습니다.");
+                throw new Exception("해당 id-" + id + "의 unitData가 없습니다.");
 
             var unitData = m_HumalData.originHumalDataList[id];
 
@@ -1039,7 +1039,7 @@ public class DataManager : MonoBehaviour
                 unitData.animCtrl = newData.animCtrl;
 
                 newData.SetUnlock(true);
-                
+
                 if (m_HumalData.partyList.Count <= 0)
                 {
                     newData.SetParty(true);
@@ -1055,10 +1055,9 @@ public class DataManager : MonoBehaviour
                     m_HumalData.humalList.Add(newData);
                 }
 
+                uiMgr.UpdateHumalSlotDataByID(id);
                 if(!m_HumalData.isLoadComplete)
                     uiMgr.SetEnabledHumalSlotByID(id);
-
-                uiMgr.UpdateHumalSlotDataByID(id);
 
                 SetupHero();
             }

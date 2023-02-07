@@ -908,8 +908,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lvTxt: {fileID: 6648332721674509447}
   heroImg: {fileID: 6648332721176078794}
-  menuPanel: {fileID: 0}
-  partyMenuTxt: {fileID: 0}
   humalData:
     id: 0
     koName: 
@@ -924,6 +922,7 @@ MonoBehaviour:
     dodge: 0
     distance: 0
     attackDelay: 0
+    isUnlock: 0
     isParty: 0
     isLeader: 0
     sprite: {fileID: 0}

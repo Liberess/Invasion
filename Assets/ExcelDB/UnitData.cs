@@ -3,46 +3,46 @@ using UnityEngine;
 [System.Serializable]
 public class UnitData
 {
-    [SerializeField] private int id;                      // 고유 판별 ID
+    [SerializeField] private int id; // 고유 판별 ID
     public int ID => id;
 
-    [SerializeField] private string koName;            // 고유 닉네임
+    [SerializeField] private string koName; // 고유 닉네임
     public string KoName => koName;
 
-    [SerializeField] private string enName;            // 고유 닉네임.
+    [SerializeField] private string enName; // 고유 닉네임.
     public string EnName => enName;
 
-    [SerializeField] private int level;                  // 유닛 레벨
+    [SerializeField] private int level; // 유닛 레벨
     public int Level => level;
 
-    [SerializeField] private int cost;                   // 유닛 생성 비용
+    [SerializeField] private int cost; // 유닛 생성 비용
     public int Cost => cost;
 
-    [SerializeField] private int hp;                      // 체력. Health Point
+    [SerializeField] private int hp; // 체력. Health Point
     public int HP => hp;
 
-    [SerializeField] private int ap;                      // 공격력. Attack Power
+    [SerializeField] private int ap; // 공격력. Attack Power
     public int Ap => ap;
 
-    [SerializeField] private int dp;                      // 방어력. Defense Power
+    [SerializeField] private int dp; // 방어력. Defense Power
     public int Dp => dp;
 
-    [SerializeField] private float moveSpeed;    // 이동속도
+    [SerializeField] private float moveSpeed; // 이동속도
     public float MoveSpeed => moveSpeed;
 
-    [SerializeField] private float critical;            // 치명타율. Critical Chance
+    [SerializeField] private float critical; // 치명타율. Critical Chance
     public float Critical => critical;
 
-    [SerializeField] private float dodge;             // 회피율.
+    [SerializeField] private float dodge; // 회피율.
     public float Dodge => dodge;
 
-    [SerializeField] private float distance;         // 공격 거리. Attack Distance
+    [SerializeField] private float distance; // 공격 거리. Attack Distance
     public float Distance => distance;
 
-    [SerializeField] private float attackDelay;   // 공격 딜레이. Attack Delay Time
+    [SerializeField] private float attackDelay; // 공격 딜레이. Attack Delay Time
     public float AttackDelay => attackDelay;
 
-    public float DPS =>           // 초당 공격력. Damage per Second
+    public float DPS => // 초당 공격력. Damage per Second
         (1f / attackDelay) * ap;
 
     [SerializeField] private bool isUnlock = false;
