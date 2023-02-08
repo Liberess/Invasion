@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rewards:
   - type: 1
-    num: 100
+    amount: 100

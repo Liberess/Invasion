@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.AddressableAssets;
 using Cysharp.Threading.Tasks;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -14,7 +13,6 @@ public class BattleManager : MonoBehaviour
     public static BattleManager Instance { get; private set; }
 
     private DataManager dataMgr;
-    private UnityMainThreadDispatcher dispatcher;
 
     [Header("== Setting Game UI ==")]
     [SerializeField] private Text stageTxt;
@@ -85,10 +83,6 @@ public class BattleManager : MonoBehaviour
     private void Start()
     {
         dataMgr = DataManager.Instance;
-
-        if (UnityMainThreadDispatcher.Exists())
-            dispatcher = UnityMainThreadDispatcher.Instance();
-
         InitializeAsync().Forget();
     }
 
@@ -294,7 +288,7 @@ public class BattleManager : MonoBehaviour
 
     private void SetCostSlider()
     {
-        dispatcher.Enqueue(UpdateCardAction);
+        UpdateCardAction?.Invoke();
         costSlider.value = cost;
         costTxt.text = cost + "/" + 10;
     }
@@ -497,7 +491,7 @@ public class BattleManager : MonoBehaviour
 
     public void OnClickQuitBtn()
     {
-        SceneManager.LoadScene("Lobby");
+        dataMgr.LoadScene("Lobby").Forget();
     }
 
     private void OnClickHeroCard(int index)

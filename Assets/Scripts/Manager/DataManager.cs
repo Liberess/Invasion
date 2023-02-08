@@ -102,13 +102,14 @@ public class DataManager : MonoBehaviour
     public IEnumerator UpdateResources()
     {
         UpdateUnitPrefab();
-        UpdateHeroSprite();
+        UpdateHumalAssets();
         UpdateGoodsSprite();
         UpdateHeroAnimCtrl();
         UpdateHeroCardIcon();
         UpdateItemData();
         UpdateOriginDB();
         UpdateHumalPickDB();
+        UpdateEnemyAsset();
 
         yield return null;
     }
@@ -175,6 +176,8 @@ public class DataManager : MonoBehaviour
                         m_HumalData.originHumalDataList.Add(unitDB);
                 }
 
+                m_HumalData.originHumalDataList = m_HumalData.originHumalDataList.OrderBy(x => x.ID).ToList();
+
                 foreach(var unitDB in result.EnemyDBList)
                 {
                     if(!m_GameData.enemyDataList.Contains(unitDB))
@@ -182,34 +185,9 @@ public class DataManager : MonoBehaviour
                 }
             }
         );
-
-        updateBundleHandle = Addressables.LoadAssetsAsync<Sprite>(
-            Tags.EnemyLabel,
-            (result) =>
-            {
-                if (!isDownStart)
-                {
-                    isDownStart = true;
-                    isDownTxt.text = "몬스터 스프라이트 다운로드 시작";
-                    Debug.Log("몬스터 스프라이트 다운로드 시작");
-                    m_GameData.enemySpriteList.Clear();
-                    StartCoroutine(UpdateBundleProgressTxtCo());
-                }
-
-                if (!m_GameData.enemySpriteList.Contains(result))
-                    m_GameData.enemySpriteList.Add(result);
-            }
-        );
-
-        updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
-        {
-            updateBundleHandle = handle;
-            isDownTxt.text = "다운로드 완료";
-            isProgressTxt.text = "100%";
-        };
     }
 
-    private void UpdateHeroSprite()
+    private void UpdateHumalAssets()
     {
         updateBundleHandle = Addressables.LoadAssetsAsync<Sprite>(
             Tags.HumalSpriteLabel,
@@ -244,6 +222,43 @@ public class DataManager : MonoBehaviour
                 if(!m_HumalData.humalSpriteList.Contains(sprite))
                     m_HumalData.humalSpriteList.Add(sprite);
             }
+        };
+    }
+
+    private void UpdateEnemyAsset()
+    {
+        updateBundleHandle = Addressables.LoadAssetsAsync<Sprite>(
+            Tags.EnemyLabel,
+            (result) =>
+            {
+                if (!isDownStart)
+                {
+                    isDownStart = true;
+                    isDownTxt.text = "몬스터 스프라이트 다운로드 시작";
+                    Debug.Log("몬스터 스프라이트 다운로드 시작");
+                    m_GameData.enemySpriteList.Clear();
+                    StartCoroutine(UpdateBundleProgressTxtCo());
+                }
+
+                if (!m_GameData.enemySpriteList.Contains(result))
+                    m_GameData.enemySpriteList.Add(result);
+            }
+        );
+        
+        updateBundleHandle = Addressables.LoadAssetsAsync<RuntimeAnimatorController>(
+            Tags.EnemyAnimCtrlLabel,
+            (result) =>
+            {
+                if(!m_GameData.enemyAnimCtrlList.Contains(result))
+                    m_GameData.enemyAnimCtrlList.Add(result);
+            }
+        );
+
+        updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
+        {
+            updateBundleHandle = handle;
+            isDownTxt.text = "다운로드 완료";
+            isProgressTxt.text = "100%";
         };
     }
 
@@ -514,9 +529,6 @@ public class DataManager : MonoBehaviour
 
     public int GetCurrency(ECurrencyType type)
     {
-        if (!Social.localUser.authenticated)
-            return -1;
-
         if (VirtualCurrencyDic.ContainsKey(type.ToString()))
             return VirtualCurrencyDic[type.ToString()];
 
@@ -870,22 +882,23 @@ public class DataManager : MonoBehaviour
                         if (lobbyHeroList.Contains(data))
                             continue;
 
-                        /*var lobbyHero = Instantiate(m_GameData.lobbyHumalPrefab, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
+                        var lobbyHero = Instantiate(m_GameData.lobbyHumalPrefab, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
                         var heroStat = data;
                         lobbyHero.UnitSetup(heroStat);
-                        lobbyHeroList.Add(data);*/
+                        lobbyHeroList.Add(data);
 
-                        Addressables.InstantiateAsync(
+                        /*Addressables.InstantiateAsync(
                             lobbyHeroReference, Vector3.zero, Quaternion.identity
                         ).Completed += (handle) =>
                         {
                             if (handle.Result.TryGetComponent(out LobbyHero hero))
                             {
+                                Debug.Log("awdwadawd");
                                 var heroStat = data;
                                 hero.UnitSetup(heroStat);
                                 lobbyHeroList.Add(data);
                             }
-                        };
+                        };*/
                     }
                 }
             }
@@ -1176,6 +1189,35 @@ public class DataManager : MonoBehaviour
         }
 
         throw new Exception("does not exist Key");
+    }
+
+    public async UniTaskVoid LoadScene(string sceneName)
+    {
+        PlayFabManager.Instance.ClearLogInSuccessAction();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.LoadScene(sceneName);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if(scene.name != "Lobby")
+            return;
+
+        StartCoroutine(OnSceneLoadedCo());
+    }
+
+    private IEnumerator OnSceneLoadedCo()
+    {
+        lobbyHeroList.Clear();
+        SetupHero();
+
+        yield return new WaitForEndOfFrame();
+
+        uiMgr = UIManager.Instance;
+        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += uiMgr.InitHeroPanel;
+        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => uiMgr.UpdateCurrencyUI(0f).Forget();
+        PlayFabManager.Instance.InvokeLogInSuccessAction();
     }
 
     private void OnApplicationQuit()

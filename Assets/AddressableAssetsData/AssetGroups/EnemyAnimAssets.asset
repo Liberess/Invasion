@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: EnemyAnimAssets
+  m_EditorClassIdentifier: 
+  m_GroupName: EnemyAnimAssets
+  m_Data:
+    m_SerializedData: []
+  m_GUID: a83511b7a0f256746999253ab0880a85
+  m_SerializeEntries:
+  - m_GUID: 4677006360c58af40b10d69af88aa370
+    m_Address: 00_Man_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnemyAnim
+  - m_GUID: 133b229febe25e24ba48db6c214d0d62
+    m_Address: 00_Man_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnemyAnim
+  - m_GUID: 3554e3002a1f7cd4f980b3b05da96e14
+    m_Address: 00_Man_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnemyAnim
+  - m_GUID: cc0472d870a420444b7952cf3278c42f
+    m_Address: 00_Man_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnemyAnimCtrl
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 14a12ce42ca59a341979f49e59c63df8, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 72d4ffc5a8068a54aa64c574f53434b1, type: 2}
+    - {fileID: 11400000, guid: 3f7ed814f8a4e4340a64eb5a5a63bab6, type: 2}

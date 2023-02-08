@@ -46,6 +46,10 @@ public class PlayFabManager : MonoBehaviour
         StartCoroutine(GoogleLogInCo());
     }
 
+    public void ClearLogInSuccessAction() => OnPlayFabLoginSuccessAction = null;
+    
+    public void InvokeLogInSuccessAction() => OnPlayFabLoginSuccessAction?.Invoke();
+
     public IEnumerator GoogleLogInCo()
     {
         Social.localUser.Authenticate((success) =>
@@ -83,6 +87,17 @@ public class PlayFabManager : MonoBehaviour
         PlayFabClientAPI.LoginWithEmailAddress(request, OnLogInSuccess, OnLogInFailure);
 
         yield return null;
+    }
+
+    public void TestLogin()
+    {
+        var request = new LoginWithEmailAddressRequest
+        {
+            Email = "lyh220601@gmail.com",
+            Password = "!lyh13579"
+        };
+        
+        PlayFabClientAPI.LoginWithEmailAddress(request, OnLogInSuccess, OnLogInFailure);
     }
 
     private void OnLogInSuccess(LoginResult result)

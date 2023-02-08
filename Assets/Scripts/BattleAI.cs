@@ -55,8 +55,7 @@ public class BattleAI : MonoBehaviour
         for (int i = dataMgr.GameData.stageInfo.minEnemyID; i <= dataMgr.GameData.stageInfo.maxEnemyID; i++)
             enemyDataList.Add(dataMgr.GameData.enemyDataList[i]);
 
-        enemyDataList = enemyDataList.OrderByDescending(x => x.Cost).ToList();
-        return enemyDataList[0].Cost;
+        return enemyDataList.Max(e => e.Cost);
     }
 
     private IEnumerator AICo()
@@ -123,6 +122,7 @@ public class BattleAI : MonoBehaviour
             enemy.gameObject.SetActive(false);
         }
 
+        dataMgr.GameData.enemyDataList[rand].animCtrl = dataMgr.GameData.enemyAnimCtrlList[rand];
         enemy.UnitSetup(dataMgr.GameData.enemyDataList[rand]);
         EnrageAction += enemy.Enrage;
         enemy.OnDeathAction += () => --spawnCount;

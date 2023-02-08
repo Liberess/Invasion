@@ -34,6 +34,7 @@ public class GameData
 
     public List<UnitData> enemyDataList = new List<UnitData>();
     public List<Sprite> enemySpriteList = new List<Sprite>();
+    public List<RuntimeAnimatorController> enemyAnimCtrlList = new List<RuntimeAnimatorController>();
 
     public int[] facilGold = new int[7];
     public int[] facilLevelList = new int[7];

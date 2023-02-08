@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -104,10 +105,9 @@ public class UIManager : MonoBehaviour
         //PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => StartCoroutine(UpdateCurrencyUICo());
     }
 
-    private IEnumerator UpdateCurrencyUICo()
+    public async UniTaskVoid UpdateCurrencyUI(float delay)
     {
-        yield return new WaitForSeconds(1.0f);
-
+        await UniTask.Delay(TimeSpan.FromSeconds(delay));
         foreach (ECurrencyType type in Enum.GetValues(typeof(ECurrencyType)))
             InvokeCurrencyUI(type, dataMgr.GetCurrency(type));
     }

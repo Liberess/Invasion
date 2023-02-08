@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class BtnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private PlayFabManager playFabMgr;
-
     public EBtnType crtType;
     public Transform btnScale;
 
@@ -35,8 +33,6 @@ public class BtnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void Start()
     {
-        playFabMgr = PlayFabManager.Instance;
-
         defaultScale = btnScale.localScale;
         if (defaultScale == Vector3.zero)
             defaultScale = Vector3.one;
@@ -52,11 +48,11 @@ public class BtnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         switch (crtType)
         {
             case EBtnType.GPGSLogin:
-                playFabMgr.StartCoroutine(playFabMgr.GoogleLogInCo());
+                PlayFabManager.Instance.StartCoroutine(PlayFabManager.Instance.GoogleLogInCo());
                 break;
 
             case EBtnType.GPGSLogout:
-                playFabMgr.StartCoroutine(playFabMgr.GoogleLogOutCo());
+                PlayFabManager.Instance.StartCoroutine(PlayFabManager.Instance.GoogleLogOutCo());
                 break;
 
             case EBtnType.QuitGame:
@@ -87,7 +83,8 @@ public class BtnType : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 break;
 
             case EBtnType.PlayFabLogin:
-                playFabMgr.StartCoroutine(playFabMgr.PlayFabLogInCo());
+                PlayFabManager.Instance.TestLogin();
+                //playFabMgr.StartCoroutine(playFabMgr.PlayFabLogInCo());
                 break;
 
             case EBtnType.Buy:
