@@ -62,7 +62,7 @@ public class DataManager : MonoBehaviour
     [SerializeField] private Text isProgressTxt;
     private bool isDownStart = false;
 
-    [SerializeField, Range(5f, 60f)] private readonly float saveDataInterval = 30f;
+    private readonly float SaveDataInterval = 15f;
     private DateTime lastSaveTime;
     private AsyncOperationHandle updateBundleHandle;
 
@@ -101,14 +101,13 @@ public class DataManager : MonoBehaviour
 
     public IEnumerator UpdateResources()
     {
+        UpdateDB();
         UpdateUnitPrefab();
         UpdateHumalAssets();
         UpdateGoodsSprite();
         UpdateHeroAnimCtrl();
         UpdateHeroCardIcon();
         UpdateItemData();
-        UpdateOriginDB();
-        UpdateHumalPickDB();
         UpdateEnemyAsset();
 
         yield return null;
@@ -126,19 +125,58 @@ public class DataManager : MonoBehaviour
             handle => m_GameData.lobbyHumalPrefab = handle.Result;
     }
 
-    private void UpdateHumalPickDB()
+    private void UpdateDB()
     {
         Addressables.LoadAssetAsync<HumalPickDB>(Tags.HumalPickDBLabel).Completed +=
-        handle =>
-        {
-            foreach (var db in handle.Result.Entities)
+            handle =>
             {
-                if (!m_HumalData.humalPickDBList.Contains(db))
-                    m_HumalData.humalPickDBList.Add(db);
-            }
+                m_HumalData.humalPickDBList.Clear();
+                foreach (var db in handle.Result.Entities)
+                {
+                    if (!m_HumalData.humalPickDBList.Contains(db))
+                        m_HumalData.humalPickDBList.Add(db);
+                }
 
-            m_HumalData.humalPickDBList = m_HumalData.humalPickDBList.OrderBy(x => x.id).ToList();
-        };
+                m_HumalData.humalPickDBList = m_HumalData.humalPickDBList.OrderBy(x => x.id).ToList();
+            };
+  
+        Addressables.LoadAssetAsync<UnitOriginDB>(Tags.UnitOriginDBLabel).Completed +=
+            handle =>
+            {
+                m_HumalData.originHumalDataList.Clear();
+                foreach (var unitDB in handle.Result.HumalDBList)
+                {
+                    if (!m_HumalData.originHumalDataList.Contains(unitDB))
+                        m_HumalData.originHumalDataList.Add(unitDB);
+                }
+
+                m_HumalData.originHumalDataList = m_HumalData.originHumalDataList.OrderBy(x => x.ID).ToList();
+
+                m_GameData.enemyDataList.Clear();
+                foreach (var unitDB in handle.Result.EnemyDBList)
+                {
+                    if (!m_GameData.enemyDataList.Contains(unitDB))
+                        m_GameData.enemyDataList.Add(unitDB);
+                }
+            };
+        
+        Addressables.LoadAssetAsync<HumalUpgradeDB>(Tags.HumalUpgradeDBLabel).Completed +=
+            handle =>
+            {
+                m_HumalData.humalUpgradeLevelList.Clear();
+                foreach (var db in handle.Result.Level)
+                {
+                    if (!m_HumalData.humalUpgradeLevelList.Contains(db))
+                        m_HumalData.humalUpgradeLevelList.Add(db);
+                }
+
+                m_HumalData.humalUpgradeGradeList.Clear();
+                foreach (var db in handle.Result.Grade)
+                {
+                    if (!m_HumalData.humalUpgradeGradeList.Contains(db))
+                        m_HumalData.humalUpgradeGradeList.Add(db);
+                }
+            };
     }
 
     private void UpdateGoodsSprite()
@@ -153,40 +191,7 @@ public class DataManager : MonoBehaviour
                 goodsSpriteList.Add(temp[i]);
         }
     }
-
-    private void UpdateOriginDB()
-    {
-        Debug.Log("UpdateOriginDB");
-        updateBundleHandle = Addressables.LoadAssetsAsync<UnitOriginDB>(
-            Tags.UnitOriginDBLabel,
-            (result) =>
-            {
-                if (!isDownStart)
-                {
-                    isDownStart = true;
-                    isDownTxt.text = "유닛 DB 다운로드 시작";
-                    Debug.Log("유닛 DB 다운로드 시작");
-                    m_HumalData.originHumalDataList.Clear();
-                    StartCoroutine(UpdateBundleProgressTxtCo());
-                }
-
-                foreach(var unitDB in result.HumalDBList)
-                {
-                    if (!m_HumalData.originHumalDataList.Contains(unitDB))
-                        m_HumalData.originHumalDataList.Add(unitDB);
-                }
-
-                m_HumalData.originHumalDataList = m_HumalData.originHumalDataList.OrderBy(x => x.ID).ToList();
-
-                foreach(var unitDB in result.EnemyDBList)
-                {
-                    if(!m_GameData.enemyDataList.Contains(unitDB))
-                        m_GameData.enemyDataList.Add(unitDB);
-                }
-            }
-        );
-    }
-
+    
     private void UpdateHumalAssets()
     {
         updateBundleHandle = Addressables.LoadAssetsAsync<Sprite>(
@@ -972,18 +977,18 @@ public class DataManager : MonoBehaviour
     {
         while(true)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(saveDataInterval), DelayType.UnscaledDeltaTime);
+            await UniTask.Delay(TimeSpan.FromSeconds(SaveDataInterval), DelayType.UnscaledDeltaTime);
             SaveData();
         }
     }
 
     public void SaveData()
     {
-        if (!Social.localUser.authenticated)
+        if(!PlayFabClientAPI.IsClientLoggedIn())
             return;
-
+        
         TimeSpan timeCal = DateTime.Now - lastSaveTime;
-        if(timeCal.Seconds < saveDataInterval)
+        if(timeCal.Seconds < SaveDataInterval)
             return;
         
         lastSaveTime = DateTime.Now;

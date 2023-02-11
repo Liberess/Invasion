@@ -1,17 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class HeroSlot : MonoBehaviour
 {
     private UIManager uiMgr;
+
+    [SerializeField] private AssetReference starYellowImgRef;
+    [SerializeField] private AssetReference starPurpleImgRef;
     
     [Header("==== Unlock Group ====")]
     [SerializeField] private Text lvTxt;
     [SerializeField] private Image heroImg;
+    [SerializeField] private GameObject gradeGrid;
+    [SerializeField] private Image[] gradeImgs = new Image[5];
 
     private Button btn;
 
@@ -66,6 +73,13 @@ public class HeroSlot : MonoBehaviour
 
         unlockBtn.onClick.AddListener(OnClickUnlock);
         unlockBtn.gameObject.SetActive(false);
+
+        foreach (var img in gradeImgs)
+        {
+            img.sprite = null;
+            img.enabled = false;
+        }
+        
         //btn.onClick.AddListener(OnClickEvent);
         //menuPanel.GetComponent<Button>().onClick.AddListener(OnClickOther);
     }
@@ -82,7 +96,7 @@ public class HeroSlot : MonoBehaviour
 
     public void UpdateHumalData(UnitData unitData) => humalData = unitData;
 
-    public void UpdateSlot()
+    public async UniTaskVoid UpdateSlot()
     {
         if(lockGroup.activeSelf)
         {
@@ -103,6 +117,23 @@ public class HeroSlot : MonoBehaviour
         else
         {
             lvTxt.text = humalData.Level.ToString();
+
+            await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset(starYellowImgRef) != null);
+            await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset(starPurpleImgRef) != null);
+            
+            for (int i = 0; i < HumalData.Grade; i++)
+            {
+                if (i < 5)
+                {
+                    gradeImgs[i].enabled = true;
+                    gradeImgs[i].sprite = ResourcesManager.Instance.LoadAsset(starYellowImgRef) as Sprite;
+                }
+                else
+                {
+                    gradeImgs[i-5].enabled = true;
+                    gradeImgs[i-5].sprite = ResourcesManager.Instance.LoadAsset(starPurpleImgRef) as Sprite;
+                }
+            }
         }
     }
 
@@ -114,6 +145,7 @@ public class HeroSlot : MonoBehaviour
             heroImg.color = Color.white;
             lvTxt.gameObject.SetActive(true);
             lockGroup.SetActive(false);
+            gradeGrid.SetActive(true);
             UpdateSlot();
         }
         else
@@ -122,6 +154,7 @@ public class HeroSlot : MonoBehaviour
             heroImg.color = Color.black;
             lvTxt.gameObject.SetActive(false);
             lockGroup.SetActive(true);
+            gradeGrid.SetActive(false);
             UpdateSlot();
         }
     }

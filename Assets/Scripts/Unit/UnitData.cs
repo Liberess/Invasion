@@ -15,6 +15,20 @@ public class UnitData
     [SerializeField] private int level; // 유닛 레벨
     public int Level => level;
 
+    [SerializeField] private int grade = 0;
+
+    public int Grade
+    {
+        get => grade;
+
+        set
+        {
+            if (value >= 0 && value <= 30)
+                grade = value;
+        }
+    }
+
+
     [SerializeField] private int cost; // 유닛 생성 비용
     public int Cost => cost;
 

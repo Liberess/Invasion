@@ -259,7 +259,7 @@ public class UIManager : MonoBehaviour
         HeroSlot heroSlot = heroSlotList.Find(x => x.HumalData.ID == id);
         if (heroSlot != null)
         {
-            heroSlot.UpdateSlot();
+            heroSlot.UpdateSlot().Forget();
             OnClickSortButton(heroSortingType);
         }
     }
@@ -579,7 +579,7 @@ public class UIManager : MonoBehaviour
             currentHeroIndex = index;
 
             UpdateHeroOrderBtn();
-            dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(data));
+            dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(data).Forget());
         }
         catch(Exception ex)
         {
@@ -620,12 +620,12 @@ public class UIManager : MonoBehaviour
         if(isPartyDetailInfo) 
         {
             dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-                dataMgr.GetDataByOrder("Next", currentPartyIndex)));
+                dataMgr.GetDataByOrder("Next", currentPartyIndex)).Forget());
         }
         else
         {
             dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-                dataMgr.GetDataByOrder("Next", currentHeroIndex)));
+                dataMgr.GetDataByOrder("Next", currentHeroIndex)).Forget());
         }
     }
 
@@ -634,12 +634,12 @@ public class UIManager : MonoBehaviour
         if (isPartyDetailInfo)
         {
             dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-                dataMgr.GetDataByOrder("Previous", currentPartyIndex)));
+                dataMgr.GetDataByOrder("Previous", currentPartyIndex)).Forget());
         }
         else
         {
             dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-                dataMgr.GetDataByOrder("Previous", currentHeroIndex)));
+                dataMgr.GetDataByOrder("Previous", currentHeroIndex)).Forget());
         }
     }
     #endregion

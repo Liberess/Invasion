@@ -1,12 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class HeroDetailInfoPanel : MonoBehaviour
 {
     [SerializeField] private HeroDetailInfo heroInfo;
+    [SerializeField] private AssetReference starYellowImgRef;
+    [SerializeField] private AssetReference starPurpleImgRef;
 
-    public void UpdateHeroInfo(UnitData HumalData)
+    public async UniTaskVoid UpdateHeroInfo(UnitData HumalData)
     {
         heroInfo.nameTxt.text = HumalData.KoName;
         heroInfo.levelTxt.text = string.Concat("Lv.", HumalData.Level);
@@ -20,7 +25,31 @@ public class HeroDetailInfoPanel : MonoBehaviour
         heroInfo.dpTxt.text = HumalData.Dp.ToString();
         heroInfo.costTxt.text = HumalData.Cost.ToString();
 
+        foreach (var img in heroInfo.gradeImgs)
+        {
+            img.sprite = null;
+            img.enabled = false;
+        }
+
+        await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset(starYellowImgRef) != null);
+        await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset(starPurpleImgRef) != null);
+
+        for (int i = 0; i < HumalData.Grade; i++)
+        {
+            if (i < 5)
+            {
+                heroInfo.gradeImgs[i].enabled = true;
+                heroInfo.gradeImgs[i].sprite = ResourcesManager.Instance.LoadAsset(starYellowImgRef) as Sprite;
+            }
+            else
+            {
+                heroInfo.gradeImgs[i-5].enabled = true;
+                heroInfo.gradeImgs[i-5].sprite = ResourcesManager.Instance.LoadAsset(starPurpleImgRef) as Sprite;
+            }
+        }
+
+        /*
         if(DataManager.Instance.TryGetHumalPieceAmount(HumalData.ID, out int amount))
-            heroInfo.pieceTxt.text = amount.ToString();
+            heroInfo.pieceTxt.text = amount.ToString();*/
     }
 }

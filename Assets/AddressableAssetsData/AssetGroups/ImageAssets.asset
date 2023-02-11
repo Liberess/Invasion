@@ -10,31 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: DBAssets
+  m_Name: ImageAssets
   m_EditorClassIdentifier: 
-  m_GroupName: DBAssets
+  m_GroupName: ImageAssets
   m_Data:
     m_SerializedData: []
-  m_GUID: e510602fa23a2a54787a850fcd2b2e6f
+  m_GUID: 8271b928ed9290d4c96f3ee649911d9e
   m_SerializeEntries:
-  - m_GUID: 11c4f0b0d4df68c4bb45b66036dd89a0
-    m_Address: HumalPickDB
+  - m_GUID: 09f91e66a067f674e93452cf291f0611
+    m_Address: Icon_Star_Yellow
     m_ReadOnly: 0
     m_SerializedLabels:
-    - HumalPickDB
-  - m_GUID: d3cf8860b0e817b46ac8985fa59ca16f
-    m_Address: UnitOriginDB
+    - Image
+  - m_GUID: 93b1cc6cd788e174a9cf36bc585611ce
+    m_Address: Icon_Star_Purple
     m_ReadOnly: 0
     m_SerializedLabels:
-    - UnitOriginDB
-  - m_GUID: 275ab7c42ca71194ea2dec1a3e5f3480
-    m_Address: HumalUpgradeDB
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - HumalUpgradeDB
+    - Image
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 14a12ce42ca59a341979f49e59c63df8, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 857055f6df7fc52419feecf58e98f2c9, type: 2}
-    - {fileID: 11400000, guid: 35d6014b6762772488aa9e66777d26b2, type: 2}
+    - {fileID: 11400000, guid: f06a5ed79709f2249ab57ce80509204d, type: 2}
+    - {fileID: 11400000, guid: 804616d115b7c28419038c66b18e328d, type: 2}

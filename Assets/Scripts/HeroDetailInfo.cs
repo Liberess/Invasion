@@ -7,7 +7,7 @@ public class HeroDetailInfo
     public Text nameTxt;
     public Text levelTxt;
     public Image heroImg;
-    public Image gradeImg;
+    public Image[] gradeImgs = new Image[5];
 
     public Text dpsTxt;
     public Text hpTxt;
@@ -16,6 +16,4 @@ public class HeroDetailInfo
     public Text dodgeTxt;
     public Text dpTxt;
     public Text costTxt;
-
-    public Text pieceTxt;
 }

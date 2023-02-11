@@ -50,6 +50,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d155cd681e924674c8b821da238b0637, type: 2}
   - {fileID: 11400000, guid: ac0ede074063ff44b922725ed25e1630, type: 2}
   - {fileID: 11400000, guid: 19824647d57a69148a6ebd451d8d58cd, type: 2}
+  - {fileID: 11400000, guid: 76682c85b7b333c41a543d3da0a072e0, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -129,6 +130,8 @@ MonoBehaviour:
     - HumalAnimCtrl
     - EnemyAnim
     - EnemyAnimCtrl
+    - HumalUpgradeDB
+    - Image
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 2950fb30cbc9c43419db844bb0beda9a, type: 2}

@@ -18,6 +18,8 @@ public class HumalData
     public List<UnitData> originHumalDataList = new List<UnitData>();
     public List<HumalPiece> humalPieceAmountList = new List<HumalPiece>();
     public List<HumalPickDBEntity> humalPickDBList = new List<HumalPickDBEntity>();
+    public List<HumalUpgradeLevelEntity> humalUpgradeLevelList = new List<HumalUpgradeLevelEntity>();
+    public List<HumalUpgradeGradeEntity> humalUpgradeGradeList = new List<HumalUpgradeGradeEntity>();
 
     //[HideInInspector] 
     public List<Sprite> humalSpriteList = new List<Sprite>();
