@@ -13,18 +13,42 @@ public class UnitData
     public string EnName => enName;
 
     [SerializeField] private int level; // 유닛 레벨
+
     public int Level => level;
+    public void UpgradeLevel(int value)
+    {
+        int nextLv = level + value;
+        if (nextLv is > 0 and <= 30)
+        {
+            level = nextLv;
+            ap = (int)(ap * 1.05f);
+            hp = (int)(hp * 1.05f);
+        }
+    }
 
     [SerializeField] private int grade = 0;
-
-    public int Grade
+    public int Grade => grade;
+    public void UpgradeGrade(int value)
     {
-        get => grade;
-
-        set
+        int nextGrade = grade + value;
+        if (nextGrade is > 0 and <= 10)
         {
-            if (value >= 0 && value <= 30)
-                grade = value;
+            grade = nextGrade;
+            if (grade % 5 == 0)
+            {
+                ap = (int)(ap * 1.5f);
+                hp = (int)(hp * 1.5f);
+            }
+            else if (grade > 5)
+            {
+                ap = (int)(ap * 1.2f);
+                hp = (int)(hp * 1.2f);
+            }
+            else
+            {
+                ap = (int)(ap * 1.1f);
+                hp = (int)(hp * 1.1f);
+            }
         }
     }
 

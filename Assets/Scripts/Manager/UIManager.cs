@@ -252,6 +252,15 @@ public class UIManager : MonoBehaviour
             if(dataMgr.HumalData.humalDic.TryGetValue(id, out UnitData data))
                 heroSlot.UpdateHumalData(data);
         }
+        else
+        {
+            HeroSlot partySlot = partySlotList.Find(x => x.HumalData.ID == id);
+            if (partySlot != null)
+            {
+                if(dataMgr.HumalData.humalDic.TryGetValue(id, out UnitData data))
+                    partySlot.UpdateHumalData(data);
+            }
+        }
     }
 
     public void UpdateHumalSlotByID(int id)
@@ -261,6 +270,12 @@ public class UIManager : MonoBehaviour
         {
             heroSlot.UpdateSlot().Forget();
             OnClickSortButton(heroSortingType);
+        }
+        else
+        {
+            HeroSlot partySlot = partySlotList.Find(x => x.HumalData.ID == id);
+            if (partySlot != null)
+                partySlot.UpdateSlot().Forget();
         }
     }
 

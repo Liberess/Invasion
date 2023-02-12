@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 public static class Utility
@@ -61,5 +62,10 @@ public static class Utility
             childItem = default;
             return false;
         }
+    }
+
+    public static string ConcatCurrency(int value, int goalValue)
+    {
+        return string.Concat($"{value:n0}", "/", $"{goalValue:n0}");
     }
 }

@@ -542,7 +542,7 @@ public class DataManager : MonoBehaviour
 
     private void AddCurrency(ECurrencyType currencyTag, int amount)
     {
-        if (!Social.localUser.authenticated)
+        if (!Social.localUser.authenticated && !PlayFabClientAPI.IsClientLoggedIn())
             return;
 
         var request = new AddUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag.ToString(), Amount = amount };
@@ -560,7 +560,7 @@ public class DataManager : MonoBehaviour
 
     private void SubstractCurrency(ECurrencyType currencyTag, int amount)
     {
-        if (!Social.localUser.authenticated)
+        if (!Social.localUser.authenticated && !PlayFabClientAPI.IsClientLoggedIn())
             return;
 
         var request = new SubtractUserVirtualCurrencyRequest() { VirtualCurrency = currencyTag.ToString(), Amount = amount };
@@ -592,7 +592,7 @@ public class DataManager : MonoBehaviour
 
     public bool SetCurrencyAmount(ECurrencyType currencyType, int num)
     {
-        if (!Social.localUser.authenticated)
+        if (!Social.localUser.authenticated && !PlayFabClientAPI.IsClientLoggedIn())
             return false;
 
         if (GetCurrency(currencyType) < 0)
@@ -631,7 +631,7 @@ public class DataManager : MonoBehaviour
     #region Inventory
     public void GetInventory()
     {
-        if (!Social.localUser.authenticated)
+        if (!Social.localUser.authenticated && !PlayFabClientAPI.IsClientLoggedIn())
             return;
 
         var request = new GetUserInventoryRequest();
@@ -656,7 +656,7 @@ public class DataManager : MonoBehaviour
 
     public void PurchaseItem(EItemCatalog catalog, string itemId, string tag, int price)
     {
-        if (!Social.localUser.authenticated)
+        if (!Social.localUser.authenticated && !PlayFabClientAPI.IsClientLoggedIn())
             return;
 
         var request = new PurchaseItemRequest()
@@ -676,7 +676,7 @@ public class DataManager : MonoBehaviour
 
     public void ConsumeItem(int consumeCount, string itemId)
     {
-        if (!Social.localUser.authenticated)
+        if (!Social.localUser.authenticated && !PlayFabClientAPI.IsClientLoggedIn())
             return;
 
         var request = new ConsumeItemRequest()
@@ -984,7 +984,7 @@ public class DataManager : MonoBehaviour
 
     public void SaveData()
     {
-        if(!PlayFabClientAPI.IsClientLoggedIn())
+        if (!Social.localUser.authenticated && !PlayFabClientAPI.IsClientLoggedIn())
             return;
         
         TimeSpan timeCal = DateTime.Now - lastSaveTime;
@@ -1130,13 +1130,19 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void SubtractHumalPiece(int id, int amount)
+    public bool SubtractHumalPiece(int id, int amount)
     {
         if (TryGetHumalPiece(id, out HumalPiece humalPiece))
         {
-            humalPiece.amount -= amount;
-            uiMgr.UpdateHumalSlotByID(id);
+            if (humalPiece.amount - amount >= 0)
+            {
+                humalPiece.amount -= amount;
+                uiMgr.UpdateHumalSlotByID(id);
+                return true;
+            }
         }
+
+        return false;
     }
 
     private void DisplayPlayfabError(PlayFabError error)

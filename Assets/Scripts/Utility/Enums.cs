@@ -2,7 +2,8 @@ public enum ECurrencyType
 {
     ST = 0, //Stamina
     GD,     //Gold
-    DA      //Dia
+    DA,     //Dia
+    AJ      //Awake Jewel
 }
 
 public enum EItemCatalog { Item }

@@ -98,29 +98,26 @@ MonoBehaviour:
     require_gold: 200000
     require_awake_jewel: 2000
   - lv: 29
-    require_gold: 350000
-    require_awake_jewel: 3500
-  - lv: 30
     require_gold: 500000
     require_awake_jewel: 5000
   Grade:
-  - lv: 1
+  - lv: 0
     require_piece: 10
-  - lv: 2
+  - lv: 1
     require_piece: 20
-  - lv: 3
+  - lv: 2
     require_piece: 30
-  - lv: 4
+  - lv: 3
     require_piece: 50
-  - lv: 5
+  - lv: 4
     require_piece: 70
-  - lv: 6
+  - lv: 5
     require_piece: 100
-  - lv: 7
+  - lv: 6
     require_piece: 120
-  - lv: 8
+  - lv: 7
     require_piece: 140
-  - lv: 9
+  - lv: 8
     require_piece: 160
-  - lv: 10
+  - lv: 9
     require_piece: 200
