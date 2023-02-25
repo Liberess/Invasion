@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
+using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using Random = UnityEngine.Random;
 
 public class BattleManager : MonoBehaviour
 {
@@ -52,18 +55,19 @@ public class BattleManager : MonoBehaviour
     public Base RedBase { get => redBase; }
     [SerializeField] private Base blueBase;
 
-    [Header("== Setting Game Result =="), Space(10)]
+    [Header("== Setting Game Result =="), Space(10)] 
+    [SerializeField] private AssetReference stageRewardRuleRef;
+    private StageRewardRuleDB stageRewardRuleDB;
     [SerializeField] private StageReward stageRewardDB;
     [SerializeField] private GameObject resultPanel;
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject defeatPanel;
     [SerializeField] private GameObject rewardGrid;
     [SerializeField] private GameObject rewardSlotPrefab;
-    [SerializeField] private GameObject[] conditions = new GameObject[3];
+    [SerializeField] private Image[] conditionImgs = new Image[3];
     [SerializeField] private Sprite starOn;
     [SerializeField] private Sprite starOff;
-    [SerializeField] private Image startImg;
-    [SerializeField] private Sprite[] startSprites = new Sprite[4];
+    [SerializeField] private Image[] starImgs = new Image[3];
 
     private Action UpdateCardAction;
     public Action GameOverAction;
@@ -98,6 +102,8 @@ public class BattleManager : MonoBehaviour
 
     private async UniTaskVoid InitializeAsync()
     {
+        await UniTask.WaitUntil(() => (stageRewardRuleDB = ResourcesManager.Instance.LoadAsset<StageRewardRuleDB>(stageRewardRuleRef) as StageRewardRuleDB) != null);
+        
         cost = 0;
         leaderGauge = 0f;
         costSlider.maxValue = maxCost;
@@ -271,10 +277,10 @@ public class BattleManager : MonoBehaviour
     #region Set UI (PlayTime, Cost, Leader)
     private void SetStageInfo()
     {
-        stageTxt.text = dataMgr.GameData.stageInfo.stageNum;
+        stageTxt.text = dataMgr.CurrentStageInfo.stageNum;
 
-        pauseStageInfoTxt.text = "STAGE " + dataMgr.GameData.stageInfo.stageName
-            + "\n" + dataMgr.GameData.stageInfo.stageNum;
+        pauseStageInfoTxt.text = "STAGE " + dataMgr.CurrentStageInfo.name_ko
+            + "\n" + dataMgr.CurrentStageInfo.stageNum;
     }
 
     private void SetPlayTimeText()
@@ -332,7 +338,7 @@ public class BattleManager : MonoBehaviour
 
             // Set Hero Card Sprite
             heroCard.transform.GetChild(0).GetComponent<Image>().sprite =
-                dataMgr.HumalData.humalCardIconList[heroID];
+                dataMgr.HumalData.GetHumalCardIcon(heroID);
 
             // Set Hero Cost Text
             heroCard.transform.GetChild(1).GetComponent<Text>().text =
@@ -386,8 +392,8 @@ public class BattleManager : MonoBehaviour
 
     public void GameVictory()
     {
-        GetReward();
         SetupConditions();
+        GetReward();
 
         victoryPanel.SetActive(true);
         Debug.Log("GameVictory");
@@ -407,63 +413,146 @@ public class BattleManager : MonoBehaviour
     {
         starNum = 0;
 
+        /*for (int i = 0; i < conditionImgs.Length; i++)
+            conditionImgs[i].sprite = starOff;*/
+        
         if (blueBase.HP >= 10)
-        {
             ++starNum;
-            conditions[0].GetComponentInChildren<Image>().sprite = starOn;
-        }
-        else
-        {
-            conditions[0].GetComponentInChildren<Image>().sprite = starOff;
-        }
 
         if (blueBase.HP >= 50)
-        {
             ++starNum;
-            conditions[1].GetComponentInChildren<Image>().sprite = starOn;
-        }
-        else
-        {
-            conditions[1].GetComponentInChildren<Image>().sprite = starOff;
-        }
 
         if (playTime < 180)
-        {
             ++starNum;
-            conditions[2].GetComponentInChildren<Image>().sprite = starOn;
-        }
-        else
-        {
-            conditions[2].GetComponentInChildren<Image>().sprite = starOff;
-        }
 
-        startImg.sprite = startSprites[starNum];
+        for (int i = 0; i < conditionImgs.Length; i++)
+        {
+            if (starNum > i)
+            {
+                starImgs[i].sprite = starOn;
+                conditionImgs[i].sprite = starOn;
+            }
+            else
+            {
+                starImgs[i].sprite = starOff;
+                conditionImgs[i].sprite = starOff;
+            }
+        }
     }
 
     private void GetReward()
     {
-        var rewards = GetRewardDatabase();
-
-        for (int i = 0; i < rewards.Length; i++)
+        var stageData = dataMgr.GameData.stageDataList.Find(e => e.stageNum == dataMgr.CurrentStageInfo.stageNum);
+        
+        for (int i = 0; i < stageRewardRuleDB.RuleList.Count; i++)
         {
-            var reward = Instantiate(rewardSlotPrefab);
-            reward.transform.SetParent(rewardGrid.transform);
-            reward.transform.localScale = new Vector3(1, 1, 1);
-            reward.transform.GetChild(0).GetComponent<Image>().sprite =
-                dataMgr.goodsSpriteList[(int)rewards[i].type];
-            reward.GetComponentInChildren<Text>().text = rewards[i].amount.ToString();
+            var entity = stageRewardRuleDB.RuleList[i];
+            int[] rules = { entity.star1, entity.star2, entity.star3 };
+            if (Enum.TryParse(entity.type, out ECurrencyType type))
+            {
+                if (type == ECurrencyType.DA && stageData.IsAllClear)
+                    continue;
 
-            dataMgr.SetCurrencyAmount(rewards[i].type, rewards[i].amount);
-            //dataMgr.SetGoodsAmount(rewards[i].type, rewards[i].amount);
+                int amount = 0;
+                switch (type)
+                {
+                    case ECurrencyType.GD:
+                        int stageIndex = int.Parse(dataMgr.CurrentStageInfo.stageNum.Split('-')[0]);
+                        int levelIndex = int.Parse(dataMgr.CurrentStageInfo.stageNum.Split('-')[1]);
+                    
+                        amount = (stageIndex * 1000) + (levelIndex * 100) + Random.Range(0, 100);
+                        if (starNum > 0)
+                            amount *= (1 + rules[starNum - 1] % 100);
+                        break;
+                    
+                    case ECurrencyType.DA:
+                        if (starNum > stageData.StarAmount)
+                        {
+                            for (int j = 0; j < starNum; j++)
+                            {
+                                if (stageData.isStar[j] == false)
+                                {
+                                    stageData.isStar[j] = true;
+                                    amount += rules[j];
+                                }
+                            }
+                        }
+                        break;
+                    
+                    case ECurrencyType.AJ:
+                        if (starNum == 1)
+                        {
+                            amount = entity.star1;
+                        }
+                        else if (starNum == 2)
+                        {
+                            var picker = new Rito.WeightedRandomPicker<int>();
+                            picker.Add(
+                                (entity.star1, 50),
+                                (entity.star1 * 2, 35),
+                                (entity.star3, 15)
+                            );
+
+                            amount = picker.GetRandomPick();
+                        }
+                        else if(starNum == 3)
+                        {
+                            var picker = new Rito.WeightedRandomPicker<int>();
+                            picker.Add(
+                                (entity.star1, 30),
+                                (entity.star1 * 2, 30),
+                                (entity.star1 * 3, 20),
+                                (entity.star1 * 4, 15),
+                                (entity.star3, 5)
+                            );
+                            
+                            amount = picker.GetRandomPick();
+                        }
+                        break;
+                }
+
+                dataMgr.SetCurrencyAmount(type, amount);
+                InstantiateReward(dataMgr.goodsSpriteList[(int)type], amount.ToString());
+            }
+        }
+
+        if (stageRewardDB.GetRewardsOfTag(dataMgr.CurrentStageInfo.stageNum, out List<Reward> rewards))
+        {
+            for (int i = 0; i < rewards.Count; i++)
+            {
+                string amountStr = "";
+                if(rewards[i].amount > 1)
+                    amountStr = rewards[i].amount.ToString();
+
+                Sprite rewardImg = null;
+                if (rewards[i].type == ERewardType.HP)
+                {
+                    dataMgr.AddHumalPiece(rewards[i].id, rewards[i].amount);
+                
+                    /*reward.transform.GetChild(0).GetComponent<Image>().sprite =
+                        dataMgr.goodsSpriteList[(int)rewards[i].type];*/
+                }
+                else
+                {
+                    ECurrencyType type = (ECurrencyType)Enum.Parse(typeof(ECurrencyType), rewards[i].type.ToString());
+                    dataMgr.SetCurrencyAmount(type, rewards[i].amount);
+
+                    rewardImg = dataMgr.goodsSpriteList[(int)rewards[i].type];
+                }
+
+                InstantiateReward(rewardImg, amountStr);
+            }
         }
     }
 
-    private Reward[] GetRewardDatabase()
+    private void InstantiateReward(Sprite sprite, string txt)
     {
-        int stageIndex = int.Parse(dataMgr.GameData.stageInfo.stageNum.Split('-')[0]);
-        int levelIndex = int.Parse(dataMgr.GameData.stageInfo.stageNum.Split('-')[1]);
-        return stageRewardDB.rewardDBList[stageIndex - 1].
-            rewardDBList[levelIndex - 1].GetAllReward();
+        var reward = Instantiate(rewardSlotPrefab);
+        reward.transform.SetParent(rewardGrid.transform);
+        reward.transform.localScale = new Vector3(1, 1, 1);
+
+        reward.transform.GetChild(0).GetComponent<Image>().sprite = sprite;
+        reward.GetComponentInChildren<Text>().text = txt;
     }
     #endregion
 

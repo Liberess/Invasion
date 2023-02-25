@@ -6,6 +6,8 @@ public enum ECurrencyType
     AJ      //Awake Jewel
 }
 
+public enum ERewardType { GD, DA, AJ, HP }
+
 public enum EItemCatalog { Item }
 
 public enum EBuyingType

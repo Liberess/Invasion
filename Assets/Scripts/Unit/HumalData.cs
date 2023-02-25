@@ -25,6 +25,13 @@ public class HumalData
     public List<Sprite> humalSpriteList = new List<Sprite>();
     public SortedDictionary<int, Sprite> humalSpriteDic = new SortedDictionary<int, Sprite>();
     public List<Sprite> humalCardIconList = new List<Sprite>();
+    public Sprite GetHumalCardIcon(int index)
+    {
+        if (index >= 0 && index < humalCardIconList.Count)
+            return humalCardIconList[index];
+        return null;
+    }
+    
     public List<RuntimeAnimatorController> humalAnimCtrlList =
         new List<RuntimeAnimatorController>();
     public RuntimeAnimatorController GetHumalAnimCtrl(int index)

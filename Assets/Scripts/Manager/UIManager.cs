@@ -91,7 +91,8 @@ public class UIManager : MonoBehaviour
 
         HideHeroInfoPanelAction += () => heroMenuPanel.SetActive(false);
 
-        SetupMapUI();
+        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => heroDetailInfoPanel.gameObject.SetActive(false);
+        PlayFabManager.Instance.OnPlayFabLoginSuccessAction += SetupMapUI;
 
         InitHeroSlotObjectPool();
         InitSortButton();
@@ -431,7 +432,10 @@ public class UIManager : MonoBehaviour
             var child = btnParent.transform.GetChild(i).GetComponent<Button>();
             child.name = "Stage" + (i + 1) + "Panel";
             child.transform.GetChild(1).GetChild(0).GetComponent<Text>().text = "Stage " + (i + 1);
-            child.transform.GetChild(1).GetChild(1).GetComponent<Text>().text = "골목길";
+
+            if (dataMgr.FindStageInfo(string.Concat(i + 1, "-", i + 1), out StageInfo info))
+                child.transform.GetChild(1).GetChild(1).GetComponent<Text>().text = info.name_ko;
+
             child.onClick.AddListener(() => DetailStagePanelCtrl(temp));
             mapBtnList.Add(child);
         }
@@ -442,8 +446,7 @@ public class UIManager : MonoBehaviour
         GameObject mapPanel = GameObject.Find("MapCanvas").transform.Find("MapPanel").gameObject;
 
         // Set Detail Stage Panel
-        GameObject panelParent = mapPanel.transform.
-            Find("DetailStagePanelGroup").gameObject;
+        GameObject panelParent = mapPanel.transform.GetChild(2).gameObject;
 
         detailStagePanelList.Clear();
         for (int i = 0; i < panelParent.transform.childCount; i++)
@@ -470,15 +473,32 @@ public class UIManager : MonoBehaviour
 
                 if (btn != null && btn.name != "QuitBtn")
                 {
-                    string text = (i + 1) + "-" + (j + 1);
-                    btn.name = text + "Btn";
+                    string stageNumStr = (i + 1) + "-" + (j + 1);
+                    btn.name = stageNumStr + "Btn";
+                    btn.GetComponentInChildren<Text>().text = stageNumStr;
 
-                    if (btn.GetComponentInChildren<Text>() != null)
-                        btn.GetComponentInChildren<Text>().text = text;
+                    /*var starImgs = btn.GetComponentsInChildren<Image>();
+                    for (int k = 0; k < starImgs.Length; k++)
+                    {
+                        
+                        starImgs[k].sprite
+                    }*/
 
-                    btn.onClick.AddListener(() => stageReadyPanel.gameObject.SetActive(true));
-                    btn.onClick.AddListener(() => stageReadyPanel.SetupStageInfo(
-                        new StageInfo("테헤12란로", text, EStageLevel.Easy, 0, 1)));
+                    if (dataMgr.FindStageInfo(stageNumStr, out StageInfo info))
+                    {
+                        btn.onClick.AddListener(() => stageReadyPanel.gameObject.SetActive(true));
+                        btn.onClick.AddListener(() => stageReadyPanel.SetupStageInfo(info));
+
+                        var starImgs = btn.transform.GetChild(1).GetComponentsInChildren<Image>();
+                        for (int k = 0; k < starImgs.Length; k++)
+                        {
+                            if (info.StarAmount > k)
+                                starImgs[k].enabled = true;
+                            else
+                                starImgs[k].enabled = false;
+                        }
+                    }
+
                     detailStageBtnDic[i].Add(btn);
                 }
             }
@@ -635,12 +655,12 @@ public class UIManager : MonoBehaviour
         if(isPartyDetailInfo) 
         {
             dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-                dataMgr.GetDataByOrder("Next", currentPartyIndex)).Forget());
+                dataMgr.GetPartyDataByIndex("Next", currentPartyIndex)).Forget());
         }
         else
         {
             dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-                dataMgr.GetDataByOrder("Next", currentHeroIndex)).Forget());
+                dataMgr.GetHumalDataByIndex("Next", currentHeroIndex)).Forget());
         }
     }
 
@@ -649,12 +669,12 @@ public class UIManager : MonoBehaviour
         if (isPartyDetailInfo)
         {
             dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-                dataMgr.GetDataByOrder("Previous", currentPartyIndex)).Forget());
+                dataMgr.GetPartyDataByIndex("Previous", currentPartyIndex)).Forget());
         }
         else
         {
             dispatcher.Enqueue(() => heroDetailInfoPanel.UpdateHeroInfo(
-                dataMgr.GetDataByOrder("Previous", currentHeroIndex)).Forget());
+                dataMgr.GetHumalDataByIndex("Previous", currentHeroIndex)).Forget());
         }
     }
     #endregion

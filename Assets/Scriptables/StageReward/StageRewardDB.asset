@@ -12,26 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 539d47115fd8d8d4592c124db2103ea9, type: 3}
   m_Name: StageRewardDB
   m_EditorClassIdentifier: 
+  rewardPathList:
+  - Stage_1
+  - Stage_2
   rewardDBList:
   - stageName: Stage_1
-    rewardDBList:
+    rewardList:
     - {fileID: 11400000, guid: a09b59cdeb52a7c4e915699fe7ec5dc1, type: 2}
-    - {fileID: 11400000, guid: b0ec9808a5845434db710a235946bd1e, type: 2}
     - {fileID: 11400000, guid: 191747e12d613394694fffd82693ddd3, type: 2}
-    - {fileID: 11400000, guid: b6dca42a801fbad4d92c6fbf477fb4b8, type: 2}
     - {fileID: 11400000, guid: a5b2c3e58a147af4cac1e70d76e55c26, type: 2}
     - {fileID: 11400000, guid: ae8e315aa53eb4a41b5efc6ee51753d1, type: 2}
     - {fileID: 11400000, guid: 869e214749da9e04cb5c0d0ef42f6659, type: 2}
-    - {fileID: 11400000, guid: e4a8d54315fb72e44bd421c65b8f9e22, type: 2}
     - {fileID: 11400000, guid: feb56384a4d71874e8a95f90bac02f7d, type: 2}
     - {fileID: 11400000, guid: 8a2d840ff4941f04099690c0d8fbfe20, type: 2}
   - stageName: Stage_2
-    rewardDBList: []
-  - stageName: Stage_3
-    rewardDBList:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-  - stageName: Stage_4
-    rewardDBList: []
+    rewardList:
+    - {fileID: 11400000, guid: a0334e6141e4b4145bd363e2d22131fe, type: 2}
+    - {fileID: 11400000, guid: e02e6b306f2f42e4f86eabe528ed07d4, type: 2}
+    - {fileID: 11400000, guid: 51a02429b6191c34b898375044e04f50, type: 2}
+    - {fileID: 11400000, guid: 8f31cfeebd17c9949a6ad995164cf131, type: 2}
+    - {fileID: 11400000, guid: fa1531e1774c30e40b9a23727b529fc0, type: 2}
+    - {fileID: 11400000, guid: 9424733b5e727574081d8344682f2aec, type: 2}
+    - {fileID: 11400000, guid: c8f657e87b68a93448769ff1f43912c8, type: 2}
+    - {fileID: 11400000, guid: c2c03348cf805504cb26215c57df4e1f, type: 2}
+    - {fileID: 11400000, guid: f3449f6aac556da49815658d67e64ba8, type: 2}
+    - {fileID: 11400000, guid: c8658c424cdfef34cbe901b6e53df483, type: 2}

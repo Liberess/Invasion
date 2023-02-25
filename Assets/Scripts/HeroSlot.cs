@@ -118,20 +118,20 @@ public class HeroSlot : MonoBehaviour
         {
             lvTxt.text = humalData.Level.ToString();
 
-            await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset(starYellowImgRef) != null);
-            await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset(starPurpleImgRef) != null);
+            await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) != null);
+            await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) != null);
             
             for (int i = 0; i < HumalData.Grade; i++)
             {
                 if (i < 5)
                 {
                     gradeImgs[i].enabled = true;
-                    gradeImgs[i].sprite = ResourcesManager.Instance.LoadAsset(starYellowImgRef) as Sprite;
+                    gradeImgs[i].sprite = ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) as Sprite;
                 }
                 else
                 {
                     gradeImgs[i-5].enabled = true;
-                    gradeImgs[i-5].sprite = ResourcesManager.Instance.LoadAsset(starPurpleImgRef) as Sprite;
+                    gradeImgs[i-5].sprite = ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) as Sprite;
                 }
             }
         }

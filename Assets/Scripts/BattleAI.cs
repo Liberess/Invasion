@@ -32,7 +32,7 @@ public class BattleAI : MonoBehaviour
     {
         spawnDelayTime = 3f;
 
-        var stageNum = int.Parse(dataMgr.GameData.stageInfo.stageNum.Substring(2));
+        var stageNum = int.Parse(dataMgr.CurrentStageInfo.stageNum.Substring(2));
         for (int i = 0; i < stageNum; i++)
         {
             if (spawnDelayTime > 2.2f)
@@ -52,7 +52,7 @@ public class BattleAI : MonoBehaviour
     {
         List<UnitData> enemyDataList = new List<UnitData>();
 
-        for (int i = dataMgr.GameData.stageInfo.minEnemyID; i <= dataMgr.GameData.stageInfo.maxEnemyID; i++)
+        for (int i = dataMgr.CurrentStageInfo.minEnemyID; i <= dataMgr.CurrentStageInfo.maxEnemyID; i++)
             enemyDataList.Add(dataMgr.GameData.enemyDataList[i]);
 
         return enemyDataList.Max(e => e.Cost);
@@ -104,8 +104,8 @@ public class BattleAI : MonoBehaviour
     {
         int rand = Random.Range
             (
-                dataMgr.GameData.stageInfo.minEnemyID,
-                dataMgr.GameData.stageInfo.maxEnemyID
+                dataMgr.CurrentStageInfo.minEnemyID,
+                dataMgr.CurrentStageInfo.maxEnemyID
             );
 
         ++spawnCount;

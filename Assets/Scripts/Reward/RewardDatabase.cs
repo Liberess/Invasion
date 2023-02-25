@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public struct Reward
 {
-    public ECurrencyType type;
+    public ERewardType type;
+    public int id;
     public int amount;
 }
 
@@ -13,9 +13,10 @@ public struct Reward
     menuName = "Scriptable Object/Reward Data", order = int.MaxValue)]
 public class RewardDatabase : ScriptableObject
 {
-    [SerializeField] private Reward[] rewards;
-    public int rewardCount => rewards.Length;
-
-    public Reward GetReward(int index) => rewards[index];
-    public Reward[] GetAllReward() => rewards;
+    [SerializeField] private string rewardTag;
+    public string RewardTag => rewardTag;
+    
+    [SerializeField] private List<Reward> rewardList = new List<Reward>();
+    public Reward GetReward(int index) => rewardList[index];
+    public List<Reward> GetAllReward() => rewardList;
 }

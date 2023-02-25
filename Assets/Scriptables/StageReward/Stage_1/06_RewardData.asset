@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: 06_RewardData
   m_EditorClassIdentifier: 
   rewards:
-  - type: 1
+  - type: 0
+    id: 0
     amount: 100

@@ -25,7 +25,7 @@ public class HeroDetailInfoPanel : MonoBehaviour
 
     private UnitData currentHumalData;
 
-    private void Start()
+    private void Awake()
     {
         gradeSlider.transform.parent.GetComponent<Button>().onClick.AddListener(OnClickUpgrade);
     }
@@ -126,20 +126,20 @@ public class HeroDetailInfoPanel : MonoBehaviour
             img.enabled = false;
         }
 
-        await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset(starYellowImgRef) != null);
-        await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset(starPurpleImgRef) != null);
+        await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) != null);
+        await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) != null);
 
         for (int i = 0; i < humalData.Grade; i++)
         {
             if (i < 5)
             {
                 heroInfo.gradeImgs[i].enabled = true;
-                heroInfo.gradeImgs[i].sprite = ResourcesManager.Instance.LoadAsset(starYellowImgRef) as Sprite;
+                heroInfo.gradeImgs[i].sprite = ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) as Sprite;
             }
             else
             {
                 heroInfo.gradeImgs[i-5].enabled = true;
-                heroInfo.gradeImgs[i-5].sprite = ResourcesManager.Instance.LoadAsset(starPurpleImgRef) as Sprite;
+                heroInfo.gradeImgs[i-5].sprite = ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) as Sprite;
             }
         }
 

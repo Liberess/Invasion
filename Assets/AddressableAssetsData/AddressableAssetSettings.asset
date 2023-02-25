@@ -132,6 +132,7 @@ MonoBehaviour:
     - EnemyAnimCtrl
     - HumalUpgradeDB
     - Image
+    - DB
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 2950fb30cbc9c43419db844bb0beda9a, type: 2}

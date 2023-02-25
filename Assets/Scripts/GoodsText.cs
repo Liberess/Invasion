@@ -18,7 +18,7 @@ public class GoodsText : MonoBehaviour
 
     private void Start()
     {
-        UIManager.Instance.UpdateCurrencyUIActionList[(int)currencyType] += (v) => UpdateGoodsText(v);
+        UIManager.Instance.UpdateCurrencyUIActionList[(int)currencyType] += UpdateGoodsText;
     }
 
     public void UpdateGoodsText(int value)

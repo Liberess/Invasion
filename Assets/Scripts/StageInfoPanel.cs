@@ -11,7 +11,7 @@ public class StageInfoPanel : MonoBehaviour
 
     public void SetupStageInfo(StageInfo info)
     {
-        nameTxt.text = info.stageName;
+        nameTxt.text = info.name_ko;
         numTxt.text = info.stageNum;
 
         startBtn.onClick.AddListener(() => GameManager.Instance.OnClickGameStartBtn(info));

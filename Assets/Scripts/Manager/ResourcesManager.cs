@@ -10,9 +10,6 @@ using Object = UnityEngine.Object;
 public sealed class ResourcesManager : MonoBehaviour
 {
     public static ResourcesManager Instance { get; private set; }
-    
-    [SerializeField] private List<AssetReference> assetRefList = new List<AssetReference>();
-
     private Dictionary<int, Object> resourceDic = new Dictionary<int, Object>();
 
     private void Awake()
@@ -26,17 +23,9 @@ public sealed class ResourcesManager : MonoBehaviour
         {
             Destroy(this);
         }
-        
-        LoadAssets();
     }
 
-    private void LoadAssets()
-    {
-        foreach (var assetRef in assetRefList)
-            LoadAsset(assetRef);
-    }
-
-    public Object LoadAsset(AssetReference assetReference, bool isCaching = true)
+    public Object LoadAsset<T>(AssetReference assetReference, bool isCaching = true)
     {
         int hashCode = assetReference.GetHashCode();
         Object obj = null;
@@ -48,11 +37,11 @@ public sealed class ResourcesManager : MonoBehaviour
         // 로드한 오브젝트가 없을 경우 비동기로 오브젝트를 로드한 후, 로드가 끝나면 콜백을 보냄
         if (obj == null)
         {
-            var handle = Addressables.LoadAssetAsync<Sprite>(assetReference);
+            var handle = Addressables.LoadAssetAsync<T>(assetReference);
             handle.Completed +=
                 handle =>
                 {
-                    obj = handle.Result;
+                    obj = handle.Result as Object;
 
                     if (isCaching)
                     {

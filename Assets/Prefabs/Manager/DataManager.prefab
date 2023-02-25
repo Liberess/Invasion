@@ -44,15 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2de502cbd9dbdef4185a6844a70b0c7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  assetRefList:
-  - m_AssetGUID: 09f91e66a067f674e93452cf291f0611
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: 93b1cc6cd788e174a9cf36bc585611ce
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
   heroReference:
     m_AssetGUID: 608ca1624c4bbba46a630bef5eaf7985
     m_SubObjectName: 
@@ -68,36 +59,15 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
+  stageInfoDBRef:
+    m_AssetGUID: dcab894de894aff448920541db10371c
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
   m_GameData:
     isLoadComplete: 0
     lastLogInTimeStr: 
-    stageInfo:
-      stageLevel: 0
-      stageName: 
-      stageNum: 
-      minEnemyID: 0
-      maxEnemyID: 0
-      enemyMaxCount: 0
-      boss:
-        id: 0
-        koName: 
-        enName: 
-        level: 0
-        grade: 0
-        cost: 0
-        hp: 0
-        ap: 0
-        dp: 0
-        moveSpeed: 0
-        critical: 0
-        dodge: 0
-        distance: 0
-        attackDelay: 0
-        isUnlock: 0
-        isParty: 0
-        isLeader: 0
-        sprite: {fileID: 0}
-        animCtrl: {fileID: 0}
+    stageDataList: []
     unitPrefabAry:
     - {fileID: 0}
     - {fileID: 0}

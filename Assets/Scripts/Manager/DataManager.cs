@@ -31,8 +31,9 @@ public class DataManager : MonoBehaviour
 
     public static DataManager Instance { get; private set; }
 
-    [Header("==== Game Data Information ===="), Space(10)] [SerializeField]
-    private GameData m_GameData = new GameData();
+    [Header("==== Game Data Information ===="), Space(10)]
+    [SerializeField] private AssetReference stageInfoDBRef;
+    [SerializeField] private GameData m_GameData = new GameData();
 
     public GameData GameData
     {
@@ -54,7 +55,12 @@ public class DataManager : MonoBehaviour
 
     #endregion
 
-    private Dictionary<string, int> VirtualCurrencyDic = new Dictionary<string, int>();
+    [SerializeField] private StageInfo currentStageInfo;
+
+    public StageInfo CurrentStageInfo => currentStageInfo;
+    //public StageInfo CurrentStageInfo { get; private set; }
+    
+    private Dictionary<string, int> virtualCurrencyDic = new Dictionary<string, int>();
 
     public List<Sprite> goodsSpriteList = new List<Sprite>();
 
@@ -94,8 +100,6 @@ public class DataManager : MonoBehaviour
 
         StartCoroutine(UpdateResources());
     }
-
-    public void SetStageInfo(StageInfo info) => GameData.stageInfo = info;
 
     #region Update Resources
 
@@ -458,7 +462,34 @@ public class DataManager : MonoBehaviour
         throw new Exception("ID : " + id + "는(은) 존재하지 않는 ID입니다.");
     }
 
-    public UnitData GetDataByOrder(string key, int index)
+    public UnitData GetPartyDataByIndex(string key, int index)
+    {
+        if (!IsValidInHumalListByIndex(index))
+            throw new Exception("유효하지 않은 Index 값입니다.");
+
+        if (key == "Next")
+        {
+            if (!IsValidInHumalListByIndex(index + 1))
+                throw new Exception("유효하지 않은 Index 값입니다.");
+
+            UIManager.Instance.SetHeroIndex(index + 1);
+            return m_HumalData.partyList[index + 1];
+        }
+        else if (key == "Previous")
+        {
+            if (!IsValidInHumalListByIndex(index - 1))
+                throw new Exception("유효하지 않은 Index 값입니다.");
+
+            UIManager.Instance.SetHeroIndex(index - 1);
+            return m_HumalData.partyList[index - 1];
+        }
+        else
+        {
+            throw new Exception("유효하지 않은 Key 값입니다.");
+        }
+    }
+
+    public UnitData GetHumalDataByIndex(string key, int index)
     {
         if (!IsValidInHumalListByIndex(index))
             throw new Exception("유효하지 않은 Index 값입니다.");
@@ -523,19 +554,19 @@ public class DataManager : MonoBehaviour
 
     private void OnInitializedVirtualCurrencyDicSuccess(GetUserInventoryResult result)
     {
-        VirtualCurrencyDic = result.VirtualCurrency;
+        virtualCurrencyDic = result.VirtualCurrency;
 
         foreach (ECurrencyType type in Enum.GetValues(typeof(ECurrencyType)))
         {
-            if (VirtualCurrencyDic.ContainsKey(type.ToString()))
-                uiMgr.InvokeCurrencyUI(type, VirtualCurrencyDic[type.ToString()]);
+            if (virtualCurrencyDic.ContainsKey(type.ToString()))
+                uiMgr.InvokeCurrencyUI(type, virtualCurrencyDic[type.ToString()]);
         }
     }
 
     public int GetCurrency(ECurrencyType type)
     {
-        if (VirtualCurrencyDic.ContainsKey(type.ToString()))
-            return VirtualCurrencyDic[type.ToString()];
+        if (virtualCurrencyDic.ContainsKey(type.ToString()))
+            return virtualCurrencyDic[type.ToString()];
 
         return -1;
     }
@@ -550,8 +581,9 @@ public class DataManager : MonoBehaviour
             request,
             (result) =>
             {
-                VirtualCurrencyDic[currencyTag.ToString()] = result.Balance;
-                uiMgr.InvokeCurrencyUI(currencyTag, result.Balance);
+                virtualCurrencyDic[currencyTag.ToString()] = result.Balance;
+                if(UIManager.Instance != null)
+                    uiMgr.InvokeCurrencyUI(currencyTag, result.Balance);
                 SaveData();
             },
             PlayFabManager.Instance.PlayFabErrorDebugLog
@@ -568,8 +600,9 @@ public class DataManager : MonoBehaviour
             request,
             (result) =>
             {
-                VirtualCurrencyDic[currencyTag.ToString()] = result.Balance;
-                uiMgr.InvokeCurrencyUI(currencyTag, result.Balance);
+                virtualCurrencyDic[currencyTag.ToString()] = result.Balance;
+                if(UIManager.Instance != null)
+                    uiMgr.InvokeCurrencyUI(currencyTag, result.Balance);
                 SaveData();
             },
             PlayFabManager.Instance.PlayFabErrorDebugLog
@@ -602,7 +635,7 @@ public class DataManager : MonoBehaviour
         }
 
         var amount = GetCurrency(currencyType) + num;
-        if (amount > int.MaxValue)
+        if (amount >= int.MaxValue)
         {
             popUpMgr.PopUp(currencyType.ToString() + " 재화가 한계치입니다!", EPopUpType.Caution);
             //throw new Exception("Overflow Max Goods Value");
@@ -618,7 +651,7 @@ public class DataManager : MonoBehaviour
         {
             if (num > 0)
                 AddCurrency(currencyType, Mathf.Abs(num));
-            else
+            else if(num < 0)
                 SubstractCurrency(currencyType, Mathf.Abs(num));
 
             return true;
@@ -693,10 +726,21 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
+    #region Stage
+    public void SetStageInfo(StageInfo info) => currentStageInfo = info;
+
+    public bool FindStageInfo(string stageNum, out StageInfo info)
+    {
+        info = m_GameData.stageDataList.Find(e => e.stageNum == stageNum);
+        return info != null;
+    }
+
+    #endregion
+    
     #region Load & Save
     public void InitializedData()
     {
-        InitializedGameData();
+        InitializedGameData().Forget();
         InitializedHumalData();
 
         SaveData();
@@ -731,10 +775,14 @@ public class DataManager : MonoBehaviour
         }
 
         uiMgr.InitHeroPanel();
+        
+        m_HumalData.isLoadComplete = true;
     }
 
-    private void InitializedGameData()
+    private async UniTaskVoid InitializedGameData()
     {
+        m_GameData.isLoadComplete = false;
+        
         m_GameData.inventoryDic.Clear();
         foreach (var itemData in ItemDataList)
         {
@@ -760,6 +808,24 @@ public class DataManager : MonoBehaviour
         m_GameData.bgm = 1f;
 
         m_GameData.isNew = true;
+
+        Addressables.LoadAssetAsync<StageInfoDB>(stageInfoDBRef).Completed +=
+            handle =>
+            {
+                for (int i = 0; i < handle.Result.StageInfoList.Count; i++)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        StageInfo stageInfo = new StageInfo();
+                        stageInfo.index = handle.Result.StageInfoList[i].index;
+                        stageInfo.name_ko = handle.Result.StageInfoList[i].name_ko;
+                        stageInfo.name_en = handle.Result.StageInfoList[i].name_en;
+                        stageInfo.stageNum = string.Concat(i + 1, "-", j + 1);
+                        stageInfo.isStar = new[] { false, false, false };
+                        m_GameData.stageDataList.Add(stageInfo);
+                    }
+                }
+            };
 
         m_GameData.lastLogInTime = DateTime.Now;
         m_GameData.lastLogInTimeStr = m_GameData.lastLogInTime.ToString();
@@ -1042,6 +1108,7 @@ public class DataManager : MonoBehaviour
             {
                 UnitData newData = new UnitData(unitData);
 
+                Debug.Log("휴멀 - " + newData.KoName + " 뽑기 성공!");
                 popUpMgr.PopUp("휴멀 - " + newData.KoName + " 뽑기 성공!", EPopUpType.Notice);
 
                 if (!m_HumalData.humalDic.ContainsKey(newData.ID))
@@ -1074,7 +1141,7 @@ public class DataManager : MonoBehaviour
                 }
 
                 uiMgr.UpdateHumalSlotDataByID(id);
-                if(!m_HumalData.isLoadComplete)
+                //if(!m_HumalData.isLoadComplete)
                     uiMgr.SetEnabledHumalSlotByID(id);
 
                 SetupHero();
@@ -1226,6 +1293,7 @@ public class DataManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         uiMgr = UIManager.Instance;
+        popUpMgr = PopUpManager.Instance;
         PlayFabManager.Instance.OnPlayFabLoginSuccessAction += uiMgr.InitHeroPanel;
         PlayFabManager.Instance.OnPlayFabLoginSuccessAction += () => uiMgr.UpdateCurrencyUI(0f).Forget();
         PlayFabManager.Instance.InvokeLogInSuccessAction();

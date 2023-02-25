@@ -38,18 +38,18 @@ public class PopUpManager : MonoBehaviour
 
         PopUpAnim = PopUpPanel.GetComponentInChildren<Animator>();
 
-        // ¹öÆ° ¹èÁ¤
+        // ë²„íŠ¼ ë°°ì •
         OkBtn = OneBtn.GetComponent<Button>();
         YesBtn = YesOrNoBtn.transform.Find("YesBtn").gameObject.GetComponent<Button>();
         NoBtn = YesOrNoBtn.transform.Find("NoBtn").gameObject.GetComponent<Button>();
 
-        // ±âº» ¸®½º³Ê Ãß°¡
+        // ê¸°ë³¸ ë¦¬ìŠ¤ë„ˆ ì¶”ê°€
         OkBtn.onClick.AddListener(() => PopUpClose(OkBtn.gameObject.name));
         YesBtn.onClick.AddListener(() => PopUpClose(YesBtn.gameObject.name));
         NoBtn.onClick.AddListener(() => PopUpClose(NoBtn.gameObject.name));
     }
 
-    private void DialogInit() // ÃÊ±âÈ­
+    private void DialogInit() // ì´ˆê¸°í™”
     {
         PopUpPanel.SetActive(false);
 
@@ -120,7 +120,7 @@ public class PopUpManager : MonoBehaviour
         ContentsPanel.sizeDelta = new Vector2(ContentsPanel.sizeDelta.x, y);
     }
 
-    // ÆË¾÷ÀÌ ´İÈú ¶§, ÁöÁ¤ÇØ µĞ Äİ¹é ½ÇÇà
+    // íŒì—…ì´ ë‹«í ë•Œ, ì§€ì •í•´ ë‘” ì½œë°± ì‹¤í–‰
     public void PopUpClose(string btnName)
     {
         //switch (EventSystem.current.currentSelectedGameObject.name)
@@ -157,7 +157,7 @@ public class PopUpManager : MonoBehaviour
         StartCoroutine(ClosePanelCo());
     }
 
-    // Callback °ü·Ã
+    // Callback ê´€ë ¨
     public void SetCallback(Callback call, EPopUpResponse buttontype)
     {
         switch (buttontype)

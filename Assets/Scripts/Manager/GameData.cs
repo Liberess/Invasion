@@ -25,9 +25,8 @@ public class GameData
     public DateTime lastLogInTime;
 
     public Dictionary<string, Item> inventoryDic = new Dictionary<string, Item>();
-
-    public StageInfo stageInfo;
     public Dictionary<string, string> stageNameDic = new Dictionary<string, string>();
+    public List<StageInfo> stageDataList = new List<StageInfo>();
 
     public GameObject[] unitPrefabAry = new GameObject[2];
     public GameObject lobbyHumalPrefab;

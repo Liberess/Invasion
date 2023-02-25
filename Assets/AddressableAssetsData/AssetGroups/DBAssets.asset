@@ -32,6 +32,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalUpgradeDB
+  - m_GUID: 2d4141a2d2ec4fc43a1f239daa445bac
+    m_Address: StageRewardRuleDB
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DB
+  - m_GUID: dcab894de894aff448920541db10371c
+    m_Address: StageInfoDB
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DB
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 14a12ce42ca59a341979f49e59c63df8, type: 2}
   m_SchemaSet:
