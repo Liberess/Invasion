@@ -56,8 +56,8 @@ public sealed class ResourcesManager : MonoBehaviour
         return obj;
     }
 
-    public async UniTaskVoid LoadAsset(AssetReference assetReference, System.Action<Object> successCallback,
-        System.Action failCallback, bool isCaching = true)
+    public async UniTask LoadAsset(AssetReference assetReference, System.Action<Object> successCallback = null,
+        System.Action failCallback = null, bool isCaching = true)
     {
         int hashCode = assetReference.GetHashCode();
         Object obj = null;
@@ -67,7 +67,10 @@ public sealed class ResourcesManager : MonoBehaviour
         {
             resourceDic.TryGetValue(hashCode, out obj);
             if (obj != null)
+            {
+                Debug.Log("기존 에셋 찾음");
                 successCallback?.Invoke(obj);
+            }
         }
 
         // 로드한 오브젝트가 없을 경우 비동기로 오브젝트를 로드한 후, 로드가 끝나면 콜백을 보냄
@@ -84,10 +87,14 @@ public sealed class ResourcesManager : MonoBehaviour
                 {
                     obj = handle.Result;
                     Addressables.Release(handle);
-                
+
                     if (isCaching)
-                        resourceDic.Add(hashCode, obj);
+                    {
+                        if(!resourceDic.ContainsKey(hashCode))
+                            resourceDic.Add(hashCode, obj);
+                    }
                 
+                    Debug.Log(Time.time + " " + obj.name.ToString() + " 에셋 반환");
                     successCallback?.Invoke(obj);
                 }
                 else

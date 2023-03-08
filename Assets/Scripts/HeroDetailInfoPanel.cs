@@ -10,6 +10,8 @@ public class HeroDetailInfoPanel : MonoBehaviour
 {
     [SerializeField] private AssetReference starYellowImgRef;
     [SerializeField] private AssetReference starPurpleImgRef;
+    private Sprite starYellowSprite;
+    private Sprite starPurpleSprite;
     
     [SerializeField] private HeroDetailInfo heroInfo;
 
@@ -125,22 +127,24 @@ public class HeroDetailInfoPanel : MonoBehaviour
             img.sprite = null;
             img.enabled = false;
         }
+        
+        //var yellowStarSprite = ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) as Sprite;
+        //var purpleStarSprite = ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) as Sprite;
+        await UniTask.WhenAll(
+            ResourcesManager.Instance.LoadAsset(starYellowImgRef, (obj) => starYellowSprite = obj as Sprite),
+            ResourcesManager.Instance.LoadAsset(starPurpleImgRef, (obj) => starPurpleSprite = obj as Sprite)
+        );
 
-        await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) != null);
-        await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) != null);
-
+        //await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) != null);
+        //await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) != null);
+        
+        
+        int yellowStarCount = Mathf.Min(humalData.Grade, 5);
         for (int i = 0; i < humalData.Grade; i++)
         {
-            if (i < 5)
-            {
-                heroInfo.gradeImgs[i].enabled = true;
-                heroInfo.gradeImgs[i].sprite = ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) as Sprite;
-            }
-            else
-            {
-                heroInfo.gradeImgs[i-5].enabled = true;
-                heroInfo.gradeImgs[i-5].sprite = ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) as Sprite;
-            }
+            bool isPurple = i >= yellowStarCount;
+            heroInfo.gradeImgs[i % 5].enabled = true;
+            heroInfo.gradeImgs[i % 5].sprite = isPurple ? starPurpleSprite : starYellowSprite;
         }
 
         /*

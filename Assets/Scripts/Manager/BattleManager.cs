@@ -117,8 +117,8 @@ public class BattleManager : MonoBehaviour
         queDic.Clear();
         quePrefabDic.Clear();
         
-        quePrefabDic.Add(EUnitQueueType.Hero, dataMgr.GameData.unitPrefabAry[(int)EUnitQueueType.Hero]);
-        quePrefabDic.Add(EUnitQueueType.Enemy, dataMgr.GameData.unitPrefabAry[(int)EUnitQueueType.Enemy]);
+        quePrefabDic.Add(EUnitQueueType.Hero, dataMgr.UnitPrefabAry[(int)EUnitQueueType.Hero]);
+        quePrefabDic.Add(EUnitQueueType.Enemy, dataMgr.UnitPrefabAry[(int)EUnitQueueType.Enemy]);
         Initialize(EUnitQueueType.Hero, defaultHeroCount);
         Initialize(EUnitQueueType.Enemy, defaultEnemyCount);
 

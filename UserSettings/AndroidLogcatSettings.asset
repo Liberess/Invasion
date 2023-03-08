@@ -1,9 +1,9 @@
 {
-    "m_SelectedDeviceId": "R3CM40HSFGZ",
+    "m_SelectedDeviceId": "RFCT70LFGSY",
     "m_SelectedPackage": {
-        "deviceId": "R3CM40HSFGZ",
-        "name": "com.copiasoft.invasion",
-        "processId": 22790,
+        "deviceId": "",
+        "name": "",
+        "processId": 0,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -11,44 +11,38 @@
         {
             "deviceId": "RFCT70LFGSY",
             "name": "com.sec.android.app.launcher",
-            "processId": 12330,
+            "processId": 2129,
+            "exited": false
+        },
+        {
+            "deviceId": "RFCT70LFGSY",
+            "name": "com.android.settings",
+            "processId": 31106,
             "exited": false
         },
         {
             "deviceId": "RFCT70LFGSY",
             "name": "com.copiasoft.invasion",
-            "processId": 16471,
+            "processId": 3362,
             "exited": true
         },
         {
             "deviceId": "RFCT70LFGSY",
             "name": "com.copiasoft.invasion",
-            "processId": 848,
+            "processId": 4558,
             "exited": true
         },
         {
             "deviceId": "RFCT70LFGSY",
             "name": "com.copiasoft.invasion",
-            "processId": 5388,
+            "processId": 5261,
             "exited": true
         },
         {
             "deviceId": "RFCT70LFGSY",
             "name": "com.copiasoft.invasion",
-            "processId": 9187,
+            "processId": 7667,
             "exited": true
-        },
-        {
-            "deviceId": "RFCT70LFGSY",
-            "name": "com.google.android.documentsui",
-            "processId": 22562,
-            "exited": false
-        },
-        {
-            "deviceId": "RFCT70LFGSY",
-            "name": "com.copiasoft.invasion",
-            "processId": 25035,
-            "exited": false
         },
         {
             "deviceId": "R3CM40HSFGZ",

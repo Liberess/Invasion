@@ -28,8 +28,8 @@ public class GameData
     public Dictionary<string, string> stageNameDic = new Dictionary<string, string>();
     public List<StageInfo> stageDataList = new List<StageInfo>();
 
-    public GameObject[] unitPrefabAry = new GameObject[2];
-    public GameObject lobbyHumalPrefab;
+    /*public GameObject[] unitPrefabAry = new GameObject[2];
+    public GameObject lobbyHumalPrefab;*/
 
     public List<UnitData> enemyDataList = new List<UnitData>();
     public List<Sprite> enemySpriteList = new List<Sprite>();

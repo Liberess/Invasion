@@ -20,6 +20,9 @@ public class DataManager : MonoBehaviour
     [SerializeField] private AssetReference heroReference;
     [SerializeField] private AssetReference enemyReference;
     [SerializeField] private AssetReference lobbyHeroReference;
+    
+    public GameObject[] UnitPrefabAry { get; private set; } = new GameObject[2];
+    private GameObject lobbyHumalPrefab;
 
     private List<UnitData> lobbyHeroList = new List<UnitData>();
     //[SerializeField] private GameObject heroPrefab;
@@ -98,12 +101,12 @@ public class DataManager : MonoBehaviour
 
         GameManager.Instance.OnApplicationStart();
 
-        StartCoroutine(UpdateResources());
+        UpdateResources().Forget();
     }
 
     #region Update Resources
 
-    public IEnumerator UpdateResources()
+    public async UniTaskVoid UpdateResources()
     {
         UpdateDB();
         UpdateUnitPrefab();
@@ -113,34 +116,54 @@ public class DataManager : MonoBehaviour
         UpdateHeroCardIcon();
         UpdateItemData();
         UpdateEnemyAsset();
-
-        yield return null;
     }
 
-    private void UpdateUnitPrefab()
+    private async UniTaskVoid UpdateUnitPrefab()
     {
-        Addressables.LoadAssetAsync<GameObject>(heroReference).Completed +=
+        Debug.Log("UpdateUnitPrefab");
+        await UniTask.WhenAll(
+            ResourcesManager.Instance.LoadAsset(heroReference, (obj) => UnitPrefabAry[(int)EUnitQueueType.Hero] = obj as GameObject),
+            ResourcesManager.Instance.LoadAsset(enemyReference, (obj) => UnitPrefabAry[(int)EUnitQueueType.Enemy] = obj as GameObject),
+            ResourcesManager.Instance.LoadAsset(lobbyHeroReference, (obj) =>
+            {
+                lobbyHumalPrefab = obj as GameObject;
+                Debug.Log(Time.time + " 로비 휴멀 찾음");
+            })
+        );
+
+        if (lobbyHumalPrefab)
+        {
+            Debug.Log(Time.time + " UpdateUnitPrefab exist");
+            
+        }
+        else
+        {
+            Debug.Log(Time.time + " UpdateUnitPrefab null");
+            
+        }
+        
+        /*UnitPrefabAry[(int)EUnitQueueType.Hero] = ResourcesManager.Instance.LoadAsset<GameObject>(heroReference, false) as GameObject;
+        UnitPrefabAry[(int)EUnitQueueType.Enemy] = ResourcesManager.Instance.LoadAsset<GameObject>(enemyReference, false) as GameObject;
+        
+        lobbyHumalPrefab = ResourcesManager.Instance.LoadAsset<GameObject>(lobbyHeroReference, false) as GameObject;*/
+
+        /*Addressables.LoadAssetAsync<GameObject>(heroReference).Completed +=
             handle => m_GameData.unitPrefabAry[(int)EUnitQueueType.Hero] = handle.Result;
         
         Addressables.LoadAssetAsync<GameObject>(enemyReference).Completed +=
             handle => m_GameData.unitPrefabAry[(int)EUnitQueueType.Enemy] = handle.Result;
 
         Addressables.LoadAssetAsync<GameObject>(lobbyHeroReference).Completed +=
-            handle => m_GameData.lobbyHumalPrefab = handle.Result;
+            handle => m_GameData.lobbyHumalPrefab = handle.Result;*/
     }
 
-    private void UpdateDB()
+    private async UniTask UpdateDB()
     {
         Addressables.LoadAssetAsync<HumalPickDB>(Tags.HumalPickDBLabel).Completed +=
             handle =>
             {
                 m_HumalData.humalPickDBList.Clear();
-                foreach (var db in handle.Result.Entities)
-                {
-                    if (!m_HumalData.humalPickDBList.Contains(db))
-                        m_HumalData.humalPickDBList.Add(db);
-                }
-
+                m_HumalData.humalPickDBList.AddRange(handle.Result.Entities.Where(db => !m_HumalData.humalPickDBList.Contains(db)));
                 m_HumalData.humalPickDBList = m_HumalData.humalPickDBList.OrderBy(x => x.id).ToList();
             };
   
@@ -148,38 +171,21 @@ public class DataManager : MonoBehaviour
             handle =>
             {
                 m_HumalData.originHumalDataList.Clear();
-                foreach (var unitDB in handle.Result.HumalDBList)
-                {
-                    if (!m_HumalData.originHumalDataList.Contains(unitDB))
-                        m_HumalData.originHumalDataList.Add(unitDB);
-                }
-
+                m_HumalData.originHumalDataList.AddRange(handle.Result.HumalDBList.Where(db => !m_HumalData.originHumalDataList.Contains(db)));
                 m_HumalData.originHumalDataList = m_HumalData.originHumalDataList.OrderBy(x => x.ID).ToList();
 
                 m_GameData.enemyDataList.Clear();
-                foreach (var unitDB in handle.Result.EnemyDBList)
-                {
-                    if (!m_GameData.enemyDataList.Contains(unitDB))
-                        m_GameData.enemyDataList.Add(unitDB);
-                }
+                m_GameData.enemyDataList.AddRange(handle.Result.EnemyDBList.Where(db => !m_GameData.enemyDataList.Contains(db)));
             };
         
         Addressables.LoadAssetAsync<HumalUpgradeDB>(Tags.HumalUpgradeDBLabel).Completed +=
             handle =>
             {
                 m_HumalData.humalUpgradeLevelList.Clear();
-                foreach (var db in handle.Result.Level)
-                {
-                    if (!m_HumalData.humalUpgradeLevelList.Contains(db))
-                        m_HumalData.humalUpgradeLevelList.Add(db);
-                }
-
                 m_HumalData.humalUpgradeGradeList.Clear();
-                foreach (var db in handle.Result.Grade)
-                {
-                    if (!m_HumalData.humalUpgradeGradeList.Contains(db))
-                        m_HumalData.humalUpgradeGradeList.Add(db);
-                }
+
+                m_HumalData.humalUpgradeLevelList.AddRange(handle.Result.Level.Where(db => !m_HumalData.humalUpgradeLevelList.Contains(db)));
+                m_HumalData.humalUpgradeGradeList.AddRange(handle.Result.Grade.Where(db => !m_HumalData.humalUpgradeGradeList.Contains(db)));
             };
     }
 
@@ -381,7 +387,7 @@ public class DataManager : MonoBehaviour
         for (int i = 0; i < m_HumalData.humalSpriteList.Count; i++)
             m_HumalData.humalSpriteDic.Add(i, m_HumalData.humalSpriteList[i]);
 
-        SetupHero();
+        SetupHero().Forget();
     }
 
     /// <summary>
@@ -855,7 +861,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    private void SetupHero()
+    private async UniTaskVoid SetupHero()
     {
         try
         {
@@ -953,7 +959,20 @@ public class DataManager : MonoBehaviour
                         if (lobbyHeroList.Contains(data))
                             continue;
 
-                        var lobbyHero = Instantiate(m_GameData.lobbyHumalPrefab, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
+                        if (!lobbyHumalPrefab)
+                        {
+                            Debug.Log("1");
+                            await ResourcesManager.Instance.LoadAsset(lobbyHeroReference,
+                                (obj) => lobbyHumalPrefab = obj as GameObject);
+                            /*await UniTask.WaitUntil(() =>
+                                (lobbyHumalPrefab =
+                                    ResourcesManager.Instance
+                                        .LoadAsset<GameObject>(lobbyHeroReference, false) as GameObject) != null);*/
+                            ResourcesManager.Instance.ReleaseAsset(lobbyHeroReference);
+                            Debug.Log("2");
+                        }
+                        
+                        var lobbyHero = Instantiate(lobbyHumalPrefab, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
                         var heroStat = data;
                         lobbyHero.UnitSetup(heroStat);
                         lobbyHeroList.Add(data);
@@ -1144,7 +1163,7 @@ public class DataManager : MonoBehaviour
                 //if(!m_HumalData.isLoadComplete)
                     uiMgr.SetEnabledHumalSlotByID(id);
 
-                SetupHero();
+                SetupHero().Forget();
             }
         }
         catch(Exception ex)
@@ -1288,7 +1307,7 @@ public class DataManager : MonoBehaviour
     private IEnumerator OnSceneLoadedCo()
     {
         lobbyHeroList.Clear();
-        SetupHero();
+        SetupHero().Forget();
 
         yield return new WaitForEndOfFrame();
 
