@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public class HeroDetailInfoPanel : MonoBehaviour
 {
@@ -130,14 +131,18 @@ public class HeroDetailInfoPanel : MonoBehaviour
         
         //var yellowStarSprite = ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) as Sprite;
         //var purpleStarSprite = ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) as Sprite;
-        await UniTask.WhenAll(
+        /*await UniTask.WhenAll(
             ResourcesManager.Instance.LoadAsset(starYellowImgRef, (obj) => starYellowSprite = obj as Sprite),
             ResourcesManager.Instance.LoadAsset(starPurpleImgRef, (obj) => starPurpleSprite = obj as Sprite)
-        );
+        );*/
 
         //await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) != null);
         //await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) != null);
+
+        starYellowSprite = ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) as Sprite;
+        starPurpleSprite = ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) as Sprite;
         
+        await UniTask.WaitUntil(() => starYellowSprite && starPurpleSprite);
         
         int yellowStarCount = Mathf.Min(humalData.Grade, 5);
         for (int i = 0; i < humalData.Grade; i++)

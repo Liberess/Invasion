@@ -27,80 +27,74 @@ public sealed class ResourcesManager : MonoBehaviour
 
     public Object LoadAsset<T>(AssetReference assetReference, bool isCaching = true)
     {
-        int hashCode = assetReference.GetHashCode();
-        Object obj = null;
+        int hashCode = assetReference.RuntimeKey.GetHashCode();
 
         // 캐싱체크를 하면 Dictionary에서 먼저 검색하여 기존에 로드한 오브젝트를 찾음
-        if (isCaching)
-            resourceDic.TryGetValue(hashCode, out obj);
+        if (isCaching && resourceDic.TryGetValue(hashCode, out Object cachedObj))
+            return cachedObj;
 
-        // 로드한 오브젝트가 없을 경우 비동기로 오브젝트를 로드한 후, 로드가 끝나면 콜백을 보냄
-        if (obj == null)
+        var handle = Addressables.LoadAssetAsync<T>(assetReference);
+        Object loadedObject = null;
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            var handle = Addressables.LoadAssetAsync<T>(assetReference);
-            handle.Completed +=
-                handle =>
-                {
-                    obj = handle.Result as Object;
-
-                    if (isCaching)
-                    {
-                        if(!resourceDic.ContainsKey(hashCode))
-                            resourceDic.Add(hashCode, obj);
-                    }
-                    
-                    Addressables.Release(handle);
-                };
+            loadedObject = handle.Result as Object;
+            Addressables.Release(handle);
+            
+            if (isCaching)
+            {
+                if (resourceDic.ContainsKey(hashCode))
+                    resourceDic[hashCode] = loadedObject;
+                else
+                    resourceDic.Add(hashCode, loadedObject);
+            }
         }
 
-        return obj;
+        return loadedObject;
     }
 
     public async UniTask LoadAsset(AssetReference assetReference, System.Action<Object> successCallback = null,
         System.Action failCallback = null, bool isCaching = true)
     {
-        int hashCode = assetReference.GetHashCode();
-        Object obj = null;
+        int hashCode = assetReference.RuntimeKey.GetHashCode();
 
-        // 캐싱체크를 하면 Dictionary에서 먼저 검색하여 기존에 로드한 오브젝트를 찾음
-        if (isCaching)
+        if (isCaching && resourceDic.TryGetValue(hashCode, out Object cachedObject))
         {
-            resourceDic.TryGetValue(hashCode, out obj);
-            if (obj != null)
-            {
-                Debug.Log("기존 에셋 찾음");
-                successCallback?.Invoke(obj);
-            }
+            Debug.Log(Time.time + " find exist");
+            successCallback?.Invoke(cachedObject);
+            return;
         }
 
-        // 로드한 오브젝트가 없을 경우 비동기로 오브젝트를 로드한 후, 로드가 끝나면 콜백을 보냄
-        if (obj == null)
+        AsyncOperationHandle<Object> handle = assetReference.LoadAssetAsync<Object>();
+
+        await handle.ToUniTask();
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            AsyncOperationHandle<Object> handle = assetReference.LoadAssetAsync<Object>();
+            Object loadedObject = handle.Result;
+            Addressables.Release(handle);
 
-            if (handle.IsValid())
+            if (loadedObject)
             {
-                await UniTask.WaitUntil(() => handle.IsDone);
-                //yield return handle;
-
-                if (handle.Status == AsyncOperationStatus.Succeeded)
+                if (isCaching)
                 {
-                    obj = handle.Result;
-                    Addressables.Release(handle);
-
-                    if (isCaching)
+                    if (resourceDic.ContainsKey(hashCode))
                     {
-                        if(!resourceDic.ContainsKey(hashCode))
-                            resourceDic.Add(hashCode, obj);
+                        Debug.Log(Time.time + " find exist, rewrite");
+                        resourceDic[hashCode] = loadedObject;
                     }
-                
-                    Debug.Log(Time.time + " " + obj.name.ToString() + " 에셋 반환");
-                    successCallback?.Invoke(obj);
+                    else
+                    {
+                        Debug.Log(Time.time + " can't find, add");
+                        resourceDic.Add(hashCode, loadedObject);
+                    }
                 }
-                else
-                {
-                    failCallback?.Invoke();
-                }
+
+                successCallback?.Invoke(loadedObject);
+            }
+            else
+            {
+                failCallback?.Invoke();
             }
         }
     }
