@@ -17,12 +17,7 @@ public class DataManager : MonoBehaviour
     private PopUpManager popUpMgr;
 
     [Header("==== Hero Object Prefab ====")]
-    [SerializeField] private AssetReference heroReference;
-    [SerializeField] private AssetReference enemyReference;
     [SerializeField] private AssetReference lobbyHeroReference;
-    
-    public GameObject[] UnitPrefabAry { get; private set; } = new GameObject[2];
-
     private GameObject lobbyHumalPrefab = null;
 
     private List<UnitData> lobbyHeroList = new List<UnitData>();
@@ -77,6 +72,7 @@ public class DataManager : MonoBehaviour
     private AsyncOperationHandle updateBundleHandle;
 
     public Action OnSaveDataAction;
+    [SerializeField] private GameObject[] unitPrefabAry1;
 
     private void Awake()
     {
@@ -102,6 +98,8 @@ public class DataManager : MonoBehaviour
 
         GameManager.Instance.OnApplicationStart();
 
+        ResourcesManager.Instance.LoadAssetAsync<GameObject>(lobbyHeroReference,
+            (obj) => lobbyHumalPrefab = obj as GameObject);
         UpdateResources();
     }
 
@@ -110,20 +108,13 @@ public class DataManager : MonoBehaviour
     private void UpdateResources()
     {
         UpdateDB();
-        UpdateUnitPrefab().Forget();
+        //UpdateUnitPrefab().Forget();
         UpdateHumalAssets();
         UpdateGoodsSprite();
         UpdateHeroAnimCtrl();
         UpdateHeroCardIcon();
         UpdateItemData();
         UpdateEnemyAsset();
-    }
-
-    private async UniTaskVoid UpdateUnitPrefab()
-    {
-        await ResourcesManager.Instance.LoadAsset(heroReference, (obj) => UnitPrefabAry[(int)EUnitQueueType.Hero] = obj as GameObject);
-        await ResourcesManager.Instance.LoadAsset(enemyReference, (obj) => UnitPrefabAry[(int)EUnitQueueType.Enemy] = obj as GameObject);
-        await ResourcesManager.Instance.LoadAsset(lobbyHeroReference, (obj) => lobbyHumalPrefab = obj as GameObject);
     }
 
     private void UpdateDB()
@@ -849,19 +840,16 @@ public class DataManager : MonoBehaviour
                     {
                         if (lobbyHeroList.Contains(data))
                             continue;
-
-                        if (!lobbyHumalPrefab)
-                        {
-                            Debug.Log(Time.time + " humal is null");
-                            await ResourcesManager.Instance.LoadAsset(lobbyHeroReference, (obj) => lobbyHumalPrefab = obj as GameObject);
-                            Debug.Log(Time.time + " %");
-                        }
-
-                        await UniTask.WaitUntil(() => lobbyHumalPrefab);
-                        var lobbyHero = Instantiate(lobbyHumalPrefab, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
-                        var heroStat = data;
-                        lobbyHero.UnitSetup(heroStat);
-                        lobbyHeroList.Add(data);
+                        
+                        await ResourcesManager.Instance.LoadAssetAsync<GameObject>(lobbyHeroReference,
+                            (obj) =>
+                            {
+                                //lobbyHumalPrefab = obj as GameObject;
+                                var lobbyHero = Instantiate(obj as GameObject, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
+                                var heroStat = data;
+                                lobbyHero.UnitSetup(heroStat);
+                                lobbyHeroList.Add(data);
+                            });
                     }
                 }
             }

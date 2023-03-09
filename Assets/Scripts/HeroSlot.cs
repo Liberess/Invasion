@@ -13,7 +13,7 @@ public class HeroSlot : MonoBehaviour
 
     [SerializeField] private AssetReference starYellowImgRef;
     [SerializeField] private AssetReference starPurpleImgRef;
-    
+
     [Header("==== Unlock Group ====")]
     [SerializeField] private Text lvTxt;
     [SerializeField] private Image heroImg;
@@ -80,6 +80,9 @@ public class HeroSlot : MonoBehaviour
             img.enabled = false;
         }
         
+        ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef);
+        ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef);
+        
         //btn.onClick.AddListener(OnClickEvent);
         //menuPanel.GetComponent<Button>().onClick.AddListener(OnClickOther);
     }
@@ -118,9 +121,6 @@ public class HeroSlot : MonoBehaviour
         {
             lvTxt.text = humalData.Level.ToString();
 
-            await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) != null);
-            await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) != null);
-            
             for (int i = 0; i < HumalData.Grade; i++)
             {
                 if (i < 5)

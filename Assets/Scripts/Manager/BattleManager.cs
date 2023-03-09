@@ -43,6 +43,8 @@ public class BattleManager : MonoBehaviour
     public bool IsPlay { get; private set; }
 
     [Header("== Setting Object Pooling =="), Space(10)]
+    [SerializeField] private AssetReference heroReference;
+    [SerializeField] private AssetReference enemyReference;
     [SerializeField] private int defaultHeroCount = 20;
     [SerializeField] private int defaultEnemyCount = 20;
     private Dictionary<EUnitQueueType, Queue<GameObject>> queDic =
@@ -116,9 +118,15 @@ public class BattleManager : MonoBehaviour
 
         queDic.Clear();
         quePrefabDic.Clear();
+
+        await ResourcesManager.Instance.LoadAssetAsync<GameObject>(heroReference,
+            (obj) => quePrefabDic.Add(EUnitQueueType.Hero, obj as GameObject));
+        await ResourcesManager.Instance.LoadAssetAsync<GameObject>(enemyReference,
+            (obj) => quePrefabDic.Add(EUnitQueueType.Enemy, obj as GameObject));
         
-        quePrefabDic.Add(EUnitQueueType.Hero, dataMgr.UnitPrefabAry[(int)EUnitQueueType.Hero]);
-        quePrefabDic.Add(EUnitQueueType.Enemy, dataMgr.UnitPrefabAry[(int)EUnitQueueType.Enemy]);
+        //quePrefabDic.Add(EUnitQueueType.Hero, ResourcesManager.Instance.LoadAsset<GameObject>(heroReference) as GameObject);
+        //quePrefabDic.Add(EUnitQueueType.Enemy, ResourcesManager.Instance.LoadAsset<GameObject>(enemyReference) as GameObject);
+        //quePrefabDic.Add(EUnitQueueType.Enemy, dataMgr.UnitPrefabAry[(int)EUnitQueueType.Enemy]);
         Initialize(EUnitQueueType.Hero, defaultHeroCount);
         Initialize(EUnitQueueType.Enemy, defaultEnemyCount);
 

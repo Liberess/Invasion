@@ -11,9 +11,7 @@ public class HeroDetailInfoPanel : MonoBehaviour
 {
     [SerializeField] private AssetReference starYellowImgRef;
     [SerializeField] private AssetReference starPurpleImgRef;
-    private Sprite starYellowSprite;
-    private Sprite starPurpleSprite;
-    
+
     [SerializeField] private HeroDetailInfo heroInfo;
 
     [SerializeField] private Slider gradeSlider;
@@ -23,7 +21,7 @@ public class HeroDetailInfoPanel : MonoBehaviour
     [SerializeField] private GameObject levelGroup;
     [SerializeField] private Image awakeImg;
     [SerializeField] private Text awakeTxt;
-    [SerializeField] private Image goldImg; 
+    [SerializeField] private Image goldImg;
     [SerializeField] private Text goldTxt;
 
     private UnitData currentHumalData;
@@ -31,6 +29,12 @@ public class HeroDetailInfoPanel : MonoBehaviour
     private void Awake()
     {
         gradeSlider.transform.parent.GetComponent<Button>().onClick.AddListener(OnClickUpgrade);
+    }
+
+    private void Start()
+    {
+        ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef);
+        ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef);
     }
 
     private void UpdatePanel()
@@ -41,10 +45,13 @@ public class HeroDetailInfoPanel : MonoBehaviour
             {
                 levelGroup.SetActive(true);
                 gradeSlider.gameObject.SetActive(false);
-                
-                var entity = DataManager.Instance.HumalData.humalUpgradeLevelList.Find(x => x.lv == currentHumalData.Level);
-                awakeTxt.text = Utility.ConcatCurrency(DataManager.Instance.GetCurrency(ECurrencyType.AJ), entity.require_awake_jewel);
-                goldTxt.text = Utility.ConcatCurrency(DataManager.Instance.GetCurrency(ECurrencyType.GD), entity.require_gold);
+
+                var entity =
+                    DataManager.Instance.HumalData.humalUpgradeLevelList.Find(x => x.lv == currentHumalData.Level);
+                awakeTxt.text = Utility.ConcatCurrency(DataManager.Instance.GetCurrency(ECurrencyType.AJ),
+                    entity.require_awake_jewel);
+                goldTxt.text = Utility.ConcatCurrency(DataManager.Instance.GetCurrency(ECurrencyType.GD),
+                    entity.require_gold);
                 //awakeTxt.text = string.Concat(string.Format("{0:n0}", DataManager.Instance.GetCurrency(ECurrencyType.AJ)), "/", string.Format("{0:n0}", entity.require_awake_jewel));
                 //goldTxt.text = string.Concat(DataManager.Instance.GetCurrency(ECurrencyType.GD), "/", entity.require_gold);
             }
@@ -52,8 +59,9 @@ public class HeroDetailInfoPanel : MonoBehaviour
             {
                 levelGroup.SetActive(false);
                 gradeSlider.gameObject.SetActive(true);
-                
-                var entity = DataManager.Instance.HumalData.humalUpgradeGradeList.Find(x => x.lv == currentHumalData.Grade);
+
+                var entity =
+                    DataManager.Instance.HumalData.humalUpgradeGradeList.Find(x => x.lv == currentHumalData.Grade);
                 if (DataManager.Instance.TryGetHumalPieceAmount(currentHumalData.ID, out int amount))
                 {
                     gradeSlider.maxValue = entity.require_piece;
@@ -85,7 +93,7 @@ public class HeroDetailInfoPanel : MonoBehaviour
             }
             else
             {
-                PopUpManager.Instance.PopUp("레벨 강화 실패!", EPopUpType.Warning); 
+                PopUpManager.Instance.PopUp("레벨 강화 실패!", EPopUpType.Warning);
             }
         }
         else //Grade
@@ -110,7 +118,7 @@ public class HeroDetailInfoPanel : MonoBehaviour
     {
         currentHumalData = humalData;
         UpdatePanel();
-        
+
         heroInfo.nameTxt.text = humalData.KoName;
         heroInfo.levelTxt.text = string.Concat("Lv.", humalData.Level);
         heroInfo.heroImg.sprite = humalData.sprite;
@@ -128,32 +136,13 @@ public class HeroDetailInfoPanel : MonoBehaviour
             img.sprite = null;
             img.enabled = false;
         }
-        
-        //var yellowStarSprite = ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) as Sprite;
-        //var purpleStarSprite = ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) as Sprite;
-        /*await UniTask.WhenAll(
-            ResourcesManager.Instance.LoadAsset(starYellowImgRef, (obj) => starYellowSprite = obj as Sprite),
-            ResourcesManager.Instance.LoadAsset(starPurpleImgRef, (obj) => starPurpleSprite = obj as Sprite)
-        );*/
 
-        //await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) != null);
-        //await UniTask.WaitUntil(() => ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) != null);
-
-        starYellowSprite = ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) as Sprite;
-        starPurpleSprite = ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) as Sprite;
-        
-        await UniTask.WaitUntil(() => starYellowSprite && starPurpleSprite);
-        
-        int yellowStarCount = Mathf.Min(humalData.Grade, 5);
         for (int i = 0; i < humalData.Grade; i++)
         {
-            bool isPurple = i >= yellowStarCount;
             heroInfo.gradeImgs[i % 5].enabled = true;
-            heroInfo.gradeImgs[i % 5].sprite = isPurple ? starPurpleSprite : starYellowSprite;
+            heroInfo.gradeImgs[i % 5].sprite = (i >= Mathf.Min(humalData.Grade, 5))
+                ? ResourcesManager.Instance.LoadAsset<Sprite>(starPurpleImgRef) as Sprite
+                : ResourcesManager.Instance.LoadAsset<Sprite>(starYellowImgRef) as Sprite;
         }
-
-        /*
-        if(DataManager.Instance.TryGetHumalPieceAmount(HumalData.ID, out int amount))
-            heroInfo.pieceTxt.text = amount.ToString();*/
     }
 }

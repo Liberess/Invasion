@@ -30,7 +30,7 @@ public sealed class ResourcesManager : MonoBehaviour
         int hashCode = assetReference.RuntimeKey.GetHashCode();
 
         // 캐싱체크를 하면 Dictionary에서 먼저 검색하여 기존에 로드한 오브젝트를 찾음
-        if (isCaching && resourceDic.TryGetValue(hashCode, out Object cachedObj))
+        if (isCaching && resourceDic.TryGetValue(hashCode, out var cachedObj))
             return cachedObj;
 
         var handle = Addressables.LoadAssetAsync<T>(assetReference);
@@ -41,11 +41,9 @@ public sealed class ResourcesManager : MonoBehaviour
             loadedObject = handle.Result as Object;
             Addressables.Release(handle);
             
-            if (isCaching)
+            if (loadedObject && isCaching)
             {
-                if (resourceDic.ContainsKey(hashCode))
-                    resourceDic[hashCode] = loadedObject;
-                else
+                if (!resourceDic.ContainsKey(hashCode))
                     resourceDic.Add(hashCode, loadedObject);
             }
         }
@@ -53,41 +51,30 @@ public sealed class ResourcesManager : MonoBehaviour
         return loadedObject;
     }
 
-    public async UniTask LoadAsset(AssetReference assetReference, System.Action<Object> successCallback = null,
+    public async UniTask LoadAssetAsync<T>(AssetReference assetReference, System.Action<Object> successCallback = null,
         System.Action failCallback = null, bool isCaching = true)
     {
         int hashCode = assetReference.RuntimeKey.GetHashCode();
 
         if (isCaching && resourceDic.TryGetValue(hashCode, out Object cachedObject))
         {
-            Debug.Log(Time.time + " find exist");
             successCallback?.Invoke(cachedObject);
             return;
         }
 
-        AsyncOperationHandle<Object> handle = assetReference.LoadAssetAsync<Object>();
-
+        var handle = Addressables.LoadAssetAsync<T>(assetReference);
         await handle.ToUniTask();
-
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            Object loadedObject = handle.Result;
+            Object loadedObject = handle.Result as Object;
             Addressables.Release(handle);
 
             if (loadedObject)
             {
                 if (isCaching)
                 {
-                    if (resourceDic.ContainsKey(hashCode))
-                    {
-                        Debug.Log(Time.time + " find exist, rewrite");
-                        resourceDic[hashCode] = loadedObject;
-                    }
-                    else
-                    {
-                        Debug.Log(Time.time + " can't find, add");
+                    if (!resourceDic.ContainsKey(hashCode))
                         resourceDic.Add(hashCode, loadedObject);
-                    }
                 }
 
                 successCallback?.Invoke(loadedObject);
