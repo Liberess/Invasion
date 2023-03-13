@@ -18,7 +18,7 @@ public class DataManager : MonoBehaviour
 
     [Header("==== Hero Object Prefab ====")]
     [SerializeField] private AssetReference lobbyHeroReference;
-    private GameObject lobbyHumalPrefab = null;
+    [SerializeField]private GameObject lobbyHumalPrefab = null;
 
     private List<UnitData> lobbyHeroList = new List<UnitData>();
     //[SerializeField] private GameObject heroPrefab;
@@ -97,9 +97,19 @@ public class DataManager : MonoBehaviour
         OnSaveDataAction += SaveData;
 
         GameManager.Instance.OnApplicationStart();
-
+        
+        Debug.Log(Time.time + " 1");
         ResourcesManager.Instance.LoadAssetAsync<GameObject>(lobbyHeroReference,
-            (obj) => lobbyHumalPrefab = obj as GameObject);
+            (obj) =>
+            {
+                lobbyHumalPrefab = Instantiate(obj as GameObject);
+                Debug.Log(Time.time + " loading success " + lobbyHumalPrefab.name);
+            }).Forget();
+        Debug.Log(Time.time + " 2");
+
+        /*ResourcesManager.Instance.LoadAssetAsync<GameObject>(lobbyHeroReference,
+            (obj) => lobbyHumalPrefab = obj as GameObject);*/
+        
         UpdateResources();
     }
 
@@ -827,30 +837,36 @@ public class DataManager : MonoBehaviour
         {
             if(m_HumalData.humalDic.Count > 0)
             {
-                bool isLobby = SceneManager.GetActiveScene().name == "Lobby";
+                if (!SceneManager.GetActiveScene().name.Equals("Lobby"))
+                    return;
 
+                if (!lobbyHumalPrefab || !lobbyHumalPrefab.activeSelf)
+                {
+                    Debug.Log(Time.time + " null");
+                    await ResourcesManager.Instance.LoadAssetAsync<GameObject>(lobbyHeroReference,
+                        (obj) =>
+                        {
+                            lobbyHumalPrefab = Instantiate(obj as GameObject);
+                            Debug.Log(Time.time + " loading success 2 " + lobbyHumalPrefab.name);
+                        });
+                    Debug.Log(Time.time + " prefab " + lobbyHumalPrefab.name);
+                }
+
+                Debug.Log(Time.time + " 3");
                 foreach (var data in m_HumalData.humalDic.Values)
                 {
                     int targetID = data.ID;
 
                     data.sprite = m_HumalData.humalSpriteList[targetID];
                     data.animCtrl = m_HumalData.GetHumalAnimCtrl(targetID);
+   
+                    if (lobbyHeroList.Contains(data))
+                        continue;
 
-                    if (isLobby)
-                    {
-                        if (lobbyHeroList.Contains(data))
-                            continue;
-                        
-                        await ResourcesManager.Instance.LoadAssetAsync<GameObject>(lobbyHeroReference,
-                            (obj) =>
-                            {
-                                //lobbyHumalPrefab = obj as GameObject;
-                                var lobbyHero = Instantiate(obj as GameObject, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
-                                var heroStat = data;
-                                lobbyHero.UnitSetup(heroStat);
-                                lobbyHeroList.Add(data);
-                            });
-                    }
+                    var lobbyHero = Instantiate(lobbyHumalPrefab, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
+                    var heroStat = data;
+                    lobbyHero.UnitSetup(heroStat);
+                    lobbyHeroList.Add(data);
                 }
             }
             else
