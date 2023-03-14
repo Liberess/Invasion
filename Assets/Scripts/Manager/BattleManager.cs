@@ -119,10 +119,17 @@ public class BattleManager : MonoBehaviour
         queDic.Clear();
         quePrefabDic.Clear();
 
-        await ResourcesManager.Instance.LoadAssetAsync<GameObject>(heroReference,
-            (obj) => quePrefabDic.Add(EUnitQueueType.Hero, obj as GameObject));
+        await UniTask.WhenAll(
+            ResourcesManager.Instance.LoadAssetAsync<GameObject>(heroReference,
+                    (obj) => quePrefabDic.Add(EUnitQueueType.Hero, ((GameObject)obj).gameObject)),
+                ResourcesManager.Instance.LoadAssetAsync<GameObject>(enemyReference,
+                    (obj) => quePrefabDic.Add(EUnitQueueType.Enemy, ((GameObject)obj).gameObject))
+            );
+        
+        /*await ResourcesManager.Instance.LoadAssetAsync<GameObject>(heroReference,
+            (obj) => quePrefabDic.Add(EUnitQueueType.Hero, ((GameObject)obj).gameObject));
         await ResourcesManager.Instance.LoadAssetAsync<GameObject>(enemyReference,
-            (obj) => quePrefabDic.Add(EUnitQueueType.Enemy, obj as GameObject));
+            (obj) => quePrefabDic.Add(EUnitQueueType.Enemy, ((GameObject)obj).gameObject));*/
         
         //quePrefabDic.Add(EUnitQueueType.Hero, ResourcesManager.Instance.LoadAsset<GameObject>(heroReference) as GameObject);
         //quePrefabDic.Add(EUnitQueueType.Enemy, ResourcesManager.Instance.LoadAsset<GameObject>(enemyReference) as GameObject);

@@ -78,8 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 1662081191
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2834552850196481573, guid: 1618eae39a61bd345ab4d414bdeec9ea,
-    type: 3}
+  m_Sprite: {fileID: 1323584161, guid: 23016e1f77a024b40afdab43f83a4184, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -166,6 +165,7 @@ MonoBehaviour:
     koName: 
     enName: 
     level: 0
+    grade: 0
     cost: 0
     hp: 0
     ap: 0
@@ -175,6 +175,8 @@ MonoBehaviour:
     dodge: 0
     distance: 0
     attackDelay: 0
+    isUnlock: 0
+    isParty: 0
     isLeader: 0
     sprite: {fileID: 0}
     animCtrl: {fileID: 0}

@@ -453,7 +453,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff04ef84a28c367479b888f1f5a36d3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infoTxt: {fileID: 8436654414793234554}
   buyingType: 1
   payGoodsType: 1
   price: 0

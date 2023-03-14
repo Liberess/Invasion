@@ -97,18 +97,9 @@ public class DataManager : MonoBehaviour
         OnSaveDataAction += SaveData;
 
         GameManager.Instance.OnApplicationStart();
-        
-        Debug.Log(Time.time + " 1");
-        ResourcesManager.Instance.LoadAssetAsync<GameObject>(lobbyHeroReference,
-            (obj) =>
-            {
-                lobbyHumalPrefab = Instantiate(obj as GameObject);
-                Debug.Log(Time.time + " loading success " + lobbyHumalPrefab.name);
-            }).Forget();
-        Debug.Log(Time.time + " 2");
 
         /*ResourcesManager.Instance.LoadAssetAsync<GameObject>(lobbyHeroReference,
-            (obj) => lobbyHumalPrefab = obj as GameObject);*/
+            (obj) => lobbyHumalPrefab = obj as GameObject).Forget();*/
         
         UpdateResources();
     }
@@ -842,17 +833,14 @@ public class DataManager : MonoBehaviour
 
                 if (!lobbyHumalPrefab || !lobbyHumalPrefab.activeSelf)
                 {
-                    Debug.Log(Time.time + " null");
                     await ResourcesManager.Instance.LoadAssetAsync<GameObject>(lobbyHeroReference,
                         (obj) =>
                         {
-                            lobbyHumalPrefab = Instantiate(obj as GameObject);
-                            Debug.Log(Time.time + " loading success 2 " + lobbyHumalPrefab.name);
+                            lobbyHumalPrefab = ((GameObject)obj).gameObject;
+                            Debug.Log(Time.time + " loading success + " + lobbyHumalPrefab.name);
                         });
-                    Debug.Log(Time.time + " prefab " + lobbyHumalPrefab.name);
                 }
 
-                Debug.Log(Time.time + " 3");
                 foreach (var data in m_HumalData.humalDic.Values)
                 {
                     int targetID = data.ID;
@@ -862,8 +850,9 @@ public class DataManager : MonoBehaviour
    
                     if (lobbyHeroList.Contains(data))
                         continue;
-
-                    var lobbyHero = Instantiate(lobbyHumalPrefab, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
+                    
+                    //var lobbyHero = Instantiate(lobbyHumalPrefab, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
+                    var lobbyHero = (lobbyHeroReference.InstantiateAsync(Vector3.zero, Quaternion.identity)).Result.GetComponent<LobbyHero>();
                     var heroStat = data;
                     lobbyHero.UnitSetup(heroStat);
                     lobbyHeroList.Add(data);

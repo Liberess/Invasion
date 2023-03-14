@@ -461,42 +461,34 @@ public class UIManager : MonoBehaviour
     {
         Debug.Log("수정 필요!! StageInfo");
 
-        // Set Detail Button List
         detailStageBtnDic.Clear();
         for (int i = 0; i < detailStagePanelList.Count; i++)
         {
             detailStageBtnDic.Add(i, new List<Button>());
-            for (int j = 0; j < detailStagePanelList[i].transform.childCount; j++)
+            Transform panelTransform = detailStagePanelList[i].transform;
+            
+            for (int j = 0; j < panelTransform.childCount; j++)
             {
-                Button btn = detailStagePanelList[i].transform.GetChild(j).
-                    gameObject.GetComponent<Button>();
+                Transform childTransform = panelTransform.GetChild(j);
+                Button btn = childTransform.GetComponent<Button>();
 
-                if (btn != null && btn.name != "QuitBtn")
+                if (btn != null && !btn.name.Equals("QuitBtn"))
                 {
-                    string stageNumStr = (i + 1) + "-" + (j + 1);
-                    btn.name = stageNumStr + "Btn";
+                    string stageNumStr = $"{i+1}-{j+1}";
+                    btn.name = $"{stageNumStr}Btn";
                     btn.GetComponentInChildren<Text>().text = stageNumStr;
-
-                    /*var starImgs = btn.GetComponentsInChildren<Image>();
-                    for (int k = 0; k < starImgs.Length; k++)
-                    {
-                        
-                        starImgs[k].sprite
-                    }*/
 
                     if (dataMgr.FindStageInfo(stageNumStr, out StageInfo info))
                     {
-                        btn.onClick.AddListener(() => stageReadyPanel.gameObject.SetActive(true));
-                        btn.onClick.AddListener(() => stageReadyPanel.SetupStageInfo(info));
-
-                        var starImgs = btn.transform.GetChild(1).GetComponentsInChildren<Image>();
-                        for (int k = 0; k < starImgs.Length; k++)
+                        btn.onClick.AddListener(() =>
                         {
-                            if (info.StarAmount > k)
-                                starImgs[k].enabled = true;
-                            else
-                                starImgs[k].enabled = false;
-                        }
+                            stageReadyPanel.gameObject.SetActive(true);
+                            stageReadyPanel.SetupStageInfo(info);
+                        });
+
+                        Image[] starImgs = childTransform.GetChild(1).GetComponentsInChildren<Image>();
+                        for (int k = 0; k < starImgs.Length; k++)
+                            starImgs[k].enabled = info.StarAmount > k;
                     }
 
                     detailStageBtnDic[i].Add(btn);
