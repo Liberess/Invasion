@@ -72,7 +72,6 @@ public class DataManager : MonoBehaviour
     private AsyncOperationHandle updateBundleHandle;
 
     public Action OnSaveDataAction;
-    [SerializeField] private GameObject[] unitPrefabAry1;
 
     private void Awake()
     {
@@ -834,11 +833,7 @@ public class DataManager : MonoBehaviour
                 if (!lobbyHumalPrefab || !lobbyHumalPrefab.activeSelf)
                 {
                     await ResourcesManager.Instance.LoadAssetAsync<GameObject>(lobbyHeroReference,
-                        (obj) =>
-                        {
-                            lobbyHumalPrefab = ((GameObject)obj).gameObject;
-                            Debug.Log(Time.time + " loading success + " + lobbyHumalPrefab.name);
-                        });
+                        (obj) => lobbyHumalPrefab = ((GameObject)obj).gameObject);
                 }
 
                 foreach (var data in m_HumalData.humalDic.Values)

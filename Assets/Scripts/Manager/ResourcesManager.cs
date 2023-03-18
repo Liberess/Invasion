@@ -47,7 +47,7 @@ public sealed class ResourcesManager : MonoBehaviour
                     resourceDic.Add(hashCode, loadedObject);
             }
         }
-
+        
         return loadedObject;
     }
 
@@ -67,8 +67,7 @@ public sealed class ResourcesManager : MonoBehaviour
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
             Object loadedObject = handle.Result as Object;
-            Addressables.Release(handle);
-
+            
             if (loadedObject)
             {
                 if (isCaching)
@@ -83,6 +82,8 @@ public sealed class ResourcesManager : MonoBehaviour
             {
                 failCallback?.Invoke();
             }
+            
+            Addressables.Release(handle);
         }
     }
 

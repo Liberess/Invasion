@@ -52,6 +52,8 @@ public class BattleManager : MonoBehaviour
     private Dictionary<EUnitQueueType, GameObject> quePrefabDic =
         new Dictionary<EUnitQueueType, GameObject>();
 
+    [SerializeField] private GameObject[] prefabs = new GameObject[2];
+
     [Header("== Setting Base =="), Space(10)]
     [SerializeField] private Base redBase;
     public Base RedBase { get => redBase; }
@@ -119,51 +121,22 @@ public class BattleManager : MonoBehaviour
         queDic.Clear();
         quePrefabDic.Clear();
 
-        await UniTask.WhenAll(
-            ResourcesManager.Instance.LoadAssetAsync<GameObject>(heroReference,
-                    (obj) => quePrefabDic.Add(EUnitQueueType.Hero, ((GameObject)obj).gameObject)),
-                ResourcesManager.Instance.LoadAssetAsync<GameObject>(enemyReference,
-                    (obj) => quePrefabDic.Add(EUnitQueueType.Enemy, ((GameObject)obj).gameObject))
-            );
+        Addressables.LoadAssetAsync<GameObject>(heroReference).Completed += (handle) =>
+        {
+            quePrefabDic.Add(EUnitQueueType.Hero, handle.Result);
+            GameOverAction += () => Addressables.Release(handle);
+        };
         
-        /*await ResourcesManager.Instance.LoadAssetAsync<GameObject>(heroReference,
-            (obj) => quePrefabDic.Add(EUnitQueueType.Hero, ((GameObject)obj).gameObject));
-        await ResourcesManager.Instance.LoadAssetAsync<GameObject>(enemyReference,
-            (obj) => quePrefabDic.Add(EUnitQueueType.Enemy, ((GameObject)obj).gameObject));*/
-        
-        //quePrefabDic.Add(EUnitQueueType.Hero, ResourcesManager.Instance.LoadAsset<GameObject>(heroReference) as GameObject);
-        //quePrefabDic.Add(EUnitQueueType.Enemy, ResourcesManager.Instance.LoadAsset<GameObject>(enemyReference) as GameObject);
-        //quePrefabDic.Add(EUnitQueueType.Enemy, dataMgr.UnitPrefabAry[(int)EUnitQueueType.Enemy]);
+        Addressables.LoadAssetAsync<GameObject>(enemyReference).Completed += (handle) =>
+        {
+            quePrefabDic.Add(EUnitQueueType.Enemy, handle.Result);
+            GameOverAction += () => Addressables.Release(handle);
+        };
+
+        await UniTask.WaitUntil(() => quePrefabDic.Count >= 2);
+   
         Initialize(EUnitQueueType.Hero, defaultHeroCount);
         Initialize(EUnitQueueType.Enemy, defaultEnemyCount);
-
-        /*bool isLoadComplete = false;
-        Addressables.LoadAssetAsync<GameObject>(heroReference).Completed +=
-            handle =>
-            {
-                isLoadComplete = true;
-                if (!quePrefabDic.ContainsKey(EUnitQueueType.Hero))
-                {
-                    quePrefabDic.Add(EUnitQueueType.Hero, handle.Result);
-                    Initialize(EUnitQueueType.Hero, defaultHeroCount);
-                }
-            };
-
-        await UniTask.WaitUntil(() => isLoadComplete == true);
-
-        isLoadComplete = false;
-        Addressables.LoadAssetAsync<GameObject>(enemyReference).Completed +=
-            handle =>
-            {
-                isLoadComplete = true;
-                if (!quePrefabDic.ContainsKey(EUnitQueueType.Enemy))
-                {
-                    quePrefabDic.Add(EUnitQueueType.Enemy, handle.Result);
-                    Initialize(EUnitQueueType.Enemy, defaultEnemyCount);
-                }
-            };
-
-        await UniTask.WaitUntil(() => isLoadComplete == true);*/
 
         SetHeroCard();
         SetCostSlider();
@@ -387,6 +360,7 @@ public class BattleManager : MonoBehaviour
         if (!IsPlay)
             return;
 
+        GameOverAction?.Invoke();
         Debug.Log("GameOver");
 
         IsPlay = false;
