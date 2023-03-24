@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2559df0d58f9e09449f19026e6959ab7
+guid: c21bc93370926b24e92a6bba3f2ec17c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -112,18 +112,6 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -135,78 +123,15 @@ TextureImporter:
         y: 48
         width: 16
         height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e9166c3721473cd428204c0ce2bb7402
-      internalID: 715209184
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 02_BbeongAl_Idle_2
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 48
-        width: 16
-        height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 219dd9bde3719b34b9d86a8723b628b8
-      internalID: -1083772319
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 02_BbeongAl_Attack_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 16
-        width: 16
-        height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: adbc3cbb47bdbf9458a586d931ebb6d9
-      internalID: -134269636
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 02_BbeongAl_Attack_2
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 16
-        width: 16
-        height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6de44f866b957c3448cb4faa8d0c3118
-      internalID: -181396092
+      spriteID: 7bf5836b36702c84bb394d1d674eec50
+      internalID: 796063073
       vertices: []
       indices: 
       edges: []
@@ -219,15 +144,36 @@ TextureImporter:
         y: 48
         width: 16
         height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2f152f2d1b9a0a74486119fbdb82a94b
-      internalID: -1884544702
+      spriteID: 86203c6fd5c2ff84e872d70b67a5d93e
+      internalID: 2095642213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 02_BbeongAl_Idle_2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 48
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ce5b572b6a116c488f4cc9c8e893e62
+      internalID: -466160738
       vertices: []
       indices: 
       edges: []
@@ -240,15 +186,15 @@ TextureImporter:
         y: 32
         width: 16
         height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3d80fd18cc5a23d428b29c9c2ddbe317
-      internalID: 993123531
+      spriteID: 75d5da6a55b86fc42bcf09af9745d199
+      internalID: -826635907
       vertices: []
       indices: 
       edges: []
@@ -261,15 +207,15 @@ TextureImporter:
         y: 32
         width: 16
         height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed40120b98990664296a697250651fcc
-      internalID: 1635422936
+      spriteID: a34a17bb9ebed5742920f071af450df1
+      internalID: 989494419
       vertices: []
       indices: 
       edges: []
@@ -282,15 +228,15 @@ TextureImporter:
         y: 32
         width: 16
         height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: faa85736994b7df4a85819d568da0d74
-      internalID: -1295061410
+      spriteID: 7044a9cddf2d998498f7a330b173c014
+      internalID: -180935776
       vertices: []
       indices: 
       edges: []
@@ -303,15 +249,36 @@ TextureImporter:
         y: 32
         width: 16
         height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b53e6ce815ee83946ad75fa910a8d6e6
-      internalID: 856583441
+      spriteID: c6b9d578c110fc9439c746a75ab0c6e8
+      internalID: 464134898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 02_BbeongAl_Attack_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a75545a8ea5e2544286772782ca729b3
+      internalID: -1481756076
       vertices: []
       indices: 
       edges: []
@@ -324,15 +291,36 @@ TextureImporter:
         y: 16
         width: 16
         height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1f9615c82812fa54fb60f0e8bb911cb6
-      internalID: 870148391
+      spriteID: 4f4932de07affdc4f88fcc6511157f78
+      internalID: -201238626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 02_BbeongAl_Attack_2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e41a980bf794f04492dbcefdd110fc4
+      internalID: 1159234457
       vertices: []
       indices: 
       edges: []
@@ -345,15 +333,15 @@ TextureImporter:
         y: 16
         width: 16
         height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6fd5d9485b56f474b9f61cbb776a1ea3
-      internalID: -839471565
+      spriteID: 247c4b9ff7209ea46be48e103b247336
+      internalID: -1655938600
       vertices: []
       indices: 
       edges: []
@@ -366,15 +354,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c1f8276558295134b81dfe218f6aabba
-      internalID: 432720574
+      spriteID: 69358546aa5d7f941881d54d7af78e02
+      internalID: 1780204742
       vertices: []
       indices: 
       edges: []
@@ -387,15 +375,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d80d4000ff06b644591313117f91435c
-      internalID: -611720904
+      spriteID: 3cbefb76e82283f4287802ee4a0dba3d
+      internalID: -808190769
       vertices: []
       indices: 
       edges: []
@@ -411,19 +399,19 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      02_BbeongAl_Walk_0: 993123531
-      02_BbeongAl_Walk_3: 856583441
-      02_BbeongAl_Idle_2: -1083772319
-      02_BbeongAl_Attack_3: -839471565
-      02_BbeongAl_Idle_1: -1884544702
-      02_BbeongAl_Attack_2: -181396092
-      02_BbeongAl_Attack_1: 870148391
-      02_BbeongAl_Idle_0: 715209184
-      02_BbeongAl_Attack_0: -134269636
-      02_BbeongAl_Die_0: 432720574
-      02_BbeongAl_Walk_2: -1295061410
-      02_BbeongAl_Die_1: -611720904
-      02_BbeongAl_Walk_1: 1635422936
+      02_BbeongAl_Walk_0: -826635907
+      02_BbeongAl_Walk_3: 464134898
+      02_BbeongAl_Idle_2: -466160738
+      02_BbeongAl_Attack_3: -1655938600
+      02_BbeongAl_Idle_1: 2095642213
+      02_BbeongAl_Attack_2: 1159234457
+      02_BbeongAl_Attack_1: -201238626
+      02_BbeongAl_Idle_0: 796063073
+      02_BbeongAl_Attack_0: -1481756076
+      02_BbeongAl_Die_0: 1780204742
+      02_BbeongAl_Walk_2: -180935776
+      02_BbeongAl_Die_1: -808190769
+      02_BbeongAl_Walk_1: 989494419
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: deaf409d06017f8498c312187b27d096
+guid: 18d8c00f44f314548a42febdfa4ece1e
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -112,18 +112,6 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -135,15 +123,15 @@ TextureImporter:
         y: 224
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 46078867042e062438f2f59d1400f801
-      internalID: 3312858
+      spriteID: 21400b41ad368264fa9a7a2e767fc833
+      internalID: 362793908
       vertices: []
       indices: 
       edges: []
@@ -156,15 +144,15 @@ TextureImporter:
         y: 224
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f21a208869b7b1f4996f0efe6c578f0f
-      internalID: -1921379058
+      spriteID: f5fa85a7a7ba1094689af568d0d74295
+      internalID: -1208662150
       vertices: []
       indices: 
       edges: []
@@ -177,15 +165,15 @@ TextureImporter:
         y: 224
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 81456bf4c1a97df41af6b6be77ef71a2
-      internalID: 1695407110
+      spriteID: 83d19b6670e6687489907660d0a63fb5
+      internalID: -1673372350
       vertices: []
       indices: 
       edges: []
@@ -198,15 +186,15 @@ TextureImporter:
         y: 224
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 44cf03eedd0029045a11b7593a9b7ea2
-      internalID: -1558624429
+      spriteID: ac2643b9a0a035745bb90ef05ae24a50
+      internalID: -1919647396
       vertices: []
       indices: 
       edges: []
@@ -219,330 +207,330 @@ TextureImporter:
         y: 224
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 21ad6440eba901f4989d88e95aa7d7b3
-      internalID: -89670836
+      spriteID: 2c2da9a008763cf49b29b5c18ddfe97d
+      internalID: -254088841
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_5
+      name: 08_Jack_Wing_Idle_0
       rect:
         serializedVersion: 2
         x: 0
         y: 192
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fa4eb6757c6db73439254fd8b4b97a3f
-      internalID: -2009311536
+      spriteID: a308c132a59db5e47ad857a38db770cb
+      internalID: 916244027
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_6
+      name: 08_Jack_Wing_Idle_1
       rect:
         serializedVersion: 2
         x: 32
         y: 192
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9c162ea0f0dd40449a4a645d8264c182
-      internalID: 1421510327
+      spriteID: f5f014f19aa11fb44ad9d4262ca056a3
+      internalID: 1961391836
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_7
+      name: 08_Jack_Wing_Idle_2
       rect:
         serializedVersion: 2
         x: 64
         y: 192
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 910c4a6f6a5197c45805b8a06baf95e9
-      internalID: 1866881452
+      spriteID: be71bd5b20be5ee4da00b51d9905e51b
+      internalID: 1594310605
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_8
+      name: 08_Jack_Wing_Idle_3
       rect:
         serializedVersion: 2
         x: 96
         y: 192
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5b447348c64c1974eba19c30a6d335c5
-      internalID: -111565903
+      spriteID: bcfb8d8912b54644b83a519b4cacce20
+      internalID: 1278068157
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_9
+      name: 08_Jack_Wing_Idle_4
       rect:
         serializedVersion: 2
         x: 128
         y: 192
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 77bf43555c8e30e478b8d53badb2378d
-      internalID: -466582297
+      spriteID: d88b9828c5fc0da4f9a6492cde1aef2f
+      internalID: 944107899
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_10
+      name: 08_Jack_UD_Idle_0
       rect:
         serializedVersion: 2
         x: 0
         y: 160
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5e1a613586c2a0d47ab40410f8f8d36e
-      internalID: -52088859
+      spriteID: 893669bcd434aef40be4805c624447ed
+      internalID: 1119053547
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_11
+      name: 08_Jack_UD_Idle_1
       rect:
         serializedVersion: 2
         x: 32
         y: 160
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: da212d65d12adf34f9eb130a2a968755
-      internalID: -497876419
+      spriteID: c72b7e8e855478d4d8d3adfe83b1a415
+      internalID: -261637043
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_12
+      name: 08_Jack_UD_Idle_2
       rect:
         serializedVersion: 2
         x: 64
         y: 160
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d562445f5a2933547a98537b6844e1fd
-      internalID: -157233975
+      spriteID: 1f4da7a9d9f77c4419a7173d603f7e95
+      internalID: 56901627
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_13
+      name: 08_Jack_UD_Idle_3
       rect:
         serializedVersion: 2
         x: 96
         y: 160
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 91043f975b1745c4d9fd4bb0a5e4b60c
-      internalID: 703393427
+      spriteID: 64fa7d6abd7ecf0419e0549892bf5384
+      internalID: 1261854569
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_14
+      name: 08_Jack_UD_Idle_4
       rect:
         serializedVersion: 2
         x: 128
         y: 160
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6e7f5fc0ce83e1c468ec342f025ee7c2
-      internalID: 20057356
+      spriteID: 83b47e8c810242143befdb25df4c7c63
+      internalID: -483724630
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_15
+      name: 08_Jack_Wing_UD_Idle_0
       rect:
         serializedVersion: 2
         x: 0
         y: 128
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 57fa5245ec9d45546870f21d3b86c3a1
-      internalID: 1507297794
+      spriteID: 319004a5850398b41a30a7e636c0fa1f
+      internalID: -636682439
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_16
+      name: 08_Jack_Wing_UD_Idle_1
       rect:
         serializedVersion: 2
         x: 32
         y: 128
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1b40918709bd7bd4d9bbf20ccfe82215
-      internalID: -2125571848
+      spriteID: 11ccfb7bf2d16e5419721c4988e6fc5e
+      internalID: -2065658985
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_17
+      name: 08_Jack_Wing_UD_Idle_2
       rect:
         serializedVersion: 2
         x: 64
         y: 128
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 989c972868921ba44b1552f3e4c5d371
-      internalID: 997528265
+      spriteID: 22fd09e12d7f68d42af77ca9adcb6372
+      internalID: 1756167224
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_18
+      name: 08_Jack_Wing_UD_Idle_3
       rect:
         serializedVersion: 2
         x: 96
         y: 128
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a98e44f61535d33488caebad3059cac0
-      internalID: 735500896
+      spriteID: 339af55f146482c4db0bef6b212f52a2
+      internalID: -1445015275
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_19
+      name: 08_Jack_Wing_UD_Idle_4
       rect:
         serializedVersion: 2
         x: 128
         y: 128
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c2c6ca3aaba973a48bc70249cbc5f2bd
-      internalID: -1854737598
+      spriteID: 5a2ddca05ed31014dace858046137819
+      internalID: -878630367
       vertices: []
       indices: 
       edges: []
@@ -555,15 +543,15 @@ TextureImporter:
         y: 96
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a830601079dfc204ca54e7da35827d4b
-      internalID: 1392441162
+      spriteID: b28bd55c332ec614bb80ae8e754ab2ba
+      internalID: 943110076
       vertices: []
       indices: 
       edges: []
@@ -576,15 +564,15 @@ TextureImporter:
         y: 96
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f1f0a77dcc827c8488fb95d5fddec6ae
-      internalID: 197313984
+      spriteID: e0e691a94fcce2a45afbb4488d5e203d
+      internalID: -2132380501
       vertices: []
       indices: 
       edges: []
@@ -597,15 +585,15 @@ TextureImporter:
         y: 64
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a71d1daa37dd64a41802d1e4e07dfc59
-      internalID: 708861906
+      spriteID: 114fb63d4c56cf54d9d27f5449c4c7e8
+      internalID: 1791391596
       vertices: []
       indices: 
       edges: []
@@ -618,15 +606,15 @@ TextureImporter:
         y: 64
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5f0896beb9e42eb43bbb2810ee59b422
-      internalID: -1820274701
+      spriteID: fa1cdbad97b55cd4a9602d4256364b75
+      internalID: 1455002701
       vertices: []
       indices: 
       edges: []
@@ -639,15 +627,15 @@ TextureImporter:
         y: 64
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bd8f10ad5366c6c41ac3fb2344b0f18e
-      internalID: -534500381
+      spriteID: 012ea91856a3dee408a912cefd99a5ca
+      internalID: -1128815582
       vertices: []
       indices: 
       edges: []
@@ -660,15 +648,15 @@ TextureImporter:
         y: 32
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5299012aa1cdd004fab00af70436bcac
-      internalID: 1242336400
+      spriteID: 6f495bc55d59fd04eb6d6b6db9786ff7
+      internalID: 900626502
       vertices: []
       indices: 
       edges: []
@@ -681,15 +669,15 @@ TextureImporter:
         y: 32
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 88ff4128fab50054f8ca85c099e8caf4
-      internalID: 1323029277
+      spriteID: 200ec6922cde1824bac24b1505e7d825
+      internalID: -1270515993
       vertices: []
       indices: 
       edges: []
@@ -702,15 +690,15 @@ TextureImporter:
         y: 32
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6fb247da62ea0434c8aab22c6f2fc29e
-      internalID: -1307209582
+      spriteID: 86d368337299e364c885ba4397d6d289
+      internalID: 1429984026
       vertices: []
       indices: 
       edges: []
@@ -723,99 +711,99 @@ TextureImporter:
         y: 32
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f949605a4d7489440aad94375189b778
-      internalID: -17153302
+      spriteID: 8e2596f4fed85a848928f496fdbd5456
+      internalID: -1023190568
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_29
+      name: 08_Jack_Wing_Die_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3839a33241462b74da833e463d229828
-      internalID: 1455702945
+      spriteID: 9c1e0ceeb3cb3e445ab13d1d80d30471
+      internalID: 1597807615
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_30
+      name: 08_Jack_Wing_Die_1
       rect:
         serializedVersion: 2
         x: 32
         y: 0
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2695851a2f3c55a449bed6277afabc4e
-      internalID: 792986987
+      spriteID: c59ede779cb42de439c9d6ab2c591c44
+      internalID: 2021929032
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_31
+      name: 08_Jack_Wing_Die_2
       rect:
         serializedVersion: 2
         x: 64
         y: 0
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1fe49e1f405020143b69b45acbeaf5bf
-      internalID: -44592670
+      spriteID: f01cf85c55243574bb22aae14ed9fbee
+      internalID: -1618275323
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 08_Jack_32
+      name: 08_Jack_Wing_Die_3
       rect:
         serializedVersion: 2
         x: 96
         y: 0
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aacb1932a20fc7340a2887827c9374d8
-      internalID: 589576047
+      spriteID: 46221d746a284724fa11a148394df685
+      internalID: -520732302
       vertices: []
       indices: 
       edges: []
@@ -831,39 +819,39 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      08_Jack_18: 735500896
-      08_Jack_12: -157233975
-      08_Jack_29: 1455702945
-      08_Jack_Idle_2: 1695407110
-      08_Jack_Idle_1: -1921379058
-      08_Jack_15: 1507297794
-      08_Jack_Attack_1: -1820274701
-      08_Jack_Die_0: 1242336400
-      08_Jack_Idle_3: -1558624429
-      08_Jack_14: 20057356
-      08_Jack_Idle_0: 3312858
-      08_Jack_Die_2: -1307209582
-      08_Jack_6: 1421510327
-      08_Jack_16: -2125571848
-      08_Jack_Die_1: 1323029277
-      08_Jack_30: 792986987
-      08_Jack_19: -1854737598
-      08_Jack_9: -466582297
-      08_Jack_5: -2009311536
-      08_Jack_10: -52088859
-      08_Jack_32: 589576047
-      08_Jack_17: 997528265
-      08_Jack_Attack_2: -534500381
-      08_Jack_Walk_0: 1392441162
-      08_Jack_Walk_1: 197313984
-      08_Jack_Die_3: -17153302
-      08_Jack_Attack_0: 708861906
-      08_Jack_31: -44592670
-      08_Jack_8: -111565903
-      08_Jack_7: 1866881452
-      08_Jack_Idle_4: -89670836
-      08_Jack_13: 703393427
-      08_Jack_11: -497876419
+      08_Jack_UD_Idle_4: -483724630
+      08_Jack_Idle_2: -1673372350
+      08_Jack_Idle_1: -1208662150
+      08_Jack_Attack_1: 1455002701
+      08_Jack_Die_0: 900626502
+      08_Jack_Wing_UD_Idle_3: -1445015275
+      08_Jack_Idle_3: -1919647396
+      08_Jack_Idle_0: 362793908
+      08_Jack_Wing_Die_1: 2021929032
+      08_Jack_Wing_Idle_1: 1961391836
+      08_Jack_Die_2: 1429984026
+      08_Jack_Wing_Die_3: -520732302
+      08_Jack_Wing_UD_Idle_1: -2065658985
+      08_Jack_Die_1: -1270515993
+      08_Jack_UD_Idle_3: 1261854569
+      08_Jack_Wing_Idle_4: 944107899
+      08_Jack_Wing_Idle_0: 916244027
+      08_Jack_Walk_1: -2132380501
+      08_Jack_Attack_2: -1128815582
+      08_Jack_Wing_Die_2: -1618275323
+      08_Jack_Walk_0: 943110076
+      08_Jack_Die_3: -1023190568
+      08_Jack_Wing_Idle_2: 1594310605
+      08_Jack_UD_Idle_1: -261637043
+      08_Jack_Attack_0: 1791391596
+      08_Jack_Wing_UD_Idle_2: 1756167224
+      08_Jack_Idle_4: -254088841
+      08_Jack_Wing_Idle_3: 1278068157
+      08_Jack_UD_Idle_0: 1119053547
+      08_Jack_UD_Idle_2: 56901627
+      08_Jack_Wing_UD_Idle_4: -878630367
+      08_Jack_Wing_Die_0: 1597807615
+      08_Jack_Wing_UD_Idle_0: -636682439
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
