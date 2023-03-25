@@ -151,7 +151,8 @@ public class GameManager : MonoBehaviour
 
         //var _stageName = dataMgr.GameData.stageNameDic[_stageNum];
         dataMgr.SetStageInfo(info);
-        SceneManager.LoadSceneAsync("Battle", LoadSceneMode.Single);
+        dataMgr.LoadScene("Battle").Forget();
+        //SceneManager.LoadSceneAsync("Battle", LoadSceneMode.Single);
     }
 
 /*    public void ShowMoneyTxt()

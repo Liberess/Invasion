@@ -17,8 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d51dbe27ce5e5354db5be4dc434b3586
   m_SerializeEntries:
-  - m_GUID: e0398b250c1496746aa53151c5051128
-    m_Address: 00_Nana_Walk
+  - m_GUID: 48b7434b1b1002f4cb0568054ce4d41f
+    m_Address: 01_Ssamdak_Idle
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalAnim
@@ -32,8 +32,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalAnim
-  - m_GUID: 0cc563f7431e1734ea7069ca4e520ad8
-    m_Address: 00_Nana_Idle
+  - m_GUID: 3ed4993a927087945a73d7f4e27985f0
+    m_Address: 01_Ssamdak_Attack
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalAnim
@@ -92,6 +92,581 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalAnimCtrl
+  - m_GUID: 7ca6b7405939b904385011e54e090a4f
+    m_Address: 01_Ssamdak_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 97dc966c5e15e2b43b4ecb4ef3d3d76a
+    m_Address: 01_Ssamdak_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: ff63cbaaa70893a45a7110f530e8b211
+    m_Address: 17_Maya_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: cf48fd35e2afe86498bd105af0313c36
+    m_Address: 17_Maya_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: af83c7b3fc33f2247be9ee5a7091c77b
+    m_Address: 06_Ddochi_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 8fc9692ed69e1c8428c341330a9eb571
+    m_Address: 05_Jungle_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 6fcdb11ba16717d4ea6426f5fa92874a
+    m_Address: 01_Ssamdak_Brown_Gla_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 5fbfc85270acc72438af0c4abb470775
+    m_Address: 17_Maya_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 4fcc6ef705e4c61448b7759097aa3488
+    m_Address: 03_Pudding_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 3f6d81b3e0620e344969508dc7832b6e
+    m_Address: 05_Jungle_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 2fe9d62328a94e545bfa97116065836c
+    m_Address: 06_Ddochi_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 1f1c010f1c4dc404c9a0cd1de64863c5
+    m_Address: 09_Hose_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: fe5420285548ac345848858b34d1f9a9
+    m_Address: 04_Pearl_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: cefafdf72dba07a418eabad4fe95dc66
+    m_Address: 00_Nana_Toy_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: bec0d6b9d6cc6024a8b89e5061bf7096
+    m_Address: 16_PatJi_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: ae8a50e690546d8419613e41165121e6
+    m_Address: 03_Pudding_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 8ee394ba429ad554a9d292b5ead9e6d3
+    m_Address: 06_Ddochi_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 2e123d0cd761db74cab32f39046780d4
+    m_Address: 06_Ddochi_Hat_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 0e4cff40090559f4a97c376d5ea490ea
+    m_Address: 02_BbeongAI_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: fdfdbd8c38da1914f8180ec7e6cb057f
+    m_Address: 08_Jack_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: dd062c5fd8fa61d4282a5899d0e08101
+    m_Address: 13_Amynem_Hat_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: dde18557b7f0be942b848ccc05d1c1ee
+    m_Address: 13_Amynem_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: bd31a6765e1ba6c44aa709704d4407ca
+    m_Address: 15_Kongji_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: adb7a066ae9a2fe448f835200ecd4e9c
+    m_Address: 15_Kongji_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 7d89c9b25a5620f42bbc9158a77bbcc6
+    m_Address: 11_Ahrang_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 6d3c6c786fc848944baac9601cda8674
+    m_Address: 15_Kongji_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: cca5a793f50943d46bda74c0d3638d71
+    m_Address: 13_Amynem_Hat_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: cce486d0b2226394d8ab79dcf887d17e
+    m_Address: 08_Jack_Wing_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: bcdb2e1ec5b45854c8f063cab32e2a0c
+    m_Address: 04_Pearl_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 9c124c720f746e74aa51daf26f6fd7e7
+    m_Address: 08_Jack_Wing_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 5c2ac5fa2fc607041b2ad857cb02311f
+    m_Address: 07_Youngmi_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 1c5f01b03d5b7174e84897e2a14399e8
+    m_Address: 01_Ssamdak_Brown_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 1c1d5ebef52b1a8439cf016de922f848
+    m_Address: 10_Bella_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 0cdd18a9a3f3ee54fa0145dfc6072a02
+    m_Address: 13_Amynem_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 0c4c7a32fb972e74aa7e9bcedeb8813f
+    m_Address: 13_Amynem_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 0cd60880e6cd5d049bebe0a4facf2b86
+    m_Address: 10_Bella_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: db6561a71a5004249a4d5d0f7db1a7fd
+    m_Address: 10_Bella_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: cb8442d36f568ff4c9f5f1b2686233ea
+    m_Address: 00_Nana_Brown_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 8bac856492d3eb94f90faa400b608fce
+    m_Address: 09_Hose_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 4bcedfa9f6958e94384bc907b65724ab
+    m_Address: 01_Ssamdak_Gla_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 1b4bbb513a713e34386c7a7cf48624dd
+    m_Address: 00_Nana_Brown_Toy_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 0b1c71f4a11aceb44b34c814957ccbf2
+    m_Address: 12_Riyo_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: fabae8f9ffb5e05499ca9969b9bab22a
+    m_Address: 00_Nana_Toy_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: ba7913af99e89584d9c0ea7371c2f32f
+    m_Address: 00_Nana_Brown_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 8a4b60283f7321c4eadc93fc1eaaaacb
+    m_Address: 11_Ahrang_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 8af2e12c52f0d3345a0e5fb64bb2e729
+    m_Address: 00_Nana_Brown_Toy_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 6ab64650e48e05f4aac87b41953ab2c7
+    m_Address: 00_Nana_Brown_Toy_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 5abe0af207e60f844a25498ff2ce5e61
+    m_Address: 01_Ssamdak_Brown_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 3a1991797a51032498f42919d3bbd588
+    m_Address: 02_BbeongAI_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 3a306127df7e3994bace528471115e95
+    m_Address: 04_Pearl_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 2a058f184aa61ff469ec5013743b3cf8
+    m_Address: 08_Jack_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 0a6a09c43f07ecc49b331f5bfd3391b7
+    m_Address: 14_GodeokChil_effect_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 99f77b7d5094a9c48b47c3237a686397
+    m_Address: 00_Nana_Brown_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 89a44357a08f895438eed3895586b933
+    m_Address: 06_Ddochi_Hat_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: f8e1984980a1b994881a890e8f841fcd
+    m_Address: 12_Riyo_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: a8cc1e096ba1790408d1563b64aca3bb
+    m_Address: 03_Pudding_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 88ee22946327b3043a76cccf7e28cd1d
+    m_Address: 13_Amynem_Hat_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 88284c05872541e4584a9e1e6b781b3a
+    m_Address: 16_PatJi_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 78636d2338978ba4ea1144b542b3c7ba
+    m_Address: 02_BbeongAI_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 28a752347ba3940479898253df69a55d
+    m_Address: 11_Ahrang_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 086f5c9b04a1ef94b924d24f70cdfe31
+    m_Address: 09_Hose_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 085ad343da9a04b4688a5daf9520c43a
+    m_Address: 17_Maya_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: d753b3112aa5b1645a869f4ae4ca0293
+    m_Address: 06_Ddochi_Hat_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: b7ff78b6936459044a7ee723c8f5cdcd
+    m_Address: 02_BbeongAI_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 877db15c75da8864b8c46904816590e2
+    m_Address: 13_Amynem_Hat_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 775d39e152a25e948b14dfbb2511c537
+    m_Address: 00_Nana_Toy_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 96995d1f2c27b314c9adcd39ee2d3573
+    m_Address: 00_Nana_Brown_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 9690c1d13e8bbe248a0b3961613b315e
+    m_Address: 08_Jack_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 8628214aeb406b54db28ac486484ecd8
+    m_Address: 14_GodeokChil_effect_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 66e2209e901e6bb4593e441b6ca9fd44
+    m_Address: 00_Nana_Toy_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 56e0dcf21a4663d469c0b484141a22af
+    m_Address: 10_Bella_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 36ca8029564278d4497e3f85e8a59014
+    m_Address: 01_Ssamdak_Brown_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 063c278059cefe543a4e3154ba191630
+    m_Address: 14_GodeokChil_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: f583a79e449da4449b46d7a4f0e48c0d
+    m_Address: 09_Hose_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 95be8d8e043b2134b9cba34f8a1027e2
+    m_Address: 08_Jack_Wing_UD_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 75f3569a7d841a148bdbed5f55830b77
+    m_Address: 06_Ddochi_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 55e5a82fad074d94dacf6962f63aab8f
+    m_Address: 08_Jack_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 45cc70e6867bfcc43a8abeb79e1a87e3
+    m_Address: 04_Pearl_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 354e4d0cc28e9634280084ccee810d1d
+    m_Address: 12_Riyo_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 15ce534336787c0479f3fd5ce1e0e14e
+    m_Address: 14_GodeokChil_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 1523ddc6172c37e4b89f3e1860a1a0f5
+    m_Address: 01_Ssamdak_Brown_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: d473a74a30b77d346bb73d75b393b588
+    m_Address: 01_Ssamdak_Brown_Gla_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: c4a90a8f37a79bb4293c3f1f5cfac269
+    m_Address: 01_Ssamdak_Gla_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: c4c39d54199b4304bae92bd10da46b53
+    m_Address: 00_Nana_Brown_Toy_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: b4c9e752913022744b9aace1ee12af9b
+    m_Address: 16_PatJi_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 94d57d6ffa8da9c4684a111a68c966b5
+    m_Address: 01_Ssamdak_Brown_Gla_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 540826fe39ef5fd45b4a1294e8644bea
+    m_Address: 14_GodeokChil_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: d3afbed4e3db0f34693efc696c6d419d
+    m_Address: 01_Ssamdak_Brown_Gla_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: b3899ff9a3b2ffe4d9195fcd81746d37
+    m_Address: 08_Jack_UD_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: a353af75599dfa44796d421e98a697d5
+    m_Address: 14_GodeokChil_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 93c38abe86e1fb64aa1bb0a88d17476c
+    m_Address: 15_Kongji_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 634c715922fee8d4d8e114a9c9bb9ae9
+    m_Address: 07_Youngmi_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 2325ba71d800da142a281d8ca5719e9c
+    m_Address: 16_PatJi_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 23a271f7c1c62734c9dc86ca3cca99c4
+    m_Address: 03_Pudding_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 1349243f93c3aff4bacc0d74085831f5
+    m_Address: 14_GodeokChil_effect_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: f273db13c8768a4469e6b513248e8d64
+    m_Address: 14_GodeokChil_effect_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 9206244f9a7d50d409afa133cb3a5e14
+    m_Address: 12_Riyo_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 725d101947aa8bd469876d39dcb9dee2
+    m_Address: 06_Ddochi_Hat_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 5266e32c5e7d127418cbc6fb5c155593
+    m_Address: 07_Youngmi_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 123feff5d9fd06246bde0103d7b1944e
+    m_Address: 05_Jungle_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: 028095bd77995c94cae39d51bbaecd43
+    m_Address: 13_Amynem_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: b1adacafdeaafb34193af09f543057bc
+    m_Address: 01_Ssamdak_Gla_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: a17dbac9fd4d97046b17ae3f49fddbc6
+    m_Address: 05_Jungle_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: a159ee73a771cd149b6398b7797112e1
+    m_Address: 07_Youngmi_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: e05749156b335fe4f80018355ce293a7
+    m_Address: 01_Ssamdak_Gla_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: d0d41739e9246a342b5789b5ef3617af
+    m_Address: 11_Ahrang_Die
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: c58cbfa0d9be0a546808658114b3d025
+    m_Address: 17_Maya_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: c52ff98808ff697479ed9ac6321835e5
+    m_Address: 16_PatJi_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: 0b754046464fb9b4aa1e17c70b6dd1b2
+    m_Address: 15_KongJi_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: 2ce60209ed210724497f2b84b6d52516
+    m_Address: 14_GoDuckChill_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: 0e53ddb5fe21b8a42a4740a7ce187a26
+    m_Address: 13_Amynem_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: 79b6a846129300b43851e56d643f4ab7
+    m_Address: 12_Riyo_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: a53f8af2dcacf5d4999afa44fc6a8a39
+    m_Address: 11_Arang_AnimCtrl
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnimCtrl
+  - m_GUID: 0cc563f7431e1734ea7069ca4e520ad8
+    m_Address: 00_Nana_Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
+  - m_GUID: e0398b250c1496746aa53151c5051128
+    m_Address: 00_Nana_Walk
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalAnim
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 14a12ce42ca59a341979f49e59c63df8, type: 2}
   m_SchemaSet:

@@ -16,6 +16,13 @@ public class HumalData
     public List<UnitData> humalList = new List<UnitData>();
     public List<UnitData> partyList = new List<UnitData>();
     public List<UnitData> originHumalDataList = new List<UnitData>();
+    public UnitData GetOriginHumalData(int index)
+    {
+        if (index >= 0 && index < originHumalDataList.Count)
+            return originHumalDataList[index];
+        return null;
+    }
+    
     public List<HumalPiece> humalPieceAmountList = new List<HumalPiece>();
     public List<HumalPickDBEntity> humalPickDBList = new List<HumalPickDBEntity>();
     public List<HumalUpgradeLevelEntity> humalUpgradeLevelList = new List<HumalUpgradeLevelEntity>();
@@ -32,8 +39,7 @@ public class HumalData
         return null;
     }
     
-    public List<RuntimeAnimatorController> humalAnimCtrlList =
-        new List<RuntimeAnimatorController>();
+    public List<RuntimeAnimatorController> humalAnimCtrlList = new List<RuntimeAnimatorController>();
     public RuntimeAnimatorController GetHumalAnimCtrl(int index)
     {
         if (index >= 0 && index < humalAnimCtrlList.Count)

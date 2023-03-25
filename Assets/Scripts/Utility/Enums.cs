@@ -64,6 +64,7 @@ public static class Tags
     public static readonly string HumalUpgradeDBLabel = "HumalUpgradeDB";
 
     public static readonly string HumalIconLabel = "HumalIcon";
+    public static readonly string HumalAnimLabel = "HumalAnim";
     public static readonly string HumalSpriteLabel = "HumalSprite";
     public static readonly string HumalAnimCtrlLabel = "HumalAnimCtrl";
 

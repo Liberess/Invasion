@@ -57,58 +57,138 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalIcon
-  - m_GUID: c53b981905ee7964ea18c24118ffb81c
-    m_Address: Assets/Images/Humal/06_Ddochi.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - HumalSprite
   - m_GUID: e92d25e79a59440409e460e4e7989026
     m_Address: Assets/Images/Humal/09_Hose.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalSprite
-  - m_GUID: f4b4c39d60701d44b809a5b22342cefe
-    m_Address: Assets/Images/Humal/04_Pearl.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - HumalSprite
-  - m_GUID: c3894a18ee79103448c54cb5e1b93dfd
-    m_Address: Assets/Images/Humal/05_Jungle.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - HumalSprite
-  - m_GUID: db33c6e8a3401a8408a2efa06245f68d
-    m_Address: Assets/Images/Humal/07_YoungMi.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - HumalSprite
-  - m_GUID: b8bd45494e9a1f74a8137229d8f9b65a
+  - m_GUID: 40fa53bf30e12ee4cbcc0da9f673aad8
     m_Address: Assets/Images/Humal/03_Pudding.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalSprite
-  - m_GUID: 2559df0d58f9e09449f19026e6959ab7
+  - m_GUID: e0f1eae8a26ae0041ac32e2eff6a8c33
+    m_Address: Assets/Images/Humal/06_Ddochi.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: f0708d9c75715e645b0d559ae210a5c4
+    m_Address: Assets/Images/Humal/00_Nana_Toy.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 92f24ab5d59e3784ca1588dcf1f1b60e
+    m_Address: Assets/Images/Humal/07_YoungMi.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: c21bc93370926b24e92a6bba3f2ec17c
     m_Address: Assets/Images/Humal/02_BbeongAl.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalSprite
-  - m_GUID: eaf11c66665f7c94e9615dd8b8e17cc5
-    m_Address: Assets/Images/Humal/01_Ssamdak.png
+  - m_GUID: 93d8f80dbcc24d743b411a50344c39ac
+    m_Address: Assets/Images/Humal/15_Kongji.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalSprite
-  - m_GUID: deaf409d06017f8498c312187b27d096
-    m_Address: Assets/Images/Humal/08_Jack.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - HumalSprite
-  - m_GUID: e7c81f637c55297458d7366c6f3335b4
+  - m_GUID: b318b25a808110b42939e13e1b660ead
     m_Address: Assets/Images/Humal/10_Bella.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalSprite
-  - m_GUID: 23016e1f77a024b40afdab43f83a4184
+  - m_GUID: d3c706cd55aa5304c992761904cb7eaf
+    m_Address: Assets/Images/Humal/00_Nana_Brown_Toy.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 74ef5aaf1106eab42b97acb072afbf9d
     m_Address: Assets/Images/Humal/00_Nana.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: e4f523b78adb77442a357cfd335e6b7c
+    m_Address: Assets/Images/Humal/14_GodeokChil_effect.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: c5e0a4d713cde6b4c8aa35872cb59150
+    m_Address: Assets/Images/Humal/01_Ssamdak.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 9670b561ddde2f1488ef64597e8b431d
+    m_Address: Assets/Images/Humal/16_PatJi.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 9682121a13cf2ef4db06bb9be79a24b1
+    m_Address: Assets/Images/Humal/13_Amynem_Hat.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: a6ffe8f9d0c3b3a4584021d5e27dc1f6
+    m_Address: Assets/Images/Humal/00_Nana_Brown.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: f6701e8b4daeaae45af4d6a5c3df42fc
+    m_Address: Assets/Images/Humal/13_Amynem.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 57c3db78c31340243b9f23b16f245128
+    m_Address: Assets/Images/Humal/01_Ssamdak_Brown.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 18d8c00f44f314548a42febdfa4ece1e
+    m_Address: Assets/Images/Humal/08_Jack.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: f874331885681f9408dec4a9895bbe44
+    m_Address: Assets/Images/Humal/12_Riyo.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 994f38e8eb0e53c47bb0b7b389bcbb56
+    m_Address: Assets/Images/Humal/04_Pearl.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: b9cee5b28f9d58f4585388c4f2008803
+    m_Address: Assets/Images/Humal/11_Ahrang.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 0a2fc2e5a6e57d24483ccb5128361e8f
+    m_Address: Assets/Images/Humal/05_Jungle.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: aab6a2ea8db01d74e8b1f5f181709d7d
+    m_Address: Assets/Images/Humal/01_Ssamdak_Gla.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 3c13e668d729c51439eb96a36ee7d7f8
+    m_Address: Assets/Images/Humal/06_Ddochi_Hat.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 6d906509540f85f468a3e179d0bfef54
+    m_Address: Assets/Images/Humal/17_Maya.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: ad10a836d83991f4fb729ad8a662b35b
+    m_Address: Assets/Images/Humal/14_GodeokChil.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - HumalSprite
+  - m_GUID: 0e26d67621d82534b9d1079ef488bd25
+    m_Address: Assets/Images/Humal/01_Ssamdak_Brown_Gla.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - HumalSprite

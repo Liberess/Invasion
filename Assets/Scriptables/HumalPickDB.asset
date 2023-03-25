@@ -16,120 +16,144 @@ MonoBehaviour:
   - id: 0
     name_ko: "\uB098\uB098"
     name_en: Nana
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 1
     name_ko: "\uD384"
     name_en: Ssamdak
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 2
     name_ko: "\uC815\uAE00"
     name_en: BbeongAl
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 3
     name_ko: "\uD478\uB529"
     name_en: Pudding
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 4
     name_ko: "\uC0D8\uB2ED\uC774"
     name_en: Pearl
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 5
     name_ko: "\uBF1D\uC544\uB9AC"
     name_en: Jungle
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 20
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 6
     name_ko: "\uB610\uCE58"
     name_en: Ddochi
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 7
     name_ko: "\uC601\uBBF8"
     name_en: YoungMi
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 8
     name_ko: "\uD638\uC138"
     name_en: Jack
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 9
     name_ko: "\uC7AD"
     name_en: Hose
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 10
     name_ko: "\uBCA8\uB77C"
     name_en: Bella
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 11
     name_ko: "\uC544\uB791"
-    name_en: '?'
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    name_en: Arang
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 12
     name_ko: "\uB9AC\uC694"
-    name_en: '?'
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    name_en: Riyo
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 13
-    name_ko: "\uCF69\uC9C0"
-    name_en: '?'
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    name_ko: "\uC5D0\uC774\uBBF8\uB134"
+    name_en: Amynem
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
   - id: 14
+    name_ko: "\uACE0\uB355\uCE60"
+    name_en: GoDuckChill
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
+  - id: 15
+    name_ko: "\uCF69\uC9C0"
+    name_en: KongJi
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
+  - id: 16
     name_ko: "\uD30C\uCE58"
-    name_en: '?'
-    piece_probability: 6.47
-    piece_10: 5
-    piece_20: 1
-    piece_50: 0.47
-    humal: 0.2
+    name_en: PatJi
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17
+  - id: 17
+    name_ko: "\uB9C8\uC57C"
+    name_en: Maya
+    piece_probability: 5.38
+    piece_10: 4.16
+    piece_20: 0.83
+    piece_50: 0.39
+    humal: 0.17

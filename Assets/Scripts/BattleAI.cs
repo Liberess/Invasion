@@ -15,7 +15,7 @@ public class BattleAI : MonoBehaviour
     [SerializeField] private int spawnCount = 0;
 
     [SerializeField] private List<Enemy> spawnedEnemyList = new List<Enemy>();
-    [SerializeField] private Queue<Enemy> notSpawnedEnemyQueue= new Queue<Enemy>();
+    [SerializeField] private Queue<Enemy> notSpawnedEnemyQueue = new Queue<Enemy>();
 
     public UnityAction EnrageAction { get; private set; }
 
@@ -64,10 +64,13 @@ public class BattleAI : MonoBehaviour
 
         while (battleMgr.IsPlay)
         {
-            if(spawnCount < 5 && spawnTime >= spawnDelayTime)
+            if(spawnTime >= spawnDelayTime)
             {
-                spawnTime = 0f;
-                EnemySpawn();
+                if (spawnCount < 5)
+                {
+                    spawnTime = 0f;
+                    EnemySpawn();
+                }
             }
             else
             {
@@ -102,33 +105,47 @@ public class BattleAI : MonoBehaviour
 
     private void EnemySpawn()
     {
-        int rand = Random.Range
-            (
-                dataMgr.CurrentStageInfo.minEnemyID,
-                dataMgr.CurrentStageInfo.maxEnemyID
-            );
-
         ++spawnCount;
-        var enemy = battleMgr.InstantiateObj(EUnitQueueType.Enemy).GetComponent<Enemy>();
+
+        Enemy enemy;
+
+        if (notSpawnedEnemyQueue.Count > 0)
+            enemy = notSpawnedEnemyQueue.Dequeue();
+        else
+            enemy = battleMgr.InstantiateObj(EUnitQueueType.Enemy).GetComponent<Enemy>();
+
         enemy.transform.position = battleMgr.RedBase.transform.position;
 
         if (IsInstantiate())
         {
             spawnedEnemyList.Add(enemy);
+            enemy.gameObject.SetActive(true);
+            SpawnedEnemySetup(enemy);
         }
         else
         {
-            notSpawnedEnemyQueue.Enqueue(enemy);
             enemy.gameObject.SetActive(false);
         }
+    }
 
+    private void SpawnedEnemySetup(Enemy enemy)
+    {
+        int rand = Random.Range
+        (
+            dataMgr.CurrentStageInfo.minEnemyID,
+            dataMgr.CurrentStageInfo.maxEnemyID
+        );
+        
         dataMgr.GameData.enemyDataList[rand].animCtrl = dataMgr.GameData.enemyAnimCtrlList[rand];
         enemy.UnitSetup(dataMgr.GameData.enemyDataList[rand]);
         EnrageAction += enemy.Enrage;
-        enemy.OnDeathAction += () => --spawnCount;
-        enemy.OnDeathAction += () => EnrageAction -= enemy.Enrage;
-        enemy.OnDeathAction += () => spawnedEnemyList.Remove(enemy);
-        enemy.OnDeathAction += () => BattleManager.ReturnObj(EUnitQueueType.Enemy, enemy.gameObject);
+        enemy.OnDeathAction += () =>
+        {
+            --spawnCount;
+            EnrageAction -= enemy.Enrage;
+            spawnedEnemyList.Remove(enemy);
+            BattleManager.ReturnObj(EUnitQueueType.Enemy, enemy.gameObject);
+        };
     }
 
     /// <summary>
@@ -143,10 +160,7 @@ public class BattleAI : MonoBehaviour
             gap = Vector2.Distance(spawnedEnemyList[i].transform.position, battleMgr.RedBase.transform.position);
             if (spawnedEnemyList[i].transform.position == battleMgr.RedBase.transform.position
                 || gap <= 1.0f)
-            {
-                Debug.Log(spawnedEnemyList[i].name + " gap : " + gap);
                 return false;
-            }
         }
 
         return true;

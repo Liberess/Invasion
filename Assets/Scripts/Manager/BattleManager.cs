@@ -86,12 +86,21 @@ public class BattleManager : MonoBehaviour
             Instance = this;
         else if (Instance != this)
             Destroy(gameObject);
+        
+        GameOverAction = null;
     }
 
     private void Start()
     {
         dataMgr = DataManager.Instance;
         InitializeAsync().Forget();
+
+        GameOverAction = () =>
+        {
+            var tempAction = GameOverAction;
+            GameOverAction = null;
+            tempAction?.Invoke();
+        };
     }
 
     private void Update()
@@ -124,13 +133,13 @@ public class BattleManager : MonoBehaviour
         Addressables.LoadAssetAsync<GameObject>(heroReference).Completed += (handle) =>
         {
             quePrefabDic.Add(EUnitQueueType.Hero, handle.Result);
-            GameOverAction += () => Addressables.Release(handle);
+            //GameOverAction += () => Addressables.Release(handle);
         };
         
         Addressables.LoadAssetAsync<GameObject>(enemyReference).Completed += (handle) =>
         {
             quePrefabDic.Add(EUnitQueueType.Enemy, handle.Result);
-            GameOverAction += () => Addressables.Release(handle);
+            //GameOverAction += () => Addressables.Release(handle);
         };
 
         await UniTask.WaitUntil(() => quePrefabDic.Count >= 2);

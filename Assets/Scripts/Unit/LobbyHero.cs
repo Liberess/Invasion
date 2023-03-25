@@ -20,6 +20,8 @@ public class LobbyHero : Unit
     private void Start()
     {
         Think();
+
+        spriteRen.sprite.pivot.Set(0.5f, 0.5f);
     }
 
     private void Update()

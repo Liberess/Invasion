@@ -15,44 +15,10 @@ public class UnitData
     [SerializeField] private int level; // 유닛 레벨
 
     public int Level => level;
-    public void UpgradeLevel(int value)
-    {
-        int nextLv = level + value;
-        if (nextLv is > 0 and <= 30)
-        {
-            level = nextLv;
-            ap = (int)(ap * 1.05f);
-            hp = (int)(hp * 1.05f);
-        }
-    }
-
+    
     [SerializeField] private int grade = 0;
     public int Grade => grade;
-    public void UpgradeGrade(int value)
-    {
-        int nextGrade = grade + value;
-        if (nextGrade is > 0 and <= 10)
-        {
-            grade = nextGrade;
-            if (grade % 5 == 0)
-            {
-                ap = (int)(ap * 1.5f);
-                hp = (int)(hp * 1.5f);
-            }
-            else if (grade > 5)
-            {
-                ap = (int)(ap * 1.2f);
-                hp = (int)(hp * 1.2f);
-            }
-            else
-            {
-                ap = (int)(ap * 1.1f);
-                hp = (int)(hp * 1.1f);
-            }
-        }
-    }
-
-
+    
     [SerializeField] private int cost; // 유닛 생성 비용
     public int Cost => cost;
 
@@ -83,20 +49,25 @@ public class UnitData
     public float DPS => // 초당 공격력. Damage per Second
         (1f / attackDelay) * ap;
 
-    [SerializeField] private bool isUnlock = false;
+    private bool isUnlock = false;
     public bool IsUnlock => isUnlock;
     public void SetUnlock(bool _isUnlock) => isUnlock = _isUnlock;
 
-    [SerializeField] private bool isParty = false;
+    private bool isParty = false;
     public bool IsParty => isParty;
     public void SetParty(bool _isParty) => isParty = _isParty;
 
-    [SerializeField] private bool isLeader = false;          // 영웅 파티의 리더인가?
+    private bool isLeader = false;          // 영웅 파티의 리더인가?
     public bool IsLeader => isLeader;
     public void SetLeader(bool _isLeader) => isLeader = _isLeader;
 
     public Sprite sprite;
     public RuntimeAnimatorController animCtrl;
+
+    public UnitData()
+    {
+        
+    }
 
     public UnitData(UnitData unitData)
     {
@@ -104,6 +75,7 @@ public class UnitData
         koName = unitData.koName;
         enName = unitData.enName;
         level = unitData.level;
+        grade = unitData.grade;
         cost = unitData.cost;
         hp = unitData.HP;
         ap = unitData.Ap;
@@ -114,7 +86,42 @@ public class UnitData
         distance = unitData.Distance;
         attackDelay = unitData.AttackDelay;
 
-        sprite = unitData.sprite;
-        animCtrl = unitData.animCtrl;
+        sprite = null;
+        animCtrl = null;
+    }
+    
+    public void UpgradeLevel(int value)
+    {
+        int nextLv = level + value;
+        if (nextLv is > 0 and <= 30)
+        {
+            level = nextLv;
+            ap = (int)(ap * 1.05f);
+            hp = (int)(hp * 1.05f);
+        }
+    }
+    
+    public void UpgradeGrade(int value)
+    {
+        int nextGrade = grade + value;
+        if (nextGrade is > 0 and <= 10)
+        {
+            grade = nextGrade;
+            if (grade % 5 == 0)
+            {
+                ap = (int)(ap * 1.5f);
+                hp = (int)(hp * 1.5f);
+            }
+            else if (grade > 5)
+            {
+                ap = (int)(ap * 1.2f);
+                hp = (int)(hp * 1.2f);
+            }
+            else
+            {
+                ap = (int)(ap * 1.1f);
+                hp = (int)(hp * 1.1f);
+            }
+        }
     }
 }

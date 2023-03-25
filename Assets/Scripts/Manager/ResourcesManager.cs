@@ -90,6 +90,10 @@ public sealed class ResourcesManager : MonoBehaviour
     // 캐싱을 하지 않은 오브젝트는 사용이 끝나면 Unload로 오브젝트를 없애주어야함
     public void ReleaseAsset(AssetReference assetReference)
     {
+        int hashCode = assetReference.RuntimeKey.GetHashCode();
+        if (!resourceDic.ContainsKey(hashCode))
+            resourceDic.Remove(hashCode);
+
         assetReference.ReleaseAsset();
     }
 

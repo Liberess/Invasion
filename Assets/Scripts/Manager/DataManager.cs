@@ -17,10 +17,9 @@ public class DataManager : MonoBehaviour
     private PopUpManager popUpMgr;
 
     [Header("==== Hero Object Prefab ====")]
-    [SerializeField] private AssetReference lobbyHeroReference;
     [SerializeField]private GameObject lobbyHumalPrefab = null;
 
-    private List<UnitData> lobbyHeroList = new List<UnitData>();
+    private List<LobbyHero> lobbyHeroList = new List<LobbyHero>();
     //[SerializeField] private GameObject heroPrefab;
     //[SerializeField] private GameObject lobbyHeroPrefab;
 
@@ -131,11 +130,13 @@ public class DataManager : MonoBehaviour
             handle =>
             {
                 m_HumalData.originHumalDataList.Clear();
-                m_HumalData.originHumalDataList.AddRange(handle.Result.HumalDBList.Where(db => !m_HumalData.originHumalDataList.Contains(db)));
+                m_HumalData.originHumalDataList.AddRange(handle.Result.humalDBList.Where(db => !m_HumalData.originHumalDataList.Contains(db)));
                 m_HumalData.originHumalDataList = m_HumalData.originHumalDataList.OrderBy(x => x.ID).ToList();
+                
+                Debug.Log(Time.time + " originDB");
 
                 m_GameData.enemyDataList.Clear();
-                m_GameData.enemyDataList.AddRange(handle.Result.EnemyDBList.Where(db => !m_GameData.enemyDataList.Contains(db)));
+                m_GameData.enemyDataList.AddRange(handle.Result.enemyDBList.Where(db => !m_GameData.enemyDataList.Contains(db)));
             };
         
         Addressables.LoadAssetAsync<HumalUpgradeDB>(Tags.HumalUpgradeDBLabel).Completed +=
@@ -185,7 +186,7 @@ public class DataManager : MonoBehaviour
             }
         );
 
-        updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
+        updateBundleHandle.Completed += (handle) =>
         {
             updateBundleHandle = handle;
             isDownTxt.text = "다운로드 완료";
@@ -194,7 +195,7 @@ public class DataManager : MonoBehaviour
             m_HumalData.humalSpriteList.Clear();
             foreach (var sprite in m_HumalData.humalSpriteDic.Values)
             {
-                if(!m_HumalData.humalSpriteList.Contains(sprite))
+                if (!m_HumalData.humalSpriteList.Contains(sprite))
                     m_HumalData.humalSpriteList.Add(sprite);
             }
         };
@@ -229,7 +230,7 @@ public class DataManager : MonoBehaviour
             }
         );
 
-        updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
+        updateBundleHandle.Completed += (handle) =>
         {
             updateBundleHandle = handle;
             isDownTxt.text = "다운로드 완료";
@@ -265,9 +266,21 @@ public class DataManager : MonoBehaviour
         };
     }
 
-    //[ContextMenu("Update Hero Anim Controller")]
     private void UpdateHeroAnimCtrl()
     {
+        /*updateBundleHandle = Addressables.LoadAssetsAsync<AnimationClip>(
+            Tags.HumalAnimLabel,
+            (result) =>
+            {
+                if (!isDownStart)
+                {
+                    isDownStart = true;
+                    isDownTxt.text = "휴멀 Anim 다운로드 시작";
+                    Debug.Log("휴멀 Anim 다운로드 시작");
+                    StartCoroutine(UpdateBundleProgressTxtCo());
+                }
+            });*/
+
         updateBundleHandle = Addressables.LoadAssetsAsync<RuntimeAnimatorController>(
             Tags.HumalAnimCtrlLabel,
             (result) =>
@@ -286,11 +299,14 @@ public class DataManager : MonoBehaviour
             }
         );
 
-        updateBundleHandle.Completed += (AsyncOperationHandle handle) =>
+        updateBundleHandle.Completed += (handle) =>
         {
             updateBundleHandle = handle;
             isDownTxt.text = "다운로드 완료";
             isProgressTxt.text = "100%";
+ 
+            for (int i = 0; i < m_HumalData.humalAnimCtrlList.Count; i++)
+                m_HumalData.GetOriginHumalData(i).animCtrl = m_HumalData.GetHumalAnimCtrl(i);
         };
     }
 
@@ -830,11 +846,11 @@ public class DataManager : MonoBehaviour
                 if (!SceneManager.GetActiveScene().name.Equals("Lobby"))
                     return;
 
-                if (!lobbyHumalPrefab || !lobbyHumalPrefab.activeSelf)
+                /*if (!lobbyHumalPrefab || !lobbyHumalPrefab.activeSelf)
                 {
                     await ResourcesManager.Instance.LoadAssetAsync<GameObject>(lobbyHeroReference,
                         (obj) => lobbyHumalPrefab = ((GameObject)obj).gameObject);
-                }
+                }*/
 
                 foreach (var data in m_HumalData.humalDic.Values)
                 {
@@ -843,14 +859,14 @@ public class DataManager : MonoBehaviour
                     data.sprite = m_HumalData.humalSpriteList[targetID];
                     data.animCtrl = m_HumalData.GetHumalAnimCtrl(targetID);
    
-                    if (lobbyHeroList.Contains(data))
+                    if (lobbyHeroList.Exists(x => x.UnitData.ID == data.ID))
                         continue;
                     
                     //var lobbyHero = Instantiate(lobbyHumalPrefab, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
-                    var lobbyHero = (lobbyHeroReference.InstantiateAsync(Vector3.zero, Quaternion.identity)).Result.GetComponent<LobbyHero>();
+                    var lobbyHero = Instantiate(lobbyHumalPrefab, Vector3.zero, Quaternion.identity).GetComponent<LobbyHero>();
                     var heroStat = data;
                     lobbyHero.UnitSetup(heroStat);
-                    lobbyHeroList.Add(data);
+                    lobbyHeroList.Add(lobbyHero);
                 }
             }
             else
@@ -861,7 +877,7 @@ public class DataManager : MonoBehaviour
         catch (Exception ex)
         {
             Debug.LogError(ex.Message);
-            popUpMgr.PopUp(ex.Message, EPopUpType.Warning);
+            //popUpMgr.PopUp(ex.Message, EPopUpType.Warning);
         }
     }
 
@@ -1154,23 +1170,29 @@ public class DataManager : MonoBehaviour
         PlayFabManager.Instance.ClearLogInSuccessAction();
         SceneManager.sceneLoaded -= OnSceneLoaded;
         SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(scene.name != "Lobby")
-            return;
+        if (scene.name != "Lobby")
+        {
+            lobbyHeroList.Clear();
+            /*Addressables.ReleaseInstance(lobbyHumalPrefab);
+            lobbyHumalPrefab = null;*/
 
-        StartCoroutine(OnSceneLoadedCo());
+            return;
+        }
+
+        OnSceneLoadedAsync().Forget();
     }
 
-    private IEnumerator OnSceneLoadedCo()
+    private async UniTaskVoid OnSceneLoadedAsync()
     {
         lobbyHeroList.Clear();
         SetupHero().Forget();
 
-        yield return new WaitForEndOfFrame();
+        await UniTask.WaitUntil(() =>UIManager.Instance && PopUpManager.Instance);
 
         uiMgr = UIManager.Instance;
         popUpMgr = PopUpManager.Instance;

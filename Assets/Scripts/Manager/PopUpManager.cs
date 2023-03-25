@@ -36,7 +36,23 @@ public class PopUpManager : MonoBehaviour
         else
             Destroy(this.gameObject);
 
+        Initialized();
+    }
+
+    private void Initialized()
+    {
+        PopUpPanel = GameObject.Find("PopUpCanvas").transform.GetChild(0).gameObject;
+        ContentsPanel = PopUpPanel.transform.Find("Contents").GetComponent<RectTransform>();
+
+        PopUpTitles = new GameObject[3] { null, null, null};
+        for (int i = 0; i < PopUpTitles.Length; i++)
+            PopUpTitles[i] = ContentsPanel.GetChild(i).gameObject;
+
         PopUpAnim = PopUpPanel.GetComponentInChildren<Animator>();
+
+        MessageBox = ContentsPanel.transform.Find("MsgTxt").gameObject;
+        OneBtn = ContentsPanel.transform.Find("OkBtn").gameObject;
+        YesOrNoBtn = ContentsPanel.transform.Find("YesOrNoBtn").gameObject;
 
         // 버튼 배정
         OkBtn = OneBtn.GetComponent<Button>();
@@ -60,6 +76,9 @@ public class PopUpManager : MonoBehaviour
     public void PopUp(string message, EPopUpType type)
     {
         SetCallback(null, EPopUpResponse.Ok);
+
+        if (!PopUpPanel)
+            Initialized();
 
         DialogInit();
         PopUpPanel.SetActive(true);
